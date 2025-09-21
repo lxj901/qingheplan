@@ -1,0 +1,1382 @@
+import SwiftUI
+
+/// 用户详情页面 - 推特风格设计
+struct UserProfileView: View {
+    let userId: String
+    @Environment(\.dismiss) private var dismiss
+    @StateObject private var viewModel = UserProfileViewModel()
+    @State private var selectedTab: ProfileTab = .posts
+    @State private var scrollOffset: CGFloat = 0
+    @State private var headerOffset: CGFloat = 0
+    @State private var tabBarOffset: CGFloat = 0
+    @State private var showNavTitle: Bool = false
+    @State private var isAnimationEnabled: Bool = true
+    @State private var lastScrollUpdate: Date = Date()
+    @State private var scrollTimer: Timer?
+    @State private var fallbackScrollOffset: CGFloat = 0
+
+    // 关注列表相关
+    @State private var showFollowersList = false
+    @State private var showFollowingList = false
+
+    // 更多选项相关
+    @State private var showMoreOptions = false
+    @State private var showBlockConfirmation = false
+
+    // 编辑资料相关
+    @State private var showEditProfile = false
+
+    // 帖子详情导航相关
+    @State private var showingPostDetail = false
+    @State private var selectedPostId: String?
+
+    // 防止重复加载
+    @State private var isLoadingMore = false
+    @State private var showingReportSheet = false
+    @State private var reportingPostId: String?
+
+    // 推特风格的标签页
+    enum ProfileTab: String, CaseIterable {
+        case posts = "帖子"
+        case media = "媒体"
+        case likes = "收藏"
+    }
+
+    var body: some View {
+        ZStack {
+            if viewModel.isLoading && viewModel.userProfile == nil {
+                loadingView
+            } else if let userProfile = viewModel.userProfile {
+                mainContentView(userProfile)
+            } else {
+                errorView
+            }
+
+            // 顶部导航栏 - 固定在顶部
+            VStack(spacing: 0) {
+                // 导航栏
+                customNavigationBar
+
+                Spacer()
+            }
+        }
+        .ignoresSafeArea(.all, edges: .top) // 忽略顶部安全区域
+        .ignoresSafeArea(.all, edges: .bottom) // 忽略底部安全区域，确保填充整个屏幕
+        .navigationBarHidden(true)
+        .sheet(isPresented: $showFollowersList) {
+            UserListView(userId: userId, listType: .followers)
+        }
+        .sheet(isPresented: $showFollowingList) {
+            UserListView(userId: userId, listType: .following)
+        }
+        .sheet(isPresented: $showEditProfile) {
+            if let userProfile = viewModel.userProfile {
+                EditProfileView(userProfile: Binding(
+                    get: { userProfile },
+                    set: { newProfile in
+                        viewModel.userProfile = newProfile
+                    }
+                ))
+            }
+        }
+        .navigationDestination(isPresented: $showingPostDetail) {
+            if let postId = selectedPostId {
+                PostDetailView(postId: postId)
+                    .navigationBarHidden(true)
+                    .onAppear {
+                        print("🔍 用户详情页面：导航到帖子详情页面，帖子ID: \(postId)")
+                    }
+            }
+        }
+        .sheet(isPresented: $showingReportSheet) {
+            if let postId = reportingPostId {
+                ReportPostView(postId: postId) { reason, description in
+                    Task {
+                        // TODO: 实现举报功能
+                        print("举报帖子: \(postId), 原因: \(reason), 描述: \(description)")
+                    }
+                }
+            }
+        }
+        .actionSheet(isPresented: $showMoreOptions) {
+            moreOptionsActionSheet
+        }
+        .alert("确认屏蔽", isPresented: $showBlockConfirmation) {
+            Button("取消", role: .cancel) { }
+            Button("屏蔽", role: .destructive) {
+                Task {
+                    await viewModel.blockUser(reason: "用户举报")
+                }
+            }
+        } message: {
+            Text("屏蔽后将无法看到该用户的内容，确定要屏蔽吗？")
+        }
+        .overlay(
+            // 错误提示 Toast
+            VStack {
+                Spacer()
+
+                if let errorMessage = viewModel.errorMessage {
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.white)
+
+                        Text(errorMessage)
+                            .font(.subheadline)
+                            .foregroundColor(.white)
+                            .multilineTextAlignment(.leading)
+
+                        Spacer()
+
+                        Button("关闭") {
+                            viewModel.errorMessage = nil
+                        }
+                        .font(.subheadline)
+                        .foregroundColor(.white)
+                    }
+                    .padding()
+                    .background(Color.red)
+                    .cornerRadius(12)
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 100)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .animation(.easeInOut(duration: 0.3), value: viewModel.errorMessage)
+                }
+            }
+        )
+        .onAppear {
+            // 检查系统动画设置
+            checkSystemAnimationSettings()
+
+            // 启动备用滚动监听定时器
+            startFallbackScrollMonitoring()
+
+            if viewModel.userProfile?.id != Int(userId) {
+                Task {
+                    await viewModel.loadUserProfile(userId: userId)
+                }
+            }
+        }
+        .onDisappear {
+            // 停止备用滚动监听定时器
+            stopFallbackScrollMonitoring()
+        }
+    }
+
+    // MARK: - 更多选项菜单
+    private var moreOptionsActionSheet: ActionSheet {
+        guard let userProfile = viewModel.userProfile else {
+            return ActionSheet(title: Text("选项"))
+        }
+
+        var buttons: [ActionSheet.Button] = []
+
+        // 如果不是自己
+        if userProfile.isMe != true {
+            // 屏蔽/取消屏蔽选项
+            if userProfile.isBlocked == true {
+                buttons.append(.default(Text("取消屏蔽")) {
+                    Task {
+                        await viewModel.unblockUser()
+                    }
+                })
+            } else {
+                buttons.append(.destructive(Text("屏蔽用户")) {
+                    showBlockConfirmation = true
+                })
+            }
+
+            // 举报选项
+            buttons.append(.destructive(Text("举报用户")) {
+                // TODO: 实现举报功能
+            })
+        }
+
+        // 分享选项
+        buttons.append(.default(Text("分享用户")) {
+            // TODO: 实现分享功能
+        })
+
+        // 取消按钮
+        buttons.append(.cancel())
+
+        return ActionSheet(
+            title: Text("更多选项"),
+            buttons: buttons
+        )
+    }
+
+    // MARK: - 自定义导航栏
+    private var customNavigationBar: some View {
+        GeometryReader { geometry in
+            HStack {
+                // 返回按钮
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image(systemName: "arrow.left")
+                        .font(.system(size: 16, weight: .medium)) // 减小图标大小
+                        .foregroundColor(.primary)
+                }
+                .frame(width: 36, height: 36) // 减小按钮大小
+                .background(
+                    Circle()
+                        .fill(Color(.systemBackground))
+                        .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+                )
+
+                Spacer()
+
+                // 用户名（滚动时显示）- 推特风格渐入
+                if showNavTitle {
+                    Text(viewModel.userProfile?.nickname ?? "")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundColor(.primary)
+                        .transition(.asymmetric(
+                            insertion: .opacity.combined(with: .scale(scale: 0.95)).combined(with: .move(edge: .top)),
+                            removal: .opacity.combined(with: .scale(scale: 0.95)).combined(with: .move(edge: .top))
+                        ))
+                        .animation(isAnimationEnabled ? .spring(response: 0.4, dampingFraction: 0.8, blendDuration: 0) : .none, value: showNavTitle)
+                }
+
+                Spacer()
+
+                // 更多选项按钮
+                Button(action: {
+                    showMoreOptions = true
+                }) {
+                    Image(systemName: "ellipsis")
+                        .font(.system(size: 16, weight: .medium)) // 减小图标大小
+                        .foregroundColor(.primary)
+                }
+                .frame(width: 36, height: 36) // 减小按钮大小
+                .background(
+                    Circle()
+                        .fill(Color(.systemBackground))
+                        .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+                )
+            }
+            .padding(.horizontal, 16)
+            .padding(.top, geometry.safeAreaInsets.top + 55) // 调整到55px的偏移
+            .padding(.bottom, 8)
+            .frame(maxWidth: .infinity)
+            .background(
+                ZStack {
+                    // 推特风格的渐变背景
+                    let opacity = calculateNavBarOpacity()
+
+                    // 基础背景色
+                    Color(.systemBackground)
+                        .opacity(opacity * 0.9)
+
+                    // 毛玻璃材质效果
+                    Rectangle()
+                        .fill(.regularMaterial)
+                        .opacity(opacity)
+
+                    // 顶部边框线（当完全显示时）
+                    VStack {
+                        Spacer()
+                        Rectangle()
+                            .fill(Color(.separator))
+                            .frame(height: 0.5)
+                            .opacity(opacity > 0.8 ? (opacity - 0.8) / 0.2 : 0)
+                    }
+                }
+            )
+        }
+        .frame(height: 147) // 增加导航栏高度以适应55px的偏移
+    }
+
+    // MARK: - 计算导航栏透明度
+    private func calculateNavBarOpacity() -> Double {
+        // 推特风格的渐变阈值
+        // scrollOffset 在顶部时为0，向上滚动时变为负数
+        let startFadeThreshold: CGFloat = -20  // 开始渐变的位置
+        let fullOpacityThreshold: CGFloat = -80  // 完全不透明的位置
+        let maxOpacity: Double = 0.95
+
+        // 只有当向上滚动时才显示导航栏背景
+        if scrollOffset >= startFadeThreshold {
+            return 0.0  // 在顶部时完全透明
+        }
+
+        // 计算滚动进度
+        let scrollProgress = min(max((startFadeThreshold - scrollOffset) / (startFadeThreshold - fullOpacityThreshold), 0), 1)
+
+        // 使用缓动函数让渐变更自然
+        let easedProgress = easeInOutCubic(scrollProgress)
+
+        return easedProgress * maxOpacity
+    }
+
+    // MARK: - 缓动函数
+    private func easeInOutCubic(_ t: CGFloat) -> Double {
+        let t = Double(t)
+        return t < 0.5 ? 4 * t * t * t : 1 - pow(-2 * t + 2, 3) / 2
+    }
+    
+    // MARK: - 检查系统动画设置
+    private func checkSystemAnimationSettings() {
+        // 检查系统是否启用了动画
+        let animationsEnabled = !UIAccessibility.isReduceMotionEnabled
+
+        DispatchQueue.main.async {
+            isAnimationEnabled = animationsEnabled
+        }
+    }
+
+    // MARK: - 备用滚动监听机制
+    private func startFallbackScrollMonitoring() {
+        // 如果PreferenceKey在真机上不工作，使用定时器作为备用方案
+        scrollTimer = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { _ in
+            // 检查是否长时间没有收到滚动更新
+            let timeSinceLastUpdate = Date().timeIntervalSince(lastScrollUpdate)
+
+            if timeSinceLastUpdate > 0.1 { // 如果超过100ms没有更新
+                // 使用备用方法检测滚动
+                DispatchQueue.main.async {
+                    // 如果长时间没有收到滚动更新，可能PreferenceKey有问题
+                    // 这时我们可以尝试手动触发一些UI更新
+                    if timeSinceLastUpdate > 1.0 {
+                        // 超过1秒没有更新，可能需要重置状态
+                    }
+                }
+            }
+        }
+    }
+
+    private func stopFallbackScrollMonitoring() {
+        scrollTimer?.invalidate()
+        scrollTimer = nil
+    }
+    
+
+
+    // MARK: - 加载视图
+    private var loadingView: some View {
+        VStack(spacing: 20) {
+            ProgressView()
+                .scaleEffect(1.5)
+            Text("加载中...")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    // MARK: - 错误视图
+    private var errorView: some View {
+        VStack(spacing: 20) {
+            Image(systemName: "exclamationmark.triangle")
+                .font(.system(size: 50))
+                .foregroundColor(.orange)
+
+            Text("加载失败")
+                .font(.headline)
+                .fontWeight(.semibold)
+
+            Text(viewModel.errorMessage ?? "请检查网络连接后重试")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+
+            Button("重试") {
+                Task {
+                    await viewModel.loadUserProfile(userId: userId)
+                }
+            }
+            .padding(.horizontal, 24)
+            .padding(.vertical, 12)
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(25)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    // MARK: - 主要内容视图
+    private func mainContentView(_ userProfile: UserProfile) -> some View {
+        GeometryReader { geometry in
+            ZStack {
+                // 主要滚动内容
+                ScrollViewReader { proxy in
+                    ScrollView {
+                    VStack(spacing: 0) {
+                        // 滚动监听器 - 放在最顶部，确保始终可见
+                        GeometryReader { scrollGeometry in
+                            let offset = scrollGeometry.frame(in: .named("scrollView")).minY
+                            Color.clear
+                                .preference(key: ScrollOffsetPreferenceKey.self, value: offset)
+                                .onAppear {
+                                    // 强制触发初始偏移量
+                                    DispatchQueue.main.async {
+                                        scrollOffset = offset
+                                    }
+                                }
+                        }
+                        .frame(height: 0) // 不占用空间
+
+                        // 横幅和用户信息区域
+                        profileHeaderSection(userProfile)
+
+                        // 标签页导航 - 当不需要固定时显示
+                        if !shouldShowStickyTabBar() {
+                            profileTabsSection
+                                .background(
+                                    GeometryReader { tabGeometry in
+                                        Color.clear
+                                            .preference(key: TabBarOffsetPreferenceKey.self, value: tabGeometry.frame(in: .named("scrollView")).minY)
+                                    }
+                                )
+                        } else {
+                            // 占位空间，保持布局一致
+                            Rectangle()
+                                .fill(Color.clear)
+                                .frame(height: 50) // 标签栏的高度
+                        }
+
+                        // 内容区域 - 确保填充剩余空间
+                        profileContentSection
+                            .frame(minHeight: calculateMinContentHeight(geometry: geometry))
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .coordinateSpace(name: "scrollView")
+            .simultaneousGesture(
+                // 添加拖拽手势作为备用滚动监听
+                DragGesture(minimumDistance: 0)
+                    .onChanged { value in
+                        // 通过拖拽手势也能监听到滚动
+                        let currentTime = Date()
+                        lastScrollUpdate = currentTime
+
+                        // 使用拖拽手势的数据来更新滚动偏移
+                        let newOffset = value.translation.height
+
+                        // 更新滚动状态
+                        DispatchQueue.main.async {
+                            scrollOffset = newOffset
+
+                            // 推特风格的标题显示逻辑 - 当内容向上滚动时显示标题
+                            let titleThreshold: CGFloat = -50  // 向上滚动50px后显示标题
+                            let shouldShowTitle = newOffset < titleThreshold
+
+                            if showNavTitle != shouldShowTitle {
+                                if isAnimationEnabled {
+                                    withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                                        showNavTitle = shouldShowTitle
+                                    }
+                                } else {
+                                    showNavTitle = shouldShowTitle
+                                }
+                            }
+                        }
+                    }
+            )
+
+            // 固定标签栏 - 当滚动到指定位置时显示在导航栏下方
+            VStack(spacing: 0) {
+                // 导航栏占位空间
+                Rectangle()
+                    .fill(Color.clear)
+                    .frame(height: 147) // 导航栏高度（状态栏 + 导航栏）
+
+                // 固定标签栏
+                if shouldShowStickyTabBar() {
+                    stickyTabBarView
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                        .animation(.easeInOut(duration: 0.25), value: shouldShowStickyTabBar())
+                }
+
+                Spacer()
+            }
+        }
+
+        .onPreferenceChange(HeaderOffsetPreferenceKey.self) { value in
+            withAnimation(.easeInOut(duration: 0.15)) {
+                headerOffset = value
+            }
+        }
+        .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
+            let newOffset = value
+            let currentTime = Date()
+            lastScrollUpdate = currentTime
+
+            // 强制更新滚动偏移，确保在真机上也能正常工作
+            DispatchQueue.main.async {
+                scrollOffset = newOffset
+
+                // 推特风格的标题显示逻辑 - 当内容向上滚动时显示标题
+                let titleThreshold: CGFloat = -50  // 向上滚动50px后显示标题
+                let shouldShowTitle = newOffset < titleThreshold
+
+                if showNavTitle != shouldShowTitle {
+                    if isAnimationEnabled {
+                        withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                            showNavTitle = shouldShowTitle
+                        }
+                    } else {
+                        showNavTitle = shouldShowTitle
+                    }
+                }
+            }
+        }
+        .onPreferenceChange(TabBarOffsetPreferenceKey.self) { value in
+            withAnimation(.easeInOut(duration: 0.15)) {
+                tabBarOffset = value
+            }
+        }
+    }
+
+    // MARK: - 计算最小内容高度
+    private func calculateMinContentHeight(geometry: GeometryProxy) -> CGFloat {
+        // 计算已使用的高度
+        let navigationBarHeight: CGFloat = 147 // 导航栏高度
+        let bannerHeight: CGFloat = 200 // 横幅高度
+        let userInfoHeight: CGFloat = 200 // 用户信息区域估计高度
+        let tabBarHeight: CGFloat = 50 // 标签栏高度
+
+        let usedHeight = bannerHeight + userInfoHeight + tabBarHeight
+        let availableHeight = geometry.size.height - navigationBarHeight
+
+        // 确保内容区域至少填充剩余的屏幕空间
+        return max(availableHeight - usedHeight, 300) // 最小300px高度
+    }
+
+    // MARK: - 用户资料头部区域
+    private func profileHeaderSection(_ userProfile: UserProfile) -> some View {
+        VStack(spacing: 0) {
+            // 横幅图片
+            bannerImageView
+
+            // 用户信息区域
+            userInfoSection(userProfile)
+        }
+    }
+
+    // MARK: - 横幅图片
+    private var bannerImageView: some View {
+        GeometryReader { geometry in
+            // 推特风格的视差效果
+            // scrollOffset 在顶部为0，向上滚动为负数，向下滚动为正数
+            let parallaxOffset = scrollOffset > 0 ? scrollOffset * 0.5 : 0  // 向下拉时图片向下移动
+
+            // 计算缩放效果 - 向下拉时轻微放大
+            let scaleEffect = scrollOffset > 0 ? 1 + (scrollOffset / 1000) : 1
+
+            Rectangle()
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            Color.blue.opacity(0.7),
+                            Color.purple.opacity(0.5),
+                            Color.pink.opacity(0.3)
+                        ]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .overlay(
+                    // 可以在这里添加实际的横幅图片
+                    AsyncImage(url: URL(string: "")) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .scaleEffect(scaleEffect)
+
+                    } placeholder: {
+                        EmptyView()
+                    }
+                )
+                .scaleEffect(scaleEffect)
+                .frame(
+                    width: geometry.size.width,
+                    height: max(200 + geometry.safeAreaInsets.top + parallaxOffset, 200 + geometry.safeAreaInsets.top)
+                )
+                .offset(y: -geometry.safeAreaInsets.top - parallaxOffset)
+                .clipped()
+                .animation(isAnimationEnabled ? .easeOut(duration: 0.08) : .none, value: scrollOffset)
+        }
+        .frame(height: 200) // 实际显示的横幅高度
+    }
+
+    // MARK: - 用户信息区域
+    private func userInfoSection(_ userProfile: UserProfile) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // 头像行
+            HStack {
+                // 头像
+                profileAvatarView(userProfile)
+
+                Spacer()
+            }
+            .padding(.top, -40) // 让头像部分覆盖横幅
+
+            // 用户名和操作按钮行
+            HStack(alignment: .center) {
+                // 用户名和认证信息
+                userNameSection(userProfile)
+
+                Spacer()
+
+                // 操作按钮
+                actionButtonsView(userProfile, viewModel: viewModel)
+            }
+
+            // 个人简介
+            if let bio = userProfile.bio, !bio.isEmpty {
+                Text(bio)
+                    .font(.subheadline)
+                    .foregroundColor(.primary)
+                    .lineLimit(nil)
+            }
+
+            // 位置信息
+            if let location = userProfile.location, !location.isEmpty {
+                HStack(spacing: 4) {
+                    Image(systemName: "location")
+                        .font(.system(size: 12))
+                        .foregroundColor(.secondary)
+
+                    Text(location)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+            }
+
+            // 统计数据
+            userStatsSection(userProfile)
+        }
+        .padding(.horizontal, 16)
+        .padding(.bottom, 20)
+        .background(Color(.systemBackground))
+    }
+
+    // MARK: - 头像视图
+    private func profileAvatarView(_ userProfile: UserProfile) -> some View {
+        // 计算头像的缩放效果
+        let avatarScale = calculateAvatarScale()
+
+        return AsyncImage(url: URL(string: userProfile.avatar ?? "")) { image in
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+        } placeholder: {
+            Circle()
+                .fill(Color.gray.opacity(0.3))
+                .overlay(
+                    Image(systemName: "person.fill")
+                        .font(.system(size: 40))
+                        .foregroundColor(.gray)
+                )
+        }
+        .frame(width: 80, height: 80)
+        .clipShape(Circle())
+        .overlay(
+            Circle()
+                .stroke(Color(.systemBackground), lineWidth: 4)
+        )
+        .scaleEffect(avatarScale)
+    }
+
+    // MARK: - 计算头像缩放
+    private func calculateAvatarScale() -> CGFloat {
+        // 向上滚动时头像轻微缩小，模拟推特效果
+        let threshold: CGFloat = -100  // 向上滚动100px
+        let minScale: CGFloat = 0.85
+
+        // 只有向上滚动时才缩放
+        if scrollOffset >= 0 {
+            return 1.0  // 在顶部时保持原始大小
+        }
+
+        let progress = min(max(-scrollOffset / (-threshold), 0), 1)
+        return 1 - (progress * (1 - minScale))
+    }
+
+    // MARK: - 操作按钮
+    private func actionButtonsView(_ userProfile: UserProfile, viewModel: UserProfileViewModel) -> some View {
+        HStack(spacing: 12) {
+            // 消息按钮
+            Button(action: {
+                // 发送消息
+            }) {
+                Image(systemName: "message")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.primary)
+            }
+            .frame(width: 36, height: 36)
+            .overlay(
+                RoundedRectangle(cornerRadius: 18)
+                    .stroke(Color(.systemGray4), lineWidth: 1)
+            )
+
+            // 编辑资料按钮（如果是自己）
+            if userProfile.isMe == true {
+                Button(action: {
+                    showEditProfile = true
+                }) {
+                    Text("编辑资料")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundColor(.primary)
+                }
+                .frame(height: 36)
+                .padding(.horizontal, 20)
+                .background(Color.clear)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 18)
+                        .stroke(Color(.systemGray4), lineWidth: 1)
+                )
+                .cornerRadius(18)
+            } else {
+                // 关注/取消关注按钮（如果不是自己）
+                Button(action: {
+                    Task {
+                        if userProfile.isFollowing == true {
+                            await viewModel.unfollowUser()
+                        } else {
+                            await viewModel.followUser()
+                        }
+                    }
+                }) {
+                    HStack(spacing: 6) {
+                        if viewModel.isFollowActionLoading {
+                            ProgressView()
+                                .scaleEffect(0.8)
+                                .progressViewStyle(CircularProgressViewStyle(tint: userProfile.isFollowing == true ? .primary : .white))
+                        }
+
+                        Text(userProfile.isFollowing == true ? "已关注" : "关注")
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundColor(userProfile.isFollowing == true ? .primary : .white)
+                    }
+                }
+                .frame(height: 36)
+                .padding(.horizontal, 20)
+                .background(
+                    userProfile.isFollowing == true ?
+                    Color.clear : Color.black
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 18)
+                        .stroke(
+                            userProfile.isFollowing == true ?
+                            Color(.systemGray4) : Color.clear,
+                            lineWidth: 1
+                        )
+                )
+                .cornerRadius(18)
+                .disabled(viewModel.isFollowActionLoading || viewModel.isLoading)
+            }
+        }
+    }
+
+    // MARK: - 用户名区域
+    private func userNameSection(_ userProfile: UserProfile) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(spacing: 8) {
+                Text(userProfile.nickname)
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .foregroundColor(.primary)
+
+                if userProfile.isVerified == true {
+                    Image(systemName: "checkmark.seal.fill")
+                        .font(.system(size: 16))
+                        .foregroundColor(.blue)
+                }
+            }
+
+            Text("@user\(userProfile.id)")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+    }
+
+    // MARK: - 统计数据区域
+    private func userStatsSection(_ userProfile: UserProfile) -> some View {
+        HStack(spacing: 20) {
+            // 正在关注
+            Button(action: {
+                showFollowingList = true
+            }) {
+                statItem(
+                    count: userProfile.followingCount ?? 0,
+                    label: "正在关注"
+                )
+            }
+            .buttonStyle(PlainButtonStyle())
+
+            // 关注者
+            Button(action: {
+                showFollowersList = true
+            }) {
+                statItem(
+                    count: userProfile.followersCount ?? 0,
+                    label: "关注者"
+                )
+            }
+            .buttonStyle(PlainButtonStyle())
+
+            // 帖子数（不可点击）
+            if let postsCount = userProfile.postsCount {
+                statItem(
+                    count: postsCount,
+                    label: "帖子"
+                )
+            }
+        }
+    }
+
+    // MARK: - 统计项目
+    private func statItem(count: Int, label: String) -> some View {
+        HStack(spacing: 4) {
+            Text("\(count)")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+                .foregroundColor(.primary)
+
+            Text(label)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+    }
+
+    // MARK: - 标签页导航
+    private var profileTabsSection: some View {
+        HStack(spacing: 0) {
+            ForEach(ProfileTab.allCases, id: \.self) { tab in
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        selectedTab = tab
+                    }
+                }) {
+                    VStack(spacing: 8) {
+                        Text(tab.rawValue)
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundColor(selectedTab == tab ? .primary : .secondary)
+
+                        Rectangle()
+                            .fill(selectedTab == tab ? Color.blue : Color.clear)
+                            .frame(height: 2)
+                    }
+                }
+                .frame(maxWidth: .infinity) // 均分宽度
+                .padding(.vertical, 12)
+            }
+        }
+        .background(
+            ZStack {
+                // 基础背景
+                Color(.systemBackground)
+                    .opacity(shouldShowTabBarShadow() ? calculateTabBarOpacity() : 1.0)
+
+                // 推特风格的毛玻璃效果
+                if shouldShowTabBarShadow() {
+                    Rectangle()
+                        .fill(.regularMaterial)
+                        .opacity(calculateTabBarOpacity() * 0.8)
+                }
+            }
+            .animation(.easeInOut(duration: 0.15), value: shouldShowTabBarShadow())
+        )
+        .overlay(
+            Rectangle()
+                .fill(Color(.systemGray5))
+                .frame(height: 0.5),
+            alignment: .bottom
+        )
+        .shadow(
+            color: shouldShowTabBarShadow() ? .black.opacity(0.1) : .clear,
+            radius: shouldShowTabBarShadow() ? 4 : 0,
+            x: 0,
+            y: 2
+        )
+        .animation(.easeInOut(duration: 0.2), value: shouldShowTabBarShadow())
+    }
+
+    // MARK: - 计算标签栏阴影显示
+    private func shouldShowTabBarShadow() -> Bool {
+        // 基于滚动偏移量判断是否显示阴影
+        // 当向上滚动超过一定距离时显示阴影效果
+        let shadowThreshold: CGFloat = -200  // 向上滚动200px后显示阴影
+        return scrollOffset < shadowThreshold
+    }
+
+    // MARK: - 计算标签栏背景透明度
+    private func calculateTabBarOpacity() -> Double {
+        // 基于滚动偏移量计算透明度
+        let startThreshold: CGFloat = -150   // 开始显示背景的位置
+        let fullOpacityThreshold: CGFloat = -250  // 完全不透明的位置
+
+        if scrollOffset >= startThreshold {
+            return 0.0  // 在顶部时完全透明
+        }
+
+        let progress = min(max((startThreshold - scrollOffset) / (startThreshold - fullOpacityThreshold), 0), 1)
+        return Double(progress) * 0.95
+    }
+
+    // MARK: - 判断是否显示固定标签栏
+    private func shouldShowStickyTabBar() -> Bool {
+        // 当滚动偏移达到约-600时，显示固定标签栏
+        let stickyThreshold: CGFloat = -600
+        return scrollOffset <= stickyThreshold
+    }
+
+    // MARK: - 固定标签栏视图
+    private var stickyTabBarView: some View {
+        HStack(spacing: 0) {
+            ForEach(ProfileTab.allCases, id: \.self) { tab in
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        selectedTab = tab
+                    }
+                }) {
+                    VStack(spacing: 8) {
+                        Text(tab.rawValue)
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundColor(selectedTab == tab ? .primary : .secondary)
+
+                        Rectangle()
+                            .fill(selectedTab == tab ? Color.blue : Color.clear)
+                            .frame(height: 2)
+                    }
+                }
+                .frame(maxWidth: .infinity) // 均分宽度
+                .padding(.vertical, 12)
+            }
+        }
+        .background(
+            Rectangle()
+                .fill(.regularMaterial)
+                .opacity(0.95)
+        )
+        .overlay(
+            Rectangle()
+                .fill(Color(.systemGray5))
+                .frame(height: 0.5),
+            alignment: .bottom
+        )
+        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+    }
+
+
+
+    // MARK: - 内容区域
+    private var profileContentSection: some View {
+        VStack(spacing: 0) {
+            switch selectedTab {
+            case .posts:
+                postsContentView
+            case .media:
+                mediaContentView
+            case .likes:
+                likesContentView
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    // MARK: - 帖子内容
+    private var postsContentView: some View {
+        VStack(spacing: 0) {
+            if viewModel.isLoadingPosts && viewModel.userPosts.isEmpty {
+                // 首次加载状态
+                VStack(spacing: 16) {
+                    ProgressView()
+                        .scaleEffect(1.2)
+                    Text("加载帖子中...")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(minHeight: 400)
+            } else if viewModel.userPosts.isEmpty {
+                // 空状态
+                VStack(spacing: 16) {
+                    Image(systemName: "doc.text")
+                        .font(.system(size: 48))
+                        .foregroundColor(.secondary)
+
+                    Text("暂无帖子")
+                        .font(.headline)
+                        .foregroundColor(.primary)
+
+                    Text("该用户还没有发布任何帖子")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(minHeight: 400)
+            } else {
+                // 帖子列表
+                LazyVStack(spacing: 0) {
+                    ForEach(viewModel.userPosts, id: \.id) { post in
+                    NavigationLink(destination: PostDetailView(postId: post.id)
+                        .navigationBarHidden(true)
+                        .onAppear {
+                            print("🔍 用户详情页面：导航到帖子详情页面，帖子ID: \(post.id)")
+                        }
+                    ) {
+                        PostCardView(
+                            post: post,
+                            showHotBadge: false,
+                            showEditButton: false,
+                            onLike: {
+                                Task {
+                                    await toggleLikePost(post.id)
+                                }
+                            },
+                            onBookmark: {
+                                Task {
+                                    await toggleBookmarkPost(post.id)
+                                }
+                            },
+                            onShare: {
+                                Task {
+                                    await sharePost(post.id)
+                                }
+                            },
+                            onReport: {
+                                reportingPostId = post.id
+                                showingReportSheet = true
+                            },
+                            onNavigateToDetail: { postId in
+                                // NavigationLink 已经处理导航，这里不需要做任何事情
+                            },
+                            onNavigateToUserProfile: { author in
+                                // 在用户详情页面，不需要跳转到自己
+                            }
+                        )
+                    }
+                    .buttonStyle(PlainButtonStyle()) // 确保NavigationLink不影响内部按钮的样式
+                    .onAppear {
+                        // 当滚动到倒数第3个帖子时，加载更多
+                        if post.id == viewModel.userPosts.suffix(3).first?.id &&
+                           viewModel.hasMorePosts &&
+                           !viewModel.isLoadingPosts &&
+                           !isLoadingMore {
+                            isLoadingMore = true
+                            Task {
+                                await viewModel.loadMorePosts()
+                                await MainActor.run {
+                                    isLoadingMore = false
+                                }
+                            }
+                        }
+                    }
+                    }
+
+                    // 加载更多指示器
+                    if viewModel.isLoadingPosts {
+                        HStack {
+                            ProgressView()
+                                .scaleEffect(0.8)
+                            Text("加载更多...")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        .frame(height: 50)
+                    } else if !viewModel.hasMorePosts && !viewModel.userPosts.isEmpty {
+                        Text("没有更多帖子了")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .frame(height: 50)
+                    }
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onAppear {
+            // 首次加载帖子
+            if viewModel.userPosts.isEmpty {
+                Task {
+                    await viewModel.loadUserPosts(userId: userId, refresh: true)
+                }
+            }
+        }
+    }
+
+    // MARK: - 其他标签页内容
+    private var mediaContentView: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "photo.on.rectangle")
+                .font(.system(size: 48))
+                .foregroundColor(.secondary)
+
+            Text("媒体内容")
+                .font(.headline)
+                .foregroundColor(.primary)
+
+            Text("该功能正在开发中")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(minHeight: 400)
+    }
+
+    private var likesContentView: some View {
+        VStack(spacing: 0) {
+            // 检查是否为当前用户本人
+            if viewModel.userProfile?.isMe != true {
+                VStack(spacing: 16) {
+                    Image(systemName: "lock")
+                        .font(.system(size: 48))
+                        .foregroundColor(.secondary)
+
+                    Text("私密内容")
+                        .font(.headline)
+                        .foregroundColor(.primary)
+
+                    Text("只有本人才能查看收藏内容")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(minHeight: 400)
+            } else if viewModel.isLoadingBookmarks && viewModel.bookmarkedPosts.isEmpty {
+                // 首次加载状态
+                VStack(spacing: 16) {
+                    ProgressView()
+                        .scaleEffect(1.2)
+                    Text("加载收藏中...")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(minHeight: 400)
+            } else if viewModel.bookmarkedPosts.isEmpty {
+                // 空状态
+                VStack(spacing: 16) {
+                    Image(systemName: "bookmark")
+                        .font(.system(size: 48))
+                        .foregroundColor(.secondary)
+
+                    Text("暂无收藏")
+                        .font(.headline)
+                        .foregroundColor(.primary)
+
+                    Text("你还没有收藏任何帖子")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(minHeight: 400)
+            } else {
+                // 收藏列表
+                LazyVStack(spacing: 0) {
+                    ForEach(viewModel.bookmarkedPosts) { post in
+                    NavigationLink(destination: PostDetailView(postId: post.id)
+                        .navigationBarHidden(true)
+                        .onAppear {
+                            print("🔍 用户详情页面：导航到帖子详情页面，帖子ID: \(post.id)")
+                        }
+                    ) {
+                        PostCardView(
+                            post: post,
+                            showHotBadge: false,
+                            showEditButton: false,
+                            onLike: {
+                                Task {
+                                    await toggleLikeBookmarkedPost(post.id)
+                                }
+                            },
+                            onBookmark: {
+                                Task {
+                                    await toggleBookmarkBookmarkedPost(post.id)
+                                }
+                            },
+                            onShare: {
+                                Task {
+                                    await shareBookmarkedPost(post.id)
+                                }
+                            },
+                            onReport: {
+                                reportingPostId = post.id
+                                showingReportSheet = true
+                            },
+                            onNavigateToDetail: { postId in
+                                // NavigationLink 已经处理导航，这里不需要做任何事情
+                            },
+                            onNavigateToUserProfile: { author in
+                                // 可以跳转到作者的用户详情页面
+                            }
+                        )
+                    }
+                    .buttonStyle(PlainButtonStyle()) // 确保NavigationLink不影响内部按钮的样式
+                    .onAppear {
+                        // 当滚动到倒数第3个收藏时，加载更多
+                        if post.id == viewModel.bookmarkedPosts.suffix(3).first?.id {
+                            Task {
+                                await viewModel.loadMoreBookmarks()
+                            }
+                        }
+                    }
+                    }
+
+                    // 加载更多指示器
+                    if viewModel.isLoadingBookmarks {
+                        HStack {
+                            ProgressView()
+                                .scaleEffect(0.8)
+                            Text("加载更多...")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        .frame(height: 50)
+                    } else if !viewModel.hasMoreBookmarks && !viewModel.bookmarkedPosts.isEmpty {
+                        Text("没有更多收藏了")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .frame(height: 50)
+                    }
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onAppear {
+            // 首次加载收藏（仅当为本人时）
+            if viewModel.userProfile?.isMe == true && viewModel.bookmarkedPosts.isEmpty {
+                Task {
+                    await viewModel.loadUserBookmarks(refresh: true)
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+// MARK: - PreferenceKey 定义
+struct HeaderOffsetPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
+struct TabBarOffsetPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
+// MARK: - UserProfileView 扩展 - 帖子交互功能
+extension UserProfileView {
+    // MARK: - 帖子交互功能
+    private func toggleLikePost(_ postId: String) async {
+        guard let index = viewModel.userPosts.firstIndex(where: { $0.id == postId }) else { return }
+
+        do {
+            let result = try await CommunityAPIService.shared.toggleLike(postId: postId)
+            await MainActor.run {
+                viewModel.userPosts[index].isLiked = result.isLiked
+
+                if result.isLiked {
+                    viewModel.userPosts[index].likesCount += 1
+                } else {
+                    viewModel.userPosts[index].likesCount = max(0, viewModel.userPosts[index].likesCount - 1)
+                }
+            }
+        } catch {
+            print("点赞失败：\(error)")
+        }
+    }
+
+    private func toggleBookmarkPost(_ postId: String) async {
+        guard let index = viewModel.userPosts.firstIndex(where: { $0.id == postId }) else { return }
+
+        do {
+            let result = try await CommunityAPIService.shared.toggleBookmark(postId: postId)
+            await MainActor.run {
+                viewModel.userPosts[index].isBookmarked = result.isBookmarked
+
+                if result.isBookmarked {
+                    viewModel.userPosts[index].bookmarksCount += 1
+                } else {
+                    viewModel.userPosts[index].bookmarksCount = max(0, viewModel.userPosts[index].bookmarksCount - 1)
+                }
+            }
+        } catch {
+            print("收藏失败：\(error)")
+        }
+    }
+
+    private func sharePost(_ postId: String) async {
+        do {
+            let _ = try await CommunityAPIService.shared.sharePost(postId: postId)
+            print("分享成功")
+        } catch {
+            print("分享失败：\(error)")
+        }
+    }
+
+    // MARK: - 收藏列表交互功能
+    private func toggleLikeBookmarkedPost(_ postId: String) async {
+        guard let index = viewModel.bookmarkedPosts.firstIndex(where: { $0.id == postId }) else { return }
+
+        do {
+            let result = try await CommunityAPIService.shared.toggleLike(postId: postId)
+            await MainActor.run {
+                viewModel.bookmarkedPosts[index].isLiked = result.isLiked
+
+                if result.isLiked {
+                    viewModel.bookmarkedPosts[index].likesCount += 1
+                } else {
+                    viewModel.bookmarkedPosts[index].likesCount = max(0, viewModel.bookmarkedPosts[index].likesCount - 1)
+                }
+            }
+        } catch {
+            print("点赞失败：\(error)")
+        }
+    }
+
+    private func toggleBookmarkBookmarkedPost(_ postId: String) async {
+        guard let index = viewModel.bookmarkedPosts.firstIndex(where: { $0.id == postId }) else { return }
+
+        do {
+            let result = try await CommunityAPIService.shared.toggleBookmark(postId: postId)
+            await MainActor.run {
+                viewModel.bookmarkedPosts[index].isBookmarked = result.isBookmarked
+
+                if result.isBookmarked {
+                    viewModel.bookmarkedPosts[index].bookmarksCount += 1
+                } else {
+                    viewModel.bookmarkedPosts[index].bookmarksCount = max(0, viewModel.bookmarkedPosts[index].bookmarksCount - 1)
+                    // 如果取消收藏，从收藏列表中移除
+                    viewModel.bookmarkedPosts.remove(at: index)
+                }
+            }
+        } catch {
+            print("收藏失败：\(error)")
+        }
+    }
+
+    private func shareBookmarkedPost(_ postId: String) async {
+        do {
+            let _ = try await CommunityAPIService.shared.sharePost(postId: postId)
+            print("分享成功")
+        } catch {
+            print("分享失败：\(error)")
+        }
+    }
+}
+
+// MARK: - 预览
+struct UserProfileView_Previews: PreviewProvider {
+    static var previews: some View {
+        UserProfileView(userId: "123")
+    }
+}

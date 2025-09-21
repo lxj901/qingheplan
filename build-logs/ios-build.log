@@ -1,0 +1,869 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project qinghe/qinghe.xcodeproj -scheme qinghe -destination "platform=iOS Simulator,name=iPhone 16,OS=18.5" build
+
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (1 target)
+    Target 'qinghe' in project 'qinghe' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk -x c -c /dev/null
+
+ExecuteExternalTool /usr/bin/what -q /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/coremlc
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/coremlc generate /Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/qinghe/SnoreTalking.mlmodel /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/DerivedSources/CoreMLGenerated/SnoreTalking --dry-run yes --deployment-target 18.0 --sdkroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk --platform ios --output-partial-info-plist /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/SnoreTalking-CoreMLPartialInfo.plist --container bundle-resources --language Swift --swift-version 5.0
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/coremlc generate /Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/qinghe/SileroVAD.mlmodel /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/DerivedSources/CoreMLGenerated/SileroVAD --dry-run yes --deployment-target 18.0 --sdkroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk --platform ios --output-partial-info-plist /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/SileroVAD-CoreMLPartialInfo.plist --container bundle-resources --language Swift --swift-version 5.0
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/qinghe/Assets.xcassets
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: b534e1e6a2af287f32e9f76181cb776f
+Build description path: /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/XCBuildData/b534e1e6a2af287f32e9f76181cb776f.xcbuilddata
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk /Users/lixujie/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator18.5-22F76-d5fc8ad4295d2ef488fb7d0f804ce0c4.sdkstatcache
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk -o /Users/lixujie/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator18.5-22F76-d5fc8ad4295d2ef488fb7d0f804ce0c4.sdkstatcache
+
+WriteAuxiliaryFile /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/Objects-normal/arm64/qinghe.SwiftFileList (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    write-file /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/Objects-normal/arm64/qinghe.SwiftFileList
+
+ProcessProductPackaging /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/qinghe.entitlements /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/qinghe.app-Simulated.xcent (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+    Entitlements:
+    
+    {
+    "application-identifier" = "7CHR3URQ44.com.qinghe.qinghe";
+    "aps-environment" = production;
+    "com.apple.developer.applesignin" =     (
+        Default
+    );
+    "com.apple.developer.family-controls" = 1;
+    "com.apple.developer.healthkit" = 1;
+    "com.apple.developer.icloud-container-environment" = Production;
+    "com.apple.developer.icloud-container-identifiers" =     (
+        "iCloud.com.qinghe.qinghe"
+    );
+    "com.apple.developer.icloud-services" =     (
+        CloudKit
+    );
+    "com.apple.developer.usernotifications.communication" = 1;
+    "com.apple.developer.usernotifications.time-sensitive" = 1;
+}
+    
+    builtin-productPackagingUtility /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/qinghe.entitlements -entitlements -format xml -o /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/qinghe.app-Simulated.xcent
+
+WriteAuxiliaryFile /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/Objects-normal/arm64/qinghe.LinkFileList (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    write-file /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/Objects-normal/arm64/qinghe.LinkFileList
+
+WriteAuxiliaryFile /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/Objects-normal/arm64/qinghe.SwiftConstValuesFileList (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    write-file /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/Objects-normal/arm64/qinghe.SwiftConstValuesFileList
+
+ProcessProductPackaging /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/qinghe.entitlements /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/qinghe.app.xcent (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+    Entitlements:
+    
+    {
+}
+    
+    builtin-productPackagingUtility /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/qinghe.entitlements -entitlements -format xml -o /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/qinghe.app.xcent
+
+ProcessProductPackagingDER /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/qinghe.app.xcent /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/qinghe.app.xcent.der (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    /usr/bin/derq query -f xml -i /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/qinghe.app.xcent -o /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/qinghe.app.xcent.der --raw
+
+ProcessProductPackagingDER /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/qinghe.app-Simulated.xcent /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/qinghe.app-Simulated.xcent.der (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    /usr/bin/derq query -f xml -i /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/qinghe.app-Simulated.xcent -o /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/qinghe.app-Simulated.xcent.der --raw
+
+SwiftDriver qinghe normal arm64 com.apple.xcode.tools.swift.compiler (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name qinghe -Onone -enforce-exclusivity\=checked @/Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/Objects-normal/arm64/qinghe.SwiftFileList -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk -target arm64-apple-ios18.0-simulator -g -module-cache-path /Users/lixujie/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Index.noindex/DataStore -swift-version 5 -I /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Products/Debug-iphonesimulator -F /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Products/Debug-iphonesimulator -F /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/Frameworks -emit-localized-strings -emit-localized-strings-path /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/Objects-normal/arm64 -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/lixujie/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator18.5-22F76-d5fc8ad4295d2ef488fb7d0f804ce0c4.sdkstatcache -output-file-map /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/Objects-normal/arm64/qinghe-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/Objects-normal/arm64/qinghe.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/lixujie/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/Objects-normal/arm64/qinghe_const_extract_protocols.json -Xcc -iquote -Xcc /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/qinghe-generated-files.hmap -Xcc -I/Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/qinghe-own-target-headers.hmap -Xcc -I/Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/qinghe-all-target-headers.hmap -Xcc -iquote -Xcc /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/qinghe-project-headers.hmap -Xcc -I/Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/DerivedSources-normal/arm64 -Xcc -I/Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/DerivedSources/arm64 -Xcc -I/Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/Objects-normal/arm64/qinghe-Swift.h -working-directory /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe -experimental-emit-module-separately -disable-cmo
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ qinghe (in target 'qinghe' from project 'qinghe')
+
+EmitSwiftModule normal arm64 (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/qinghe/AudioRecordingManager.swift:263:1: warning: @preconcurrency attribute on conformance to 'AVAudioRecorderDelegate' has no effect
+extension AudioRecordingManager: @preconcurrency AVAudioRecorderDelegate {
+^                                ~~~~~~~~~~~~~~~~
+                                 
+/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/qinghe/AudioRecordingManager.swift:263:1: warning: @preconcurrency attribute on conformance to 'Sendable' has no effect
+extension AudioRecordingManager: @preconcurrency AVAudioRecorderDelegate {
+^                                ~~~~~~~~~~~~~~~~
+                                 
+/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/qinghe/WorkoutAICoachService.swift:544:1: warning: @preconcurrency attribute on conformance to 'AVSpeechSynthesizerDelegate' has no effect
+extension WorkoutAICoachService: @preconcurrency AVSpeechSynthesizerDelegate {
+^                                ~~~~~~~~~~~~~~~~
+                                 
+/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/qinghe/WorkoutAICoachService.swift:544:1: warning: @preconcurrency attribute on conformance to 'Sendable' has no effect
+extension WorkoutAICoachService: @preconcurrency AVSpeechSynthesizerDelegate {
+^                                ~~~~~~~~~~~~~~~~
+                                 
+/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/qinghe/AppUnlockRuleEditorView.swift:19:49: error: cannot find type 'ApplicationToken' in scope
+    @State private var currentApplicationToken: ApplicationToken? = nil
+                                                ^~~~~~~~~~~~~~~~
+/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/qinghe/WorkoutAudioPlayer.swift:162:10: warning: main actor-isolated instance method 'audioPlayerDidFinishPlaying(_:successfully:)' cannot be used to satisfy nonisolated requirement from protocol 'AVAudioPlayerDelegate'; this is an error in the Swift 6 language mode
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+         ^
+/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/qinghe/WorkoutAudioPlayer.swift:162:10: note: add 'nonisolated' to 'audioPlayerDidFinishPlaying(_:successfully:)' to make this instance method not isolated to the actor
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+         ^
+    nonisolated 
+/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/qinghe/WorkoutAudioPlayer.swift:161:31: note: add '@preconcurrency' to the 'AVAudioPlayerDelegate' conformance to defer isolation checking to run time
+extension WorkoutAudioPlayer: AVAudioPlayerDelegate {
+                              ^
+                              @preconcurrency 
+/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/qinghe/WorkoutAudioPlayer.swift:169:10: warning: main actor-isolated instance method 'audioPlayerDecodeErrorDidOccur(_:error:)' cannot be used to satisfy nonisolated requirement from protocol 'AVAudioPlayerDelegate'; this is an error in the Swift 6 language mode
+    func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
+         ^
+/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/qinghe/WorkoutAudioPlayer.swift:169:10: note: add 'nonisolated' to 'audioPlayerDecodeErrorDidOccur(_:error:)' to make this instance method not isolated to the actor
+    func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
+         ^
+    nonisolated 
+/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/qinghe/PushNotificationManager.swift:348:1: warning: @preconcurrency attribute on conformance to 'UNUserNotificationCenterDelegate' has no effect
+extension PushNotificationManager: @preconcurrency UNUserNotificationCenterDelegate {
+^                                  ~~~~~~~~~~~~~~~~
+                                   
+/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/qinghe/AudioMessageManager.swift:346:1: warning: @preconcurrency attribute on conformance to 'AVAudioPlayerDelegate' has no effect
+extension AudioMessageManager: @preconcurrency AVAudioPlayerDelegate {
+^                              ~~~~~~~~~~~~~~~~
+                               
+/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/qinghe/MissingTypes.swift:729:61: warning: main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    static let shared = EnhancedDeepSeekSleepAnalysisEngine.shared
+                                                            ^
+/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/qinghe/DeepSeekSleepAnalysisEngine.swift:9:16: note: static property declared here
+    static let shared = EnhancedDeepSeekSleepAnalysisEngine()
+               ^
+
+Failed frontend command:
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -emit-module -experimental-skip-non-inlinable-function-bodies-without-types /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepDashboardView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/NativeExpressAdView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/NetworkMonitor.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/PostDetailView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/AdditionalTypes.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/NewPublishPostView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/TemptationDetailViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/AvatarPickerView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatWithUserView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/TagDetailViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/NotificationListView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CacheManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CheckinModels.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/qingheApp.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/UnifiedCommentListView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CommentInputSheet.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/AudioRecordingManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/UtilityExtensions.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepDataManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatExportView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/PostDetailViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/TagsAPIService.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/UnifiedCommentView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/RecordCenterViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/VoiceRecordingOverlay.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepDesignTheme.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunityView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/GroupDetailManagementView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CreatePlanView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatExportViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/HomePageViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ProfileContentModule.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutCountdownView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekInsightsGenerator.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/LocalSleepAudioAnalyzer.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/Extensions.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutModels.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekTrendAnalyzer.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/MainCommunityView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/UserFeedbackManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutSyncManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/RecordHistoryView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/EditPlanViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/MessageSearchViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/EmotionDetailViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ModernCheckinCalendarView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/WakeTimeSelectionView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/NavigationManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepDetailView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/NewChatView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatListViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ProfileCore.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/NewRecordCenterView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/AvatarUploadService.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CheckinAPIService.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/NotificationManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatAPIService.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CheckinService.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/UserInfoCacheManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/RecordModels.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CommentManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/NotificationRowView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/WebSocketManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepInsightsView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ActionOptionRow.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/AddressPickerView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ProfileHeaderModule.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanManagementView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/UserListView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ReportPostView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/PersistenceDetailView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/FinalSettingsPages.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutAICoachService.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunityViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/GroupInfoViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepModels.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CreatePlanViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/HomeViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutDetailOverviewView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ProfileInfoModule.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/AppleMapView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekRecommendationsGenerator.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/LocationDebugView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutModeSelectionView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekTrendModels.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/MainTabView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/UserManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/EditProfileView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/MessagesView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/RouteDataManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunityModels.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ModernDesignSystem.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/PersistenceDetailViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/NetworkErrorHandler.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutAIModels.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepRecordsView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/NewChatViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/AppConstants.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatModels.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/NewRecordCenterViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ProfileNavigationModule.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/AppManagementSettingsView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/BlockUserView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CheckinDetailView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/NotificationModels.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/AppUnlockRuleEditorView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatDetailView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CheckinViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/UserProfileComponents.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunityAPIService.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ScreenTimeManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunityNavigationDestination.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanDetailView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutAudioPlayer.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepTrackingView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/TemptationRecordView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ProfileStatsModule.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/AppManagementView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/AppUsageManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/UserProfileHelperViews.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/SettingsPages.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunityPostCard.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ForwardMessageView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanReminderManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ContentView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/GroupMemberListView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutCameraView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/AuthManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekAnalysisExtensions.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ImageViewerSheet.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/TemptationService.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutLiveView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekSleepAnalysisEngine.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/LocationSelectionView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ProfileTabsModule.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutNotificationManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/EditGroupInfoView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/MessageActionBottomSheet.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/EditTemptationView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/MessageUserProfileView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/EmotionRecordView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ShareSheet.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/UserProfileManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/MoreSettingsPages.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanService.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/NetworkManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/NewMainHomeView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/SplashAdView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/EmotionStatisticsView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatUIComponents.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/NewWorkoutAPIService.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/TemptationStatisticsView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CachedAsyncImage.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/AppRestrictionManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CheckinInputView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanDetailViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/PushNotificationManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatDetailViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/AudioMessageManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CommentDesignSystem.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/UserProfileView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/SideMenuView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanManagementViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanStatusManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/AddGroupMemberView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/SplashView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/AppIconManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/AuthService.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/EmotionStatisticsViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/TopicSelectionView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/AudioMLModels.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunitySearchView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/GDTAdManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/PostCardView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CoordinateConverter.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/HealthKitManager.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutCompletionView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/TemptationDetailView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekAPIService.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/AppleMapService.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/EventSegmentsView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/KeepStyleWorkoutLiveView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/TagDetailView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekSleepAnalysisModels.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/LoginView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/TwitterStyleImageGrid.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutLockScreenView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/EditPlanView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunityListCardView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/MessageSearchView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutRecordsSelectionView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/EmotionDetailView.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/MissingTypes.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/EmotionService.swift /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/qinghe/UserProfileViewModel.swift /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/DerivedSources/CoreMLGenerated/SnoreTalking/SnoreTalking.swift /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/DerivedSources/CoreMLGenerated/SileroVAD/SileroVAD.swift /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/DerivedSources/GeneratedAssetSymbols.swift -target arm64-apple-ios18.0-simulator -Xllvm -aarch64-use-tbi -enable-objc-interop -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk -I /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Products/Debug-iphonesimulator -F /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Products/Debug-iphonesimulator -F /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe/Frameworks -no-color-diagnostics -enable-testing -g -debug-info-format\=dwarf -dwarf-version\=5 -module-cache-path /Users/lixujie/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -profile-generate -profile-coverage-mapping -swift-version 5 -enforce-exclusivity\=checked -Onone -D DEBUG -serialize-debugging-options -const-gather-protocols-file /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/Objects-normal/arm64/qinghe_const_extract_protocols.json -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -empty-abi-descriptor -validate-clang-modules-once -clang-build-session-file /Users/lixujie/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -working-directory -Xcc /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe -resource-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift -enable-anonymous-context-mangled-names -file-compilation-dir /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe -Xcc -ivfsstatcache -Xcc /Users/lixujie/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator18.5-22F76-d5fc8ad4295d2ef488fb7d0f804ce0c4.sdkstatcache -Xcc -I/Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/swift-overrides.hmap -Xcc -iquote -Xcc /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/qinghe-generated-files.hmap -Xcc -I/Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/qinghe-own-target-headers.hmap -Xcc -I/Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/qinghe-all-target-headers.hmap -Xcc -iquote -Xcc /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/qinghe-project-headers.hmap -Xcc -I/Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/DerivedSources-normal/arm64 -Xcc -I/Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/DerivedSources/arm64 -Xcc -I/Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/DerivedSources -Xcc -DDEBUG\=1 -module-name qinghe -frontend-parseable-output -disable-clang-spi -target-sdk-version 18.5 -target-sdk-name iphonesimulator18.5 -external-plugin-path /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server -external-plugin-path /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/local/lib/swift/host/plugins\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server -in-process-plugin-server-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/libSwiftInProcPluginServer.dylib -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/local/lib/swift/host/plugins -emit-module-doc-path /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/Objects-normal/arm64/qinghe.swiftdoc -emit-module-source-info-path /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/Objects-normal/arm64/qinghe.swiftsourceinfo -emit-objc-header-path /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/Objects-normal/arm64/qinghe-Swift.h -serialize-diagnostics-path /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/Objects-normal/arm64/qinghe-master-emit-module.dia -emit-dependencies-path /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/Objects-normal/arm64/qinghe-master-emit-module.d -o /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/Objects-normal/arm64/qinghe.swiftmodule -emit-abi-descriptor-path /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/Objects-normal/arm64/qinghe.abi.json
+SwiftCompile normal arm64 Compiling\ NewWorkoutAPIService.swift,\ TemptationStatisticsView.swift,\ CachedAsyncImage.swift,\ AppRestrictionManager.swift,\ CheckinInputView.swift,\ PlanDetailViewModel.swift,\ PushNotificationManager.swift,\ ChatDetailViewModel.swift,\ AudioMessageManager.swift,\ CommentDesignSystem.swift,\ UserProfileView.swift,\ SideMenuView.swift,\ PlanManagementViewModel.swift,\ PlanStatusManager.swift,\ AddGroupMemberView.swift,\ SplashView.swift,\ AppIconManager.swift,\ AuthService.swift,\ EmotionStatisticsViewModel.swift,\ TopicSelectionView.swift,\ AudioMLModels.swift,\ CommunitySearchView.swift,\ GDTAdManager.swift,\ PostCardView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NewWorkoutAPIService.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/TemptationStatisticsView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CachedAsyncImage.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AppRestrictionManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CheckinInputView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanDetailViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PushNotificationManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatDetailViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AudioMessageManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommentDesignSystem.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UserProfileView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SideMenuView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanManagementViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanStatusManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AddGroupMemberView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SplashView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AppIconManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AuthService.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EmotionStatisticsViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/TopicSelectionView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AudioMLModels.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunitySearchView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/GDTAdManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PostCardView.swift (in target 'qinghe' from project 'qinghe')
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NewWorkoutAPIService.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/TemptationStatisticsView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CachedAsyncImage.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AppRestrictionManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CheckinInputView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanDetailViewModel.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PushNotificationManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatDetailViewModel.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AudioMessageManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommentDesignSystem.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UserProfileView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SideMenuView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanManagementViewModel.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanStatusManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AddGroupMemberView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SplashView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AppIconManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AuthService.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EmotionStatisticsViewModel.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/TopicSelectionView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AudioMLModels.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunitySearchView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/GDTAdManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PostCardView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 Compiling\ ProfileNavigationModule.swift,\ AppManagementSettingsView.swift,\ BlockUserView.swift,\ CheckinDetailView.swift,\ NotificationModels.swift,\ AppUnlockRuleEditorView.swift,\ ChatDetailView.swift,\ CheckinViewModel.swift,\ UserProfileComponents.swift,\ CommunityAPIService.swift,\ ScreenTimeManager.swift,\ CommunityNavigationDestination.swift,\ PlanDetailView.swift,\ WorkoutAudioPlayer.swift,\ SleepTrackingView.swift,\ TemptationRecordView.swift,\ ProfileStatsModule.swift,\ AppManagementView.swift,\ AppUsageManager.swift,\ UserProfileHelperViews.swift,\ SettingsPages.swift,\ CommunityPostCard.swift,\ ForwardMessageView.swift,\ PlanReminderManager.swift,\ ContentView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ProfileNavigationModule.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AppManagementSettingsView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/BlockUserView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CheckinDetailView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NotificationModels.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AppUnlockRuleEditorView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatDetailView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CheckinViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UserProfileComponents.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunityAPIService.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ScreenTimeManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunityNavigationDestination.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanDetailView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutAudioPlayer.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepTrackingView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/TemptationRecordView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ProfileStatsModule.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AppManagementView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AppUsageManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UserProfileHelperViews.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SettingsPages.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunityPostCard.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ForwardMessageView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanReminderManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ContentView.swift (in target 'qinghe' from project 'qinghe')
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ProfileNavigationModule.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AppManagementSettingsView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/BlockUserView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CheckinDetailView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NotificationModels.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AppUnlockRuleEditorView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatDetailView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CheckinViewModel.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UserProfileComponents.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunityAPIService.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ScreenTimeManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunityNavigationDestination.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanDetailView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutAudioPlayer.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepTrackingView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/TemptationRecordView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ProfileStatsModule.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AppManagementView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AppUsageManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UserProfileHelperViews.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SettingsPages.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunityPostCard.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ForwardMessageView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanReminderManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ContentView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 Compiling\ SleepDashboardView.swift,\ NativeExpressAdView.swift,\ NetworkMonitor.swift,\ PostDetailView.swift,\ AdditionalTypes.swift,\ NewPublishPostView.swift,\ TemptationDetailViewModel.swift,\ AvatarPickerView.swift,\ ChatWithUserView.swift,\ TagDetailViewModel.swift,\ NotificationListView.swift,\ CacheManager.swift,\ CheckinModels.swift,\ qingheApp.swift,\ UnifiedCommentListView.swift,\ CommentInputSheet.swift,\ AudioRecordingManager.swift,\ UtilityExtensions.swift,\ SleepDataManager.swift,\ ChatExportView.swift,\ PostDetailViewModel.swift,\ TagsAPIService.swift,\ UnifiedCommentView.swift,\ RecordCenterViewModel.swift,\ VoiceRecordingOverlay.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepDashboardView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NativeExpressAdView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NetworkMonitor.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PostDetailView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AdditionalTypes.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NewPublishPostView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/TemptationDetailViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AvatarPickerView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatWithUserView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/TagDetailViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NotificationListView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CacheManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CheckinModels.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/qingheApp.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UnifiedCommentListView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommentInputSheet.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AudioRecordingManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UtilityExtensions.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepDataManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatExportView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PostDetailViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/TagsAPIService.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UnifiedCommentView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/RecordCenterViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/VoiceRecordingOverlay.swift (in target 'qinghe' from project 'qinghe')
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepDashboardView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NativeExpressAdView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NetworkMonitor.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PostDetailView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AdditionalTypes.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NewPublishPostView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/TemptationDetailViewModel.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AvatarPickerView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatWithUserView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/TagDetailViewModel.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NotificationListView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CacheManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CheckinModels.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/qingheApp.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UnifiedCommentListView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommentInputSheet.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AudioRecordingManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UtilityExtensions.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepDataManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatExportView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PostDetailViewModel.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/TagsAPIService.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UnifiedCommentView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/RecordCenterViewModel.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/VoiceRecordingOverlay.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 Compiling\ ChatListViewModel.swift,\ ProfileCore.swift,\ NewRecordCenterView.swift,\ AvatarUploadService.swift,\ CheckinAPIService.swift,\ NotificationManager.swift,\ ChatAPIService.swift,\ CheckinService.swift,\ UserInfoCacheManager.swift,\ RecordModels.swift,\ CommentManager.swift,\ NotificationRowView.swift,\ WebSocketManager.swift,\ SleepInsightsView.swift,\ ActionOptionRow.swift,\ AddressPickerView.swift,\ ProfileHeaderModule.swift,\ PlanManagementView.swift,\ UserListView.swift,\ ReportPostView.swift,\ PersistenceDetailView.swift,\ FinalSettingsPages.swift,\ WorkoutAICoachService.swift,\ CommunityViewModel.swift,\ GroupInfoViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatListViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ProfileCore.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NewRecordCenterView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AvatarUploadService.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CheckinAPIService.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NotificationManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatAPIService.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CheckinService.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UserInfoCacheManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/RecordModels.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommentManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NotificationRowView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WebSocketManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepInsightsView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ActionOptionRow.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AddressPickerView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ProfileHeaderModule.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanManagementView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UserListView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ReportPostView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PersistenceDetailView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/FinalSettingsPages.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutAICoachService.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunityViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/GroupInfoViewModel.swift (in target 'qinghe' from project 'qinghe')
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatListViewModel.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ProfileCore.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NewRecordCenterView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AvatarUploadService.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CheckinAPIService.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NotificationManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatAPIService.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CheckinService.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UserInfoCacheManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/RecordModels.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommentManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NotificationRowView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WebSocketManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepInsightsView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ActionOptionRow.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AddressPickerView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ProfileHeaderModule.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanManagementView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UserListView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ReportPostView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PersistenceDetailView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/FinalSettingsPages.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutAICoachService.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunityViewModel.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/GroupInfoViewModel.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 Compiling\ GroupMemberListView.swift,\ WorkoutCameraView.swift,\ AuthManager.swift,\ DeepSeekAnalysisExtensions.swift,\ ImageViewerSheet.swift,\ TemptationService.swift,\ WorkoutLiveView.swift,\ DeepSeekSleepAnalysisEngine.swift,\ LocationSelectionView.swift,\ ProfileTabsModule.swift,\ WorkoutNotificationManager.swift,\ EditGroupInfoView.swift,\ MessageActionBottomSheet.swift,\ EditTemptationView.swift,\ MessageUserProfileView.swift,\ EmotionRecordView.swift,\ ShareSheet.swift,\ UserProfileManager.swift,\ MoreSettingsPages.swift,\ PlanService.swift,\ NetworkManager.swift,\ NewMainHomeView.swift,\ SplashAdView.swift,\ EmotionStatisticsView.swift,\ ChatUIComponents.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/GroupMemberListView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutCameraView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AuthManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekAnalysisExtensions.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ImageViewerSheet.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/TemptationService.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutLiveView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekSleepAnalysisEngine.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/LocationSelectionView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ProfileTabsModule.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutNotificationManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EditGroupInfoView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/MessageActionBottomSheet.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EditTemptationView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/MessageUserProfileView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EmotionRecordView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ShareSheet.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UserProfileManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/MoreSettingsPages.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanService.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NetworkManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NewMainHomeView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SplashAdView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EmotionStatisticsView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatUIComponents.swift (in target 'qinghe' from project 'qinghe')
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/GroupMemberListView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutCameraView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AuthManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekAnalysisExtensions.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ImageViewerSheet.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/TemptationService.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutLiveView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekSleepAnalysisEngine.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/LocationSelectionView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ProfileTabsModule.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutNotificationManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EditGroupInfoView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/MessageActionBottomSheet.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EditTemptationView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/MessageUserProfileView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EmotionRecordView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ShareSheet.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UserProfileManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/MoreSettingsPages.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PlanService.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NetworkManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NewMainHomeView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SplashAdView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EmotionStatisticsView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatUIComponents.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 Compiling\ CoordinateConverter.swift,\ HealthKitManager.swift,\ WorkoutCompletionView.swift,\ TemptationDetailView.swift,\ DeepSeekAPIService.swift,\ AppleMapService.swift,\ EventSegmentsView.swift,\ KeepStyleWorkoutLiveView.swift,\ TagDetailView.swift,\ DeepSeekSleepAnalysisModels.swift,\ LoginView.swift,\ TwitterStyleImageGrid.swift,\ WorkoutLockScreenView.swift,\ EditPlanView.swift,\ CommunityListCardView.swift,\ MessageSearchView.swift,\ WorkoutRecordsSelectionView.swift,\ EmotionDetailView.swift,\ MissingTypes.swift,\ EmotionService.swift,\ UserProfileViewModel.swift,\ SnoreTalking.swift,\ SileroVAD.swift,\ GeneratedAssetSymbols.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CoordinateConverter.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/HealthKitManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutCompletionView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/TemptationDetailView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekAPIService.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AppleMapService.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EventSegmentsView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/KeepStyleWorkoutLiveView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/TagDetailView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekSleepAnalysisModels.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/LoginView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/TwitterStyleImageGrid.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutLockScreenView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EditPlanView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunityListCardView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/MessageSearchView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutRecordsSelectionView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EmotionDetailView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/MissingTypes.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EmotionService.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UserProfileViewModel.swift /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/DerivedSources/CoreMLGenerated/SnoreTalking/SnoreTalking.swift /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/DerivedSources/CoreMLGenerated/SileroVAD/SileroVAD.swift /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'qinghe' from project 'qinghe')
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CoordinateConverter.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/HealthKitManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutCompletionView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/TemptationDetailView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekAPIService.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AppleMapService.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EventSegmentsView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/KeepStyleWorkoutLiveView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/TagDetailView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekSleepAnalysisModels.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/LoginView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/TwitterStyleImageGrid.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutLockScreenView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EditPlanView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunityListCardView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/MessageSearchView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutRecordsSelectionView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EmotionDetailView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/MissingTypes.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EmotionService.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UserProfileViewModel.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/DerivedSources/CoreMLGenerated/SnoreTalking/SnoreTalking.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/DerivedSources/CoreMLGenerated/SileroVAD/SileroVAD.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Developer/Xcode/DerivedData/qinghe-doxvjfleykwunbcjlxhzfgzycgod/Build/Intermediates.noindex/qinghe.build/Debug-iphonesimulator/qinghe.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 Compiling\ SleepModels.swift,\ CreatePlanViewModel.swift,\ HomeViewModel.swift,\ WorkoutDetailOverviewView.swift,\ ProfileInfoModule.swift,\ AppleMapView.swift,\ DeepSeekRecommendationsGenerator.swift,\ LocationDebugView.swift,\ WorkoutModeSelectionView.swift,\ DeepSeekTrendModels.swift,\ MainTabView.swift,\ UserManager.swift,\ EditProfileView.swift,\ MessagesView.swift,\ RouteDataManager.swift,\ CommunityModels.swift,\ ModernDesignSystem.swift,\ PersistenceDetailViewModel.swift,\ NetworkErrorHandler.swift,\ WorkoutAIModels.swift,\ SleepRecordsView.swift,\ NewChatViewModel.swift,\ AppConstants.swift,\ ChatModels.swift,\ NewRecordCenterViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepModels.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CreatePlanViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/HomeViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutDetailOverviewView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ProfileInfoModule.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AppleMapView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekRecommendationsGenerator.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/LocationDebugView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutModeSelectionView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekTrendModels.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/MainTabView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UserManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EditProfileView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/MessagesView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/RouteDataManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunityModels.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ModernDesignSystem.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PersistenceDetailViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NetworkErrorHandler.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutAIModels.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepRecordsView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NewChatViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AppConstants.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatModels.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NewRecordCenterViewModel.swift (in target 'qinghe' from project 'qinghe')
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepModels.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CreatePlanViewModel.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/HomeViewModel.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutDetailOverviewView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ProfileInfoModule.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AppleMapView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekRecommendationsGenerator.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/LocationDebugView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutModeSelectionView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekTrendModels.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/MainTabView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UserManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EditProfileView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/MessagesView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/RouteDataManager.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunityModels.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ModernDesignSystem.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/PersistenceDetailViewModel.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NetworkErrorHandler.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutAIModels.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepRecordsView.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NewChatViewModel.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/AppConstants.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatModels.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NewRecordCenterViewModel.swift (in target 'qinghe' from project 'qinghe')
+    cd /Users/lixujie/Library/Mobile\ Documents/com\~apple\~CloudDocs/qinghe\ plan/qinghe
+    
+
+SwiftCompile normal arm64 Compiling\ SleepDesignTheme.swift,\ CommunityView.swift,\ GroupDetailManagementView.swift,\ CreatePlanView.swift,\ ChatExportViewModel.swift,\ HomePageViewModel.swift,\ ProfileContentModule.swift,\ WorkoutCountdownView.swift,\ DeepSeekInsightsGenerator.swift,\ LocalSleepAudioAnalyzer.swift,\ Extensions.swift,\ WorkoutModels.swift,\ DeepSeekTrendAnalyzer.swift,\ MainCommunityView.swift,\ UserFeedbackManager.swift,\ WorkoutSyncManager.swift,\ RecordHistoryView.swift,\ EditPlanViewModel.swift,\ MessageSearchViewModel.swift,\ EmotionDetailViewModel.swift,\ ModernCheckinCalendarView.swift,\ WakeTimeSelectionView.swift,\ NavigationManager.swift,\ SleepDetailView.swift,\ NewChatView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepDesignTheme.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CommunityView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/GroupDetailManagementView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/CreatePlanView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ChatExportViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/HomePageViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ProfileContentModule.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutCountdownView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekInsightsGenerator.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/LocalSleepAudioAnalyzer.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/Extensions.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutModels.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/DeepSeekTrendAnalyzer.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/MainCommunityView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/UserFeedbackManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WorkoutSyncManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/RecordHistoryView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EditPlanViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/MessageSearchViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/EmotionDetailViewModel.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/ModernCheckinCalendarView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/WakeTimeSelectionView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NavigationManager.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/SleepDetailView.swift /Users/lixujie/Library/Mobile\ Documents/com~apple~CloudDocs/qinghe\ plan/qinghe/qinghe/NewChatView.swift (in target 'qinghe' from project 'qinghe')
+Command SwiftCompile failed with a nonzero exit code
+
+note: '/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/Frameworks/Tquic.xcframework' is missing architecture(s) required by this target (arm64), but may still be link-compatible. (in target 'qinghe' from project 'qinghe')
