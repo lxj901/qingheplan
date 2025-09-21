@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/qinghe/Models/Audio/silero-vad-6.0/examples/java-example/java-example.iml" filepath="$PROJECT_DIR$/qinghe/Models/Audio/silero-vad-6.0/examples/java-example/java-example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qinghe/Models/Audio/silero-vad-6.0/examples/java-wav-file-example/java-wav-file-example.iml" filepath="$PROJECT_DIR$/qinghe/Models/Audio/silero-vad-6.0/examples/java-wav-file-example/java-wav-file-example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/qinghe plan.iml" filepath="$PROJECT_DIR$/.idea/qinghe plan.iml" />
+    </modules>
+  </component>
+</project>
