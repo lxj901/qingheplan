@@ -162,7 +162,7 @@ struct ChatListItemView: View {
             }
         }
     }
-    
+
     private var contentView: some View {
         HStack(spacing: ModernDesignSystem.Spacing.md) {
             // 头像
@@ -172,7 +172,7 @@ struct ChatListItemView: View {
                 size: 52,
                 isOnline: conversation.type == .privateChat ? conversation.participants.first?.isOnline : nil
             )
-            
+
             // 内容区域
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
@@ -182,9 +182,9 @@ struct ChatListItemView: View {
                         .fontWeight(.medium)
                         .foregroundColor(ModernDesignSystem.Colors.textPrimary)
                         .lineLimit(1)
-                    
+
                     Spacer()
-                    
+
                     // 时间和状态指示器
                     HStack(spacing: 4) {
                         if conversation.isPinned {
@@ -192,28 +192,28 @@ struct ChatListItemView: View {
                                 .font(.system(size: 10))
                                 .foregroundColor(ModernDesignSystem.Colors.primaryGreen)
                         }
-                        
+
                         if conversation.isMuted ?? false {
                             Image(systemName: "speaker.slash.fill")
                                 .font(.system(size: 10))
                                 .foregroundColor(ModernDesignSystem.Colors.textTertiary)
                         }
-                        
+
                         Text(conversation.lastMessageTimeDisplay)
                             .font(ModernDesignSystem.Typography.caption2)
                             .foregroundColor(ModernDesignSystem.Colors.textSecondary)
                     }
                 }
-                
+
                 HStack {
                     // 最后消息预览
                     Text(conversation.lastMessagePreview)
                         .font(ModernDesignSystem.Typography.footnote)
                         .foregroundColor(ModernDesignSystem.Colors.textSecondary)
                         .lineLimit(2)
-                    
+
                     Spacer()
-                    
+
                     // 未读消息数量
                     if (conversation.unreadCount ?? 0) > 0 {
                         UnreadBadgeView(count: conversation.unreadCount ?? 0)
@@ -281,7 +281,7 @@ struct ChatAvatarView: View {
 /// 未读消息徽章
 struct UnreadBadgeView: View {
     let count: Int
-    
+
     var body: some View {
         Group {
             if count > 0 {
@@ -305,7 +305,7 @@ struct ChatSearchBar: View {
     @FocusState private var isSearchFocused: Bool
     let onSearchSubmit: () -> Void
     let onCancelSearch: () -> Void
-    
+
     var body: some View {
         HStack(spacing: ModernDesignSystem.Spacing.sm) {
             // 搜索输入框
@@ -313,7 +313,7 @@ struct ChatSearchBar: View {
                 Image(systemName: "magnifyingglass")
                     .font(.system(size: 16))
                     .foregroundColor(ModernDesignSystem.Colors.textTertiary)
-                
+
                 TextField("搜索聊天记录", text: $searchText)
                     .focused($isSearchFocused)
                     .textFieldStyle(PlainTextFieldStyle())
@@ -321,7 +321,7 @@ struct ChatSearchBar: View {
                     .onSubmit {
                         onSearchSubmit()
                     }
-                
+
                 if !searchText.isEmpty {
                     Button(action: {
                         searchText = ""
@@ -337,7 +337,7 @@ struct ChatSearchBar: View {
             .padding(.vertical, ModernDesignSystem.Spacing.sm)
             .background(ModernDesignSystem.Colors.backgroundSecondary)
             .cornerRadius(ModernDesignSystem.CornerRadius.md)
-            
+
             // 取消按钮（搜索时显示）
             if isSearchFocused {
                 Button("取消") {
@@ -405,25 +405,25 @@ struct ChatCategoryButton: View {
 /// 空状态视图
 struct ChatEmptyStateView: View {
     let type: EmptyStateType
-    
+
     var body: some View {
         VStack(spacing: ModernDesignSystem.Spacing.lg) {
             Image(systemName: type.iconName)
                 .font(.system(size: 64))
                 .foregroundColor(ModernDesignSystem.Colors.textTertiary)
-            
+
             VStack(spacing: ModernDesignSystem.Spacing.sm) {
                 Text(type.title)
                     .font(ModernDesignSystem.Typography.headline)
                     .foregroundColor(ModernDesignSystem.Colors.textPrimary)
-                
+
                 Text(type.subtitle)
                     .font(ModernDesignSystem.Typography.body)
                     .foregroundColor(ModernDesignSystem.Colors.textSecondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, ModernDesignSystem.Spacing.xl)
             }
-            
+
             if let actionTitle = type.actionTitle {
                 Button(actionTitle) {
                     // 处理操作
@@ -453,45 +453,82 @@ struct MessageBubbleView: View {
     }
 
     var body: some View {
-        HStack(alignment: .top, spacing: ModernDesignSystem.Spacing.sm) {
-            if message.isFromCurrentUser {
-                // 自己发送的消息 - 右对齐
-                Spacer(minLength: 80)
-                messageBubble
-                    .frame(maxWidth: UIScreen.main.bounds.width * 0.75, alignment: .trailing)
+        Group {
+            if message.type == .system {
+                // 系统消息：使用与上方卡片一致的“卡片样式”，占满行宽
+                systemMessageCard
             } else {
-                // 他人发送的消息 - 左对齐
-                if shouldShowAvatar {
-                    ChatAvatarView(
-                        avatarUrl: message.sender.avatar,
-                        displayName: message.sender.nickname,
-                        size: 36,
-                        isOnline: nil
-                    )
-                    .padding(.top, 2)
-                } else {
-                    Spacer()
-                        .frame(width: 36)
-                }
+                HStack(alignment: .top, spacing: ModernDesignSystem.Spacing.sm) {
+                    if message.isFromCurrentUser {
+                        // 自己发送的消息 - 右对齐
+                        Spacer(minLength: 80)
+                        messageBubble
+                            .frame(maxWidth: UIScreen.main.bounds.width * 0.75, alignment: .trailing)
+                    } else {
+                        // 他人发送的消息 - 左对齐
+                        if shouldShowAvatar {
+                            ChatAvatarView(
+                                avatarUrl: message.sender.avatar,
+                                displayName: message.sender.nickname,
+                                size: 36,
+                                isOnline: nil
+                            )
+                            .padding(.top, 2)
+                        } else {
+                            Spacer().frame(width: 36)
+                        }
 
-                messageBubble
-                    .frame(maxWidth: UIScreen.main.bounds.width * 0.75, alignment: .leading)
-                Spacer(minLength: 80)
+                        messageBubble
+                            .frame(maxWidth: UIScreen.main.bounds.width * 0.75, alignment: .leading)
+                        Spacer(minLength: 80)
+                    }
+                }
+                .padding(.horizontal, ModernDesignSystem.Spacing.md)
+                .background(
+                    // 高亮背景效果
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(ModernDesignSystem.Colors.primaryGreen.opacity(isHighlighted ? 0.15 : 0))
+                        .animation(.easeInOut(duration: 0.3).repeatCount(3, autoreverses: true), value: isHighlighted)
+                        .padding(.horizontal, -8)
+                        .padding(.vertical, -4)
+                )
+                .onLongPressGesture { onLongPress() }
             }
         }
-        .padding(.horizontal, ModernDesignSystem.Spacing.md)
-        .background(
-            // 高亮背景效果
-            RoundedRectangle(cornerRadius: 12)
-                .fill(ModernDesignSystem.Colors.primaryGreen.opacity(isHighlighted ? 0.15 : 0))
-                .animation(.easeInOut(duration: 0.3).repeatCount(3, autoreverses: true), value: isHighlighted)
-                .padding(.horizontal, -8)
-                .padding(.vertical, -4)
-        )
-        .onLongPressGesture {
-            onLongPress()
-        }
     }
+
+    // 系统消息卡片：与 AskSuggestionsCard 保持一致的视觉风格
+    private var systemMessageCard: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(systemMessageText)
+                .font(ModernDesignSystem.Typography.subheadline)
+                .foregroundColor(.black)
+                .multilineTextAlignment(.leading)
+        }
+        .padding(18)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: 28, style: .continuous)
+                .fill(Color.white)
+                .background(
+                    RoundedRectangle(cornerRadius: 28, style: .continuous)
+                        .strokeBorder(Color.white.opacity(0.25), lineWidth: 0.5)
+                        .shadow(color: .white.opacity(0.35), radius: 20, x: 0, y: 6)
+                        .blur(radius: 0)
+                )
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 28, style: .continuous)
+                .stroke(Color.white.opacity(0.35), lineWidth: 0.5)
+        )
+
+    }
+
+    private var systemMessageText: String {
+        // 将特定占位表情替换为 Emoji（或后续替换为图片富文本）
+        message.content.replacingOccurrences(of: "[社会社会]", with: "😎")
+    }
+
 
     private var messageBubble: some View {
         VStack(alignment: message.isFromCurrentUser ? .trailing : .leading, spacing: 6) {
@@ -531,17 +568,19 @@ struct MessageBubbleView: View {
                         .stroke(bubbleBorderColor, lineWidth: 0.5)
                 )
 
-                // 时间和状态
-                HStack(spacing: 4) {
-                    if message.isFromCurrentUser {
-                        messageStatusIcon
-                    }
+                // 时间和状态（系统消息不显示）
+                if message.type != .system {
+                    HStack(spacing: 4) {
+                        if message.isFromCurrentUser {
+                            messageStatusIcon
+                        }
 
-                    Text(detailedTimeDisplay)
-                        .font(ModernDesignSystem.Typography.caption2)
-                        .foregroundColor(ModernDesignSystem.Colors.textTertiary)
+                        Text(detailedTimeDisplay)
+                            .font(ModernDesignSystem.Typography.caption2)
+                            .foregroundColor(ModernDesignSystem.Colors.textTertiary)
+                    }
+                    .padding(.horizontal, 4)
                 }
-                .padding(.horizontal, 4)
             }
         }
     }
@@ -577,43 +616,35 @@ struct MessageBubbleView: View {
                     // TODO: 实现视频消息
                     Text("[视频]")
                         .font(ModernDesignSystem.Typography.body)
-                    .foregroundColor(textColor)
-            case .audio:
-                AudioMessageView(
-                    message: message,
-                    textColor: textColor
-                )
-            case .file:
-                // TODO: 实现文件消息
-                Text("[文件]")
-                    .font(ModernDesignSystem.Typography.body)
-                    .foregroundColor(textColor)
-            case .system:
-                Text(message.content)
-                    .font(ModernDesignSystem.Typography.footnote)
-                    .foregroundColor(ModernDesignSystem.Colors.textSecondary)
-                    .multilineTextAlignment(.center)
+                        .foregroundColor(textColor)
+                case .audio:
+                    AudioMessageView(
+                        message: message,
+                        textColor: textColor
+                    )
+                case .file:
+                    // TODO: 实现文件消息
+                    Text("[文件]")
+                        .font(ModernDesignSystem.Typography.body)
+                        .foregroundColor(textColor)
+                case .system:
+                    // 系统消息在外层使用卡片视图，messageContent 本体仅作为占位
+                    EmptyView()
                 }
             }
         }
     }
 
     private var bubbleBackground: Color {
-        if message.type == .system {
-            return ModernDesignSystem.Colors.backgroundSecondary.opacity(0.6)
-        }
+        // 系统消息不使用聊天气泡背景（使用卡片样式），此处返回值不会被用到
         return message.isFromCurrentUser ?
             ModernDesignSystem.Colors.chatBubbleSent :
             ModernDesignSystem.Colors.chatBubbleReceived
     }
 
     private var bubbleBorderColor: Color {
-        if message.type == .system {
-            return Color.clear
-        }
-        return message.isFromCurrentUser ?
-            Color.clear :
-            ModernDesignSystem.Colors.borderLight
+        // 系统消息不使用聊天气泡边框
+        return message.isFromCurrentUser ? Color.clear : ModernDesignSystem.Colors.borderLight
     }
 
     private var modernBubbleShape: some Shape {
@@ -665,13 +696,13 @@ struct MessageBubbleView: View {
     }
 
     private var shouldShowAvatar: Bool {
-        // 群聊中的他人消息显示头像
-        return !message.isFromCurrentUser
+        // 群聊中的他人消息显示头像；系统消息不显示头像
+        return !message.isFromCurrentUser && message.type != .system
     }
 
     private var shouldShowSenderName: Bool {
-        // 群聊中的他人消息显示发送者名称
-        return !message.isFromCurrentUser
+        // 群聊中的他人消息显示发送者名称；系统消息不显示
+        return !message.isFromCurrentUser && message.type != .system
     }
 
     /// 详细的时间显示格式

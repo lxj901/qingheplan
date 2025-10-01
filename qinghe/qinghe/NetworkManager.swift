@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 /// 网络请求管理器
 class NetworkManager {
@@ -9,8 +10,8 @@ class NetworkManager {
     
     private init() {
         let config = URLSessionConfiguration.default
-        config.timeoutIntervalForRequest = 30
-        config.timeoutIntervalForResource = 60
+        config.timeoutIntervalForRequest = 60  // 增加到60秒，因为AI分析可能需要更长时间
+        config.timeoutIntervalForResource = 120 // 增加到120秒
         config.waitsForConnectivity = true
         config.allowsCellularAccess = true
         config.allowsConstrainedNetworkAccess = true
@@ -176,6 +177,21 @@ class NetworkManager {
                 if httpResponse.statusCode == 429 {
                     throw NetworkError.rateLimitExceeded
                 }
+                
+                // 特殊处理504网关超时错误
+                if httpResponse.statusCode == 504 {
+                    throw NetworkError.serverMessage("服务器暂时繁忙，请稍后重试")
+                }
+                
+                // 特殊处理502错误网关错误
+                if httpResponse.statusCode == 502 {
+                    throw NetworkError.serverMessage("服务器网关错误，请稍后重试")
+                }
+                
+                // 特殊处理503服务不可用错误
+                if httpResponse.statusCode == 503 {
+                    throw NetworkError.serverMessage("服务暂时不可用，请稍后重试")
+                }
 
                 // 对于400错误，先尝试解析响应，让业务层处理特定的错误情况
                 if httpResponse.statusCode == 400 {
@@ -235,6 +251,89 @@ class NetworkManager {
                 throw error
             } else if let urlError = error as? URLError {
                 // 特殊处理取消错误
+                if urlError.code == .cancelled {
+                    throw CancellationError()
+                }
+                throw NetworkError.networkError(urlError.localizedDescription)
+            } else {
+                throw NetworkError.networkError(error.localizedDescription)
+            }
+        }
+    }
+    
+    /// 上传图片到健康分析服务
+    /// - Parameters:
+    ///   - image: 要上传的图片
+    ///   - compressionQuality: 图片压缩质量 (0.0-1.0)
+    /// - Returns: 图片上传响应
+    func uploadHealthImage(_ image: UIImage, compressionQuality: CGFloat = 0.8) async throws -> HealthImageUploadResponse {
+        guard let imageData = image.jpegData(compressionQuality: compressionQuality) else {
+            throw NetworkError.networkError("图片数据转换失败")
+        }
+        
+        let endpoint = APIEndpoints.uploadHealth
+        let fullURL = baseURL + endpoint
+        
+        guard let url = URL(string: fullURL) else {
+            throw NetworkError.invalidURL
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        
+        // 添加认证头
+        if let token = AuthManager.shared.getToken() {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        
+        // 设置multipart/form-data
+        let boundary = UUID().uuidString
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        // 构建请求体
+        var body = Data()
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"healthImage\"; filename=\"health-photo.jpg\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+        body.append(imageData)
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        
+        request.httpBody = body
+        
+        print("🔍 正在上传健康分析图片...")
+        print("🔍 图片大小: \(imageData.count) bytes")
+        
+        do {
+            let (data, response) = try await session.data(for: request)
+            
+            // 检查HTTP状态码
+            if let httpResponse = response as? HTTPURLResponse {
+                print("📡 图片上传HTTP状态码: \(httpResponse.statusCode)")
+                
+                guard 200...299 ~= httpResponse.statusCode else {
+                    if let errorResponse = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                       let message = errorResponse["message"] as? String {
+                        throw NetworkError.serverMessage(message)
+                    }
+                    throw NetworkError.serverError(httpResponse.statusCode)
+                }
+            }
+            
+            // 解析响应
+            let decoder = JSONDecoder()
+            let uploadResponse = try decoder.decode(HealthImageUploadResponse.self, from: data)
+            
+            if uploadResponse.success {
+                print("✅ 图片上传成功: \(uploadResponse.data.url)")
+                return uploadResponse
+            } else {
+                throw NetworkError.serverMessage(uploadResponse.message ?? "图片上传失败")
+            }
+            
+        } catch {
+            if error is NetworkError {
+                throw error
+            } else if let urlError = error as? URLError {
                 if urlError.code == .cancelled {
                     throw CancellationError()
                 }
@@ -335,6 +434,11 @@ struct APIEndpoints {
     static let deletionStatus = "/auth/deletion-status"      // 查询注销状态
     static let cancelDeletion = "/auth/cancel-deletion"      // 撤销注销
 
+    // 健康管理相关
+    static let uploadHealth = "/upload/health"           // 健康分析图片上传
+    static let tongueAnalyze = "/health/tongue/analyze"  // 舌诊分析
+    static let faceAnalyze = "/health/face/analyze"      // 面诊分析
+    
     // 打卡相关
     static let checkin = "/checkin"
     static let checkinHistory = "/checkin/history"

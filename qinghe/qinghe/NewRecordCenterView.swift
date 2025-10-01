@@ -3,7 +3,6 @@ import Charts
 import EventKit
 
 struct NewRecordCenterView: View {
-    @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel = NewRecordCenterViewModel()
     @State private var selectedTab = 0
     @State private var selectedRecordType: RecordType? = nil
@@ -47,16 +46,7 @@ struct NewRecordCenterView: View {
         }
         .navigationTitle("记录中心")
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button("关闭") {
-                    dismiss()
-                }
-                .foregroundColor(.primary)
-            }
-        }
-        .asSubView()
+        .asRootView() // 标记为根视图，显示Tab栏
         // 弹出创建记录类型选择
         .fullScreenCover(item: $selectedRecordType) { type in
             NavigationView {

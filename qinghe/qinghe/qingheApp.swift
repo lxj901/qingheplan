@@ -2,6 +2,8 @@ import SwiftUI
 
 // MARK: - AppDelegate for handling push notifications
 class AppDelegate: NSObject, UIApplicationDelegate {
+    // 控制全局方向的开关（需确保工程允许横屏）
+    var orientationMask: UIInterfaceOrientationMask = .portrait
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         print("🔔 AppDelegate: 应用启动完成")
@@ -44,6 +46,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             completionHandler(result)
         }
     }
+
+    // 限制支持的方向（受工程设置影响）
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        orientationMask
+    }
 }
 
 @main
@@ -57,6 +64,19 @@ struct qingheApp: App {
     @StateObject private var pushNotificationManager = PushNotificationManager.shared
     @StateObject private var locationManager = AppleMapService.shared
     @StateObject private var themeManager = ThemeManager.shared
+
+    init() {
+        // 临时代码：打印所有可用字体名称（用于获取自定义字体的PostScript名）
+        DispatchQueue.main.async {
+            print("=== 所有可用字体 ===")
+            for family in UIFont.familyNames.sorted() {
+                print("字体家族: \(family)")
+                for name in UIFont.fontNames(forFamilyName: family).sorted() {
+                    print("  PostScript名: \(name)")
+                }
+            }
+        }
+    }
 
     var body: some Scene {
         WindowGroup {

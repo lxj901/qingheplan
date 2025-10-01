@@ -2,7 +2,6 @@ import SwiftUI
 
 /// 现代化打卡日历页面 - 重新设计版本
 struct ModernCheckinCalendarView: View {
-    @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel = CheckinCalendarViewModel()
     @State private var selectedDate: Date = Date()
     @State private var showingDateDetail = false
@@ -82,6 +81,7 @@ struct ModernCheckinCalendarView: View {
             }
         }
         .navigationBarHidden(true)
+        .asRootView() // 标记为根视图，显示Tab栏
         .onAppear {
             Task {
                 await viewModel.loadMonthData(for: selectedDate)
@@ -173,38 +173,11 @@ struct ModernCheckinCalendarView: View {
     // MARK: - 毛玻璃导航栏
     private var modernNavigationBar: some View {
         HStack {
-            // 返回按钮 - 增强设计
-            Button(action: {
-                withAnimation(ModernDesignSystem.Animation.springQuick) {
-                    dismiss()
-                }
-            }) {
-                HStack(spacing: 6) {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 16, weight: .semibold))
-                    Text("返回")
-                        .font(ModernDesignSystem.Typography.callout)
-                        .fontWeight(.medium)
-                }
-                .foregroundColor(ModernDesignSystem.Colors.primaryGreen)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-                .background(
-                    Capsule()
-                        .fill(ModernDesignSystem.Colors.primaryGreen.opacity(0.1))
-                        .overlay(
-                            Capsule()
-                                .stroke(ModernDesignSystem.Colors.primaryGreen.opacity(0.2), lineWidth: 1)
-                        )
-                )
-            }
-            .buttonStyle(ScaleButtonStyle())
-
             Spacer()
 
             // 标题和日期 - 增强设计
             VStack(spacing: 3) {
-                Text("打卡日历")
+                Text("功过格")
                     .font(ModernDesignSystem.Typography.headline)
                     .fontWeight(.bold)
                     .foregroundColor(ModernDesignSystem.Colors.textPrimary)

@@ -72,48 +72,51 @@ struct MainTabView: View {
 
     var body: some View {
         ZStack {
-            // TabView 内容
-            TabView(selection: selectedTab) {
-                // 首页
-                NewMainHomeView()
-                    .tabItem {
-                        Image(systemName: navigationManager.selectedTab == .home ? "house.fill" : "house")
-                        Text("首页")
+            // 根内容（使用自定义 Tab 切换）
+            Group {
+                if navigationManager.selectedTab == .home {
+                    // 首页 -> 社区
+                    MainCommunityView()
+                } else if navigationManager.selectedTab == .newHome {
+                    // 听音 显示我们的新首页页面（重设计页面）
+                    HomeRedesignPlaceholderView()
+                } else if navigationManager.selectedTab == .record {
+                    // 功过格
+                    NavigationStack {
+                        GongGuoGeView()
                     }
-                    .tag(MainTab.home)
-
-                // 社区
-                MainCommunityView()
-                    .tabItem {
-                        Image(systemName: navigationManager.selectedTab == .community ? "person.3.fill" : "person.3")
-                        Text("社区")
+                } else if navigationManager.selectedTab == .health {
+                    // 健康助手
+                    NavigationStack {
+                        HealthAssistantView()
                     }
-                    .tag(MainTab.community)
-
-                // 消息
-                MessagesView()
-                    .tabItem {
-                        Image(systemName: navigationManager.selectedTab == .messages ? "message.fill" : "message")
-                        Text("消息")
+                } else if navigationManager.selectedTab == .workout {
+                    // 运动
+                    NavigationStack {
+                        WorkoutModeSelectionView()
                     }
-                    .tag(MainTab.messages)
-
-                // 我的
-                ProfileView()
-                    .tabItem {
-                        Image(systemName: navigationManager.selectedTab == .profile ? "person.fill" : "person")
-                        Text("我的")
-                        }
-                    .tag(MainTab.profile)
+                } else if navigationManager.selectedTab == .community {
+                    MainCommunityView()
+                } else if navigationManager.selectedTab == .messages {
+                    MessagesView()
+                } else if navigationManager.selectedTab == .profile {
+                    ProfileView()
+                } else {
+                    // 兜底：若出现已移除的Tab类型，回退到社区
+                    MainCommunityView()
+                }
             }
-            .accentColor(.blue)
             .environmentObject(tabBarManager)
 
-            // 自定义 TabBar（只在主页面显示）
-            if tabBarManager.isTabBarVisible {
-                VStack {
-                    Spacer()
-                    CustomTabBar(selectedTab: selectedTab, tabBarManager: tabBarManager)
+            // 自定义 TabBar（只在主页面显示，固定在底部）
+            GeometryReader { geometry in
+                if tabBarManager.isTabBarVisible {
+                    VStack {
+                        Spacer()
+                        CustomTabBar(selectedTab: selectedTab, tabBarManager: tabBarManager)
+                            .frame(width: geometry.size.width)
+                    }
+                    .ignoresSafeArea(.keyboard)
                 }
             }
         }
@@ -128,6 +131,8 @@ struct MainTabView: View {
             tabBarManager.resetSubViewCount()
         }
         .withNavigationHandler()
+        // 再次显式隐藏系统 TabBar（安全网）
+        .toolbar(.hidden, for: .tabBar)
     }
 }
 
@@ -146,24 +151,21 @@ struct CustomTabBar: View {
                 )
             }
         }
-        .padding(.horizontal)
-        .padding(.top, 6)
-        .padding(.bottom, 6)
+        .padding(.horizontal, 20)
+        .padding(.top, 12)
+        .padding(.bottom, 8)
         .background(
             Rectangle()
                 .fill(Color(.systemBackground))
                 .ignoresSafeArea(edges: .bottom) // 背景延伸到底部
         )
-        .safeAreaInset(edge: .bottom) {
-            Color.clear.frame(height: 0)
-        }
         .opacity(tabBarManager.isTabBarVisible ? 1 : 0)
         .offset(y: tabBarManager.isTabBarVisible ? 0 : 100)
         .animation(.easeInOut(duration: 0.3), value: tabBarManager.isTabBarVisible)
     }
 }
 
-// MARK: - TabBar 按钮
+// MARK: - TabBar 按钮（纯文字版本）
 struct TabBarButton: View {
     let tab: MainTab
     @Binding var selectedTab: MainTab
@@ -176,33 +178,27 @@ struct TabBarButton: View {
             // 用户点击Tab按钮时，强制显示Tab栏
             TabBarVisibilityManager.shared.showTabBar()
         }) {
-            VStack(spacing: 2) {
-                ZStack {
-                    Image(systemName: isSelected ? tab.selectedIcon : tab.icon)
-                        .font(.system(size: 20, weight: .medium))
-                        .foregroundColor(isSelected ? ModernDesignSystem.Colors.primaryGreen : ModernDesignSystem.Colors.textSecondary)
-
-                    // 消息Tab的通知角标
-                    if tab == .messages && notificationManager.unreadCount > 0 {
-                        ZStack {
-                            Circle()
-                                .fill(Color.red)
-                                .frame(width: 14, height: 14)
-
-                            Text("\(notificationManager.unreadCount > 99 ? "99+" : "\(notificationManager.unreadCount)")")
-                                .font(.system(size: 7, weight: .bold))
-                                .foregroundColor(.white)
-                        }
-                        .offset(x: 10, y: -8)
-                    }
-                }
-                .frame(height: 24)
-
+            ZStack(alignment: .topTrailing) {
                 Text(tab.title)
-                    .font(.system(size: 10, weight: .medium))
-                    .foregroundColor(isSelected ? ModernDesignSystem.Colors.primaryGreen : ModernDesignSystem.Colors.textSecondary)
+                    .font(.system(size: 17, weight: isSelected ? .semibold : .regular))
+                    .foregroundColor(isSelected ? Color(.label) : Color(.systemGray3))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 4)
+
+                // 消息Tab的通知角标
+                if tab == .messages && notificationManager.unreadCount > 0 {
+                    ZStack {
+                        Circle()
+                            .fill(Color.red)
+                            .frame(width: 16, height: 16)
+
+                        Text("\(notificationManager.unreadCount > 99 ? "99+" : "\(notificationManager.unreadCount)")")
+                            .font(.system(size: 8, weight: .bold))
+                            .foregroundColor(.white)
+                    }
+                    .offset(x: 8, y: -4)
+                }
             }
-            .frame(maxWidth: .infinity)
         }
         .buttonStyle(PlainButtonStyle())
     }
@@ -211,13 +207,24 @@ struct TabBarButton: View {
 // MARK: - 主标签页枚举
 enum MainTab: String, CaseIterable {
     case home = "home"
+    case record = "record"
+    case health = "health"
+    case workout = "workout"
+    case newHome = "newHome"
     case community = "community"
     case messages = "messages"
     case profile = "profile"
 
+    // 自定义可见的 Tab 顺序：首页、记录、健康、运动、我的
+    static var allCases: [MainTab] { [.home, .record, .health, .workout, .profile] }
+
     var title: String {
         switch self {
         case .home: return "首页"
+        case .record: return "记录"
+        case .health: return "健康"
+        case .workout: return "运动"
+        case .newHome: return "听音"
         case .community: return "社区"
         case .messages: return "消息"
         case .profile: return "我的"
@@ -226,7 +233,11 @@ enum MainTab: String, CaseIterable {
 
     var icon: String {
         switch self {
-        case .home: return "leaf"
+        case .home: return "house"
+        case .record: return "square.and.pencil"
+        case .health: return "heart"
+        case .workout: return "figure.walk"
+        case .newHome: return "headphones"
         case .community: return "person.2"
         case .messages: return "bubble.left"
         case .profile: return "person.circle"
@@ -235,7 +246,11 @@ enum MainTab: String, CaseIterable {
 
     var selectedIcon: String {
         switch self {
-        case .home: return "leaf.fill"
+        case .home: return "house.fill"
+        case .record: return "square.and.pencil"
+        case .health: return "heart.fill"
+        case .workout: return "figure.walk.circle.fill"
+        case .newHome: return "headphones"
         case .community: return "person.2.fill"
         case .messages: return "bubble.left.fill"
         case .profile: return "person.circle.fill"

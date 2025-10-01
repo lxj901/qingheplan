@@ -148,6 +148,10 @@ struct ModernDesignSystem {
         
         // 阴影颜色 - 使用系统动态颜色
         static let shadowColor = Color(.systemGray4).opacity(0.3)
+
+        // 中式扩展色（纸感与金色点缀）
+        static let paperIvory = Color(red: 247/255, green: 244/255, blue: 237/255)
+        static let accentGold = Color(red: 201/255, green: 169/255, blue: 106/255)
     }
     
     // MARK: - 圆角扩展

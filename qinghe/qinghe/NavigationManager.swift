@@ -78,7 +78,12 @@ class NavigationManager: ObservableObject {
     func switchToHome() {
         selectedTab = .home
     }
-    
+
+    /// 切换到新首页
+    func switchToNewHome() {
+        selectedTab = .newHome
+    }
+
     /// 切换到社区
     func switchToCommunity() {
         selectedTab = .community
@@ -102,6 +107,7 @@ extension NSNotification.Name {
     static let navigateToChat = NSNotification.Name("NavigateToChat")
     static let scrollToComment = NSNotification.Name("ScrollToComment")
     static let notificationTapped = NSNotification.Name("notificationTapped")
+    static let openNewChat = NSNotification.Name("OpenNewChat")
 }
 
 // MARK: - 导航辅助视图修饰符

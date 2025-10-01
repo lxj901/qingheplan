@@ -146,7 +146,7 @@ extension EnhancedDeepSeekSleepAnalysisEngine {
 
         // 健康趋势
         let healthTrendsData = analyzeHealthTrends(longTermData)
-        let healthTrends = convertToHealthTrends(healthTrendsData)
+        let healthTrends = convertToDeepSeekHealthTrends(healthTrendsData)
 
         // 生活方式影响
         let lifestyleImpactsData = analyzeLifestyleImpacts(longTermData)
@@ -582,7 +582,7 @@ extension EnhancedDeepSeekSleepAnalysisEngine {
                 optimalSeason: "春季",
                 seasonalRecommendations: []
             ),
-            healthTrends: HealthTrends(
+            healthTrends: DeepSeekHealthTrends(
                 snoringTrend: .stable,
                 breathingQualityTrend: .stable,
                 movementTrend: .stable,
@@ -1023,13 +1023,13 @@ extension EnhancedDeepSeekSleepAnalysisEngine {
         )
     }
 
-    private func convertToHealthTrends(_ trends: [DeepSeekHealthTrend]) -> HealthTrends {
+    private func convertToDeepSeekHealthTrends(_ trends: [DeepSeekHealthTrend]) -> DeepSeekHealthTrends {
         let snoringTrend = convertTrendDirection(trends.first { $0.metric.contains("打鼾") || $0.metric.contains("snoring") }?.trend)
         let breathingTrend = convertTrendDirection(trends.first { $0.metric.contains("呼吸") || $0.metric.contains("breathing") }?.trend)
         let movementTrend = convertTrendDirection(trends.first { $0.metric.contains("运动") || $0.metric.contains("movement") }?.trend)
         let overallScore = trends.isEmpty ? 75.0 : trends.map { $0.change }.reduce(0, +) / Double(trends.count) * 100
 
-        return HealthTrends(
+        return DeepSeekHealthTrends(
             snoringTrend: snoringTrend,
             breathingQualityTrend: breathingTrend,
             movementTrend: movementTrend,

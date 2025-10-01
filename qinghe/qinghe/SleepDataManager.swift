@@ -25,6 +25,33 @@ class SleepDataManager: ObservableObject {
     @Published var sleepGoal: SleepGoal?
     @Published var currentReport: SleepReport?
 
+    // 今日睡眠总时长（秒）
+    var todaySleepDuration: TimeInterval {
+        let calendar = Calendar.current
+        let startOfToday = calendar.startOfDay(for: Date())
+        let endOfToday = calendar.date(byAdding: .day, value: 1, to: startOfToday) ?? Date()
+
+        // 筛选今天起床（wakeTime）或就寝（bedTime）落在今天内的记录
+        let todayRecords = sleepRecords.filter { record in
+            // 覆盖跨天睡眠：若任一端点与今天有交集则计入
+            let recordStart = record.bedTime
+            let recordEnd = record.wakeTime
+            return (recordStart < endOfToday) && (recordEnd >= startOfToday)
+        }
+
+        // 计算与今天的交集时长
+        let total = todayRecords.reduce(0.0) { partial, record in
+            let recordStart = record.bedTime
+            let recordEnd = record.wakeTime
+            let overlapStart = max(recordStart, startOfToday)
+            let overlapEnd = min(recordEnd, endOfToday)
+            let overlap = max(0, overlapEnd.timeIntervalSince(overlapStart))
+            return partial + overlap
+        }
+
+        return total
+    }
+
     // DeepSeek AI 分析结果 - 支持多个会话
     @Published var deepSeekAnalysisResults: [String: DeepSeekSleepAnalysis] = [:]
     @Published var currentDeepSeekAnalysis: DeepSeekSleepAnalysis?

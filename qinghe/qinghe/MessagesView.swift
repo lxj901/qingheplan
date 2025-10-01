@@ -367,6 +367,9 @@ struct MessagesView: View {
                 print("🔍 MessagesView: 需要导航到聊天页面，用户ID: \(userId)")
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: .openNewChat)) { _ in
+            showingNewChat = true
+        }
         .asRootView()
     }
 
@@ -374,6 +377,20 @@ struct MessagesView: View {
     private var topNavigationBar: some View {
         VStack(spacing: 0) {
             ZStack {
+                // 左侧返回按钮
+                HStack {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "chevron.left")
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(.primary)
+                        }
+                    }
+                    Spacer()
+                }
+
                 // 居中的标题
                 Text("消息")
                     .font(ModernDesignSystem.Typography.headline)

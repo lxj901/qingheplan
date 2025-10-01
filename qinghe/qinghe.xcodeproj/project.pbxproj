@@ -15,7 +15,6 @@
 		DD1B3ADE2E4B5B9D00CD826C /* DeviceActivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD1B3ADF2E4B5B9D00CD826D /* DeviceActivity.framework */; };
 		DD1B3AE02E4B5B9D00CD826E /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD1B3AE12E4B5B9D00CD826F /* ManagedSettings.framework */; };
 		DD58E9E92E7AD3CE001C0F65 /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD1B3AE12E4B5B9D00CD826F /* ManagedSettings.framework */; };
-		DD58E9EB2E7AD3CE001C0F65 /* ManagedSettingsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD58E9EA2E7AD3CE001C0F65 /* ManagedSettingsUI.framework */; };
 		DD58E9F32E7AD3CE001C0F65 /* ShieldConfig.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = DD58E9E82E7AD3CE001C0F65 /* ShieldConfig.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -79,7 +78,6 @@
 		DD1B3ADF2E4B5B9D00CD826D /* DeviceActivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DeviceActivity.framework; path = System/Library/Frameworks/DeviceActivity.framework; sourceTree = SDKROOT; };
 		DD1B3AE12E4B5B9D00CD826F /* ManagedSettings.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettings.framework; path = System/Library/Frameworks/ManagedSettings.framework; sourceTree = SDKROOT; };
 		DD58E9E82E7AD3CE001C0F65 /* ShieldConfig.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShieldConfig.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		DD58E9EA2E7AD3CE001C0F65 /* ManagedSettingsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettingsUI.framework; path = Library/Frameworks/ManagedSettingsUI.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -155,7 +153,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD58E9E92E7AD3CE001C0F65 /* ManagedSettings.framework in Frameworks */,
-				DD58E9EB2E7AD3CE001C0F65 /* ManagedSettingsUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,6 +162,7 @@
 		DD1B3AA02E4B5B9B00CD8261 = {
 			isa = PBXGroup;
 			children = (
+				DD58EA262E7FC591001C0F65 /* Fonts */,
 				DD1B3AAB2E4B5B9B00CD8261 /* qinghe */,
 				DD1B3ABA2E4B5B9D00CD8261 /* qingheTests */,
 				DD1B3AC42E4B5B9D00CD8261 /* qingheUITests */,
@@ -194,9 +192,15 @@
 				DD1B3ADD2E4B5B9D00CD826B /* FamilyControls.framework */,
 				DD1B3ADF2E4B5B9D00CD826D /* DeviceActivity.framework */,
 				DD1B3AE12E4B5B9D00CD826F /* ManagedSettings.framework */,
-				DD58E9EA2E7AD3CE001C0F65 /* ManagedSettingsUI.framework */,
 			);
 			path = Frameworks;
+			sourceTree = "<group>";
+		};
+		DD58EA262E7FC591001C0F65 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -577,10 +581,11 @@
 				INFOPLIST_KEY_UIBackgroundModes = location;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -635,10 +640,11 @@
 				INFOPLIST_KEY_UIBackgroundModes = location;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";

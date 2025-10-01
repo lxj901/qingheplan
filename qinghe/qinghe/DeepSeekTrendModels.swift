@@ -86,7 +86,7 @@ struct MediumTermTrend: Codable {
 struct LongTermTrend: Codable {
     let period: TrendPeriod
     let seasonalPatterns: SeasonalPatterns
-    let healthTrends: HealthTrends
+    let healthTrends: DeepSeekHealthTrends
     let lifestyleImpacts: LifestyleImpacts
     let improvementTrajectory: ImprovementTrajectory
     let stabilityIndex: Double
@@ -138,7 +138,7 @@ struct SeasonalPatterns: Codable {
 
 // MARK: - 健康趋势
 
-struct HealthTrends: Codable {
+struct DeepSeekHealthTrends: Codable {
     let snoringTrend: SleepTrendDirection
     let breathingQualityTrend: SleepTrendDirection
     let movementTrend: SleepTrendDirection

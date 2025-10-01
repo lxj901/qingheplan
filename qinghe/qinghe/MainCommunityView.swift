@@ -18,6 +18,7 @@ struct MainCommunityView: View {
     @State private var showingSearch = false  // 添加搜索页面状态
     @State private var presetSearchKeyword: String? = nil  // 预设搜索关键词
     @State private var showingPublishPost = false  // 发布帖子页面状态
+    @State private var navigateToMessages = false  // 导航到消息页面
 
     // 广告相关状态
     @State private var nativeAdViews: [UIView] = []
@@ -119,13 +120,29 @@ struct MainCommunityView: View {
     private var topTabBar: some View {
         VStack(spacing: 0) {
             HStack {
-                // 左侧占位，保持标签居中
-                Button(action: {}) {
-                    Image(systemName: "magnifyingglass")
-                        .font(.system(size: 20))
-                        .foregroundColor(.clear) // 透明占位
+                // 左侧消息按钮
+                NavigationLink(destination: MessagesView().navigationBarHidden(true), isActive: $navigateToMessages) {
+                    EmptyView()
                 }
-                .disabled(true)
+                .hidden()
+
+                Button(action: {
+                    navigateToMessages = true
+                }) {
+                    ZStack(alignment: .topTrailing) {
+                        Image(systemName: "bubble.left")
+                            .font(.system(size: 20))
+                            .foregroundColor(.primary)
+
+                        // 未读消息红点（如果有未读消息）
+                        if NotificationManager.shared.unreadCount > 0 {
+                            Circle()
+                                .fill(Color.red)
+                                .frame(width: 8, height: 8)
+                                .offset(x: 4, y: -4)
+                        }
+                    }
+                }
 
                 Spacer()
 

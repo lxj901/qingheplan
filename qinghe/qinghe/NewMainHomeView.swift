@@ -30,6 +30,7 @@ struct NewMainHomeView: View {
     @State private var navigationToConversationId: String? = nil // 推送通知导航
     @State private var showingCheckinInput = false // 显示打卡输入界面
     @State private var showingCheckinCalendar = false // 显示打卡日历界面
+    @State private var showingHealthAssistant = false // 显示健康助手页面
 
     // 运动分析管理器 - 暂时注释掉，因为 WorkoutAnalyticsManager 不存在
     // @StateObject private var workoutAnalytics = WorkoutAnalyticsManager.shared
@@ -275,6 +276,9 @@ struct NewMainHomeView: View {
             NavigationView {
                 NewRecordCenterView()
             }
+        }
+        .fullScreenCover(isPresented: $showingHealthAssistant) {
+            HealthAssistantView()
         }
         .sheet(isPresented: $showingCheckinInput) {
             CheckinInputView()
@@ -596,7 +600,7 @@ struct NewMainHomeView: View {
             // 应用管理
             modernQuickActionButton(
                 icon: "heart.fill",
-                title: "健康管家",
+                title: "健康报告",
                 bgColor: Color(red: 230/255, green: 247/255, blue: 255/255),
                 iconColor: Color(red: 51/255, green: 170/255, blue: 255/255),
                 action: { handleHealthManagerAction() }
@@ -729,6 +733,8 @@ struct NewMainHomeView: View {
         .background(Color(.secondarySystemBackground))
         .cornerRadius(14)
     }
+
+    
 
     private func segmentTitle(for index: Int) -> String {
         switch index {
@@ -2246,13 +2252,9 @@ struct NewMainHomeView: View {
         appUsageManager.saveSelectedApplications(selectedAppsAndCategories.applications)
     }
 
-    /// 处理健康管家按钮点击事件
+    /// 处理健康助手按钮点击事件
     private func handleHealthManagerAction() {
-        // 健康管家功能暂未实现，显示提示
-
-            // 同步授权状态给 AppUsageManager，并刷新使用数据（供首页“应用使用”面板展示）
-        print("📱 健康管家功能即将上线")
-        // 可以在这里添加健康管家相关的功能
+        showingHealthAssistant = true
     }
 
     // MARK: - 应用选择状态保存和恢复
@@ -2295,5 +2297,3 @@ struct NewMainHomeView_Previews: PreviewProvider {
         NewMainHomeView()
     }
 }
-
-

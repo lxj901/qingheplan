@@ -4,10 +4,15 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>ShieldConfig.xcscheme_^#shared#^_</key>
+		<key>Copy of ShieldConfig.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+		<key>ShieldConfig.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
 		</dict>
 		<key>huodongjiankong.xcscheme_^#shared#^_</key>
 		<dict>
@@ -17,7 +22,20 @@
 		<key>qinghe.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>1</integer>
+			<integer>2</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>DD1B3AA82E4B5B9B00CD8261</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DD58E9E72E7AD3CE001C0F65</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>
