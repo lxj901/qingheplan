@@ -19,7 +19,7 @@ struct NewRecordCenterView: View {
         ZStack {
             Color(UIColor.systemGroupedBackground)
                 .ignoresSafeArea()
-            
+
             // 添加数据加载保护
             if viewModel.isLoading {
                 VStack {
@@ -33,11 +33,11 @@ struct NewRecordCenterView: View {
                     // 自律状态卡片
                     selfDisciplineStatusCard
                         .padding(.top, 8)
-                    
+
                     // 分段控制器
                     tabSelector
                         .padding(.vertical, 8)
-                    
+
                     // 内容区域
                     tabContentView
                         .padding(.bottom, 16)

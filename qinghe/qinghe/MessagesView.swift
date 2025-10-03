@@ -260,11 +260,12 @@ struct MessagesView: View {
     @State private var showingPlusMenu = false // 加号菜单弹窗
     @State private var showingNewChat = false // 显示新建聊天页面
     @State private var openActionConversationId: String? = nil // 当前打开操作按钮的会话ID
+    @State private var navigationPath: [CommunityNavigationDestination] = [] // 社区导航路径
 
     @EnvironmentObject private var tabBarManager: TabBarVisibilityManager
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             ZStack {
                 // 主要内容
                 VStack(spacing: 0) {
@@ -326,6 +327,7 @@ struct MessagesView: View {
                 if let conversationId = navigationToConversationId,
                    let conversation = viewModel.conversations.first(where: { $0.id == conversationId }) {
                     ChatDetailView(conversation: conversation)
+                        .asSubView() // 隐藏底部Tab栏
                         .onDisappear {
                             navigationToConversationId = nil
                         }
@@ -341,6 +343,34 @@ struct MessagesView: View {
                 NewChatView()
                     .asSubView() // 隐藏底部Tab栏
             }
+            .navigationDestination(for: CommunityNavigationDestination.self) { destination in
+                switch destination {
+                case .postDetail(let postId):
+                    PostDetailView(postId: postId)
+                        .navigationBarHidden(true)
+                        .modifier(SwipeBackGestureModifier()) // 添加滑动返回手势
+                        .asSubView() // 标记为子页面，隐藏Tab栏
+                        .onAppear {
+                            print("🔍 消息页面：导航到帖子详情页面，帖子ID: \(postId)")
+                        }
+                case .userProfile(let userId):
+                    UserProfileView(userId: userId, isRootView: false)
+                        .navigationBarHidden(true)
+                        .modifier(SwipeBackGestureModifier()) // 添加滑动返回手势
+                        .asSubView() // 标记为子页面，隐藏Tab栏
+                        .onAppear {
+                            print("🔍 消息页面：导航到用户详情页面，用户ID: \(userId)")
+                        }
+                case .tagDetail(let tagName):
+                    TagDetailView(tagName: tagName)
+                        .navigationBarHidden(true)
+                        .modifier(SwipeBackGestureModifier()) // 添加滑动返回手势
+                        .asSubView() // 标记为子页面，隐藏Tab栏
+                        .onAppear {
+                            print("🔍 消息页面：导航到标签详情页面，标签: \(tagName)")
+                        }
+                }
+            }
         }
         // MARK: - 错误处理
         .alert("错误", isPresented: $viewModel.showError) {
@@ -351,12 +381,31 @@ struct MessagesView: View {
             Text(viewModel.errorMessage ?? "未知错误")
         }
         // MARK: - 跨页面导航通知监听
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("NavigateToPost"))) { notification in
+            // 支持两种类型的帖子ID：String 和 Int
+            var postIdString: String?
+            
+            if let postId = notification.userInfo?["postId"] as? String {
+                postIdString = postId
+            } else if let postId = notification.userInfo?["postId"] as? Int {
+                postIdString = String(postId)
+            }
+            
+            if let postId = postIdString {
+                print("🔍 MessagesView 收到帖子详情导航通知，帖子ID: \(postId)")
+                Task { @MainActor in
+                    navigationPath.append(CommunityNavigationDestination.postDetail(postId))
+                    print("🔍 MessagesView: 已设置帖子详情显示，postId: \(postId)")
+                }
+            }
+        }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("NavigateToUserProfile"))) { notification in
             if let userId = notification.userInfo?["userId"] as? String {
                 print("🔍 MessagesView 收到用户详情导航通知，用户ID: \(userId)")
-                // 在Tab架构下，可以通过通知或其他方式处理跨Tab导航
-                // 这里暂时保留日志，具体实现可以后续优化
-                print("🔍 MessagesView: 需要导航到用户详情页面，用户ID: \(userId)")
+                Task { @MainActor in
+                    navigationPath.append(CommunityNavigationDestination.userProfile(userId))
+                    print("🔍 MessagesView: 已设置用户详情显示，userId: \(userId)")
+                }
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("NavigateToChat"))) { notification in
@@ -370,7 +419,10 @@ struct MessagesView: View {
         .onReceive(NotificationCenter.default.publisher(for: .openNewChat)) { _ in
             showingNewChat = true
         }
-        .asRootView()
+        // Tab栏可见性管理：
+        // - 从 MainTabView 作为主Tab调用时，使用 .asRootView()（显示并重置tab栏状态）
+        // - 从 MainCommunityView 导航调用时，使用 .asSubView()（隐藏tab栏）
+        // 注意：MessagesView 本身不添加修饰符，由调用方决定
     }
 
     // MARK: - 顶部导航栏
@@ -423,7 +475,10 @@ struct MessagesView: View {
     private var notificationEntrySection: some View {
         VStack(spacing: 12) {
             // 通知入口卡片
-            NavigationLink(destination: NotificationListView()) {
+            NavigationLink(destination:
+                NotificationListView()
+                    .asSubView() // 隐藏底部Tab栏
+            ) {
                 NotificationEntryCardView(unreadCount: notificationManager.unreadCount)
                     .environmentObject(notificationManager)
             }
@@ -485,7 +540,10 @@ struct MessagesView: View {
         ScrollView {
             LazyVStack(spacing: 0) {
                 ForEach(viewModel.conversations) { conversation in
-                    NavigationLink(destination: ChatDetailView(conversation: conversation)) {
+                    NavigationLink(destination:
+                        ChatDetailView(conversation: conversation)
+                            .asSubView() // 隐藏底部Tab栏
+                    ) {
                         ChatListItemView(
                             conversation: conversation,
                             onTap: nil,

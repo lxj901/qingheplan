@@ -53,7 +53,6 @@ struct PostDetailView: View {
         content
             .navigationBarHidden(true)
             .statusBarHidden(false)
-            .asSubView()
         .fullScreenCover(isPresented: $showingImageViewer) {
             imageViewerSheet
         }
@@ -116,6 +115,8 @@ struct PostDetailView: View {
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
             keyboardHeight = 0
         }
+        // 不在这里使用 .asSubView()，由调用方添加修饰符
+        // 避免双重应用导致计数器问题
     }
     
     // MARK: - 主要内容视图
@@ -130,6 +131,8 @@ struct PostDetailView: View {
             } else if let post = viewModel.post {
                 mainContentView(post)
             } else {
+                // 调试：显示详细状态
+                let _ = print("⚠️ PostDetailView 显示错误视图 - isLoading: \(viewModel.isLoading), post: \(viewModel.post == nil ? "nil" : "存在"), errorMessage: \(viewModel.errorMessage ?? "无")")
                 errorView
             }
 
@@ -228,6 +231,8 @@ struct PostDetailView: View {
     
     // MARK: - 辅助方法
     private func setupOnAppear() {
+        print("🔍 PostDetailView setupOnAppear - postId: \(postId)")
+
         // 初始化安全区域
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
            let window = windowScene.windows.first {
@@ -235,10 +240,14 @@ struct PostDetailView: View {
         }
 
         // 只在需要时加载帖子数据，避免重复加载
+        print("🔍 PostDetailView 检查是否需要加载 - viewModel.post?.id: \(viewModel.post?.id ?? "nil"), postId: \(postId)")
         if viewModel.post?.id != postId {
+            print("✅ PostDetailView 开始加载帖子数据")
             Task.detached(priority: .userInitiated) { @MainActor in
                 await viewModel.loadPost(postId: postId)
             }
+        } else {
+            print("⏭️ PostDetailView 跳过加载（已存在相同帖子）")
         }
     }
     
@@ -342,6 +351,21 @@ struct PostDetailView: View {
                 )
                 .padding(.leading, 20) // 与头像左边缘对齐
                 .padding(.trailing, 20)
+                .padding(.top, 16)
+            }
+
+            // 视频内容 - 全宽无边距无圆角
+            if let video = post.video {
+                VideoThumbnailView(
+                    videoURL: video,
+                    duration: nil,
+                    isFullWidth: true, // 全宽显示
+                    showControls: true, // 详情页模式：显示完整播放控制
+                    loop: true,         // 详情页开启循环播放
+                    onTap: {
+                        // 详情页不需要点击跳转，VideoPlayer自带控制
+                    }
+                )
                 .padding(.top, 16)
             }
 

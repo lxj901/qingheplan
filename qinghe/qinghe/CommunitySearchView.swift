@@ -70,6 +70,7 @@ struct CommunitySearchView: View {
             .navigationDestination(for: String.self) { postId in
                 PostDetailView(postId: postId)
                     .navigationBarHidden(true)
+                    .asSubView() // 标记为子页面，隐藏Tab栏
                     .id(postId)
             }
             .onAppear {

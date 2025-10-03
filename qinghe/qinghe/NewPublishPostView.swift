@@ -1,5 +1,22 @@
 import SwiftUI
 import PhotosUI
+import AVFoundation
+import AVKit
+import UniformTypeIdentifiers
+import UIKit
+
+// MARK: - Window 工具（本文件使用）
+@inline(__always)
+private func getKeyWindow() -> UIWindow? {
+    for scene in UIApplication.shared.connectedScenes {
+        if let windowScene = scene as? UIWindowScene {
+            if let key = windowScene.windows.first(where: { $0.isKeyWindow }) {
+                return key
+            }
+        }
+    }
+    return UIApplication.shared.windows.first { $0.isKeyWindow }
+}
 
 // MARK: - Twitter Style Design System
 struct TwitterStyleDesignSystem {
@@ -91,10 +108,13 @@ struct NewPublishPostView: View {
 
     @State private var isPosting = false
     @State private var showImagePicker = false
+    @State private var showVideoPicker = false
 
     @State private var navigateToLocationSelection = false
     @State private var navigateToTopicSelection = false
     @State private var selectedPhotos: [PhotosPickerItem] = []
+    @State private var selectedVideos: [PhotosPickerItem] = []
+    @State private var selectedVideoURLs: [URL] = []
 
     // 权限管理相关状态 - 根据API文档只支持评论和分享
     @State private var allowComments = true
@@ -108,7 +128,13 @@ struct NewPublishPostView: View {
     @State private var navigateToCheckinRecords = false
     @State private var selectedCheckinData: CheckinDataForPost?
 
-
+    // 视频上传相关状态
+    @State private var uploadingVideoId: String? // 正在上传的视频ID
+    @State private var videoUploadProgress: Double = 0 // 上传进度 0-1
+    @State private var videoModerationStatus: String? // 审核状态
+    @State private var videoModerationAttempt: Int = 0 // 当前轮询次数
+    @State private var showVideoPublishConfirm = false // 显示发布确认弹窗
+    @State private var videoTitle: String = "" // 视频标题
 
     // 位置坐标信息
     @State private var latitude: Double?
@@ -124,6 +150,10 @@ struct NewPublishPostView: View {
     @State private var showPublishErrorAlert = false
     @State private var publishErrorMessage: String = ""
 
+    // 上传成功提示（审核中）
+    @State private var showVideoUploadInfoAlert = false
+    @State private var videoUploadInfoMessage: String = ""
+
     private let maxLength = 2000
 
 
@@ -132,7 +162,7 @@ struct NewPublishPostView: View {
     }
 
     private var canPost: Bool {
-        (!content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || !selectedImages.isEmpty) &&
+        (!content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || !selectedImages.isEmpty || !selectedVideoURLs.isEmpty) &&
         content.count <= maxLength && !isPosting
     }
 
@@ -160,6 +190,11 @@ struct NewPublishPostView: View {
                             // 图片预览
                             if !selectedImages.isEmpty {
                                 selectedContentSection
+                            }
+
+                            // 视频预览
+                            if !selectedVideoURLs.isEmpty {
+                                videoPreviewSection
                             }
 
                             // 话题、位置、打卡和运动信息
@@ -255,6 +290,24 @@ struct NewPublishPostView: View {
             } message: {
                 Text(publishErrorMessage)
             }
+            .alert("视频审核通过", isPresented: $showVideoPublishConfirm) {
+                Button("取消", role: .cancel) {
+                    showVideoPublishConfirm = false
+                }
+                Button("确认发布") {
+                    confirmPublishVideo()
+                }
+            } message: {
+                Text("视频已通过审核，是否立即发布？\n发布后将触发转码，完成后即可播放。")
+            }
+            .alert("上传成功", isPresented: $showVideoUploadInfoAlert) {
+                Button("确定") {
+                    showVideoUploadInfoAlert = false
+                    dismiss()
+                }
+            } message: {
+                Text(videoUploadInfoMessage)
+            }
 
         .photosPicker(isPresented: $showImagePicker, selection: $selectedPhotos, maxSelectionCount: 9, matching: .images)
         .onChange(of: selectedPhotos) { _, newItems in
@@ -266,6 +319,18 @@ struct NewPublishPostView: View {
                     }
                 }
                 selectedPhotos.removeAll()
+            }
+        }
+
+        .photosPicker(isPresented: $showVideoPicker, selection: $selectedVideos, maxSelectionCount: 1, matching: .videos)
+        .onChange(of: selectedVideos) { _, newItems in
+            Task {
+                for item in newItems {
+                    if let movie = try? await item.loadTransferable(type: VideoTransferable.self) {
+                        selectedVideoURLs.append(movie.url)
+                    }
+                }
+                selectedVideos.removeAll()
             }
         }
     }
@@ -307,6 +372,31 @@ struct NewPublishPostView: View {
         VStack(spacing: 16) {
             // 横向滑动图片布局
             HorizontalImageGrid(images: selectedImages, onRemove: removeImage)
+        }
+        .padding(16)
+    }
+
+    private var videoPreviewSection: some View {
+        VStack(spacing: 16) {
+            ForEach(Array(selectedVideoURLs.enumerated()), id: \.offset) { index, url in
+                ZStack(alignment: .topTrailing) {
+                    VideoPlayerView(url: url)
+                        .frame(height: 200)
+                        .cornerRadius(12)
+
+                    Button(action: { removeVideo(at: index) }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 20))
+                            .foregroundColor(.white)
+                            .background(
+                                Circle()
+                                    .fill(Color.black.opacity(0.6))
+                                    .frame(width: 24, height: 24)
+                            )
+                    }
+                    .padding(8)
+                }
+            }
         }
         .padding(16)
     }
@@ -500,13 +590,38 @@ struct NewPublishPostView: View {
             // 功能按钮 - 单行水平滑动布局
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
-                    // 相册按钮
+                    // 图片按钮
                     FunctionButton(
                         icon: "photo",
-                        title: "相册",
+                        title: "图片",
                         subtitle: selectedImages.isEmpty ? "添加图片" : "\(selectedImages.count)张图片",
                         isActive: !selectedImages.isEmpty,
-                        action: { showImagePicker = true }
+                        action: {
+                            // 视频和图片不能同时选择
+                            if !selectedVideoURLs.isEmpty {
+                                publishErrorMessage = "视频和图片不能同时发布，请先删除视频"
+                                showPublishErrorAlert = true
+                            } else {
+                                showImagePicker = true
+                            }
+                        }
+                    )
+
+                    // 视频按钮
+                    FunctionButton(
+                        icon: "video",
+                        title: "视频",
+                        subtitle: selectedVideoURLs.isEmpty ? "添加视频" : "\(selectedVideoURLs.count)个视频",
+                        isActive: !selectedVideoURLs.isEmpty,
+                        action: {
+                            // 视频和图片不能同时选择
+                            if !selectedImages.isEmpty {
+                                publishErrorMessage = "视频和图片不能同时发布，请先删除图片"
+                                showPublishErrorAlert = true
+                            } else {
+                                showVideoPicker = true
+                            }
+                        }
                     )
 
                     // 位置按钮
@@ -593,8 +708,42 @@ struct NewPublishPostView: View {
                 VStack(spacing: 16) {
                     ProgressView()
                         .scaleEffect(1.5)
-                    Text("正在发布动态...")
-                        .font(.system(size: 16))
+
+                    if !selectedVideoURLs.isEmpty {
+                        // 视频上传进度
+                        if videoUploadProgress < 1.0 {
+                            Text("正在上传视频...")
+                                .font(.system(size: 16))
+
+                            // 进度条
+                            ProgressView(value: videoUploadProgress)
+                                .progressViewStyle(LinearProgressViewStyle())
+                                .frame(width: 200)
+
+                            Text("\(Int(videoUploadProgress * 100))%")
+                                .font(.system(size: 14))
+                                .foregroundColor(.secondary)
+                        } else if videoModerationStatus == "pending" || videoModerationStatus == "reviewing" {
+                            Text("视频审核中...")
+                                .font(.system(size: 16))
+                            Text("请稍候，审核通过后可发布")
+                                .font(.system(size: 12))
+                                .foregroundColor(.secondary)
+
+                            // 显示轮询进度
+                            if videoModerationAttempt > 0 {
+                                Text("已等待 \(videoModerationAttempt * 5) 秒")
+                                    .font(.system(size: 11))
+                                    .foregroundColor(.secondary.opacity(0.7))
+                            }
+                        } else {
+                            Text("正在发布视频...")
+                                .font(.system(size: 16))
+                        }
+                    } else {
+                        Text("正在发布动态...")
+                            .font(.system(size: 16))
+                    }
                 }
                 .padding(24)
                 .background(Color(.systemBackground))
@@ -676,18 +825,181 @@ struct NewPublishPostView: View {
     private func handlePost() {
         guard canPost else { return }
 
+        // 如果有视频，先上传视频
+        if !selectedVideoURLs.isEmpty {
+            handleVideoPost()
+        } else {
+            // 没有视频，直接发布帖子
+            handleTextImagePost()
+        }
+    }
+
+    /// 处理视频发布
+    private func handleVideoPost() {
+        guard let videoURL = selectedVideoURLs.first else { return }
+
+        // 检查视频文件大小
+        do {
+            let fileAttributes = try FileManager.default.attributesOfItem(atPath: videoURL.path)
+            if let fileSize = fileAttributes[.size] as? Int64 {
+                let fileSizeMB = Double(fileSize) / 1024 / 1024
+                print("📹 视频文件大小: \(String(format: "%.2f", fileSizeMB))MB")
+
+                // 检查文件大小限制（最大1GB）
+                if fileSizeMB > 1024 {
+                    publishErrorMessage = "视频文件过大（\(String(format: "%.1f", fileSizeMB))MB），最大支持1GB"
+                    showPublishErrorAlert = true
+                    return
+                }
+            }
+        } catch {
+            print("❌ 无法获取视频文件大小: \(error)")
+        }
+
+        // 检查是否填写了内容（视频标题必填）
+        let trimmedContent = content.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmedContent.isEmpty {
+            publishErrorMessage = "请填写视频描述"
+            showPublishErrorAlert = true
+            return
+        }
+
+        // 使用内容作为视频标题
+        let title = String(trimmedContent.prefix(100))
+
+        isPosting = true
+        videoUploadProgress = 0
+
+        VideoService.shared.uploadVideo(
+            videoURL: videoURL,
+            title: title,
+            description: content,
+            category: nil,
+            tags: topics.isEmpty ? nil : topics,
+            progressHandler: { progress in
+                DispatchQueue.main.async {
+                    self.videoUploadProgress = progress
+                }
+            },
+            completion: { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let response):
+                        // 上传成功：提示正在审核中并退出发布页面，不再持续显示上传中
+                        self.isPosting = false
+                        self.videoUploadInfoMessage = response.message ?? response.data.message ?? "视频上传成功，正在审核中，请稍后在我的视频查看进度"
+                        self.showVideoUploadInfoAlert = true
+
+                    case .failure(let error):
+                        self.isPosting = false
+                        self.publishErrorMessage = "视频上传失败：\(error.localizedDescription)"
+                        self.showPublishErrorAlert = true
+                    }
+                }
+            }
+        )
+    }
+
+    /// 轮询视频审核状态
+    private func pollVideoStatus(videoId: String, attempt: Int = 1) {
+        let maxAttempts = 24 // 约2分钟（24 * 5s）
+
+        // 更新轮询次数
+        self.videoModerationAttempt = attempt
+
+        VideoService.shared.getVideoStatus(videoId: videoId) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let response):
+                    let status = response.data
+                    self.videoModerationStatus = status.moderationStatus
+
+                    if status.moderationStatus == "approved" && status.canPublish {
+                        // 审核通过，显示发布确认弹窗
+                        self.isPosting = false
+                        self.showVideoPublishConfirm = true
+
+                    } else if status.moderationStatus == "rejected" {
+                        // 审核被拒绝
+                        self.isPosting = false
+                        self.publishErrorMessage = "视频审核未通过：\(status.message ?? "请检查视频内容")"
+                        self.showPublishErrorAlert = true
+
+                    } else if attempt >= maxAttempts {
+                        // 超时：审核时间过长
+                        self.isPosting = false
+                        self.publishErrorMessage = """
+                        视频审核时间较长，已在后台继续处理
+
+                        视频ID: \(videoId)
+                        当前状态: 审核中
+
+                        您可以：
+                        1. 稍后在"我的视频"中查看审核结果
+                        2. 审核通过后可手动发布
+                        """
+                        self.showPublishErrorAlert = true
+
+                    } else {
+                        // 继续轮询（每5秒查询一次）
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                            self.pollVideoStatus(videoId: videoId, attempt: attempt + 1)
+                        }
+                    }
+
+                case .failure(let error):
+                    // 可能是短暂性错误（状态未就绪/网络波动/404），重试一段时间
+                    if attempt < maxAttempts {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                            self.pollVideoStatus(videoId: videoId, attempt: attempt + 1)
+                        }
+                    } else {
+                        self.isPosting = false
+                        self.publishErrorMessage = "查询视频状态失败：\(error.localizedDescription)"
+                        self.showPublishErrorAlert = true
+                    }
+                }
+            }
+        }
+    }
+
+    /// 确认发布视频
+    private func confirmPublishVideo() {
+        guard let videoId = uploadingVideoId else { return }
+
+        isPosting = true
+        showVideoPublishConfirm = false
+
+        VideoService.shared.publishVideo(videoId: videoId) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    // 视频发布成功，关闭页面
+                    self.isPosting = false
+                    self.dismiss()
+
+                case .failure(let error):
+                    self.isPosting = false
+                    self.publishErrorMessage = "视频发布失败：\(error.localizedDescription)"
+                    self.showPublishErrorAlert = true
+                }
+            }
+        }
+    }
+
+    /// 处理文本+图片发布
+    private func handleTextImagePost() {
         isPosting = true
 
         // 准备发布参数
-        let checkinId: Int? = selectedCheckinData?.checkinId // 使用真正的打卡记录ID
-        let workoutId: Int? = selectedWorkoutData?.workoutId // 使用真正的运动记录ID
+        let checkinId: Int? = selectedCheckinData?.checkinId
+        let workoutId: Int? = selectedWorkoutData?.workoutId
 
         // 调用新的发布方法
         communityViewModel.publishPost(
             content: content,
             images: selectedImages,
             tags: topics,
-            // 移除 category 参数，因为不再需要分类功能
             allowComments: allowComments,
             allowShares: allowSharing,
             visibility: privacy.apiValue,
@@ -712,11 +1024,14 @@ struct NewPublishPostView: View {
                 }
             }
         )
-
     }
 
     private func removeImage(at index: Int) {
         selectedImages.remove(at: index)
+    }
+
+    private func removeVideo(at index: Int) {
+        selectedVideoURLs.remove(at: index)
     }
 
     private func removeTopic(_ topic: String) {
@@ -1439,3 +1754,795 @@ struct WorkoutDataForPost: Identifiable {
     NewPublishPostView()
 }
 
+// MARK: - 使用示例
+/*
+ // 示例1: 单一视频URL（本地上传的视频）
+ VideoPlayerView(url: videoURL)
+
+ // 示例2: 多清晰度视频（从API获取的视频详情）
+ let qualities = [
+     VideoQuality.fromAPIVersion(quality: "hd", url: "https://example.com/video-hd.m3u8", bitrate: 5000, isDefault: false),
+     VideoQuality.fromAPIVersion(quality: "sd", url: "https://example.com/video-sd.m3u8", bitrate: 2500, isDefault: true),
+     VideoQuality.fromAPIVersion(quality: "ld", url: "https://example.com/video-ld.m3u8", bitrate: 1200, isDefault: false)
+ ].compactMap { $0 }
+
+ VideoPlayerView(url: qualities.first!.url, qualities: qualities)
+
+ // 示例3: 从API VideoDetail响应创建画质列表
+ func createQualities(from videoDetail: VideoDetail) -> [VideoQuality] {
+     var qualities: [VideoQuality] = []
+
+     if let hd = videoDetail.versions.hd {
+         qualities.append(VideoQuality.fromAPIVersion(quality: "hd", url: hd.url, bitrate: hd.bitrate)!)
+     }
+     if let sd = videoDetail.versions.sd {
+         qualities.append(VideoQuality.fromAPIVersion(quality: "sd", url: sd.url, bitrate: sd.bitrate, isDefault: true)!)
+     }
+     if let ld = videoDetail.versions.ld {
+         qualities.append(VideoQuality.fromAPIVersion(quality: "ld", url: ld.url, bitrate: ld.bitrate)!)
+     }
+
+     return qualities
+ }
+*/
+
+// MARK: - Video Transferable
+
+struct VideoTransferable: Transferable {
+    let url: URL
+
+    static var transferRepresentation: some TransferRepresentation {
+        FileRepresentation(contentType: .movie) { video in
+            SentTransferredFile(video.url)
+        } importing: { received in
+            let copy = URL.documentsDirectory.appending(path: "video-\(UUID().uuidString).mov")
+            try FileManager.default.copyItem(at: received.file, to: copy)
+            return Self(url: copy)
+        }
+    }
+}
+
+// MARK: - Video Quality Model
+struct VideoQuality: Identifiable {
+    let id: String
+    let url: URL
+    let displayName: String
+    let description: String?
+    let bitrate: Int?
+    let isDefault: Bool
+
+    // 便捷初始化方法，匹配API返回格式
+    static func fromAPIVersion(quality: String, url: String, bitrate: Int? = nil, isDefault: Bool = false) -> VideoQuality? {
+        guard let videoURL = URL(string: url) else { return nil }
+
+        let displayName: String
+        let description: String?
+
+        switch quality.lowercased() {
+        case "hd", "1080p":
+            displayName = "高清"
+            description = "1080P"
+        case "sd", "720p":
+            displayName = "标清"
+            description = "720P"
+        case "ld", "480p":
+            displayName = "流畅"
+            description = "480P"
+        default:
+            displayName = quality
+            description = nil
+        }
+
+        return VideoQuality(
+            id: quality,
+            url: videoURL,
+            displayName: displayName,
+            description: description,
+            bitrate: bitrate,
+            isDefault: isDefault
+        )
+    }
+}
+
+// MARK: - Enhanced Video Player View
+struct VideoPlayerView: View {
+    let url: URL
+    var qualities: [VideoQuality]? = nil // 可选的多清晰度
+    @StateObject private var viewModel = VideoPlayerViewModel()
+    @State private var showQualitySelector = false
+    @State private var showControls = true
+    @State private var hideControlsTask: Task<Void, Never>?
+    @State private var isFullscreen = false
+
+    // 便捷初始化 - 只有URL
+    init(url: URL) {
+        self.url = url
+        self.qualities = nil
+    }
+
+    // 完整初始化 - 带画质选项
+    init(url: URL, qualities: [VideoQuality]) {
+        self.url = url
+        self.qualities = qualities
+    }
+
+    var body: some View {
+        ZStack {
+            // 视频播放器层
+            if let player = viewModel.player {
+                VideoPlayer(player: player)
+                    .allowsHitTesting(false) // 允许上层自定义控件接管点击
+            } else {
+                Rectangle()
+                    .fill(Color.black)
+                    .overlay(
+                        ProgressView()
+                            .tint(.white)
+                    )
+            }
+
+            // 点击手势覆盖层（位于视频之上、控件之下）
+            Color.clear
+                .contentShape(Rectangle())
+                // 双击：播放/暂停
+                .highPriorityGesture(
+                    TapGesture(count: 2).onEnded {
+                        viewModel.togglePlayPause()
+                        scheduleHideControls()
+                    }
+                )
+                .onTapGesture {
+                    // 点击视频切换控制栏显示/隐藏
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        showControls.toggle()
+                    }
+                    if showControls {
+                        scheduleHideControls()
+                    }
+                }
+
+            // 自定义控制层
+            if showControls {
+                VStack {
+                    Spacer()
+
+                    // 播放控制栏
+                    VStack(spacing: 12) {
+                        // 进度条
+                        VideoProgressBar(
+                            currentTime: viewModel.currentTime,
+                            duration: viewModel.duration,
+                            onSeek: { time in
+                                viewModel.seek(to: time)
+                            },
+                            onDragStart: {
+                                // 拖动时取消自动隐藏
+                                hideControlsTask?.cancel()
+                            },
+                            onDragEnd: {
+                                // 拖动结束后重新计时隐藏
+                                scheduleHideControls()
+                            }
+                        )
+
+                        // 控制按钮
+                        HStack(spacing: 20) {
+                            // 播放/暂停按钮
+                            Button(action: {
+                                viewModel.togglePlayPause()
+                                scheduleHideControls()
+                            }) {
+                                Image(systemName: viewModel.isPlaying ? "pause.fill" : "play.fill")
+                                    .font(.system(size: 24))
+                                    .foregroundColor(.white)
+                            }
+
+                            // 时间显示
+                            Text("\(formatTime(viewModel.currentTime)) / \(formatTime(viewModel.duration))")
+                                .font(.system(size: 14))
+                                .foregroundColor(.white)
+
+                            Spacer()
+
+                            // 画质切换按钮（如果有多清晰度）
+                            if let qualities = qualities, !qualities.isEmpty {
+                                Button(action: {
+                                    hideControlsTask?.cancel()
+                                    showQualitySelector.toggle()
+                                }) {
+                                    HStack(spacing: 4) {
+                                        Text(viewModel.currentQuality?.displayName ?? "画质")
+                                            .font(.system(size: 14))
+                                        Image(systemName: "chevron.up")
+                                            .font(.system(size: 12))
+                                    }
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 4)
+                                    .background(Color.white.opacity(0.2))
+                                    .cornerRadius(4)
+                                }
+                            }
+
+                            // 全屏按钮
+                            Button(action: {
+                                hideControlsTask?.cancel()
+                                isFullscreen = true
+                            }) {
+                                Image(systemName: "arrow.up.left.and.arrow.down.right")
+                                    .font(.system(size: 20))
+                                    .foregroundColor(.white)
+                            }
+                            .disabled(viewModel.player == nil)
+                        }
+                        .padding(.horizontal, 16)
+                    }
+                    .padding(.vertical, 12)
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.black.opacity(0), Color.black.opacity(0.7)]),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                }
+                .transition(.opacity)
+            }
+
+            // 中央播放/暂停按钮（仅在暂停且显示控制栏时显示）
+            if !viewModel.isPlaying && showControls {
+                Button(action: {
+                    viewModel.togglePlayPause()
+                    scheduleHideControls()
+                }) {
+                    Image(systemName: "play.circle.fill")
+                        .font(.system(size: 60))
+                        .foregroundColor(.white)
+                        .shadow(radius: 10)
+                }
+            }
+
+            // 加载指示器
+            if viewModel.isLoading {
+                ProgressView()
+                    .scaleEffect(1.5)
+                    .tint(.white)
+            }
+
+            // 画质选择器
+            if showQualitySelector, let qualities = qualities {
+                VStack {
+                    Spacer()
+                    QualitySelector(
+                        qualities: qualities,
+                        currentQuality: viewModel.currentQuality,
+                        onSelect: { quality in
+                            viewModel.switchQuality(to: quality)
+                            showQualitySelector = false
+                            scheduleHideControls()
+                        }
+                    )
+                    .padding(.bottom, 80)
+                }
+                .background(Color.black.opacity(0.3))
+                .onTapGesture {
+                    showQualitySelector = false
+                    scheduleHideControls()
+                }
+            }
+        }
+        .onAppear {
+            if let qualities = qualities, !qualities.isEmpty {
+                // 有多清晰度，使用默认清晰度
+                let defaultQuality = qualities.first { $0.isDefault } ?? qualities.first!
+                viewModel.setupPlayer(quality: defaultQuality, availableQualities: qualities)
+            } else {
+                // 单一视频URL
+                viewModel.setupPlayer(url: url)
+            }
+            scheduleHideControls()
+        }
+        .onDisappear {
+            hideControlsTask?.cancel()
+            viewModel.cleanup()
+        }
+        .onChange(of: viewModel.isPlaying) { _, isPlaying in
+            if !isPlaying {
+                // 暂停时显示控制栏
+                hideControlsTask?.cancel()
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    showControls = true
+                }
+            } else {
+                // 播放时自动隐藏
+                scheduleHideControls()
+            }
+        }
+        // 全屏播放器
+        .fullScreenCover(isPresented: $isFullscreen) {
+            if let _ = viewModel.player {
+                LandscapeHosting(content:
+                    FullscreenVideoView(viewModel: viewModel, qualities: qualities) {
+                        isFullscreen = false
+                        scheduleHideControls()
+                    }
+                )
+                .ignoresSafeArea()
+            } else {
+                Color.black.ignoresSafeArea()
+            }
+        }
+    }
+
+    private func formatTime(_ time: Double) -> String {
+        let minutes = Int(time) / 60
+        let seconds = Int(time) % 60
+        return String(format: "%d:%02d", minutes, seconds)
+    }
+
+    private func scheduleHideControls() {
+        hideControlsTask?.cancel()
+        hideControlsTask = Task {
+            try? await Task.sleep(for: .seconds(3))
+            if !Task.isCancelled && viewModel.isPlaying {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    showControls = false
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Quality Selector
+struct QualitySelector: View {
+    let qualities: [VideoQuality]
+    let currentQuality: VideoQuality?
+    let onSelect: (VideoQuality) -> Void
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ForEach(qualities) { quality in
+                Button(action: { onSelect(quality) }) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(quality.displayName)
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(.white)
+
+                            if let description = quality.description {
+                                Text(description)
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.white.opacity(0.7))
+                            }
+                        }
+
+                        Spacer()
+
+                        if currentQuality?.id == quality.id {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(.green)
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(currentQuality?.id == quality.id ? Color.white.opacity(0.2) : Color.clear)
+                }
+
+                if quality.id != qualities.last?.id {
+                    Divider()
+                        .background(Color.white.opacity(0.2))
+                }
+            }
+        }
+        .background(Color.black.opacity(0.9))
+        .cornerRadius(12)
+        .padding(.horizontal, 40)
+    }
+}
+
+// MARK: - Video Progress Bar
+struct VideoProgressBar: View {
+    let currentTime: Double
+    let duration: Double
+    let onSeek: (Double) -> Void
+    var onDragStart: (() -> Void)? = nil
+    var onDragEnd: (() -> Void)? = nil
+
+    @State private var isDragging = false
+    @State private var dragValue: Double = 0
+
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                // 背景轨道
+                Rectangle()
+                    .fill(Color.white.opacity(0.3))
+                    .frame(height: 4)
+
+                // 已播放进度
+                Rectangle()
+                    .fill(Color.white)
+                    .frame(width: progressWidth(geometry: geometry), height: 4)
+
+                // 拖动滑块
+                Circle()
+                    .fill(Color.white)
+                    .frame(width: 12, height: 12)
+                    .offset(x: progressWidth(geometry: geometry) - 6)
+            }
+            .contentShape(Rectangle()) // 扩大点击区域
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { value in
+                        if !isDragging {
+                            isDragging = true
+                            onDragStart?()
+                        }
+                        let progress = min(max(0, value.location.x / geometry.size.width), 1)
+                        dragValue = progress * duration
+                    }
+                    .onEnded { _ in
+                        isDragging = false
+                        onSeek(dragValue)
+                        onDragEnd?()
+                    }
+            )
+        }
+        .frame(height: 30) // 增大触摸区域
+        .padding(.horizontal, 16)
+    }
+
+    private func progressWidth(geometry: GeometryProxy) -> CGFloat {
+        let progress = isDragging ? dragValue / duration : currentTime / duration
+        return geometry.size.width * CGFloat(progress)
+    }
+}
+
+// MARK: - Video Player ViewModel
+class VideoPlayerViewModel: ObservableObject {
+    @Published var player: AVPlayer?
+    @Published var isPlaying = false
+    @Published var isLoading = true
+    @Published var currentTime: Double = 0
+    @Published var duration: Double = 0
+    @Published var currentQuality: VideoQuality?
+
+    private var timeObserver: Any?
+    private var statusObserver: NSKeyValueObservation?
+    private var availableQualities: [VideoQuality] = []
+
+    func setupPlayer(url: URL) {
+        createPlayer(with: url)
+    }
+
+    func setupPlayer(quality: VideoQuality, availableQualities: [VideoQuality]) {
+        self.currentQuality = quality
+        self.availableQualities = availableQualities
+        createPlayer(with: quality.url)
+    }
+
+    private func createPlayer(with url: URL) {
+        player = AVPlayer(url: url)
+
+        // 观察播放状态
+        statusObserver = player?.currentItem?.observe(\.status) { [weak self] item, _ in
+            DispatchQueue.main.async {
+                if item.status == .readyToPlay {
+                    self?.isLoading = false
+                    self?.duration = item.duration.seconds
+                } else if item.status == .failed {
+                    self?.isLoading = false
+                    print("视频加载失败: \(item.error?.localizedDescription ?? "未知错误")")
+                }
+            }
+        }
+
+        // 观察播放进度
+        let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        timeObserver = player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
+            self?.currentTime = time.seconds
+        }
+
+        // 自动播放
+        player?.play()
+        isPlaying = true
+    }
+
+    func togglePlayPause() {
+        if isPlaying {
+            player?.pause()
+        } else {
+            player?.play()
+        }
+        isPlaying.toggle()
+    }
+
+    func seek(to time: Double) {
+        let cmTime = CMTime(seconds: time, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        player?.seek(to: cmTime)
+    }
+
+    func switchQuality(to quality: VideoQuality) {
+        guard quality.id != currentQuality?.id else { return }
+
+        // 保存当前播放进度
+        let currentTime = self.currentTime
+        let wasPlaying = self.isPlaying
+
+        // 清理旧的观察者
+        if let observer = timeObserver {
+            player?.removeTimeObserver(observer)
+        }
+        statusObserver?.invalidate()
+
+        // 切换到新清晰度
+        currentQuality = quality
+        isLoading = true
+
+        createPlayer(with: quality.url)
+
+        // 跳转到之前的播放位置
+        if currentTime > 0 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                self?.seek(to: currentTime)
+                if wasPlaying {
+                    self?.player?.play()
+                    self?.isPlaying = true
+                }
+            }
+        }
+    }
+
+    func cleanup() {
+        player?.pause()
+        if let observer = timeObserver {
+            player?.removeTimeObserver(observer)
+        }
+        statusObserver?.invalidate()
+        player = nil
+    }
+}
+
+// MARK: - Fullscreen Video View
+private struct FullscreenVideoView: View {
+    @ObservedObject var viewModel: VideoPlayerViewModel
+    let qualities: [VideoQuality]?
+    let onClose: () -> Void
+
+    @State private var showControls = true
+    @State private var hideControlsTask: Task<Void, Never>?
+    @State private var showQualitySelector = false
+
+    var body: some View {
+        ZStack {
+            if let player = viewModel.player {
+                VideoPlayer(player: player)
+                .ignoresSafeArea()
+                .allowsHitTesting(false)
+            } else {
+                Color.black.ignoresSafeArea()
+            }
+
+            // 点击层：双击播放/暂停，单击切换控制显示
+            Color.clear
+                .ignoresSafeArea()
+                .contentShape(Rectangle())
+                .highPriorityGesture(
+                    TapGesture(count: 2).onEnded {
+                        viewModel.togglePlayPause()
+                        showControls = true
+                        scheduleAutoHide()
+                    }
+                )
+                .onTapGesture {
+                    withAnimation(.easeInOut(duration: 0.25)) { showControls.toggle() }
+                    if showControls { scheduleAutoHide() }
+                }
+
+            if showControls {
+                VStack {
+                    // 顶部：关闭按钮
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            restorePortrait()
+                            onClose()
+                        }) {
+                            Image(systemName: "arrow.down.right.and.arrow.up.left")
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundColor(.white)
+                                .padding(10)
+                                .background(Color.black.opacity(0.5))
+                                .clipShape(Circle())
+                        }
+                        .padding(.trailing, 12)
+                        .padding(.top, 10)
+                    }
+
+                    Spacer()
+
+                    // 底部：控制条（复用进度与播放/暂停）
+                    VStack(spacing: 12) {
+                        VideoProgressBar(
+                            currentTime: viewModel.currentTime,
+                            duration: viewModel.duration,
+                            onSeek: { t in viewModel.seek(to: t) },
+                            onDragStart: { hideControlsTask?.cancel() },
+                            onDragEnd: { scheduleAutoHide() }
+                        )
+
+                        HStack(spacing: 20) {
+                            Button(action: {
+                                viewModel.togglePlayPause()
+                                scheduleAutoHide()
+                            }) {
+                                Image(systemName: viewModel.isPlaying ? "pause.fill" : "play.fill")
+                                    .font(.system(size: 24))
+                                    .foregroundColor(.white)
+                            }
+
+                            Text("\(formatTime(viewModel.currentTime)) / \(formatTime(viewModel.duration))")
+                                .font(.system(size: 14))
+                                .foregroundColor(.white)
+
+                            Spacer()
+
+                            // 清晰度按钮（如有多清晰度）
+                            if let qualities = qualities, !qualities.isEmpty {
+                                Button(action: {
+                                    hideControlsTask?.cancel()
+                                    showQualitySelector.toggle()
+                                }) {
+                                    HStack(spacing: 4) {
+                                        Text(viewModel.currentQuality?.displayName ?? "画质")
+                                            .font(.system(size: 14))
+                                        Image(systemName: "chevron.up")
+                                            .font(.system(size: 12))
+                                    }
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 4)
+                                    .background(Color.white.opacity(0.2))
+                                    .cornerRadius(4)
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 16)
+                    }
+                    .padding(.vertical, 12)
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.black.opacity(0), Color.black.opacity(0.7)]),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                }
+                .transition(.opacity)
+            }
+
+            // 全屏下的清晰度选择浮层
+            if showQualitySelector, let qualities = qualities {
+                VStack {
+                    Spacer()
+                    QualitySelector(
+                        qualities: qualities,
+                        currentQuality: viewModel.currentQuality,
+                        onSelect: { quality in
+                            viewModel.switchQuality(to: quality)
+                            showQualitySelector = false
+                            scheduleAutoHide()
+                        }
+                    )
+                    .padding(.bottom, 80)
+                }
+                .ignoresSafeArea()
+                .background(Color.black.opacity(0.3))
+                .onTapGesture {
+                    showQualitySelector = false
+                    scheduleAutoHide()
+                }
+            }
+        }
+        .onAppear {
+            forceLandscape()
+            scheduleAutoHide()
+        }
+        .onDisappear {
+            hideControlsTask?.cancel()
+            restorePortrait()
+        }
+    }
+
+    private func scheduleAutoHide() {
+        hideControlsTask?.cancel()
+        guard viewModel.isPlaying else { return }
+        hideControlsTask = Task {
+            try? await Task.sleep(for: .seconds(3))
+            if !Task.isCancelled && viewModel.isPlaying {
+                withAnimation(.easeInOut(duration: 0.3)) { showControls = false }
+            }
+        }
+    }
+
+    private func formatTime(_ time: Double) -> String {
+        let minutes = Int(time) / 60
+        let seconds = Int(time) % 60
+        return String(format: "%d:%02d", minutes, seconds)
+    }
+
+    private func forceLandscape() {
+        if let appDelegate = AppDelegate.shared {
+            appDelegate.orientationMask = [.landscapeLeft, .landscapeRight]
+        }
+        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            if #available(iOS 16.0, *) {
+                let prefs = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: .landscapeRight)
+                try? scene.requestGeometryUpdate(prefs)
+                // iOS 16+ 使用新的 API
+                if let rootViewController = scene.windows.first?.rootViewController {
+                    rootViewController.setNeedsUpdateOfSupportedInterfaceOrientations()
+                }
+            } else {
+                UIDevice.current.setValue(UIInterfaceOrientation.landscapeRight.rawValue, forKey: "orientation")
+                UIViewController.attemptRotationToDeviceOrientation()
+            }
+        }
+    }
+
+    private func restorePortrait() {
+        if let appDelegate = AppDelegate.shared {
+            appDelegate.orientationMask = [.portrait]
+        }
+        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            if #available(iOS 16.0, *) {
+                let prefs = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: .portrait)
+                try? scene.requestGeometryUpdate(prefs)
+                // iOS 16+ 使用新的 API
+                if let rootViewController = scene.windows.first?.rootViewController {
+                    rootViewController.setNeedsUpdateOfSupportedInterfaceOrientations()
+                }
+            } else {
+                UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+                UIViewController.attemptRotationToDeviceOrientation()
+            }
+        }
+    }
+}
+
+// MARK: - Landscape-only Hosting Wrapper
+private struct LandscapeHosting<Content: View>: UIViewControllerRepresentable {
+    let content: Content
+
+    func makeUIViewController(context: Context) -> UIViewController {
+        Controller(rootView: content)
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) { }
+
+    private class Controller: UIHostingController<Content> {
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            view.backgroundColor = .black
+            view.isOpaque = true
+        }
+        override var prefersHomeIndicatorAutoHidden: Bool { true }
+        override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge { .all }
+        override var supportedInterfaceOrientations: UIInterfaceOrientationMask { [.portrait, .landscapeLeft, .landscapeRight] }
+        override var shouldAutorotate: Bool { false }
+        override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation { .landscapeRight }
+
+        override func viewDidAppear(_ animated: Bool) {
+            super.viewDidAppear(animated)
+            if let keyWindow = getKeyWindow(), let scene = keyWindow.windowScene {
+                if #available(iOS 16.0, *) {
+                    let prefs = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: .landscapeRight)
+                    try? scene.requestGeometryUpdate(prefs)
+                } else {
+                    UIDevice.current.setValue(UIInterfaceOrientation.landscapeRight.rawValue, forKey: "orientation")
+                    UIViewController.attemptRotationToDeviceOrientation()
+                }
+            }
+        }
+    }
+}

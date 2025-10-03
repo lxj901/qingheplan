@@ -8,7 +8,7 @@ struct GongGuoGeView: View {
     @State private var monthScores: [Date: DailyScore] = [:]
     @State private var dayRecords: [Date: [RecordItem]] = [:]
     @State private var selectedDate: Date? = nil
-    @State private var showingEditor: Bool = false
+    // 由弹出式编辑改为导航推入新页面
 
     private var navOpacity: Double {
         let shown = max(0, min(1, Double((-scrollOffset - 10) / 30)))
@@ -22,15 +22,27 @@ struct GongGuoGeView: View {
 
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 16) {
-                    // 监听滚动偏移（自定义坐标空间）
-                    ScrollOffsetReader(coordinateSpace: "gongguogeScroll")
+                    // 滚动监听器 - 使用与 HealthAssistantView 相同的实现方式
+                    Color.clear
+                        .frame(height: 1)
+                        .background(
+                            GeometryReader { g in
+                                let y = g.frame(in: .named("gongguogeScroll")).minY
+                                Color.clear
+                                    .preference(key: ScrollOffsetPreferenceKey.self, value: y)
+                                    .onChange(of: y) { oldValue, newValue in
+                                        // 直接在这里更新状态
+                                        DispatchQueue.main.async {
+                                            scrollOffset = newValue
+                                        }
+                                    }
+                            }
+                        )
 
-                    // 将日历整体下移一些
-                    Color.clear.frame(height: 16)
-
-                    // 月份头部（切换）
+                    // 月份头部（切换） - 移除了额外的顶部间距
                     monthHeader
                         .padding(.horizontal, 16)
+                        .padding(.top, 8)
 
                     // 星期标题
                     weekHeader
@@ -51,9 +63,6 @@ struct GongGuoGeView: View {
                 }
             }
             .coordinateSpace(name: "gongguogeScroll")
-            .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
-                scrollOffset = value
-            }
             .onAppear {
                 buildSampleScores(for: currentMonth)
                 let cal = Calendar.current
@@ -69,22 +78,7 @@ struct GongGuoGeView: View {
         }
         .toolbar(.hidden, for: .navigationBar)
         .asRootView()
-        .sheet(isPresented: $showingEditor) {
-            let date = Calendar.current.startOfDay(for: selectedDate ?? startOfMonth(currentMonth))
-            GongGuoRecordEditorView(date: date) { kind, title, points in
-                let dayKey = Calendar.current.startOfDay(for: date)
-                // 更新明细
-                var items = dayRecords[dayKey] ?? []
-                let newItem = RecordItem(kind: (kind == .merit ? .merit : .demerit), title: title, points: points)
-                items.append(newItem)
-                dayRecords[dayKey] = items
-
-                // 更新当日汇总分
-                var s = monthScores[dayKey] ?? DailyScore(merit: 0, demerit: 0)
-                if kind == .merit { s.merit += points } else { s.demerit += points }
-                monthScores[dayKey] = s
-            }
-        }
+        // 移除 sheet 弹出编辑器，改为由 NavigationLink 推入
     }
 }
 
@@ -263,7 +257,7 @@ private extension GongGuoGeView {
         let isTodayFlag = isToday(date)
         let isSelected = selectedDate.map { Calendar.current.isDate($0, inSameDayAs: date) } ?? false
 
-        return VStack(alignment: .leading, spacing: 4) {
+        return VStack(alignment: .center, spacing: 4) {
             HStack(spacing: 4) {
                 Text("\(day)")
                     .font(.system(size: 12, weight: .semibold))
@@ -294,13 +288,13 @@ private extension GongGuoGeView {
                         .background(Capsule().fill(ModernDesignSystem.Colors.errorRed.opacity(0.12)))
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: .infinity, alignment: .center)
 
             Spacer(minLength: 0)
         }
         .padding(8)
         .frame(height: 64)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, alignment: .center)
         .background(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .fill(.ultraThinMaterial)
@@ -352,7 +346,22 @@ private extension GongGuoGeView {
                 Text(dateString(normalized))
                     .font(.system(size: 12, weight: .medium))
                     .foregroundColor(.secondary)
-                Button(action: { showingEditor = true }) {
+                NavigationLink {
+                    GongGuoRecordEditorView(date: normalized) { kind, title, points in
+                        let dayKey = Calendar.current.startOfDay(for: normalized)
+                        // 更新明细
+                        var items = dayRecords[dayKey] ?? []
+                        let newItem = RecordItem(kind: (kind == .merit ? .merit : .demerit), title: title, points: points)
+                        items.append(newItem)
+                        dayRecords[dayKey] = items
+
+                        // 更新当日汇总分
+                        var s = monthScores[dayKey] ?? DailyScore(merit: 0, demerit: 0)
+                        if kind == .merit { s.merit += points } else { s.demerit += points }
+                        monthScores[dayKey] = s
+                    }
+                    .asSubView()
+                } label: {
                     Image(systemName: "plus.circle.fill")
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(ModernDesignSystem.Colors.primaryGreen)
@@ -445,10 +454,11 @@ private extension GongGuoGeView {
                 .frame(height: safeTopInset)
 
             HStack(spacing: 12) {
+                Spacer()
                 Text("功过格")
                     .font(AppFont.kangxi(size: 20))
                     .foregroundColor(.primary)
-
+                    .opacity(opacity)  // 标题也跟随透明度渐显
                 Spacer()
             }
             .padding(.horizontal, 12)

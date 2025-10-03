@@ -1,6 +1,7 @@
 import SwiftUI
 import AVKit
 import WebKit
+import UIKit
 
 struct GongFaVideoPlayerView: View {
     let course: GongFaCourse
@@ -114,22 +115,47 @@ struct GongFaVideoPlayerView: View {
     private func forceLandscape() {
         guard !didForceLandscape else { return }
         didForceLandscape = true
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.orientationMask = [.landscapeLeft, .landscapeRight]
+        if let appDelegate = AppDelegate.shared {
+            appDelegate.orientationMask = [.portrait, .landscapeLeft, .landscapeRight]
         }
-        let value = UIInterfaceOrientation.landscapeRight.rawValue
-        UIDevice.current.setValue(value, forKey: "orientation")
-        UINavigationController.attemptRotationToDeviceOrientation()
+        if let keyWindow = getKeyWindow(), let scene = keyWindow.windowScene {
+            if #available(iOS 16.0, *) {
+                let prefs = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: .landscapeRight)
+                try? scene.requestGeometryUpdate(prefs)
+            } else {
+                UIDevice.current.setValue(UIInterfaceOrientation.landscapeRight.rawValue, forKey: "orientation")
+                UIViewController.attemptRotationToDeviceOrientation()
+            }
+        }
     }
 
     private func restorePortrait() {
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+        if let appDelegate = AppDelegate.shared {
             appDelegate.orientationMask = [.portrait]
         }
-        let value = UIInterfaceOrientation.portrait.rawValue
-        UIDevice.current.setValue(value, forKey: "orientation")
-        UINavigationController.attemptRotationToDeviceOrientation()
+        if let keyWindow = getKeyWindow(), let scene = keyWindow.windowScene {
+            if #available(iOS 16.0, *) {
+                let prefs = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: .portrait)
+                try? scene.requestGeometryUpdate(prefs)
+            } else {
+                UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+                UIViewController.attemptRotationToDeviceOrientation()
+            }
+        }
     }
+}
+
+// MARK: - Window 工具（本文件使用）
+@inline(__always)
+private func getKeyWindow() -> UIWindow? {
+    for scene in UIApplication.shared.connectedScenes {
+        if let windowScene = scene as? UIWindowScene {
+            if let key = windowScene.windows.first(where: { $0.isKeyWindow }) {
+                return key
+            }
+        }
+    }
+    return UIApplication.shared.windows.first { $0.isKeyWindow }
 }
 
 // 右侧悬浮卡路里组件（叠加在播放器之上）

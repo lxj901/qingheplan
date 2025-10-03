@@ -2,8 +2,15 @@ import SwiftUI
 
 // MARK: - AppDelegate for handling push notifications
 class AppDelegate: NSObject, UIApplicationDelegate {
+    // 提供全局可访问的共享实例，便于在 SwiftUI 视图中引用
+    static weak var shared: AppDelegate?
     // 控制全局方向的开关（需确保工程允许横屏）
-    var orientationMask: UIInterfaceOrientationMask = .portrait
+    @objc dynamic var orientationMask: UIInterfaceOrientationMask = .portrait
+
+    override init() {
+        super.init()
+        AppDelegate.shared = self
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         print("🔔 AppDelegate: 应用启动完成")

@@ -5,6 +5,7 @@ class TabBarVisibilityManager: ObservableObject {
     static let shared = TabBarVisibilityManager()
 
     @Published var isTabBarVisible: Bool = true
+    @Published var tabBarContentHeight: CGFloat = 0 // 由 CustomTabBar 实时上报的内容高度（不含安全区）
     private var subViewCount: Int = 0 // 追踪当前子页面数量
 
     private init() {} // 防止外部创建实例
@@ -159,9 +160,30 @@ struct CustomTabBar: View {
                 .fill(Color(.systemBackground))
                 .ignoresSafeArea(edges: .bottom) // 背景延伸到底部
         )
+        // 实时测量 TabBar 内容高度（不含底部安全区），上报到管理器
+        .background(
+            GeometryReader { proxy in
+                Color.clear
+                    .preference(key: TabBarHeightPreferenceKey.self, value: proxy.size.height)
+            }
+        )
+        .onPreferenceChange(TabBarHeightPreferenceKey.self) { height in
+            // 避免频繁更新造成无意义的刷新
+            if abs(tabBarManager.tabBarContentHeight - height) > 0.5 {
+                tabBarManager.tabBarContentHeight = height
+            }
+        }
         .opacity(tabBarManager.isTabBarVisible ? 1 : 0)
         .offset(y: tabBarManager.isTabBarVisible ? 0 : 100)
         .animation(.easeInOut(duration: 0.3), value: tabBarManager.isTabBarVisible)
+    }
+}
+
+// 用于上报 TabBar 高度的 PreferenceKey（仅承载一个 CGFloat）
+private struct TabBarHeightPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
     }
 }
 
@@ -290,11 +312,15 @@ struct TabBarVisibilityModifier: ViewModifier {
                 }
             }
             .onDisappear {
+                let tabBarManager = TabBarVisibilityManager.shared
                 if !shouldShow {
                     // 子页面消失时，减少子页面计数
-                    let tabBarManager = TabBarVisibilityManager.shared
                     tabBarManager.subViewDidDisappear()
                     print("📱 TabBarVisibilityModifier: 子页面消失")
+                } else {
+                    // 主页面被推入后台时（有子页面出现），确保Tab栏已隐藏
+                    // 这个情况通常不需要处理，因为子页面的 onAppear 会处理
+                    print("📱 TabBarVisibilityModifier: 主页面被推入后台")
                 }
             }
     }

@@ -18,7 +18,7 @@ struct MainCommunityView: View {
     @State private var showingSearch = false  // 添加搜索页面状态
     @State private var presetSearchKeyword: String? = nil  // 预设搜索关键词
     @State private var showingPublishPost = false  // 发布帖子页面状态
-    @State private var navigateToMessages = false  // 导航到消息页面
+    @State private var showingMessages = false  // 显示消息页面
 
     // 广告相关状态
     @State private var nativeAdViews: [UIView] = []
@@ -113,6 +113,9 @@ struct MainCommunityView: View {
         .fullScreenCover(isPresented: $showingPublishPost) {
             NewPublishPostView()
         }
+        .fullScreenCover(isPresented: $showingMessages) {
+            MessagesView()
+        }
         .asRootView()
     }
     
@@ -121,13 +124,8 @@ struct MainCommunityView: View {
         VStack(spacing: 0) {
             HStack {
                 // 左侧消息按钮
-                NavigationLink(destination: MessagesView().navigationBarHidden(true), isActive: $navigateToMessages) {
-                    EmptyView()
-                }
-                .hidden()
-
                 Button(action: {
-                    navigateToMessages = true
+                    showingMessages = true
                 }) {
                     ZStack(alignment: .topTrailing) {
                         Image(systemName: "bubble.left")

@@ -76,10 +76,33 @@ struct MessageUserProfileView: View {
             }
             .navigationBarHidden(true)
             .asSubView()
-            .navigationDestination(for: String.self) { postId in
-                PostDetailView(postId: postId)
-                    .navigationBarHidden(true)
-                    .id(postId)
+            .navigationDestination(for: CommunityNavigationDestination.self) { destination in
+                switch destination {
+                case .postDetail(let postId):
+                    PostDetailView(postId: postId)
+                        .navigationBarHidden(true)
+                        .asSubView() // 标记为子页面，隐藏Tab栏
+                        .id(postId)
+                case .userProfile(let userId):
+                    // 避免递归创建，使用 UserProfileView 替代
+                    UserProfileView(userId: userId, isRootView: false)
+                        .navigationBarHidden(true)
+                        .asSubView()
+                case .tagDetail(let tagName):
+                    TagDetailView(tagName: tagName)
+                        .navigationBarHidden(true)
+                        .asSubView()
+                }
+            }
+            .navigationDestination(isPresented: $showEditProfile) {
+                if let userProfile = viewModel.userProfile {
+                    EditProfileView(userProfile: Binding(
+                        get: { userProfile },
+                        set: { newProfile in
+                            viewModel.userProfile = newProfile
+                        }
+                    ))
+                }
             }
         }
         .sheet(isPresented: $showFollowersList) {
@@ -87,16 +110,6 @@ struct MessageUserProfileView: View {
         }
         .sheet(isPresented: $showFollowingList) {
             UserListView(userId: userId, listType: .following)
-        }
-        .navigationDestination(isPresented: $showEditProfile) {
-            if let userProfile = viewModel.userProfile {
-                EditProfileView(userProfile: Binding(
-                    get: { userProfile },
-                    set: { newProfile in
-                        viewModel.userProfile = newProfile
-                    }
-                ))
-            }
         }
         .sheet(isPresented: $showingReportSheet) {
             if let postId = reportingPostId {
@@ -134,10 +147,15 @@ struct MessageUserProfileView: View {
         .onAppear {
             Task {
                 await viewModel.loadUserProfile(userId: userId)
-                
+
                 print("🚀 MessageUserProfileView 页面已加载，用户ID: \(userId)")
                 print("📊 当前用户资料状态: \(viewModel.userProfile?.nickname ?? "未加载")")
             }
+        }
+        .onDisappear {
+            // 清空导航路径，防止类型混淆
+            navigationPath = NavigationPath()
+            print("🧹 MessageUserProfileView 页面消失，已清空导航路径")
         }
         .onPreferenceChange(AvatarOffsetPreferenceKey.self) { value in
             DispatchQueue.main.async {
@@ -745,7 +763,7 @@ struct MessageUserProfileView: View {
                                 print("🔍 MessageUserProfileView: 导航到帖子详情，帖子ID: \(postId)")
                                 Task { @MainActor in
                                     selectedPostId = postId
-                                    navigationPath.append(postId)
+                                    navigationPath.append(CommunityNavigationDestination.postDetail(postId))
                                 }
                             },
                             onNavigateToUserProfile: { author in
@@ -853,7 +871,7 @@ struct MessageUserProfileView: View {
                                 print("🔍 MessageUserProfileView: 导航到帖子详情，帖子ID: \(postId)")
                                 Task { @MainActor in
                                     selectedPostId = postId
-                                    navigationPath.append(postId)
+                                    navigationPath.append(CommunityNavigationDestination.postDetail(postId))
                                 }
                             },
                             onNavigateToUserProfile: { author in

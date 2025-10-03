@@ -39,6 +39,12 @@ struct PostCardView: View {
                     .padding(.top, 16)
             }
 
+            // 视频内容 - 全宽无边距无圆角
+            if let video = post.video {
+                videoContent(video)
+                    .padding(.top, 16)
+            }
+
             // 位置信息 - 与头像对齐
             if let location = post.location {
                 locationInfo
@@ -257,6 +263,20 @@ struct PostCardView: View {
             images: post.images ?? [],
             onImageTap: { index in
                 // 点击图片时导航到详情页
+                onNavigateToDetail(post.id)
+            }
+        )
+    }
+
+    // 视频内容
+    private func videoContent(_ videoURL: String) -> some View {
+        VideoThumbnailView(
+            videoURL: videoURL,
+            duration: nil, // 可以从后端获取视频时长
+            isFullWidth: true, // 全宽显示
+            showControls: false, // 列表模式：无控制
+            onTap: {
+                // 点击视频跳转到详情页，而不是打开全屏播放器
                 onNavigateToDetail(post.id)
             }
         )

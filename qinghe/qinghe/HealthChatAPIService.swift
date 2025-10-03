@@ -166,8 +166,12 @@ struct ConversationHistoryResponse: Codable {
         let title: String?
         let lastMessage: String?
         let messageCount: Int?
-        let createdAt: String
-        let updatedAt: String
+        let startedAt: String  // API 返回的字段名是 startedAt，不是 createdAt
+        let lastMessageAt: String  // API 返回的字段名是 lastMessageAt，不是 updatedAt
+
+        // 为了兼容性，提供计算属性
+        var createdAt: String { startedAt }
+        var updatedAt: String { lastMessageAt }
     }
 }
 
@@ -201,29 +205,54 @@ struct HealthChatMessage: Codable, Identifiable {
 
 /// 聊天响应
 struct ChatResponse: Codable {
-    let success: Bool
+    let status: String
     let message: String?
     let data: ChatData?
 
+    var success: Bool {
+        return status.lowercased() == "success"
+    }
+
     struct ChatData: Codable {
         let conversationId: String
-        let messageId: String
+        let messageId: String?
         let response: String?
         let jobId: String?
         let status: String // "processing", "completed", "failed"
+        let userMessage: String?
+        let estimatedTime: String?
+        let useQueue: Bool?
     }
 }
 
 /// 任务状态响应
 struct JobStatusResponse: Codable {
-    let success: Bool
+    let status: String
     let message: String?
     let data: JobStatusData?
 
+    var success: Bool {
+        return status.lowercased() == "success"
+    }
+
     struct JobStatusData: Codable {
-        let jobId: String
+        let jobId: String?
         let status: String // "processing", "completed", "failed"
         let response: String?
         let error: String?
+        let result: JobResult?
+
+        struct JobResult: Codable {
+            let success: Bool?
+            let conversationId: String?
+            let aiReply: String?
+            let tokenUsage: TokenUsage?
+
+            struct TokenUsage: Codable {
+                let prompt: Int?
+                let completion: Int?
+                let total: Int?
+            }
+        }
     }
 }

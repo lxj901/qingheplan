@@ -208,6 +208,7 @@ struct NewMainHomeView: View {
                     createdAt: nil
                 )
                 ChatDetailView(conversation: tempConversation)
+                    .asSubView() // 标记为子页面，隐藏Tab栏
                     .onDisappear {
                         navigationToConversationId = nil
                     }

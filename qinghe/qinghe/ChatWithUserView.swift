@@ -48,6 +48,7 @@ struct ChatWithUserView: View {
             } else if let conversation = conversation {
                 // 聊天界面
                 ChatDetailView(conversation: conversation)
+                    .asSubView() // 标记为子页面，隐藏Tab栏
             } else {
                 // 意外状态
                 VStack {

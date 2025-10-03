@@ -16,9 +16,11 @@ struct ChatInputBar: View {
                     .lineLimit(1...4)
                     .font(.system(size: 16))
                     .foregroundColor(.black.opacity(0.85))
+                    .frame(minHeight: 22) // 设置最小高度确保单行居中
             }
             .padding(.horizontal, 14)
-            .padding(.vertical, 12)
+            .padding(.vertical, 10)
+            .frame(minHeight: 44) // 确保整体有足够的点击区域
             .background(
                 ZStack {
                     // 底层毛玻璃
@@ -68,8 +70,8 @@ struct ChatInputBar: View {
             .buttonStyle(.plain)
         }
         .padding(.horizontal, 16)
-        .padding(.top, 8)
-        .padding(.bottom, 12)
+        // 让整个输入栏在背景板内上下各留 4pt
+        .padding(.vertical, 4)
 
     }
 }

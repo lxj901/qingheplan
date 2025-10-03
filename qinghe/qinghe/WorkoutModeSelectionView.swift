@@ -47,8 +47,8 @@ struct WorkoutModeSelectionView: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 10)
             }
-            .navigationTitle("AI智能教练")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationTitle("运动GO!")
+            .navigationBarTitleDisplayMode(.inline)
 
             // 321GO倒计时动画
             if showCountdownAnimation {

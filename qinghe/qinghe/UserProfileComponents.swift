@@ -460,6 +460,7 @@ struct BookmarksListView: View {
             if let postId = selectedPostId {
                 PostDetailView(postId: postId)
                     .navigationBarHidden(true)
+                    .asSubView() // 标记为子页面，隐藏Tab栏
                     .onAppear {
                         print("🔍 用户详情页面：导航到帖子详情页面，帖子ID: \(postId)")
                     }
@@ -597,6 +598,7 @@ struct PostsListView: View {
             if let postId = selectedPostId {
                 PostDetailView(postId: postId)
                     .navigationBarHidden(true)
+                    .asSubView() // 标记为子页面，隐藏Tab栏
                     .onAppear {
                         print("🔍 用户详情页面：导航到帖子详情页面，帖子ID: \(postId)")
                     }

@@ -23,7 +23,8 @@ struct HealthAssistantView: View {
 
     // 当前对话ID
     @State private var currentConversationId: String? = nil
-    @State private var hasCreatedConversation = false
+    @State private var hasCreatedInitialConversation = false  // 是否创建了初始对话
+    @State private var appDidEnterBackground = false  // 标记 app 是否进入过后台
 
     // 消息列表
     @State private var messages: [ChatMessage] = []
@@ -31,7 +32,9 @@ struct HealthAssistantView: View {
     @State private var isTyping: Bool = false // 是否正在打字
     @State private var showingActionMenu: Bool = false // 是否显示操作菜单
     @FocusState private var isInputFocused: Bool // 输入框焦点状态
-    @State private var keyboardHeight: CGFloat = 0 // 键盘高度，用于调整底部区域
+    @State private var keyboardHeight: CGFloat = 0 // 键盘高度
+    @State private var isSendingMessage: Bool = false // 是否正在发送消息
+    // 使用单例获取 TabBar 可见性，避免环境注入缺失导致崩溃
 
     // 消息数据模型
     struct ChatMessage: Identifiable {
@@ -55,13 +58,33 @@ struct HealthAssistantView: View {
                 // 可滚动内容（上滑显示导航栏）
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 0) {
-                        // 监听滚动偏移
-                        ScrollOffsetReader(coordinateSpace: "assistantScroll")
+                        // 滚动监听器 - 使用与 UserProfileView 相同的实现方式
+                        Color.clear
+                            .frame(height: 1)
+                            .background(
+                                GeometryReader { g in
+                                    let y = g.frame(in: .named("assistantScroll")).minY
+                                    Color.clear
+                                        .preference(key: ScrollOffsetPreferenceKey.self, value: y)
+                                        .onAppear {
+                                            print("📍 健康助手滚动监听器初始化，初始Y值: \(y)")
+                                        }
+                                        .onChange(of: y) { oldValue, newValue in
+                                            print("📈 健康助手滚动监听器检测到变化: \(oldValue) -> \(newValue)")
+
+                                            // 直接在这里更新状态
+                                            DispatchQueue.main.async {
+                                                scrollOffset = newValue
+                                                print("✅ scrollOffset 已更新为: \(newValue)")
+                                            }
+                                        }
+                                }
+                            )
 
                         // 头部问候 + 插画
                         headerSection
                             .padding(.horizontal, 20)
-                            .padding(.top, 32)
+                            .padding(.top, -10)
 
                         // 今日自律卡片（放在头部下方与其同层级）
                         DailySelfDisciplineCard(
@@ -73,7 +96,7 @@ struct HealthAssistantView: View {
                             onTapSuggestion: { _ in /* TODO: 触发向健康助手发问 */ }
                         )
                         .padding(.horizontal, 16)
-                        .padding(.top, -28)
+                        .padding(.top, -42)
 
                         // 消息列表
                         if !messages.isEmpty || isTyping {
@@ -87,6 +110,38 @@ struct HealthAssistantView: View {
                                 if isTyping, let lastMessage = messages.last {
                                     MessageBubble(message: lastMessage, displayedText: displayedText)
                                 }
+
+                                // 正在发送消息的加载指示器
+                                if isSendingMessage {
+                                    HStack(alignment: .top, spacing: 8) {
+                                        HStack(spacing: 4) {
+                                            ForEach(0..<3) { index in
+                                                Circle()
+                                                    .fill(Color(hex: "1F774E").opacity(0.6))
+                                                    .frame(width: 8, height: 8)
+                                                    .scaleEffect(isSendingMessage ? 1.0 : 0.5)
+                                                    .animation(
+                                                        Animation.easeInOut(duration: 0.6)
+                                                            .repeatForever()
+                                                            .delay(Double(index) * 0.2),
+                                                        value: isSendingMessage
+                                                    )
+                                            }
+                                        }
+                                        .padding(.horizontal, 14)
+                                        .padding(.vertical, 10)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                                .fill(Color.white)
+                                        )
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                                .stroke(Color(hex: "E0E0E0"), lineWidth: 1)
+                                        )
+
+                                        Spacer(minLength: 50)
+                                    }
+                                }
                             }
                             .padding(.horizontal, 16)
                             .padding(.top, 16)
@@ -94,14 +149,19 @@ struct HealthAssistantView: View {
 
                         Color.clear.frame(height: 24)
                         // 额外留白，确保可产生实际滚动，从而触发顶部导航渐显
-                        Color.clear.frame(height: 320)
+                        Color.clear.frame(height: 480)
                     }
                 }
                 .scrollDismissesKeyboard(.immediately)
                 .coordinateSpace(name: "assistantScroll")
                 .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
-                    scrollOffset = value
+                    print("📍 assistantScroll offset updated: \(value)")
+                    DispatchQueue.main.async {
+                        scrollOffset = value
+                    }
                 }
+
+                Spacer(minLength: 0)
 
                 // 操作菜单（输入框上方）
                 if showingActionMenu {
@@ -136,28 +196,23 @@ struct HealthAssistantView: View {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
 
-                // 底部输入栏（固定在底部，输入框垂直居中于底部背景区域）
+                // 底部输入栏
                 VStack(spacing: 0) {
-                    Spacer(minLength: 0)
                     ChatInputBar(
                         text: $inputText,
                         onSend: {
-                            inputText = ""
+                            sendMessage()
                         },
                         showingActionMenu: $showingActionMenu,
                         isInputFocused: $isInputFocused
                     )
-                    Spacer(minLength: 0)
                 }
-                .frame(height: bottomBackgroundHeight) // 动态高度：默认含Tab栏，键盘弹起时收缩
-                .frame(maxWidth: .infinity)
-                // 将底部区域整体抬起，避免被键盘遮挡
-                .padding(.bottom, keyboardHeight > 0 ? max(0, keyboardHeight - getSafeAreaBottom()) : 0)
+                .padding(.bottom, bottomSafeAreaInset)
             }
         }
         .animation(.spring(response: 0.3, dampingFraction: 0.8), value: showingActionMenu)
-        // 顶部导航栏（上滑后显示）
-        .overlay(alignment: .top) { topNavigationBar(opacity: navOpacity) }
+        // 顶部导航栏（使用 safeAreaInset，更符合 SwiftUI 推荐方式）
+        .safeAreaInset(edge: .top) { topNavigationBar(opacity: navOpacity) }
         // 侧边栏
         .overlay(alignment: .trailing) {
             ZStack(alignment: .trailing) {
@@ -178,8 +233,15 @@ struct HealthAssistantView: View {
         }
         .animation(.spring(response: 0.3, dampingFraction: 0.8), value: showingSidebar)
         .animation(.spring(response: 0.3, dampingFraction: 0.8), value: showingActionMenu)
-        .animation(.spring(response: 0.3, dampingFraction: 0.85), value: isInputFocused)
-        .animation(.spring(response: 0.3, dampingFraction: 0.85), value: keyboardHeight)
+        // 监听键盘事件
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { notification in
+            if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                keyboardHeight = keyboardFrame.cgRectValue.height
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+            keyboardHeight = 0
+        }
         // 点击任意位置收起键盘
         .simultaneousGesture(
             TapGesture().onEnded { _ in
@@ -281,65 +343,81 @@ struct HealthAssistantView: View {
         } message: {
             Text("该日没有报告")
         }
-        // 页面出现时自动创建新对话
-        .onAppear {
-            if !hasCreatedConversation {
-                hasCreatedConversation = true
-                Task {
-                    do {
-                        print("🔄 正在创建新对话...")
-                        let response = try await HealthChatAPIService.shared.createNewConversation()
-                        if let data = response.data {
-                            currentConversationId = data.conversationId
-                            print("✅ 新对话创建成功: \(data.conversationId)")
-
-                            // 添加欢迎消息并启动打字机效果
-                            if let welcomeMsg = data.welcomeMessage {
-                                let message = ChatMessage(
-                                    content: welcomeMsg,
-                                    isUser: false,
-                                    timestamp: Date()
-                                )
-                                messages.append(message)
-                                print("✅ 已添加欢迎消息，开始打字机效果")
-
-                                // 启动打字机效果
-                                await startTypingEffect(for: welcomeMsg)
-                            }
-                        }
-                    } catch {
-                        print("❌ 创建新对话失败: \(error)")
-                    }
-                }
+        // 监听 app 进入后台
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
+            print("📱 App 进入后台")
+            appDidEnterBackground = true
+        }
+        // 监听 app 从后台返回,只有真正从后台返回时才创建新对话
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+            if appDidEnterBackground {
+                print("📱 App 从后台返回,创建新对话")
+                appDidEnterBackground = false
+                createNewConversation()
+            } else {
+                print("📱 App 前台切换,不创建新对话")
             }
         }
-        // 键盘事件监听：用于抬起输入栏并收缩底部背景区域
-        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { notification in
-            handleKeyboardShow(notification)
-        }
-        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
-            keyboardHeight = 0
+        // 首次加载时创建对话
+        .onAppear {
+            if !hasCreatedInitialConversation {
+                hasCreatedInitialConversation = true
+                print("📱 首次加载健康助手页面,创建初始对话")
+                createNewConversation()
+            }
         }
         // 不再预加载日期型报告,避免误触发旧接口日志
     }
 
-    // MARK: - 底部区域动态高度（默认包含 TabBar，高度较高；键盘弹起或输入聚焦时收缩）
-    private var bottomBackgroundHeight: CGFloat {
-        let tabBarHeight: CGFloat = 60
-        let inputAreaBase: CGFloat = 60
-        // 输入聚焦或键盘弹起时，缩小底部背景区域高度，避免显得拥挤
-        if isInputFocused || keyboardHeight > 0 {
-            return inputAreaBase + 20 // 紧凑高度：仅保留输入栏上下少量留白
-        } else {
-            return inputAreaBase + tabBarHeight // 默认：包含Tab栏高度，使输入居中于底部背景区域
+    // MARK: - 创建新对话
+    private func createNewConversation() {
+        Task {
+            do {
+                print("🔄 正在创建新对话...")
+                let response = try await HealthChatAPIService.shared.createNewConversation()
+                if let data = response.data {
+                    currentConversationId = data.conversationId
+                    print("✅ 新对话创建成功: \(data.conversationId)")
+
+                    // 清空旧消息
+                    await MainActor.run {
+                        messages.removeAll()
+                    }
+
+                    // 添加欢迎消息并启动打字机效果
+                    if let welcomeMsg = data.welcomeMessage {
+                        let message = ChatMessage(
+                            content: welcomeMsg,
+                            isUser: false,
+                            timestamp: Date()
+                        )
+                        await MainActor.run {
+                            messages.append(message)
+                        }
+                        print("✅ 已添加欢迎消息，开始打字机效果")
+
+                        // 启动打字机效果
+                        await startTypingEffect(for: welcomeMsg)
+                    }
+                }
+            } catch {
+                print("❌ 创建新对话失败: \(error)")
+            }
         }
     }
 
-    // MARK: - 键盘事件处理
-    private func handleKeyboardShow(_ notification: Notification) {
-        if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            keyboardHeight = keyboardFrame.cgRectValue.height
+    // MARK: - 底部安全区域（仅考虑TabBar，不处理键盘）
+    private var bottomSafeAreaInset: CGFloat {
+        // 键盘弹起时，不添加额外的 padding，让系统自动处理
+        if keyboardHeight > 0 {
+            return 0
         }
+        // 键盘收起时，考虑 TabBar
+        if TabBarVisibilityManager.shared.isTabBarVisible {
+            let contentH = max(0, TabBarVisibilityManager.shared.tabBarContentHeight)
+            return getSafeAreaBottom() + contentH + 14
+        }
+        return getSafeAreaBottom()
     }
 
     private func getSafeAreaBottom() -> CGFloat {
@@ -376,6 +454,151 @@ struct HealthAssistantView: View {
         }
 
         isTyping = false
+    }
+
+    // MARK: - 发送消息
+    private func sendMessage() {
+        let messageContent = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !messageContent.isEmpty else { return }
+
+        // 清空输入框
+        inputText = ""
+
+        // 添加用户消息到列表
+        let userMessage = ChatMessage(
+            content: messageContent,
+            isUser: true,
+            timestamp: Date()
+        )
+        messages.append(userMessage)
+
+        // 显示加载状态
+        isSendingMessage = true
+
+        // 调用 API 发送消息
+        Task {
+            do {
+                print("📤 正在发送消息: \(messageContent)")
+                let response = try await HealthChatAPIService.shared.sendMessage(
+                    message: messageContent,
+                    conversationId: currentConversationId
+                )
+
+                if let data = response.data {
+                    print("✅ 消息发送成功，jobId: \(data.jobId ?? "无")")
+
+                    // 如果有 jobId，需要轮询任务状态获取 AI 响应
+                    if let jobId = data.jobId {
+                        await pollJobStatus(jobId: jobId)
+                    } else if let aiResponse = data.response {
+                        // 直接返回了响应
+                        await MainActor.run {
+                            isSendingMessage = false
+                        }
+                        await addAIMessage(aiResponse)
+                    }
+                }
+            } catch {
+                print("❌ 发送消息失败: \(error)")
+                // 隐藏加载状态
+                await MainActor.run {
+                    isSendingMessage = false
+                }
+                // 添加错误提示消息
+                await MainActor.run {
+                    let errorMessage = ChatMessage(
+                        content: "抱歉，消息发送失败，请稍后重试。",
+                        isUser: false,
+                        timestamp: Date()
+                    )
+                    messages.append(errorMessage)
+                }
+            }
+        }
+    }
+
+    // MARK: - 轮询任务状态
+    private func pollJobStatus(jobId: String) async {
+        var attempts = 0
+        let maxAttempts = 30 // 最多轮询30次（约30秒）
+
+        while attempts < maxAttempts {
+            do {
+                let statusResponse = try await HealthChatAPIService.shared.getJobStatus(jobId: jobId)
+
+                if let data = statusResponse.data {
+                    print("📊 任务状态: \(data.status)")
+
+                    switch data.status.lowercased() {
+                    case "completed":
+                        // 任务完成，提取 AI 回复
+                        // 优先使用 result.aiReply，否则使用 response
+                        let aiResponse = data.result?.aiReply ?? data.response
+                        if let aiResponse = aiResponse {
+                            print("✅ AI响应完成: \(aiResponse)")
+                            await MainActor.run {
+                                isSendingMessage = false
+                            }
+                            await addAIMessage(aiResponse)
+                        } else {
+                            print("⚠️ 任务完成但没有响应内容")
+                            await MainActor.run {
+                                isSendingMessage = false
+                            }
+                        }
+                        return
+                    case "failed", "error":
+                        print("❌ AI响应失败: \(data.error ?? "未知错误")")
+                        await MainActor.run {
+                            isSendingMessage = false
+                        }
+                        await addAIMessage("抱歉，处理您的问题时出现了错误，请稍后重试。")
+                        return
+                    case "processing", "active", "pending":
+                        // 继续轮询
+                        print("⏳ AI正在处理中... (状态: \(data.status))")
+                    default:
+                        print("⚠️ 未知状态: \(data.status)")
+                        break
+                    }
+                }
+
+                // 等待1秒后继续轮询
+                try await Task.sleep(nanoseconds: 1_000_000_000)
+                attempts += 1
+            } catch {
+                print("❌ 轮询任务状态失败: \(error)")
+                await MainActor.run {
+                    isSendingMessage = false
+                }
+                await addAIMessage("抱歉，获取响应时出现了错误，请稍后重试。")
+                return
+            }
+        }
+
+        // 超时
+        print("⏰ 轮询超时")
+        await MainActor.run {
+            isSendingMessage = false
+        }
+        await addAIMessage("抱歉，响应超时，请稍后重试。")
+    }
+
+    // MARK: - 添加 AI 消息
+    private func addAIMessage(_ content: String) async {
+        await MainActor.run {
+            let aiMessage = ChatMessage(
+                content: content,
+                isUser: false,
+                timestamp: Date()
+            )
+            messages.append(aiMessage)
+
+            // 启动打字机效果
+            Task {
+                await startTypingEffect(for: content)
+            }
+        }
     }
 
     // MARK: - 操作菜单
@@ -822,8 +1045,8 @@ struct HealthAssistantView: View {
 
     // MARK: - 头部
     private var headerSection: some View {
-        HStack(alignment: .top) {
-            VStack(alignment: .leading, spacing: 8) {
+        HStack(alignment: .top, spacing: 12) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text("Hi! 我叫青禾")
                     .font(.system(size: 26, weight: .heavy))
                     .foregroundColor(Color(hex: "131A38"))
@@ -835,6 +1058,7 @@ struct HealthAssistantView: View {
                     .foregroundColor(.black.opacity(0.45))
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .offset(y: -15)
 
             ZStack(alignment: .top) {
                 Circle().fill(.white.opacity(0.18)).frame(width: 110, height: 110)
@@ -845,7 +1069,8 @@ struct HealthAssistantView: View {
                         .resizable().scaledToFit().foregroundStyle(Color.white)
                 }
             }
-            .frame(width: 140, height: 140)
+            .frame(width: 120, height: 120)
+            .offset(y: -20)
         }
     }
 
@@ -898,25 +1123,40 @@ struct HealthAssistantView: View {
     private var navOpacity: Double {
         // 更灵敏：上滑 8pt 开始出现，约 24pt 完全显示
         let shown = max(0, min(1, Double((-(scrollOffset) - 8) / 24)))
+        // 调试：打印滚动偏移和透明度
+        if shown > 0 {
+            print("📊 scrollOffset: \(scrollOffset), navOpacity: \(shown) ✅ 导航栏应该显示")
+        }
         return shown
     }
 
     private func topNavigationBar(opacity: Double) -> some View {
-        VStack(spacing: 0) {
-            Rectangle()
-                .fill(Color.clear)
-                .frame(height: 44)
-                .frame(maxWidth: .infinity)
-                .background(.ultraThinMaterial.opacity(opacity))
-                .overlay(
-                    Rectangle()
-                        .fill(Color.black.opacity(0.08))
-                        .frame(height: 0.5)
-                        .opacity(opacity)
-                    , alignment: .bottom
-                )
+        HStack {
+            Spacer()
+            // 导航栏标题（居中、黑色，仅标题）
+            Text("健康助手")
+                .font(.system(size: 17, weight: .semibold))
+                .foregroundColor(.black)
+            Spacer()
         }
-        .ignoresSafeArea(edges: .top)
+        .frame(height: 44)
+        .padding(.horizontal, 16)
+        .background(.ultraThinMaterial)
+        .overlay(
+            Rectangle()
+                .fill(Color.black.opacity(0.08))
+                .frame(height: 0.5)
+            , alignment: .bottom
+        )
+        .opacity(opacity)
+    }
+
+    private func getSafeAreaTop() -> CGFloat {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first else {
+            return 44 // 默认状态栏高度
+        }
+        return window.safeAreaInsets.top
     }
 
     // MARK: - 简单卡片占位
@@ -1315,7 +1555,7 @@ struct MessageBubble: View {
     let displayedText: String
 
     var body: some View {
-        HStack {
+        HStack(alignment: .top, spacing: 8) {
             if message.isUser {
                 Spacer(minLength: 50)
             }
@@ -1328,18 +1568,31 @@ struct MessageBubble: View {
                     .padding(.vertical, 10)
                     .background(
                         RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .fill(message.isUser ? Color(hex: "1F774E") : Color.white)
+                            .fill(message.isUser ? Color(hex: "34C759") : Color.white)
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 16, style: .continuous)
                             .stroke(message.isUser ? Color.clear : Color(hex: "E0E0E0"), lineWidth: 1)
                     )
+                    .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+
+                // 时间戳
+                Text(formatTime(message.timestamp))
+                    .font(.system(size: 11))
+                    .foregroundColor(.secondary.opacity(0.6))
+                    .padding(.horizontal, 4)
             }
 
             if !message.isUser {
                 Spacer(minLength: 50)
             }
         }
+    }
+
+    private func formatTime(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: date)
     }
 }
 
