@@ -27,16 +27,11 @@ struct AddGroupMemberView: View {
         .navigationTitle("添加群成员")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button("取消") {
-                    dismiss()
-                }
-            }
-
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("确定(\(selectedUsers.count))") {
                     addSelectedMembers()
                 }
+                .foregroundColor(.black)
                 .disabled(selectedUsers.isEmpty || viewModel.isLoading)
             }
         }

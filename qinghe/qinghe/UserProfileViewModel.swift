@@ -18,6 +18,10 @@ class UserProfileViewModel: ObservableObject {
     @Published var errorMessage: String?
     
     @Published var isFollowActionLoading = false
+    
+    // 屏蔽用户相关的错误提示
+    @Published var showBlockedUserAlert = false
+    @Published var blockedUserMessage: String?
 
     // 收藏相关
     @Published var bookmarkedPosts: [Post] = []
@@ -378,10 +382,30 @@ class UserProfileViewModel: ObservableObject {
                     print("✅ 关注操作成功: \(message)")
                 }
             } else {
-                print("❌ 关注操作失败: \(response.message ?? "未知错误")")
+                // 处理失败情况
+                let errorMsg = response.message ?? "未知错误"
+                print("❌ 关注操作失败: \(errorMsg)")
+                
+                // 检查是否是屏蔽用户的错误
+                if errorMsg.contains("无法关注已屏蔽的用户") || errorMsg.contains("屏蔽") {
+                    blockedUserMessage = "您已屏蔽该用户，如需关注请先从黑名单中移除"
+                    showBlockedUserAlert = true
+                }
             }
         } catch {
             print("❌ 关注用户失败: \(error)")
+            
+            // 检查是否是 NetworkError.serverMessage
+            if let networkError = error as? NetworkManager.NetworkError,
+               case .serverMessage(let message) = networkError {
+                print("🔍 捕获到服务器错误消息: \(message)")
+                
+                // 检查是否是屏蔽用户的错误
+                if message.contains("无法关注已屏蔽的用户") || message.contains("屏蔽") {
+                    blockedUserMessage = "您已屏蔽该用户，如需关注请先从黑名单中移除"
+                    showBlockedUserAlert = true
+                }
+            }
         }
 
         isFollowActionLoading = false
@@ -430,12 +454,21 @@ class UserProfileViewModel: ObservableObject {
         guard let userProfile = userProfile else { return }
 
         do {
-            // 暂时使用模拟API调用，因为API可能还没有实现
-            try await Task.sleep(nanoseconds: 1_000_000_000) // 模拟网络延迟
-
-            // 更新本地状态
-            self.userProfile?.isBlocked = true
-            print("✅ 屏蔽用户成功")
+            let response = try await apiService.blockUser(userId: userProfile.id, reason: reason)
+            
+            if response.success, let data = response.data {
+                // 使用服务器返回的实际数据更新本地状态
+                self.userProfile?.isBlocked = data.isBlocked
+                if let isFollowing = data.isFollowing {
+                    self.userProfile?.isFollowing = isFollowing
+                }
+                print("✅ 屏蔽用户成功 - isBlocked: \(data.isBlocked), isFollowing: \(data.isFollowing ?? false)")
+                
+                // 重新加载用户资料以获取最新状态
+                await refreshFollowStatus(userId: userProfile.id)
+            } else {
+                print("❌ 屏蔽用户失败: \(response.message ?? "未知错误")")
+            }
         } catch {
             print("❌ 屏蔽用户失败: \(error)")
         }
@@ -446,12 +479,18 @@ class UserProfileViewModel: ObservableObject {
         guard let userProfile = userProfile else { return }
 
         do {
-            // 暂时使用模拟API调用，因为API可能还没有实现
-            try await Task.sleep(nanoseconds: 1_000_000_000) // 模拟网络延迟
-
-            // 更新本地状态
-            self.userProfile?.isBlocked = false
-            print("✅ 取消屏蔽用户成功")
+            let response = try await apiService.unblockUser(userId: userProfile.id)
+            
+            if response.success, let data = response.data {
+                // 使用服务器返回的实际数据更新本地状态
+                self.userProfile?.isBlocked = data.isBlocked
+                print("✅ 取消屏蔽用户成功 - isBlocked: \(data.isBlocked), canFollow: \(data.canFollow ?? false)")
+                
+                // 重新加载用户资料以获取最新状态
+                await refreshFollowStatus(userId: userProfile.id)
+            } else {
+                print("❌ 取消屏蔽用户失败: \(response.message ?? "未知错误")")
+            }
         } catch {
             print("❌ 取消屏蔽用户失败: \(error)")
         }

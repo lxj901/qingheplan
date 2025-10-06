@@ -93,6 +93,13 @@ class ImageLoader: ObservableObject {
             return
         }
 
+        // 检查是否是 base64 数据 URL
+        let urlString = url.absoluteString
+        if urlString.hasPrefix("data:image/") {
+            loadBase64Image(from: urlString, cacheKey: cacheKey)
+            return
+        }
+
         // 重置状态
         image = nil
         isLoading = true
@@ -102,6 +109,34 @@ class ImageLoader: ObservableObject {
         // 开始加载
         currentTask = Task {
             await loadImageWithRetry(url: url, cacheKey: cacheKey)
+        }
+    }
+    
+    private func loadBase64Image(from dataUrl: String, cacheKey: NSString) {
+        // 解析 base64 数据
+        // 格式: data:image/jpeg;base64,/9j/4AAQSkZJRgABA...
+        guard let commaIndex = dataUrl.firstIndex(of: ",") else {
+            hasError = true
+            return
+        }
+        
+        let base64String = String(dataUrl[dataUrl.index(after: commaIndex)...])
+        
+        // 解码 base64
+        if let imageData = Data(base64Encoded: base64String, options: .ignoreUnknownCharacters),
+           let uiImage = UIImage(data: imageData) {
+            // 缓存图片
+            Self.cache.setObject(uiImage, forKey: cacheKey)
+            
+            // 更新UI
+            image = uiImage
+            hasError = false
+            isLoading = false
+            print("✅ Base64图片加载成功")
+        } else {
+            hasError = true
+            isLoading = false
+            print("❌ Base64图片解码失败")
         }
     }
 

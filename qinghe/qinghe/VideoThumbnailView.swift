@@ -17,6 +17,23 @@ struct VideoThumbnailView: View {
     @State private var isLoading = true
     @State private var showingFullScreen = false
     @State private var fullscreenReturnTime: CMTime? = nil
+    
+    // 修复视频URL的辅助方法
+    private func fixVideoUrl(_ url: String) -> String {
+        var fixedUrl = url
+        
+        // 如果URL包含localhost，替换为正确的域名
+        if fixedUrl.contains("localhost:3000") {
+            fixedUrl = fixedUrl.replacingOccurrences(of: "http://localhost:3000", with: "https://api.qinghejihua.com.cn")
+        }
+        
+        // 如果URL包含localhost，替换为正确的域名
+        if fixedUrl.contains("localhost") && !fixedUrl.contains("https://") && !fixedUrl.contains("http://") {
+            fixedUrl = "https://api.qinghejihua.com.cn" + fixedUrl
+        }
+        
+        return fixedUrl
+    }
 
     var body: some View {
         ZStack {
@@ -141,8 +158,9 @@ struct VideoThumbnailView: View {
         .onAppear {
             // 列表模式默认静音且循环；详情页依据 loop 参数决定是否循环
             // 详情页模式自动播放
-            playerManager.setupPlayer(urlString: videoURL, isMuted: !showControls, loop: loop || !showControls, autoPlay: showControls)
-            print("🎬 视频组件出现: \(videoURL), showControls: \(showControls)")
+            let fixedUrl = fixVideoUrl(videoURL)
+            playerManager.setupPlayer(urlString: fixedUrl, isMuted: !showControls, loop: loop || !showControls, autoPlay: showControls)
+            print("🎬 视频组件出现: \(videoURL) -> 修复后: \(fixedUrl), showControls: \(showControls)")
         }
         .onDisappear {
             playerManager.cleanup()
@@ -150,7 +168,7 @@ struct VideoThumbnailView: View {
         }
         // 系统原生全屏播放器
         .fullScreenCover(isPresented: $showingFullScreen) {
-            NativeFullScreenVideoPlayer(videoURL: videoURL, startTime: playerManager.getCurrentTime(), onDismiss: { returnTime in
+            NativeFullScreenVideoPlayer(videoURL: fixVideoUrl(videoURL), startTime: playerManager.getCurrentTime(), onDismiss: { returnTime in
                 fullscreenReturnTime = returnTime
             })
             .onDisappear {
@@ -327,6 +345,7 @@ struct NativeFullScreenVideoPlayer: View {
         self.videoURL = videoURL
         self.startTime = startTime
         self.onDismiss = onDismiss
+        print("🎥 全屏播放器初始化 - URL: \(videoURL)")
     }
 
     var body: some View {

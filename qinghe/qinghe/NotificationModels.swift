@@ -167,11 +167,11 @@ struct SystemNotificationResponse: Codable {
 /// 系统通知列表数据
 struct SystemNotificationListData: Codable {
     let items: [SystemNotification]
-    let pagination: Pagination
+    let pagination: NotificationPagination
 }
 
-/// 分页信息
-struct Pagination: Codable {
+/// 通知分页信息
+struct NotificationPagination: Codable {
     let page: Int
     let limit: Int
     let total: Int
@@ -317,5 +317,45 @@ extension String {
         let yearFormatter = DateFormatter()
         yearFormatter.dateFormat = "yyyy-MM-dd HH:mm"
         return yearFormatter.string(from: date)
+    }
+    
+    /// 格式化为年月日时分格式 (yyyy年MM月dd日 HH:mm)
+    var formattedDateTime: String {
+        let formatter = ISO8601DateFormatter()
+        guard let date = formatter.date(from: self) else {
+            // 如果ISO8601解析失败，尝试其他格式
+            let fallbackFormatter = DateFormatter()
+            
+            // 尝试 "yyyy-MM-dd HH:mm:ss" 格式（API实际返回的格式）
+            fallbackFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            if let fallbackDate = fallbackFormatter.date(from: self) {
+                return formatDateTime(for: fallbackDate)
+            }
+            
+            // 尝试带微秒的ISO8601格式
+            fallbackFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'"
+            if let fallbackDate = fallbackFormatter.date(from: self) {
+                return formatDateTime(for: fallbackDate)
+            }
+            
+            // 尝试标准ISO8601格式
+            fallbackFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+            if let fallbackDate = fallbackFormatter.date(from: self) {
+                return formatDateTime(for: fallbackDate)
+            }
+            
+            print("⚠️ 无法解析时间格式: \(self)")
+            return self
+        }
+        
+        return formatDateTime(for: date)
+    }
+    
+    /// 格式化为年月日时分
+    private func formatDateTime(for date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "zh_CN")
+        formatter.dateFormat = "yyyy年MM月dd日 HH:mm"
+        return formatter.string(from: date)
     }
 }

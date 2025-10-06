@@ -2814,7 +2814,7 @@ struct ConcentricWavesView: View {
     }
 }
 
-#Preview {
+#Preview("HeaderAndCard") {
     ZStack {
         LinearGradient(colors: [Color(hex: "C3E88D"), Color(hex: "B2F0E1"), Color(hex: "FFE485")], startPoint: .topLeading, endPoint: .bottomTrailing)
             .ignoresSafeArea()
@@ -3798,7 +3798,6 @@ struct HealthRecordView: View {
     @ObservedObject private var authManager = AuthManager.shared
     @State private var basicInfo = BasicHealthInfo()
     @State private var showingBasicInfoEditor = false
-    @State private var showingDiagnosisRecords = false
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -3829,13 +3828,9 @@ struct HealthRecordView: View {
 
                 SleepExerciseCard()
                     .padding(.horizontal, 16)
-
-                    DiagnosisRecordsCard(onManageRecords: { showingDiagnosisRecords = true })
-                        .padding(.horizontal, 16)
                 }
                 .padding(.bottom, 32)
             }
-            NavigationLink(destination: DiagnosisRecordsView(), isActive: $showingDiagnosisRecords) { EmptyView() }
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {

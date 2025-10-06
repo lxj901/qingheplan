@@ -12,8 +12,8 @@ struct MainCommunityView: View {
     // 导航路径
     @State private var navigationPath = NavigationPath()
 
-    @State private var showingReportSheet = false
     @State private var reportingPostId: String?
+    @State private var showingReportSheet = false
     @State private var lastRefreshTime: Date = Date()
     @State private var showingSearch = false  // 添加搜索页面状态
     @State private var presetSearchKeyword: String? = nil  // 预设搜索关键词
@@ -49,13 +49,25 @@ struct MainCommunityView: View {
             // 使用NavigationLink方式的导航目标
             .navigationDestination(for: CommunityNavigationDestination.self) { destination in
                 switch destination {
-                case .postDetail(let postId):
-                    PostDetailView(postId: postId)
+                case .postDetail(let postId, let highlightSection, let highlightUserId):
+                    PostDetailView(
+                        postId: postId,
+                        highlightSection: highlightSection.flatMap { section in
+                            switch section {
+                            case "likes": return .likes
+                            case "bookmarks": return .bookmarks
+                            case "comments": return .comments
+                            default: return nil
+                            }
+                        },
+                        highlightUserId: highlightUserId
+                    )
                         .navigationBarHidden(true)
                         .modifier(SwipeBackGestureModifier()) // 添加滑动返回手势
                         .asSubView() // 标记为子页面，隐藏Tab栏
+                        .id(postId) // 强制在postId改变时重新创建视图
                         .onAppear {
-                            print("🔍 主社区页面：导航到帖子详情页面，帖子ID: \(postId)")
+                            print("🔍 主社区页面：导航到帖子详情页面，帖子ID: \(postId), 高亮: \(highlightSection ?? "无"), 用户ID: \(highlightUserId ?? "无")")
                         }
                 case .userProfile(let userId):
                     UserProfileView(userId: userId, isRootView: false)
@@ -83,6 +95,20 @@ struct MainCommunityView: View {
                         await communityViewModel.reportPost(postId, reason: reason, description: description)
                     }
                 }
+                .onAppear {
+                    print("📋 MainCommunityView: 显示ReportPostView，帖子ID: \(postId)")
+                    print("✅ MainCommunityView: ReportPostView已显示")
+                }
+            } else {
+                Text("错误：无法显示举报页面")
+                    .onAppear {
+                        print("❌ MainCommunityView: reportingPostId为空，无法显示举报页面")
+                    }
+            }
+        }
+        .onChange(of: showingReportSheet) { newValue in
+            if newValue {
+                print("📋 MainCommunityView: sheet被触发，showingReportSheet: \(newValue), reportingPostId: \(reportingPostId ?? "nil")")
             }
         }
         .task {
@@ -109,6 +135,7 @@ struct MainCommunityView: View {
                 viewModel: communityViewModel,
                 presetSearchKeyword: presetSearchKeyword
             )
+            .id(presetSearchKeyword ?? "") // 强制在 presetSearchKeyword 变化时重建视图
         }
         .fullScreenCover(isPresented: $showingPublishPost) {
             NewPublishPostView()
@@ -385,8 +412,10 @@ struct MainCommunityView: View {
             if let tagName = notification.userInfo?["tagName"] as? String {
                 print("🏷️ 收到标签搜索通知: \(tagName)")
                 Task { @MainActor in
-                    // 设置预设搜索关键词为 #tagName
-                    presetSearchKeyword = "#\(tagName)"
+                    // tagName已经包含#号，直接使用
+                    presetSearchKeyword = tagName
+                    // 稍微延迟确保状态更新完成
+                    try? await Task.sleep(nanoseconds: 50_000_000) // 0.05秒
                     // 导航到搜索页面
                     showingSearch = true
                 }
@@ -412,10 +441,12 @@ struct MainCommunityView: View {
             }
 
             if let postId = postIdString {
-                print("🔍 MainCommunityView 收到帖子详情导航通知，帖子ID: \(postId)")
+                let highlightSection = notification.userInfo?["highlightSection"] as? String
+                let highlightUserId = notification.userInfo?["highlightUserId"] as? String
+                print("🔍 MainCommunityView 收到帖子详情导航通知，帖子ID: \(postId), 高亮区域: \(highlightSection ?? "无"), 高亮用户ID: \(highlightUserId ?? "无")")
                 Task { @MainActor in
-                    navigationPath.append(CommunityNavigationDestination.postDetail(postId))
-                    print("🔍 MainCommunityView: 已设置帖子详情显示，postId: \(postId)")
+                    navigationPath.append(CommunityNavigationDestination.postDetail(postId, highlightSection: highlightSection, highlightUserId: highlightUserId))
+                    print("🔍 MainCommunityView: 已设置帖子详情显示，postId: \(postId), highlightSection: \(highlightSection ?? "无"), highlightUserId: \(highlightUserId ?? "无")")
                 }
             }
         }
@@ -443,14 +474,14 @@ struct MainCommunityView: View {
                 }
             },
             onReport: {
-                Task { @MainActor in
-                    reportingPostId = post.id
-                    showingReportSheet = true
-                }
+                print("⚠️ MainCommunityView: 触发举报回调，帖子ID: \(post.id)")
+                reportingPostId = post.id
+                showingReportSheet = true
+                print("⚠️ MainCommunityView: 设置状态 - reportingPostId: \(post.id), showingReportSheet: true")
             },
             onNavigateToDetail: { postId in
                 Task { @MainActor in
-                    navigationPath.append(CommunityNavigationDestination.postDetail(postId))
+                    navigationPath.append(CommunityNavigationDestination.postDetail(postId, highlightSection: nil))
                 }
             },
             onNavigateToUserProfile: { author in

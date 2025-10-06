@@ -3,16 +3,25 @@ import UIKit
 
 /// 了凡四训功过格 - 初始页面（米色背景 + 滚动后显示导航栏）
 struct GongGuoGeView: View {
+    @StateObject private var viewModel = MeritViewModel()
     @State private var scrollOffset: CGFloat = 0
     @State private var currentMonth: Date = Date()
-    @State private var monthScores: [Date: DailyScore] = [:]
-    @State private var dayRecords: [Date: [RecordItem]] = [:]
     @State private var selectedDate: Date? = nil
+    @State private var showingError = false
     // 由弹出式编辑改为导航推入新页面
 
     private var navOpacity: Double {
         let shown = max(0, min(1, Double((-scrollOffset - 10) / 30)))
         return shown
+    }
+    
+    // 从 ViewModel 获取数据的计算属性
+    private var monthScores: [Date: DailyScore] {
+        viewModel.dailyScores
+    }
+    
+    private var dayRecords: [Date: [MeritRecord]] {
+        viewModel.dayRecords
     }
 
     var body: some View {
@@ -64,13 +73,36 @@ struct GongGuoGeView: View {
             }
             .coordinateSpace(name: "gongguogeScroll")
             .onAppear {
-                buildSampleScores(for: currentMonth)
                 let cal = Calendar.current
                 if cal.isDate(Date(), equalTo: currentMonth, toGranularity: .month) {
                     selectedDate = Date()
                 } else {
                     selectedDate = startOfMonth(currentMonth)
                 }
+                
+                // 加载当月数据
+                Task {
+                    await viewModel.loadMonthlyRecords(for: currentMonth)
+                }
+            }
+            .overlay {
+                if viewModel.isLoading {
+                    ZStack {
+                        Color.black.opacity(0.2)
+                            .ignoresSafeArea()
+                        ProgressView()
+                            .scaleEffect(1.5)
+                            .progressViewStyle(CircularProgressViewStyle(tint: ModernDesignSystem.Colors.primaryGreen))
+                    }
+                }
+            }
+            .alert("错误", isPresented: $showingError) {
+                Button("确定", role: .cancel) { }
+            } message: {
+                Text(viewModel.errorMessage ?? "未知错误")
+            }
+            .onChange(of: viewModel.errorMessage) { oldValue, newValue in
+                showingError = newValue != nil
             }
 
             // 顶部导航栏（默认透明，滚动后出现）
@@ -84,14 +116,7 @@ struct GongGuoGeView: View {
 
 private extension GongGuoGeView {
     // MARK: - 数据模型
-    struct DailyScore { var merit: Int; var demerit: Int }
-    struct RecordItem: Identifiable, Hashable {
-        enum Kind { case merit, demerit }
-        let id = UUID()
-        let kind: Kind
-        let title: String
-        let points: Int
-    }
+    typealias DailyScore = MeritViewModel.DailyScore
 
     // MARK: - 日期工具
     func startOfMonth(_ date: Date) -> Date {
@@ -153,33 +178,16 @@ private extension GongGuoGeView {
         return arr
     }
 
-    func buildSampleScores(for month: Date) {
-        monthScores.removeAll()
-        dayRecords.removeAll()
-        let cal = Calendar.current
-        let days = daysInMonth(month)
-        for d in 1...days {
-            if let date = cal.date(bySetting: .day, value: d, of: startOfMonth(month)) {
-                var m = 0, g = 0
-                if d % 7 == 0 { m = 1 }
-                if d % 10 == 0 { g = 1 }
-                if m > 0 || g > 0 { monthScores[date] = DailyScore(merit: m, demerit: g) }
-                var items: [RecordItem] = []
-                if m > 0 { items.append(RecordItem(kind: .merit, title: "随手帮人", points: m)) }
-                if g > 0 { items.append(RecordItem(kind: .demerit, title: "言辞不敬", points: g)) }
-                if !items.isEmpty { dayRecords[date] = items }
-            }
-        }
-    }
-
     // MARK: - 视图片段
     var monthHeader: some View {
         HStack(spacing: 12) {
             Button {
                 withAnimation(.easeInOut(duration: 0.2)) {
                     currentMonth = addMonths(currentMonth, -1)
-                    buildSampleScores(for: currentMonth)
                     selectedDate = startOfMonth(currentMonth)
+                }
+                Task {
+                    await viewModel.loadMonthlyRecords(for: currentMonth)
                 }
             } label: {
                 Image(systemName: "chevron.left")
@@ -200,8 +208,10 @@ private extension GongGuoGeView {
             Button {
                 withAnimation(.easeInOut(duration: 0.2)) {
                     currentMonth = addMonths(currentMonth, 1)
-                    buildSampleScores(for: currentMonth)
                     selectedDate = startOfMonth(currentMonth)
+                }
+                Task {
+                    await viewModel.loadMonthlyRecords(for: currentMonth)
                 }
             } label: {
                 Image(systemName: "chevron.right")
@@ -256,8 +266,12 @@ private extension GongGuoGeView {
         let score = monthScores[date]
         let isTodayFlag = isToday(date)
         let isSelected = selectedDate.map { Calendar.current.isDate($0, inSameDayAs: date) } ?? false
+        
+        // 判断是否有功过记录
+        let hasScore = score != nil && (score!.merit > 0 || score!.demerit > 0)
 
-        return VStack(alignment: .center, spacing: 4) {
+        return VStack(alignment: .center, spacing: 3) {
+            // 日期行
             HStack(spacing: 4) {
                 Text("\(day)")
                     .font(.system(size: 12, weight: .semibold))
@@ -266,35 +280,42 @@ private extension GongGuoGeView {
                 if isTodayFlag {
                     Circle()
                         .fill(ModernDesignSystem.Colors.primaryGreen)
-                        .frame(width: 6, height: 6)
+                        .frame(width: 5, height: 5)
                 }
             }
+            .padding(.top, 2)
 
-            HStack(spacing: 4) {
+            // 功过标签 - 垂直排列以节省空间
+            VStack(spacing: 3) {
                 if let s = score, s.merit > 0 {
-                    Text("功 +\(s.merit)")
-                        .font(.system(size: 9, weight: .semibold))
+                    Text("功+\(s.merit)")
+                        .font(.system(size: 8, weight: .bold))
                         .foregroundColor(ModernDesignSystem.Colors.primaryGreen)
-                        .padding(.horizontal, 6)
+                        .padding(.horizontal, 5)
                         .padding(.vertical, 2)
-                        .background(Capsule().fill(ModernDesignSystem.Colors.primaryGreen.opacity(0.12)))
+                        .background(Capsule().fill(ModernDesignSystem.Colors.primaryGreen.opacity(0.15)))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
                 }
                 if let s = score, s.demerit > 0 {
-                    Text("过 -\(s.demerit)")
-                        .font(.system(size: 9, weight: .semibold))
+                    Text("过-\(s.demerit)")
+                        .font(.system(size: 8, weight: .bold))
                         .foregroundColor(ModernDesignSystem.Colors.errorRed)
-                        .padding(.horizontal, 6)
+                        .padding(.horizontal, 5)
                         .padding(.vertical, 2)
-                        .background(Capsule().fill(ModernDesignSystem.Colors.errorRed.opacity(0.12)))
+                        .background(Capsule().fill(ModernDesignSystem.Colors.errorRed.opacity(0.15)))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .center)
-
+            .frame(maxWidth: .infinity)
+            
             Spacer(minLength: 0)
         }
-        .padding(8)
-        .frame(height: 64)
-        .frame(maxWidth: .infinity, alignment: .center)
+        .padding(.horizontal, 6)
+        .padding(.vertical, 6)
+        .frame(height: hasScore ? 72 : 64)  // 有记录时增加高度
+        .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .fill(.ultraThinMaterial)
@@ -335,7 +356,7 @@ private extension GongGuoGeView {
         let baseDate = selectedDate ?? startOfMonth(currentMonth)
         // 为避免时间成分影响，以起始日统一 key
         let normalized = Calendar.current.startOfDay(for: baseDate)
-        let items = dayRecords[normalized] ?? dayRecords[baseDate] ?? []
+        let items = viewModel.getRecordsForDate(normalized)
 
         return VStack(alignment: .leading, spacing: 10) {
             HStack {
@@ -347,19 +368,10 @@ private extension GongGuoGeView {
                     .font(.system(size: 12, weight: .medium))
                     .foregroundColor(.secondary)
                 NavigationLink {
-                    GongGuoRecordEditorView(date: normalized) { kind, title, points in
-                        let dayKey = Calendar.current.startOfDay(for: normalized)
-                        // 更新明细
-                        var items = dayRecords[dayKey] ?? []
-                        let newItem = RecordItem(kind: (kind == .merit ? .merit : .demerit), title: title, points: points)
-                        items.append(newItem)
-                        dayRecords[dayKey] = items
-
-                        // 更新当日汇总分
-                        var s = monthScores[dayKey] ?? DailyScore(merit: 0, demerit: 0)
-                        if kind == .merit { s.merit += points } else { s.demerit += points }
-                        monthScores[dayKey] = s
-                    }
+                    GongGuoRecordEditorView(
+                        date: normalized,
+                        viewModel: viewModel
+                    )
                     .asSubView()
                 } label: {
                     Image(systemName: "plus.circle.fill")
@@ -393,44 +405,57 @@ private extension GongGuoGeView {
                 )
             } else {
                 VStack(spacing: 10) {
-                    ForEach(items) { item in
-                        HStack(spacing: 12) {
-                            Text(item.kind == .merit ? "功" : "过")
-                                .font(.system(size: 12, weight: .bold))
-                                .foregroundColor(.white)
-                                .frame(width: 28, height: 28)
-                                .background(
-                                    Circle().fill(item.kind == .merit ? ModernDesignSystem.Colors.primaryGreen : ModernDesignSystem.Colors.errorRed)
-                                )
-
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(item.title)
-                                    .font(.system(size: 14, weight: .semibold))
-                                    .foregroundColor(.primary)
-                                Text(item.kind == .merit ? "加分" : "减分")
-                                    .font(.system(size: 11))
-                                    .foregroundColor(.secondary)
+                    ForEach(items) { record in
+                        recordRow(record)
+                            .contextMenu {
+                                Button(role: .destructive) {
+                                    Task {
+                                        await viewModel.deleteRecord(id: record.id)
+                                    }
+                                } label: {
+                                    Label("删除", systemImage: "trash")
+                                }
                             }
-
-                            Spacer()
-
-                            Text((item.kind == .merit ? "+" : "-") + "\(item.points)")
-                                .font(.system(size: 14, weight: .bold))
-                                .foregroundColor(item.kind == .merit ? ModernDesignSystem.Colors.primaryGreen : ModernDesignSystem.Colors.errorRed)
-                        }
-                        .padding(12)
-                        .background(
-                            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                .fill(.ultraThinMaterial)
-                        )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                .stroke(Color.white.opacity(0.25), lineWidth: 0.5)
-                        )
                     }
                 }
             }
         }
+    }
+    
+    func recordRow(_ record: MeritRecord) -> some View {
+        HStack(spacing: 12) {
+            Text(record.type == "merit" ? "功" : "过")
+                .font(.system(size: 12, weight: .bold))
+                .foregroundColor(.white)
+                .frame(width: 28, height: 28)
+                .background(
+                    Circle().fill(record.type == "merit" ? ModernDesignSystem.Colors.primaryGreen : ModernDesignSystem.Colors.errorRed)
+                )
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(record.title)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(.primary)
+                Text(record.type == "merit" ? "加分" : "减分")
+                    .font(.system(size: 11))
+                    .foregroundColor(.secondary)
+            }
+
+            Spacer()
+
+            Text((record.type == "merit" ? "+" : "-") + "\(record.points)")
+                .font(.system(size: 14, weight: .bold))
+                .foregroundColor(record.type == "merit" ? ModernDesignSystem.Colors.primaryGreen : ModernDesignSystem.Colors.errorRed)
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(.ultraThinMaterial)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .stroke(Color.white.opacity(0.25), lineWidth: 0.5)
+        )
     }
 
     func dateString(_ date: Date) -> String {
@@ -453,15 +478,28 @@ private extension GongGuoGeView {
                 .opacity(opacity)
                 .frame(height: safeTopInset)
 
-            HStack(spacing: 12) {
-                Spacer()
+            ZStack {
+                // 居中的标题
                 Text("功过格")
                     .font(AppFont.kangxi(size: 20))
                     .foregroundColor(.primary)
-                    .opacity(opacity)  // 标题也跟随透明度渐显
-                Spacer()
+                    .opacity(opacity)
+
+                // 右侧统计按钮
+                HStack {
+                    Spacer()
+                    NavigationLink {
+                        MeritStatisticsView()
+                            .asSubView()
+                    } label: {
+                        Image(systemName: "chart.bar.fill")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(.primary)
+                            .opacity(opacity)
+                    }
+                }
             }
-            .padding(.horizontal, 12)
+            .padding(.horizontal, 16)
             .padding(.bottom, 10)
             .background(.ultraThinMaterial.opacity(opacity))
             .overlay(

@@ -916,6 +916,13 @@ struct BooleanUserAPIResponse<T: Codable>: Codable {
     }
 }
 
+// MARK: - 屏蔽/取消屏蔽响应数据
+struct BlockUserData: Codable {
+    let isBlocked: Bool
+    let canFollow: Bool?  // 屏蔽接口不返回此字段，只有取消屏蔽时返回
+    let isFollowing: Bool?  // 屏蔽接口返回此字段
+}
+
 // MARK: - 错误响应
 struct ErrorResponse: Codable {
     let success: Bool

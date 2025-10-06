@@ -49,6 +49,32 @@ struct SleepTrackingView: View {
                             .padding(.bottom, 40)
                     }
                     .padding(.horizontal, 24)
+                    
+                    // 上传状态Toast
+                    if let message = sleepManager.uploadStatusMessage {
+                        VStack {
+                            Spacer()
+                            HStack(spacing: 12) {
+                                Image(systemName: message.contains("✅") ? "checkmark.circle.fill" : "info.circle.fill")
+                                    .font(.system(size: 16))
+                                    .foregroundColor(.white)
+                                
+                                Text(message)
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor(.white)
+                            }
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 12)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(message.contains("✅") ? Color.green : Color.blue)
+                                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
+                            )
+                            .padding(.bottom, 100)
+                        }
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                        .animation(.spring(response: 0.5, dampingFraction: 0.7), value: sleepManager.uploadStatusMessage)
+                    }
                 }
             }
             .navigationBarHidden(true)

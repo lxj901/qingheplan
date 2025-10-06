@@ -34,7 +34,6 @@ enum NotificationFilterType: CaseIterable {
 struct NotificationListView: View {
     @StateObject private var notificationManager = NotificationManager.shared
     @State private var selectedFilterType: NotificationFilterType = .all
-    @State private var showingClearAllAlert = false
 
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var tabBarManager: TabBarVisibilityManager
@@ -65,15 +64,6 @@ struct NotificationListView: View {
             // 用户主动下拉刷新时强制刷新
             notificationManager.refreshNotifications(force: true)
         }
-        .alert("清空所有通知", isPresented: $showingClearAllAlert) {
-            Button("取消", role: .cancel) { }
-            Button("确定", role: .destructive) {
-                notificationManager.clearAllNotifications()
-            }
-        } message: {
-            Text("此操作将删除所有通知，无法恢复。")
-        }
-
         .asSubView()
     }
 
@@ -108,38 +98,23 @@ struct NotificationListView: View {
 
     // MARK: - 自定义导航栏
     private var customNavigationBar: some View {
-        HStack {
-            // 返回按钮
-            Button(action: {
-                dismiss()
-            }) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundColor(.black)
-            }
-
-            Spacer()
-
-            // 标题
+        ZStack {
+            // 居中的标题
             Text("互动消息")
                 .font(.system(size: 17, weight: .semibold))
                 .foregroundColor(.primary)
-
-            Spacer()
-
-            // 右侧菜单
-            Menu {
-                Button("全部已读") {
-                    notificationManager.markAllAsRead()
+            
+            // 左侧返回按钮
+            HStack {
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundColor(.black)
+                        .frame(width: 44, height: 44)
                 }
-
-                Button("清空所有", role: .destructive) {
-                    showingClearAllAlert = true
-                }
-            } label: {
-                Image(systemName: "ellipsis.circle")
-                    .font(.system(size: 18))
-                    .foregroundColor(.primary)
+                Spacer()
             }
         }
         .padding(.horizontal, 16)

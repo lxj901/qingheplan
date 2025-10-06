@@ -110,11 +110,13 @@ struct PostCardView: View {
         }
         .confirmationDialog("选择操作", isPresented: $showingActionSheet) {
             Button("分享") {
+                print("📤 PostCardView: 点击分享按钮，帖子ID: \(post.id)")
                 onShare()
             }
 
             if !showEditButton {
                 Button("举报", role: .destructive) {
+                    print("⚠️ PostCardView: 点击举报按钮，帖子ID: \(post.id)")
                     onReport()
                 }
             }
@@ -424,7 +426,8 @@ extension PostCardView {
                     Button(action: {
                         navigateToTagSearch(tag)
                     }) {
-                        Text("#\(tag)")
+                        // 如果标签不以#开头，添加#号显示
+                        Text(tag.hasPrefix("#") ? tag : "#\(tag)")
                             .font(.system(size: 12, weight: .medium))
                             .foregroundColor(AppConstants.Colors.primaryGreen)
                             .padding(.horizontal, 8)
@@ -441,13 +444,15 @@ extension PostCardView {
 
     /// 导航到标签搜索
     private func navigateToTagSearch(_ tagName: String) {
-        print("🏷️ 点击标签: #\(tagName)")
+        // 统一标签格式：如果不以#开头，添加#号
+        let searchTag = tagName.hasPrefix("#") ? tagName : "#\(tagName)"
+        print("🏷️ 点击标签: \(searchTag)")
 
         // 发送通知，让主视图处理标签搜索导航
         NotificationCenter.default.post(
             name: NSNotification.Name("NavigateToTagSearch"),
             object: nil,
-            userInfo: ["tagName": "#\(tagName)"] // 确保包含#号
+            userInfo: ["tagName": searchTag]
         )
     }
 

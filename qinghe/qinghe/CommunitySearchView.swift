@@ -648,7 +648,12 @@ struct CommunitySearchView: View {
         guard keyword.hasPrefix("#") else { return }
         
         do {
-            let tagName = String(keyword.dropFirst()) // 去掉#号
+            // 去掉所有开头的 # 号
+            var tagName = keyword
+            while tagName.hasPrefix("#") {
+                tagName = String(tagName.dropFirst())
+            }
+            tagName = tagName.trimmingCharacters(in: .whitespacesAndNewlines)
             print("🏷️ 尝试标签API搜索: '\(tagName)'")
             
             let response = try await communityService.getPostsByTag(tagName: tagName)
@@ -719,13 +724,18 @@ struct CommunitySearchView: View {
     
 
 
-    /// 处理搜索关键词：如果是标签搜索（以#开头），去掉#号
+    /// 处理搜索关键词：如果是标签搜索（以#开头），去掉所有开头的#号
     private func processSearchKeyword(_ keyword: String) -> String {
         let trimmedKeyword = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        // 如果关键词以#开头，去掉#号发送给后端
+        // 如果关键词以#开头，去掉所有开头的#号发送给后端
         if trimmedKeyword.hasPrefix("#") {
-            let cleanKeyword = String(trimmedKeyword.dropFirst()).trimmingCharacters(in: .whitespacesAndNewlines)
+            // 去掉所有开头的 # 号
+            var cleanKeyword = trimmedKeyword
+            while cleanKeyword.hasPrefix("#") {
+                cleanKeyword = String(cleanKeyword.dropFirst())
+            }
+            cleanKeyword = cleanKeyword.trimmingCharacters(in: .whitespacesAndNewlines)
             return cleanKeyword.isEmpty ? trimmedKeyword : cleanKeyword
         }
 

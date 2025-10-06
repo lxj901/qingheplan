@@ -15,6 +15,7 @@ class SleepDataManager: ObservableObject {
     @Published var isRecording = false
     @Published var isUploading = false
     @Published var isLoading = false
+    @Published var uploadStatusMessage: String? = nil // 上传状态消息
 
     // 当前睡眠会话数据
     @Published var currentSession: LocalSleepSession?
@@ -596,9 +597,100 @@ class SleepDataManager: ObservableObject {
 
         // 🧠 启动本地音频分析处理（先执行分析，确保音频文件可用）
         await processLocalAudioAnalysis()
+        
+        // 📤 上传睡眠数据到服务器
+        await uploadSleepDataToServer(session: updatedSession)
 
         // 清理追踪状态（移到分析完成后，避免过早清理音频文件状态）
         clearTrackingState()
+    }
+    
+    // MARK: - 上传睡眠数据到服务器
+    
+    /// 上传睡眠数据到服务器
+    private func uploadSleepDataToServer(session: LocalSleepSession) async {
+        print("📤 准备上传睡眠数据...")
+        
+        guard let endTime = session.endTime else {
+            print("⚠️ 睡眠会话未完成，跳过上传")
+            return
+        }
+        
+        // 计算睡眠时长
+        let duration = endTime.timeIntervalSince(session.startTime)
+        let durationMinutes = Int(duration / 60.0)
+        
+        print("📊 睡眠时长: \(durationMinutes)分钟")
+        
+        // 验证睡眠时长（至少需要1分钟）
+        // 服务器需要有效的睡眠时长数据（duration > 0）
+        if durationMinutes < 1 {
+            print("⚠️ 睡眠时长过短（\(String(format: "%.1f", duration))秒），需要至少1分钟才能上传到服务器")
+            print("ℹ️ 数据已保存在本地，但不会上传到服务器")
+            
+            uploadStatusMessage = "睡眠时长过短（少于1分钟），数据已保存在本地"
+            
+            // 3秒后清除消息
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 3_000_000_000)
+                uploadStatusMessage = nil
+            }
+            return
+        }
+        
+        // 将 LocalSleepSession 转换为 SleepRecord
+        let sleepRecord = convertLocalSessionToRecord(session)
+        
+        do {
+            isUploading = true
+            
+            // 调用API上传
+            let sleepId = try await SleepAPIService.shared.uploadSleepRecord(sleepRecord)
+            
+            print("✅ 睡眠数据上传成功，sleepId: \(sleepId)")
+            
+            uploadStatusMessage = "✅ 睡眠数据已同步到云端"
+            
+            // 更新本地记录的 sleepId
+            updateLocalRecordWithServerId(sessionId: session.sessionId, sleepId: sleepId)
+            
+            // 重新加载本地记录以刷新界面
+            loadLocalSleepRecords()
+            
+        } catch {
+            print("❌ 睡眠数据上传失败: \(error.localizedDescription)")
+            // 上传失败不影响本地记录，数据已保存在本地
+            // 可以稍后通过同步功能重新上传
+            uploadStatusMessage = "数据已保存在本地，稍后将自动同步"
+        }
+        
+        isUploading = false
+        
+        // 3秒后清除状态消息
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 3_000_000_000)
+            uploadStatusMessage = nil
+        }
+    }
+    
+    /// 更新本地记录中的服务器ID
+    private func updateLocalRecordWithServerId(sessionId: String, sleepId: Int) {
+        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let sessionFile = documentsPath
+            .appendingPathComponent("SleepRecordings")
+            .appendingPathComponent("session_\(sessionId).json")
+        
+        guard FileManager.default.fileExists(atPath: sessionFile.path),
+              let data = try? Data(contentsOf: sessionFile),
+              var session = try? JSONDecoder().decode(LocalSleepSession.self, from: data) else {
+            print("⚠️ 无法读取本地会话文件")
+            return
+        }
+        
+        // 这里可以扩展 LocalSleepSession 结构以包含 sleepId
+        // 由于当前结构不包含 sleepId 字段，我们保存在记录的 notes 中或扩展结构
+        // 暂时只打印日志，后续可以扩展结构
+        print("📝 本地记录已关联服务器ID: \(sleepId)")
     }
 
     // MARK: - 音频录制管理

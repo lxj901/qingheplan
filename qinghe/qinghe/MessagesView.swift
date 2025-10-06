@@ -345,13 +345,25 @@ struct MessagesView: View {
             }
             .navigationDestination(for: CommunityNavigationDestination.self) { destination in
                 switch destination {
-                case .postDetail(let postId):
-                    PostDetailView(postId: postId)
+                case .postDetail(let postId, let highlightSection, let highlightUserId):
+                    PostDetailView(
+                        postId: postId,
+                        highlightSection: highlightSection.flatMap { section in
+                            switch section {
+                            case "likes": return .likes
+                            case "bookmarks": return .bookmarks
+                            case "comments": return .comments
+                            default: return nil
+                            }
+                        },
+                        highlightUserId: highlightUserId
+                    )
                         .navigationBarHidden(true)
                         .modifier(SwipeBackGestureModifier()) // 添加滑动返回手势
                         .asSubView() // 标记为子页面，隐藏Tab栏
+                        .id(postId) // 强制在postId改变时重新创建视图
                         .onAppear {
-                            print("🔍 消息页面：导航到帖子详情页面，帖子ID: \(postId)")
+                            print("🔍 消息页面：导航到帖子详情页面，帖子ID: \(postId), 高亮: \(highlightSection ?? "无"), 用户ID: \(highlightUserId ?? "无")")
                         }
                 case .userProfile(let userId):
                     UserProfileView(userId: userId, isRootView: false)
@@ -392,10 +404,11 @@ struct MessagesView: View {
             }
             
             if let postId = postIdString {
-                print("🔍 MessagesView 收到帖子详情导航通知，帖子ID: \(postId)")
+                let highlightSection = notification.userInfo?["highlightSection"] as? String
+                print("🔍 MessagesView 收到帖子详情导航通知，帖子ID: \(postId), 高亮区域: \(highlightSection ?? "无")")
                 Task { @MainActor in
-                    navigationPath.append(CommunityNavigationDestination.postDetail(postId))
-                    print("🔍 MessagesView: 已设置帖子详情显示，postId: \(postId)")
+                    navigationPath.append(CommunityNavigationDestination.postDetail(postId, highlightSection: highlightSection))
+                    print("🔍 MessagesView: 已设置帖子详情显示，postId: \(postId), highlightSection: \(highlightSection ?? "无")")
                 }
             }
         }

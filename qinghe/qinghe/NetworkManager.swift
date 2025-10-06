@@ -153,8 +153,20 @@ class NetworkManager {
             } else {
                 // 其他请求将参数添加到请求体
                 do {
-                    request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
+                    // 使用 JSONSerialization 的 .sortedKeys 和 .prettyPrinted 选项以确保正确编码
+                    let jsonData = try JSONSerialization.data(
+                        withJSONObject: parameters,
+                        options: [.sortedKeys, .withoutEscapingSlashes]
+                    )
+                    request.httpBody = jsonData
+                    
+                    // 打印实际发送的JSON
+                    if let jsonString = String(data: jsonData, encoding: .utf8) {
+                        print("📤 实际发送的JSON: \(jsonString)")
+                        print("📤 JSON字节数: \(jsonData.count)")
+                    }
                 } catch {
+                    print("❌ 参数编码失败: \(error)")
                     throw NetworkError.networkError("参数编码失败")
                 }
             }
@@ -213,8 +225,8 @@ class NetworkManager {
                 }
 
                 guard 200...299 ~= httpResponse.statusCode else {
-                    // 对于401、500等错误，尝试解析错误消息
-                    if httpResponse.statusCode == 401 || httpResponse.statusCode == 500 {
+                    // 对于401、403、404、500等错误，尝试解析错误消息
+                    if httpResponse.statusCode == 401 || httpResponse.statusCode == 403 || httpResponse.statusCode == 404 || httpResponse.statusCode == 500 {
                         if let errorResponse = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
                            let message = errorResponse["message"] as? String {
                             print("🔍 \(httpResponse.statusCode)错误消息: \(message)")
@@ -452,4 +464,13 @@ struct APIEndpoints {
     static let temptations = "/temptations"                 // 诱惑记录管理
     static let emotions = "/emotions"                       // 情绪记录管理
     static let plans = "/plans"                             // 计划管理
+    
+    // 功过格相关
+    static let merits = "/merits"                           // 功过记录管理
+    static let meritsDaily = "/merits/daily"                // 每日记录
+    static let meritsMonthly = "/merits/monthly"            // 月度汇总
+    static let meritsStatistics = "/merits/statistics"      // 统计数据
+    static let meritsStandard = "/merits/standard-items"    // 标准条目
+    static let meritsCategories = "/merits/categories"      // 分类列表
+    static let meritsLeaderboard = "/merits/leaderboard"    // 排行榜
 }

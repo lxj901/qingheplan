@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - 社区导航目标枚举
 enum CommunityNavigationDestination: Hashable {
-    case postDetail(String)
+    case postDetail(String, highlightSection: String? = nil, highlightUserId: String? = nil)
     case userProfile(String)
     case tagDetail(String)
 }
@@ -82,8 +82,8 @@ struct SwipeBackGestureModifier: ViewModifier {
 class CommunityNavigationManager: ObservableObject {
     @Published var navigationPath = NavigationPath()
     
-    func navigateToPost(_ postId: String) {
-        navigationPath.append(CommunityNavigationDestination.postDetail(postId))
+    func navigateToPost(_ postId: String, highlightSection: String? = nil, highlightUserId: String? = nil) {
+        navigationPath.append(CommunityNavigationDestination.postDetail(postId, highlightSection: highlightSection, highlightUserId: highlightUserId))
     }
     
     func navigateToUserProfile(_ userId: String) {
