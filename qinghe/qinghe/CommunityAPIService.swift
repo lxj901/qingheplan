@@ -77,6 +77,59 @@ struct ModerationViolation: Codable {
     }
 }
 
+// MARK: - Post Interaction User Models
+struct PostInteractionUser: Codable, Identifiable {
+    let id: String
+    let nickname: String
+    let avatar: String?
+    let isVerified: Bool
+    let likedAt: String?
+    let bookmarkedAt: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case id, nickname, avatar, isVerified, likedAt, bookmarkedAt
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        // Handle id as either Int or String
+        if let intId = try? container.decode(Int.self, forKey: .id) {
+            self.id = String(intId)
+        } else {
+            self.id = try container.decode(String.self, forKey: .id)
+        }
+        
+        self.nickname = try container.decode(String.self, forKey: .nickname)
+        self.avatar = try? container.decode(String.self, forKey: .avatar)
+        
+        // Handle isVerified as either Bool or Int (0/1)
+        if let boolValue = try? container.decode(Bool.self, forKey: .isVerified) {
+            self.isVerified = boolValue
+        } else if let intValue = try? container.decode(Int.self, forKey: .isVerified) {
+            self.isVerified = intValue != 0
+        } else {
+            self.isVerified = false
+        }
+        
+        self.likedAt = try? container.decode(String.self, forKey: .likedAt)
+        self.bookmarkedAt = try? container.decode(String.self, forKey: .bookmarkedAt)
+    }
+}
+
+struct PostInteractionUsersData: Codable {
+    let items: [PostInteractionUser]
+    let pagination: PaginationInfo
+}
+
+// Note: PaginationInfo is already defined in CommunityModels.swift
+
+struct PostInteractionUsersResponse: Codable {
+    let success: Bool
+    let data: PostInteractionUsersData?
+    let message: String?
+}
+
 struct CreatePostData: Codable {
     let id: String
     let authorId: Int
@@ -691,10 +744,10 @@ class CommunityAPIService {
     func getUserProfile(userId: Int) async throws -> CommunityAPIResponse<UserProfile> {
         let headers = authManager.getAuthHeader()
 
-        let response: UserAPIResponse<UserProfile> = try await networkManager.get(
+        let response: BooleanUserAPIResponse<UserProfile> = try await networkManager.get(
             endpoint: "/users/\(userId)/profile",
             headers: headers,
-            responseType: UserAPIResponse<UserProfile>.self
+            responseType: BooleanUserAPIResponse<UserProfile>.self
         )
 
         // 如果服务器没有设置 isMe 字段，在客户端设置
@@ -708,7 +761,7 @@ class CommunityAPIService {
             print("🔍 getUserProfile - 服务器已设置 isMe: \(userData?.isMe ?? false)")
         }
 
-        return CommunityAPIResponse(success: response.status == "success", data: userData, message: response.message)
+        return CommunityAPIResponse(success: response.success, data: userData, message: response.message)
     }
 
     /// 关注用户
@@ -1010,7 +1063,7 @@ class CommunityAPIService {
     ///   - userId: 用户ID
     ///   - reason: 屏蔽原因
     /// - Returns: 屏蔽响应
-    func blockUser(userId: Int, reason: String? = nil) async throws -> CommunityAPIResponse<String> {
+    func blockUser(userId: Int, reason: String? = nil) async throws -> CommunityAPIResponse<BlockUserData> {
         guard let authHeaders = authManager.getAuthHeader() else {
             throw NetworkManager.NetworkError.networkError("未授权")
         }
@@ -1020,11 +1073,11 @@ class CommunityAPIService {
             parameters["reason"] = reason
         }
 
-        let response: BooleanUserAPIResponse<String> = try await networkManager.post(
+        let response: BooleanUserAPIResponse<BlockUserData> = try await networkManager.post(
             endpoint: "/users/\(userId)/block",
             parameters: parameters,
             headers: authHeaders,
-            responseType: BooleanUserAPIResponse<String>.self
+            responseType: BooleanUserAPIResponse<BlockUserData>.self
         )
 
         return CommunityAPIResponse(success: response.isSuccess, data: response.data, message: response.message)
@@ -1033,18 +1086,43 @@ class CommunityAPIService {
     /// 取消屏蔽用户
     /// - Parameter userId: 用户ID
     /// - Returns: 取消屏蔽响应
-    func unblockUser(userId: Int) async throws -> CommunityAPIResponse<String> {
+    func unblockUser(userId: Int) async throws -> CommunityAPIResponse<BlockUserData> {
         guard let authHeaders = authManager.getAuthHeader() else {
             throw NetworkManager.NetworkError.networkError("未授权")
         }
 
-        let response: UserAPIResponse<String> = try await networkManager.delete(
+        let response: BooleanUserAPIResponse<BlockUserData> = try await networkManager.delete(
             endpoint: "/users/\(userId)/block",
             headers: authHeaders,
-            responseType: UserAPIResponse<String>.self
+            responseType: BooleanUserAPIResponse<BlockUserData>.self
         )
 
-        return CommunityAPIResponse(success: response.status == "success", data: response.data, message: response.message)
+        return CommunityAPIResponse(success: response.isSuccess, data: response.data, message: response.message)
+    }
+
+    /// 获取屏蔽列表
+    /// - Parameters:
+    ///   - page: 页码
+    ///   - limit: 每页数量
+    /// - Returns: 屏蔽用户列表响应
+    func getBlockedUsers(page: Int = 1, limit: Int = 20) async throws -> CommunityAPIResponse<BlockedUsersResponse> {
+        guard let authHeaders = authManager.getAuthHeader() else {
+            throw NetworkManager.NetworkError.networkError("未授权")
+        }
+
+        let parameters: [String: Any] = [
+            "page": page,
+            "limit": limit
+        ]
+
+        let response: BooleanUserAPIResponse<BlockedUsersResponse> = try await networkManager.get(
+            endpoint: "/users/blocked",
+            parameters: parameters,
+            headers: authHeaders,
+            responseType: BooleanUserAPIResponse<BlockedUsersResponse>.self
+        )
+
+        return CommunityAPIResponse(success: response.isSuccess, data: response.data, message: response.message)
     }
 
     /// 更新用户资料
@@ -1339,7 +1417,8 @@ class CommunityAPIService {
             "content": request.content,
             "allowComments": request.allowComments,
             "allowShares": request.allowShares,
-            "visibility": request.visibility
+            "visibility": request.visibility,
+            "isAIGenerated": request.isAIGenerated
         ]
 
         // 添加可选参数
@@ -1430,8 +1509,58 @@ class CommunityAPIService {
                 hasNext: true,
                 hasPrevious: false
             ),
-            recommendationInfo: nil
+            recommendationInfo: nil as RecommendationInfo?
         )
+    }
+    
+    // MARK: - Post Interaction Users
+    
+    /// 获取帖子点赞用户列表
+    /// - Parameters:
+    ///   - postId: 帖子ID
+    ///   - page: 页码
+    ///   - limit: 每页数量
+    /// - Returns: 点赞用户列表响应
+    func getPostLikes(postId: String, page: Int = 1, limit: Int = 20) async throws -> PostInteractionUsersResponse {
+        let headers = authManager.getAuthHeader()
+        
+        let parameters: [String: Any] = [
+            "page": page,
+            "limit": limit
+        ]
+        
+        let response: PostInteractionUsersResponse = try await networkManager.get(
+            endpoint: "\(Endpoint.posts)/\(postId)/likes",
+            parameters: parameters,
+            headers: headers,
+            responseType: PostInteractionUsersResponse.self
+        )
+        
+        return response
+    }
+    
+    /// 获取帖子收藏用户列表
+    /// - Parameters:
+    ///   - postId: 帖子ID
+    ///   - page: 页码
+    ///   - limit: 每页数量
+    /// - Returns: 收藏用户列表响应
+    func getPostBookmarks(postId: String, page: Int = 1, limit: Int = 20) async throws -> PostInteractionUsersResponse {
+        let headers = authManager.getAuthHeader()
+        
+        let parameters: [String: Any] = [
+            "page": page,
+            "limit": limit
+        ]
+        
+        let response: PostInteractionUsersResponse = try await networkManager.get(
+            endpoint: "\(Endpoint.posts)/\(postId)/bookmarks",
+            parameters: parameters,
+            headers: headers,
+            responseType: PostInteractionUsersResponse.self
+        )
+        
+        return response
     }
 
     private func generateMockPostsData(count: Int) -> [Post] {
@@ -1502,6 +1631,86 @@ class CommunityAPIService {
             responseType: PopularTagsResponse.self
         )
 
+        return response
+    }
+    
+    // MARK: - 同城功能
+    
+    /// 获取同城帖子
+    /// - Parameters:
+    ///   - latitude: 纬度
+    ///   - longitude: 经度
+    ///   - radius: 搜索半径（公里），默认50，最大200
+    ///   - page: 页码，默认1
+    ///   - limit: 每页数量，默认10，最大50
+    /// - Returns: 同城帖子响应
+    func getNearbyPosts(
+        latitude: Double,
+        longitude: Double,
+        radius: Int = 50,
+        page: Int = 1,
+        limit: Int = 10
+    ) async throws -> NearbyPostsResponse {
+        let parameters: [String: Any] = [
+            "latitude": latitude,
+            "longitude": longitude,
+            "radius": min(radius, 200),  // 限制最大半径为200km
+            "page": page,
+            "limit": min(limit, 50)  // 限制最大每页数量为50
+        ]
+        
+        let headers = authManager.getAuthHeader()
+        
+        let response: NearbyPostsResponse = try await networkManager.get(
+            endpoint: "/community/nearby/posts",
+            parameters: parameters,
+            headers: headers,
+            responseType: NearbyPostsResponse.self
+        )
+        
+        guard response.success else {
+            throw NetworkManager.NetworkError.networkError(response.message ?? "获取同城帖子失败")
+        }
+        
+        return response
+    }
+    
+    /// 获取同城用户
+    /// - Parameters:
+    ///   - latitude: 纬度
+    ///   - longitude: 经度
+    ///   - radius: 搜索半径（公里），默认50
+    ///   - page: 页码，默认1
+    ///   - limit: 每页数量，默认10
+    /// - Returns: 同城用户响应
+    func getNearbyUsers(
+        latitude: Double,
+        longitude: Double,
+        radius: Int = 50,
+        page: Int = 1,
+        limit: Int = 10
+    ) async throws -> NearbyUsersResponse {
+        let parameters: [String: Any] = [
+            "latitude": latitude,
+            "longitude": longitude,
+            "radius": radius,
+            "page": page,
+            "limit": limit
+        ]
+        
+        let headers = authManager.getAuthHeader()
+        
+        let response: NearbyUsersResponse = try await networkManager.get(
+            endpoint: "/community/nearby/users",
+            parameters: parameters,
+            headers: headers,
+            responseType: NearbyUsersResponse.self
+        )
+        
+        guard response.success else {
+            throw NetworkManager.NetworkError.networkError(response.message ?? "获取同城用户失败")
+        }
+        
         return response
     }
 }

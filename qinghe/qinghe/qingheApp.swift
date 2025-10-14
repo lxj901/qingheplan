@@ -18,6 +18,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         // 设置推送通知代理
         UNUserNotificationCenter.current().delegate = PushNotificationManager.shared
 
+        // 开启远程控制事件，确保锁屏/控制中心的播放命令能回调
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+
         // 检查是否通过推送通知启动
         if let notificationUserInfo = launchOptions?[.remoteNotification] as? [AnyHashable: Any] {
             print("🔔 AppDelegate: 通过推送通知启动应用")
@@ -70,7 +73,6 @@ struct qingheApp: App {
     @StateObject private var webSocketManager = WebSocketManager.shared
     @StateObject private var pushNotificationManager = PushNotificationManager.shared
     @StateObject private var locationManager = AppleMapService.shared
-    @StateObject private var themeManager = ThemeManager.shared
 
     init() {
         // 临时代码：打印所有可用字体名称（用于获取自定义字体的PostScript名）
@@ -112,8 +114,6 @@ struct qingheApp: App {
                 } else if authManager.isAuthenticated {
                     MainTabView()
                         .environmentObject(sideMenuManager)
-                        .environmentObject(themeManager)
-                        .preferredColorScheme(themeManager.currentColorScheme)
                 } else {
                     LoginView {
                         withAnimation(.easeInOut(duration: 0.5)) {
@@ -170,22 +170,33 @@ struct qingheApp: App {
                     }
                 }
 
-                // 发送睡眠追踪前台通知
-                print("📱 应用进入前台，发送睡眠追踪通知")
-                NotificationCenter.default.post(name: .sleepTrackingWillEnterForeground, object: nil)
+                // 仅在正在追踪睡眠时发送睡眠追踪前台通知，避免无关日志与处理
+                if SleepDataManager.shared.isTrackingSleep {
+                    print("📱 应用进入前台（正在追踪睡眠），发送睡眠追踪通知")
+                    NotificationCenter.default.post(name: .sleepTrackingWillEnterForeground, object: nil)
+                } else {
+                    // 非睡眠追踪场景下避免触发 SleepDataManager 流程
+                    // print("📱 应用进入前台（非睡眠追踪），略过睡眠通知")
+                }
             }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
                 // 应用进入后台时，保持连接以接收推送通知
                 print("应用进入后台，WebSocket保持连接")
 
-                // 发送睡眠追踪后台通知
-                print("📱 应用进入后台，发送睡眠追踪通知")
-                NotificationCenter.default.post(name: .sleepTrackingDidEnterBackground, object: nil)
+                // 仅在正在追踪睡眠时发送睡眠追踪后台通知
+                if SleepDataManager.shared.isTrackingSleep {
+                    print("📱 应用进入后台（正在追踪睡眠），发送睡眠追踪通知")
+                    NotificationCenter.default.post(name: .sleepTrackingDidEnterBackground, object: nil)
+                } else {
+                    // print("📱 应用进入后台（非睡眠追踪），略过睡眠通知")
+                }
             }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification)) { _ in
-                // 应用即将终止时，发送睡眠追踪终止通知
-                print("📱 应用即将终止，发送睡眠追踪终止通知")
-                NotificationCenter.default.post(name: .sleepTrackingWillTerminate, object: nil)
+                // 仅在正在追踪睡眠时发送睡眠追踪终止通知
+                if SleepDataManager.shared.isTrackingSleep {
+                    print("📱 应用即将终止（正在追踪睡眠），发送睡眠追踪终止通知")
+                    NotificationCenter.default.post(name: .sleepTrackingWillTerminate, object: nil)
+                }
             }
             .onReceive(NotificationCenter.default.publisher(for: .openConversation)) { notification in
                 // 处理推送通知点击跳转到对话

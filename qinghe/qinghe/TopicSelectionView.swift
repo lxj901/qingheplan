@@ -397,14 +397,14 @@ struct TopicSelectionView: View {
     private var modernAllTagsSection: some View {
         VStack(spacing: 0) {
             modernSectionHeader(title: "全部话题", subtitle: "系统内可选的话题")
-            ForEach(allTags.prefix(30), id: \.id) { tag in
+            ForEach(Array(allTags.prefix(30).enumerated()), id: \.offset) { index, tag in
                 ModernTagListItem(
-                    tag: tag.name,
-                    count: Int(tag.postCount ?? "0"),
-                    isSelected: selectedTopics.contains(tag.name),
+                    tag: tag.tag,
+                    count: tag.count,
+                    isSelected: selectedTopics.contains(tag.tag),
                     showTrending: false
                 ) {
-                    toggleTag(tag.name)
+                    toggleTag(tag.tag)
                 }
             }
         }
@@ -486,7 +486,7 @@ struct TopicSelectionView: View {
                 let results = try await tagsAPIService.getAllTags(limit: 10, search: newValue)
                 await MainActor.run {
                     // 用全部标签搜索结果替换建议
-                    self.searchSuggestions = results.prefix(8).map { TagSuggestion(tag: $0.name, relevance: 1.0, category: nil) }
+                    self.searchSuggestions = results.prefix(8).map { TagSuggestion(tag: $0.tag, relevance: 1.0, category: nil) }
                 }
             } catch {
                 await MainActor.run {

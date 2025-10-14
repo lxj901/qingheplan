@@ -14,8 +14,6 @@
 		DD1B3ADC2E4B5B9D00CD826A /* FamilyControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD1B3ADD2E4B5B9D00CD826B /* FamilyControls.framework */; };
 		DD1B3ADE2E4B5B9D00CD826C /* DeviceActivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD1B3ADF2E4B5B9D00CD826D /* DeviceActivity.framework */; };
 		DD1B3AE02E4B5B9D00CD826E /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD1B3AE12E4B5B9D00CD826F /* ManagedSettings.framework */; };
-		DD58E9E92E7AD3CE001C0F65 /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD1B3AE12E4B5B9D00CD826F /* ManagedSettings.framework */; };
-		DD58E9F32E7AD3CE001C0F65 /* ShieldConfig.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = DD58E9E82E7AD3CE001C0F65 /* ShieldConfig.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,13 +30,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = DD1B3AA82E4B5B9B00CD8261;
 			remoteInfo = qinghe;
-		};
-		DD58E9F12E7AD3CE001C0F65 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DD1B3AA12E4B5B9B00CD8261 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DD58E9E72E7AD3CE001C0F65;
-			remoteInfo = ShieldConfig;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -61,7 +52,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				DD58E9F32E7AD3CE001C0F65 /* ShieldConfig.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -77,18 +67,7 @@
 		DD1B3ADD2E4B5B9D00CD826B /* FamilyControls.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FamilyControls.framework; path = System/Library/Frameworks/FamilyControls.framework; sourceTree = SDKROOT; };
 		DD1B3ADF2E4B5B9D00CD826D /* DeviceActivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DeviceActivity.framework; path = System/Library/Frameworks/DeviceActivity.framework; sourceTree = SDKROOT; };
 		DD1B3AE12E4B5B9D00CD826F /* ManagedSettings.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettings.framework; path = System/Library/Frameworks/ManagedSettings.framework; sourceTree = SDKROOT; };
-		DD58E9E82E7AD3CE001C0F65 /* ShieldConfig.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShieldConfig.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		DD58E9F42E7AD3CE001C0F65 /* Exceptions for "ShieldConfig" folder in "ShieldConfig" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = DD58E9E72E7AD3CE001C0F65 /* ShieldConfig */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		DD1B3AAB2E4B5B9B00CD8261 /* qinghe */ = {
@@ -108,9 +87,6 @@
 		};
 		DD58E9EC2E7AD3CE001C0F65 /* ShieldConfig */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				DD58E9F42E7AD3CE001C0F65 /* Exceptions for "ShieldConfig" folder in "ShieldConfig" target */,
-			);
 			path = ShieldConfig;
 			sourceTree = "<group>";
 		};
@@ -148,14 +124,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DD58E9E52E7AD3CE001C0F65 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DD58E9E92E7AD3CE001C0F65 /* ManagedSettings.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -179,7 +147,6 @@
 				DD1B3AA92E4B5B9B00CD8261 /* qinghe.app */,
 				DD1B3AB72E4B5B9D00CD8261 /* qingheTests.xctest */,
 				DD1B3AC12E4B5B9D00CD8261 /* qingheUITests.xctest */,
-				DD58E9E82E7AD3CE001C0F65 /* ShieldConfig.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -219,14 +186,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				DD58E9F22E7AD3CE001C0F65 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				DD1B3AAB2E4B5B9B00CD8261 /* qinghe */,
 			);
 			name = qinghe;
-			packageProductDependencies = (
-			);
 			productName = qinghe;
 			productReference = DD1B3AA92E4B5B9B00CD8261 /* qinghe.app */;
 			productType = "com.apple.product-type.application";
@@ -248,8 +212,6 @@
 				DD1B3ABA2E4B5B9D00CD8261 /* qingheTests */,
 			);
 			name = qingheTests;
-			packageProductDependencies = (
-			);
 			productName = qingheTests;
 			productReference = DD1B3AB72E4B5B9D00CD8261 /* qingheTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -271,33 +233,9 @@
 				DD1B3AC42E4B5B9D00CD8261 /* qingheUITests */,
 			);
 			name = qingheUITests;
-			packageProductDependencies = (
-			);
 			productName = qingheUITests;
 			productReference = DD1B3AC12E4B5B9D00CD8261 /* qingheUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
-		};
-		DD58E9E72E7AD3CE001C0F65 /* ShieldConfig */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DD58E9F52E7AD3CE001C0F65 /* Build configuration list for PBXNativeTarget "ShieldConfig" */;
-			buildPhases = (
-				DD58E9E42E7AD3CE001C0F65 /* Sources */,
-				DD58E9E52E7AD3CE001C0F65 /* Frameworks */,
-				DD58E9E62E7AD3CE001C0F65 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				DD58E9EC2E7AD3CE001C0F65 /* ShieldConfig */,
-			);
-			name = ShieldConfig;
-			packageProductDependencies = (
-			);
-			productName = ShieldConfig;
-			productReference = DD58E9E82E7AD3CE001C0F65 /* ShieldConfig.appex */;
-			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -320,9 +258,6 @@
 						CreatedOnToolsVersion = 16.4;
 						TestTargetID = DD1B3AA82E4B5B9B00CD8261;
 					};
-					DD58E9E72E7AD3CE001C0F65 = {
-						CreatedOnToolsVersion = 16.4;
-					};
 				};
 			};
 			buildConfigurationList = DD1B3AA42E4B5B9B00CD8261 /* Build configuration list for PBXProject "qinghe" */;
@@ -342,7 +277,6 @@
 				DD1B3AA82E4B5B9B00CD8261 /* qinghe */,
 				DD1B3AB62E4B5B9D00CD8261 /* qingheTests */,
 				DD1B3AC02E4B5B9D00CD8261 /* qingheUITests */,
-				DD58E9E72E7AD3CE001C0F65 /* ShieldConfig */,
 			);
 		};
 /* End PBXProject section */
@@ -363,13 +297,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		DD1B3ABF2E4B5B9D00CD8261 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DD58E9E62E7AD3CE001C0F65 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -400,13 +327,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DD58E9E42E7AD3CE001C0F65 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -419,11 +339,6 @@
 			isa = PBXTargetDependency;
 			target = DD1B3AA82E4B5B9B00CD8261 /* qinghe */;
 			targetProxy = DD1B3AC22E4B5B9D00CD8261 /* PBXContainerItemProxy */;
-		};
-		DD58E9F22E7AD3CE001C0F65 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DD58E9E72E7AD3CE001C0F65 /* ShieldConfig */;
-			targetProxy = DD58E9F12E7AD3CE001C0F65 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -551,6 +466,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
 				CODE_SIGN_ENTITLEMENTS = qinghe/qinghe.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -564,6 +480,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "青禾计划";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "青禾计划需要访问您的日历来创建任务提醒和闹钟事件";
 				INFOPLIST_KEY_NSCameraUsageDescription = "青禾计划需要使用相机来拍摄照片和视频";
 				INFOPLIST_KEY_NSDocumentPickerUsageDescription = "青禾计划需要访问文档来发送文件";
 				INFOPLIST_KEY_NSFamilyControlsUsageDescription = "青禾计划需要访问屏幕使用时间数据来帮助您管理应用使用时间，实现自律目标";
@@ -578,7 +495,7 @@
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
-				INFOPLIST_KEY_UIBackgroundModes = location;
+				INFOPLIST_KEY_UIBackgroundModes = "audio location";
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
@@ -586,7 +503,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.5;
@@ -597,10 +514,11 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TARGETED_DEVICE_FAMILY = 1;
 				XROS_DEPLOYMENT_TARGET = 2.5;
 			};
 			name = Debug;
@@ -610,6 +528,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
 				CODE_SIGN_ENTITLEMENTS = qinghe/qinghe.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -623,6 +542,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "青禾计划";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "青禾计划需要访问您的日历来创建任务提醒和闹钟事件";
 				INFOPLIST_KEY_NSCameraUsageDescription = "青禾计划需要使用相机来拍摄照片和视频";
 				INFOPLIST_KEY_NSDocumentPickerUsageDescription = "青禾计划需要访问文档来发送文件";
 				INFOPLIST_KEY_NSFamilyControlsUsageDescription = "青禾计划需要访问屏幕使用时间数据来帮助您管理应用使用时间，实现自律目标";
@@ -637,7 +557,7 @@
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
-				INFOPLIST_KEY_UIBackgroundModes = location;
+				INFOPLIST_KEY_UIBackgroundModes = "audio location";
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
@@ -645,7 +565,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.5;
@@ -656,10 +576,11 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TARGETED_DEVICE_FAMILY = 1;
 				XROS_DEPLOYMENT_TARGET = 2.5;
 			};
 			name = Release;
@@ -754,65 +675,6 @@
 			};
 			name = Release;
 		};
-		DD58E9F62E7AD3CE001C0F65 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = ShieldConfig/ShieldConfig.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7CHR3URQ44;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ShieldConfig/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ShieldConfig;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.qinghe.qinghe.ShieldConfig;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		DD58E9F72E7AD3CE001C0F65 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = ShieldConfig/ShieldConfig.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7CHR3URQ44;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ShieldConfig/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ShieldConfig;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.qinghe.qinghe.ShieldConfig;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -848,15 +710,6 @@
 			buildConfigurations = (
 				DD1B3AD22E4B5B9D00CD8261 /* Debug */,
 				DD1B3AD32E4B5B9D00CD8261 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DD58E9F52E7AD3CE001C0F65 /* Build configuration list for PBXNativeTarget "ShieldConfig" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DD58E9F62E7AD3CE001C0F65 /* Debug */,
-				DD58E9F72E7AD3CE001C0F65 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

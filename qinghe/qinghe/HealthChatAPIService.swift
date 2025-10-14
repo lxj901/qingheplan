@@ -120,6 +120,30 @@ class HealthChatAPIService {
 struct BaseResponse: Codable {
     let success: Bool
     let message: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case success, status, message
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        message = try? container.decode(String.self, forKey: .message)
+        
+        // 处理 success 可能是 Bool 或者 status 是 "success" 字符串的情况
+        if let successBool = try? container.decode(Bool.self, forKey: .success) {
+            success = successBool
+        } else if let statusString = try? container.decode(String.self, forKey: .status) {
+            success = (statusString == "success")
+        } else {
+            success = false
+        }
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(success, forKey: .success)
+        try container.encodeIfPresent(message, forKey: .message)
+    }
 }
 
 /// 创建对话响应
@@ -164,42 +188,112 @@ struct ConversationHistoryResponse: Codable {
     struct ConversationItem: Codable {
         let conversationId: String
         let title: String?
-        let lastMessage: String?
+        let lastUserMessage: String?
+        let lastAiReply: String?
         let messageCount: Int?
-        let startedAt: String  // API 返回的字段名是 startedAt，不是 createdAt
-        let lastMessageAt: String  // API 返回的字段名是 lastMessageAt，不是 updatedAt
+        let startedAt: String
+        let lastMessageAt: String
+        let status: String?
 
         // 为了兼容性，提供计算属性
         var createdAt: String { startedAt }
         var updatedAt: String { lastMessageAt }
+        
+        // 生成消息摘要（优先显示 AI 回复的前 50 个字符）
+        var lastMessage: String? {
+            if let aiReply = lastAiReply, !aiReply.isEmpty {
+                // 截取前 50 个字符
+                let maxLength = 50
+                if aiReply.count > maxLength {
+                    let index = aiReply.index(aiReply.startIndex, offsetBy: maxLength)
+                    return String(aiReply[..<index]) + "..."
+                }
+                return aiReply
+            }
+            return lastUserMessage
+        }
     }
 }
 
 /// 对话消息响应
 struct ConversationMessagesResponse: Codable {
-    let success: Bool
+    let status: String
     let message: String?
     let data: ConversationMessagesData?
+    
+    var success: Bool {
+        return status.lowercased() == "success"
+    }
 
     struct ConversationMessagesData: Codable {
-        let conversationId: String
-        let messages: [HealthChatMessage]
-        let total: Int
-        let page: Int
-        let limit: Int
+        let conversationId: String?
+        let messages: [HealthChatMessage]?
+        let total: Int?
+        let page: Int?
+        let limit: Int?
+        
+        // 兼容服务器返回对话列表而不是消息列表的情况
+        let conversations: [ConversationHistoryResponse.ConversationItem]?
+        let pagination: ConversationHistoryResponse.Pagination?
     }
 }
 
 /// 健康对话消息
 struct HealthChatMessage: Codable, Identifiable {
     let id: String
-    let conversationId: String
+    let conversationId: String?
     let role: String // "user" 或 "assistant"
     let content: String
-    let createdAt: String
+    let createdAt: String?
+    let timestamp: String?  // 兼容后端返回的 timestamp 字段
 
     var isUser: Bool {
         return role == "user"
+    }
+    
+    // 自定义解码，兼容 messageId 和 id 两种字段名
+    enum CodingKeys: String, CodingKey {
+        case conversationId
+        case role
+        case content
+        case createdAt
+        case timestamp
+        case id
+        case messageId
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        // 优先使用 id，如果没有则使用 messageId
+        if let idValue = try? container.decode(String.self, forKey: .id) {
+            id = idValue
+        } else if let messageIdValue = try? container.decode(String.self, forKey: .messageId) {
+            id = messageIdValue
+        } else {
+            // 如果都没有，生成一个默认 ID
+            id = "msg_\(UUID().uuidString)"
+        }
+        
+        conversationId = try? container.decode(String.self, forKey: .conversationId)
+        role = try container.decode(String.self, forKey: .role)
+        content = try container.decode(String.self, forKey: .content)
+        
+        // createdAt 和 timestamp 都可能存在
+        createdAt = try? container.decode(String.self, forKey: .createdAt)
+        timestamp = try? container.decode(String.self, forKey: .timestamp)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        // 编码时使用 id 字段
+        try container.encode(id, forKey: .id)
+        try container.encodeIfPresent(conversationId, forKey: .conversationId)
+        try container.encode(role, forKey: .role)
+        try container.encode(content, forKey: .content)
+        try container.encodeIfPresent(createdAt, forKey: .createdAt)
+        try container.encodeIfPresent(timestamp, forKey: .timestamp)
     }
 }
 

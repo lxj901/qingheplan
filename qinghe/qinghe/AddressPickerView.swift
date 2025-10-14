@@ -32,7 +32,7 @@ struct AddressPickerView: View {
                     }
                     .pickerStyle(WheelPickerStyle())
                     .frame(maxWidth: .infinity)
-                    .onChange(of: selectedProvince) { _, newProvince in
+                    .onChange(of: selectedProvince) { newProvince in
                         selectedCity = nil
                         selectedDistrict = nil
                         loadCities(for: newProvince)
@@ -47,7 +47,7 @@ struct AddressPickerView: View {
                     }
                     .pickerStyle(WheelPickerStyle())
                     .frame(maxWidth: .infinity)
-                    .onChange(of: selectedCity) { _, newCity in
+                    .onChange(of: selectedCity) { newCity in
                         selectedDistrict = nil
                         loadDistricts(for: newCity)
                     }

@@ -15,7 +15,7 @@ struct ChatConversation: Codable, Identifiable, Equatable {
     let isTop: Bool?
     let isMuted: Bool?
     let membersCount: Int?
-    let creatorId: Int?
+    private let _creatorId: Int?
     let creator: ChatUser?
     let memberRecords: [MemberRecord]?
     let description: String?
@@ -29,6 +29,61 @@ struct ChatConversation: Codable, Identifiable, Equatable {
 
     var isPinned: Bool { return isTop ?? false }
     var lastActiveAt: String { return lastMessageAt ?? "" }
+    
+    /// 群主ID - 从 creatorId 或 creator.id 获取
+    var creatorId: Int? {
+        // 优先使用直接的 creatorId 字段
+        if let id = _creatorId {
+            return id
+        }
+        // 如果没有，从 creator 对象中获取
+        return creator?.id
+    }
+    
+    // 自定义解码键
+    enum CodingKeys: String, CodingKey {
+        case id, title, type, avatar, lastMessage, lastMessageAt
+        case unreadCount, isTop, isMuted, membersCount
+        case _creatorId = "creatorId"
+        case creator, memberRecords, description, maxMembers, createdAt
+    }
+    
+    /// 自定义初始化器 - 用于手动创建实例
+    init(
+        id: String,
+        title: String?,
+        type: ConversationType,
+        avatar: String?,
+        lastMessage: LastMessage?,
+        lastMessageAt: String?,
+        unreadCount: Int?,
+        isTop: Bool?,
+        isMuted: Bool?,
+        membersCount: Int?,
+        creatorId: Int?,
+        creator: ChatUser?,
+        memberRecords: [MemberRecord]?,
+        description: String?,
+        maxMembers: Int?,
+        createdAt: String?
+    ) {
+        self.id = id
+        self.title = title
+        self.type = type
+        self.avatar = avatar
+        self.lastMessage = lastMessage
+        self.lastMessageAt = lastMessageAt
+        self.unreadCount = unreadCount
+        self.isTop = isTop
+        self.isMuted = isMuted
+        self.membersCount = membersCount
+        self._creatorId = creatorId
+        self.creator = creator
+        self.memberRecords = memberRecords
+        self.description = description
+        self.maxMembers = maxMembers
+        self.createdAt = createdAt
+    }
     
     /// 显示名称
     var displayName: String {
@@ -185,7 +240,15 @@ struct ChatMessage: Codable, Identifiable {
         isRecalled = try container.decodeIfPresent(Bool.self, forKey: .isRecalled)
         createdAt = try container.decode(String.self, forKey: .createdAt)
         sender = try container.decode(ChatUser.self, forKey: .sender)
-        replyToMessageId = try container.decodeIfPresent(String.self, forKey: .replyToMessageId)
+
+        // 解析 replyToMessageId，过滤空字符串
+        if let replyId = try container.decodeIfPresent(String.self, forKey: .replyToMessageId),
+           !replyId.isEmpty {
+            replyToMessageId = replyId
+        } else {
+            replyToMessageId = nil
+        }
+
         mediaUrl = try container.decodeIfPresent(String.self, forKey: .mediaUrl)
         mediaDuration = try container.decodeIfPresent(Int.self, forKey: .mediaDuration)
         thumbnailUrl = try container.decodeIfPresent(String.self, forKey: .thumbnailUrl)

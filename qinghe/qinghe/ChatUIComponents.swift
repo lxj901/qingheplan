@@ -126,10 +126,13 @@ struct ChatListItemView: View {
                 } : nil
             )
             .gesture(
-                DragGesture()
+                DragGesture(minimumDistance: 20)
                     .onChanged { value in
                         let translation = value.translation.width
-                        if translation < 0 {
+                        let verticalTranslation = value.translation.height
+                        
+                        // 只有当水平移动大于垂直移动时才响应手势（确保是水平滑动）
+                        if abs(translation) > abs(verticalTranslation) && translation < 0 {
                             // 只允许向左滑动
                             offset = max(translation, -80) // 最大滑动距离为1个按钮的宽度
                         }
@@ -137,14 +140,24 @@ struct ChatListItemView: View {
                     .onEnded { value in
                         let translation = value.translation.width
                         let velocity = value.velocity.width
-
-                        withAnimation(.spring()) {
-                            if translation < -40 || velocity < -500 {
-                                // 显示操作按钮
-                                offset = -80
-                                onActionStateChanged(true)
-                            } else {
-                                // 回到原位
+                        let verticalTranslation = value.translation.height
+                        
+                        // 只有当水平移动大于垂直移动时才处理结束事件
+                        if abs(translation) > abs(verticalTranslation) {
+                            withAnimation(.spring()) {
+                                if translation < -40 || velocity < -500 {
+                                    // 显示操作按钮
+                                    offset = -80
+                                    onActionStateChanged(true)
+                                } else {
+                                    // 回到原位
+                                    offset = 0
+                                    onActionStateChanged(false)
+                                }
+                            }
+                        } else {
+                            // 如果是垂直滑动，重置偏移
+                            withAnimation(.spring()) {
                                 offset = 0
                                 onActionStateChanged(false)
                             }
@@ -165,13 +178,34 @@ struct ChatListItemView: View {
 
     private var contentView: some View {
         HStack(spacing: ModernDesignSystem.Spacing.md) {
-            // 头像
-            ChatAvatarView(
-                avatarUrl: conversation.displayAvatar,
-                displayName: conversation.displayName,
-                size: 52,
-                isOnline: conversation.type == .privateChat ? conversation.participants.first?.isOnline : nil
-            )
+            // 头像 - 根据会话类型显示不同样式
+            Group {
+                if conversation.type == .group {
+                    // 群聊：如果有成员信息则显示九宫格头像，否则显示群头像
+                    if !conversation.participants.isEmpty {
+                        GroupAvatarView(
+                            members: conversation.participants,
+                            size: 52
+                        )
+                    } else {
+                        // 回退到单个群头像
+                        ChatAvatarView(
+                            avatarUrl: conversation.avatar,
+                            displayName: conversation.displayName,
+                            size: 52,
+                            isOnline: nil
+                        )
+                    }
+                } else {
+                    // 私聊：显示单个头像
+                    ChatAvatarView(
+                        avatarUrl: conversation.displayAvatar,
+                        displayName: conversation.displayName,
+                        size: 52,
+                        isOnline: conversation.type == .privateChat ? conversation.participants.first?.isOnline : nil
+                    )
+                }
+            }
 
             // 内容区域
             VStack(alignment: .leading, spacing: 4) {
@@ -275,6 +309,112 @@ struct ChatAvatarView: View {
                     .font(.system(size: size * 0.4, weight: .medium))
                     .foregroundColor(ModernDesignSystem.Colors.primaryGreen)
             )
+    }
+}
+
+/// 群聊头像组件 - 九宫格样式
+struct GroupAvatarView: View {
+    let members: [ChatUser]
+    let size: CGFloat
+    
+    // 根据成员数量决定显示的头像数量和布局
+    private var displayMembers: [ChatUser] {
+        Array(members.prefix(9))
+    }
+    
+    private var gridLayout: (rows: Int, columns: Int) {
+        let count = displayMembers.count
+        switch count {
+        case 0, 1: return (1, 1)
+        case 2: return (1, 2)  // 2个成员：1行2列
+        case 3: return (2, 2)  // 3个成员：2行2列（右下角空）
+        case 4: return (2, 2)  // 4个成员：2行2列
+        case 5...6: return (2, 3)  // 5-6个成员：2行3列
+        case 7...9: return (3, 3)  // 7-9个成员：3行3列
+        default: return (3, 3)
+        }
+    }
+    
+    var body: some View {
+        let layout = gridLayout
+        let itemSize = size / CGFloat(max(layout.rows, layout.columns))
+        let spacing: CGFloat = 1
+        
+        // 调试信息
+        let _ = print("🔍 GroupAvatarView - members count: \(members.count), displayMembers: \(displayMembers.count), layout: \(layout)")
+        
+        VStack(spacing: spacing) {
+            ForEach(0..<layout.rows, id: \.self) { row in
+                HStack(spacing: spacing) {
+                    ForEach(0..<layout.columns, id: \.self) { col in
+                        let index = row * layout.columns + col
+                        if index < displayMembers.count {
+                            let _ = print("🔍 Member[\(index)]: \(displayMembers[index].nickname), avatar: \(displayMembers[index].avatar ?? "nil")")
+                            memberAvatarView(member: displayMembers[index], size: itemSize - spacing)
+                        }
+                        // 移除了 else 分支，不再显示透明占位符
+                    }
+                }
+            }
+        }
+        .frame(width: size, height: size)
+        .background(ModernDesignSystem.Colors.backgroundSecondary)
+        .clipShape(RoundedRectangle(cornerRadius: size * 0.15))
+    }
+    
+    @ViewBuilder
+    private func memberAvatarView(member: ChatUser, size: CGFloat) -> some View {
+        Group {
+            if let avatarUrl = member.avatar, !avatarUrl.isEmpty, let url = URL(string: avatarUrl) {
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    case .failure(_):
+                        // 加载失败，显示默认头像
+                        defaultMemberAvatar(member: member, size: size)
+                    case .empty:
+                        // 加载中，显示默认头像作为占位符
+                        defaultMemberAvatar(member: member, size: size)
+                    @unknown default:
+                        defaultMemberAvatar(member: member, size: size)
+                    }
+                }
+                .frame(width: size, height: size)
+                .clipped()
+            } else {
+                defaultMemberAvatar(member: member, size: size)
+            }
+        }
+    }
+    
+    private func defaultMemberAvatar(member: ChatUser, size: CGFloat) -> some View {
+        Rectangle()
+            .fill(avatarColor(for: member.id))
+            .frame(width: size, height: size)
+            .overlay(
+                Text(String(member.nickname.prefix(1)).uppercased())
+                    .font(.system(size: size * 0.4, weight: .medium))
+                    .foregroundColor(.white)
+            )
+    }
+    
+    // 根据用户ID生成不同的颜色
+    private func avatarColor(for userId: Int) -> Color {
+        let colors: [Color] = [
+            ModernDesignSystem.Colors.primaryGreen,
+            .blue,
+            .purple,
+            .orange,
+            .pink,
+            .teal,
+            .indigo,
+            .cyan,
+            .mint
+        ]
+        return colors[abs(userId.hashValue) % colors.count]
     }
 }
 

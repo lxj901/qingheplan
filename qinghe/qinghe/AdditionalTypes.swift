@@ -430,47 +430,199 @@ enum DataQuality: String {
 
 
 
-class WorkoutCameraManager: ObservableObject {
+// MARK: - 运动相机管理器
+final class WorkoutCameraManager: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate {
     static let shared = WorkoutCameraManager()
-    
+
+    let session = AVCaptureSession()
+    private let sessionQueue = DispatchQueue(label: "workout.camera.session")
+    private let photoOutput = AVCapturePhotoOutput()
+
     @Published var isRecording = false
     @Published var photos: [WorkoutPhotoData] = []
     @Published var isFlashOn = false
     @Published var isSessionActive = false
-    
-    private init() {}
-    
+    @Published var lastCapturedImage: UIImage? = nil
+
+    private var currentDevice: AVCaptureDevice?
+    private var photoCaptureCompletion: ((UIImage?) -> Void)?
+
+    private override init() {
+        super.init()
+        configureSession()
+    }
+
+    // MARK: - Session Management
     func startSession() {
-        isSessionActive = true
-        print("📸 相机会话已启动")
+        sessionQueue.async { [weak self] in
+            guard let self = self else { return }
+            if !self.session.isRunning {
+                self.session.startRunning()
+                DispatchQueue.main.async {
+                    self.isSessionActive = true
+                    print("📸 相机会话已启动")
+                }
+            }
+        }
     }
-    
+
     func stopSession() {
-        isSessionActive = false
-        print("📸 相机会话已停止")
+        sessionQueue.async { [weak self] in
+            guard let self = self else { return }
+            if self.session.isRunning {
+                self.session.stopRunning()
+                DispatchQueue.main.async {
+                    self.isSessionActive = false
+                    print("📸 相机会话已停止")
+                }
+            }
+        }
     }
-    
+
+    // MARK: - Flash Control
     func toggleFlash() {
         isFlashOn.toggle()
         print("📸 闪光灯状态: \(isFlashOn ? "开" : "关")")
+
+        // 如果设备支持，立即设置手电筒模式（用于预览）
+        sessionQueue.async { [weak self] in
+            guard let self = self, let device = self.currentDevice else { return }
+
+            if device.hasTorch && device.isTorchAvailable {
+                do {
+                    try device.lockForConfiguration()
+                    if self.isFlashOn {
+                        try device.setTorchModeOn(level: 1.0)
+                    } else {
+                        device.torchMode = .off
+                    }
+                    device.unlockForConfiguration()
+                } catch {
+                    print("📸 设置手电筒失败: \(error.localizedDescription)")
+                }
+            }
+        }
     }
-    
+
+    // MARK: - Camera Switch
     func switchCamera() {
-        print("📸 切换前后摄像头")
-        // Mock implementation
+        sessionQueue.async { [weak self] in
+            guard let self = self else { return }
+            guard let currentInput = self.session.inputs.first as? AVCaptureDeviceInput else { return }
+
+            let currentPosition = currentInput.device.position
+            let newPosition: AVCaptureDevice.Position = (currentPosition == .back) ? .front : .back
+
+            self.session.beginConfiguration()
+            self.session.removeInput(currentInput)
+
+            // 关闭当前设备的手电筒
+            if currentInput.device.hasTorch && currentInput.device.torchMode == .on {
+                try? currentInput.device.lockForConfiguration()
+                currentInput.device.torchMode = .off
+                currentInput.device.unlockForConfiguration()
+            }
+
+            if let newDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: newPosition),
+               let newInput = try? AVCaptureDeviceInput(device: newDevice),
+               self.session.canAddInput(newInput) {
+                self.session.addInput(newInput)
+                self.currentDevice = newDevice
+
+                // 如果闪光灯是开启状态，在新设备上也开启
+                if self.isFlashOn && newDevice.hasTorch {
+                    try? newDevice.lockForConfiguration()
+                    try? newDevice.setTorchModeOn(level: 1.0)
+                    newDevice.unlockForConfiguration()
+                }
+            } else {
+                // 回退：加回原输入
+                if self.session.canAddInput(currentInput) {
+                    self.session.addInput(currentInput)
+                }
+            }
+
+            self.session.commitConfiguration()
+            print("📸 切换到\(newPosition == .back ? "后置" : "前置")摄像头")
+        }
     }
-    
-    func takePhoto() -> WorkoutPhotoData? {
-        // Mock implementation
-        guard let imageData = UIImage(systemName: "camera")?.pngData() else { return nil }
-        let photo = WorkoutPhotoData(
-            imageData: imageData,
-            timestamp: Date(),
-            location: nil,
-            workoutId: nil
-        )
-        photos.append(photo)
-        return photo
+
+    // MARK: - Photo Capture
+    func takePhoto(completion: @escaping (UIImage?) -> Void) {
+        photoCaptureCompletion = completion
+
+        let settings = AVCapturePhotoSettings()
+
+        // 设置闪光灯模式
+        if isFlashOn {
+            if photoOutput.supportedFlashModes.contains(.on) {
+                settings.flashMode = .on
+            }
+        } else {
+            settings.flashMode = .off
+        }
+
+        photoOutput.capturePhoto(with: settings, delegate: self)
+        print("📸 开始拍照，闪光灯: \(isFlashOn ? "开" : "关")")
+    }
+
+    // MARK: - AVCapturePhotoCaptureDelegate
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        if let error = error {
+            print("📸 拍照失败: \(error.localizedDescription)")
+            DispatchQueue.main.async { [weak self] in
+                self?.photoCaptureCompletion?(nil)
+                self?.photoCaptureCompletion = nil
+            }
+            return
+        }
+
+        guard let data = photo.fileDataRepresentation(),
+              let image = UIImage(data: data) else {
+            print("📸 无法获取照片数据")
+            DispatchQueue.main.async { [weak self] in
+                self?.photoCaptureCompletion?(nil)
+                self?.photoCaptureCompletion = nil
+            }
+            return
+        }
+
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.lastCapturedImage = image
+            self.photoCaptureCompletion?(image)
+            self.photoCaptureCompletion = nil
+            print("📸 拍照成功")
+        }
+    }
+
+    // MARK: - Private Configuration
+    private func configureSession() {
+        sessionQueue.async { [weak self] in
+            guard let self = self else { return }
+
+            self.session.beginConfiguration()
+            self.session.sessionPreset = .photo
+
+            // 默认使用后置摄像头
+            guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back),
+                  let input = try? AVCaptureDeviceInput(device: device),
+                  self.session.canAddInput(input) else {
+                self.session.commitConfiguration()
+                print("📸 无法配置相机输入")
+                return
+            }
+
+            self.session.addInput(input)
+            self.currentDevice = device
+
+            if self.session.canAddOutput(self.photoOutput) {
+                self.session.addOutput(self.photoOutput)
+            }
+
+            self.session.commitConfiguration()
+            print("📸 相机配置完成")
+        }
     }
 }
 
@@ -1044,8 +1196,73 @@ class AudioSessionManager: ObservableObject {
         print("🔇 音频会话已停用")
     }
 
+    // 仅标记组件活跃/不活跃，不触发系统音频会话切换。
+    // 用于像白噪音这类在后台保持播放的场景，避免其他模块释放会话时误把全局会话停掉。
+    func markActive(componentId: String) {
+        activeComponents.insert(componentId)
+        print("🔒 [AudioSessionManager] 标记活跃组件: \(componentId). 当前活跃组件: \(activeComponents)")
+    }
+
+    func unmarkActive(componentId: String) {
+        if activeComponents.remove(componentId) != nil {
+            print("🔓 [AudioSessionManager] 取消活跃组件标记: \(componentId). 当前活跃组件: \(activeComponents)")
+        }
+    }
+
     // MARK: - 新增方法以修复编译错误
 
+    /// 配置后台录音会话
+    func configureForBackgroundRecording(componentId: String = "SleepTracking") async throws {
+        print("🎤 [AudioSessionManager] 配置后台录音会话: \(componentId)")
+        
+        do {
+            let audioSession = AVAudioSession.sharedInstance()
+            
+            // 使用 .playAndRecord 支持后台录音
+            try audioSession.setCategory(
+                .playAndRecord,
+                mode: .measurement,
+                options: [.mixWithOthers, .allowBluetooth]
+            )
+            try audioSession.setActive(true)
+            
+            activeComponents.insert(componentId)
+            isActive = true
+            currentCategory = "playAndRecord"
+            
+            print("✅ [AudioSessionManager] 后台录音会话配置成功")
+        } catch {
+            print("❌ [AudioSessionManager] 后台录音会话配置失败: \(error)")
+            throw error
+        }
+    }
+    
+    /// 释放音频会话
+    func releaseAudioSession(componentId: String) {
+        activeComponents.remove(componentId)
+
+        // 如果没有活跃组件，停用会话
+        if activeComponents.isEmpty {
+            if WhiteNoisePlayer.shared.isPlaying {
+                print("ℹ️ [AudioSessionManager] 保留音频会话（白噪音正在播放）")
+            } else {
+                // 🔥 关键修复：后台永远不要调用 setActive(false)，会导致播放器被暂停
+                if UIApplication.shared.applicationState == .background {
+                    print("ℹ️ [AudioSessionManager] 后台环境，跳过音频会话释放")
+                    return
+                }
+
+                do {
+                    try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+                    isActive = false
+                    print("✅ [AudioSessionManager] 音频会话已释放")
+                } catch {
+                    print("❌ [AudioSessionManager] 音频会话释放失败: \(error)")
+                }
+            }
+        }
+    }
+    
     /// 请求音频会话
     /// - Parameters:
     ///   - componentId: 组件ID
@@ -1095,12 +1312,22 @@ class AudioSessionManager: ObservableObject {
 
         // 如果没有其他组件使用音频会话，则停用
         if activeComponents.isEmpty {
-            do {
-                try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
-                isActive = false
-                print("✅ [AudioSessionManager] 音频会话已停用")
-            } catch {
-                print("⚠️ [AudioSessionManager] 停用音频会话时出错: \(error)")
+            if WhiteNoisePlayer.shared.isPlaying {
+                print("ℹ️ [AudioSessionManager] 保留音频会话（白噪音正在播放）")
+            } else {
+                // 🔥 关键修复：后台永远不要调用 setActive(false)，会导致播放器被暂停
+                if await UIApplication.shared.applicationState == .background {
+                    print("ℹ️ [AudioSessionManager] 后台环境，跳过音频会话释放")
+                    return
+                }
+
+                do {
+                    try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+                    isActive = false
+                    print("✅ [AudioSessionManager] 音频会话已停用")
+                } catch {
+                    print("⚠️ [AudioSessionManager] 停用音频会话时出错: \(error)")
+                }
             }
         }
     }

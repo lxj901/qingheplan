@@ -4,13 +4,15 @@ import SwiftUI
 
 // MARK: - 社区主页面
 struct CommunityView: View {
-    @StateObject private var viewModel = CommunityViewModel()
+    @ObservedObject private var viewModel = CommunityViewModel.shared
     @StateObject private var adManager = GDTAdManager.shared
+    @StateObject private var localizationManager = LocalizationManager.shared
 
     @State private var showingUserProfile = false
     @State private var selectedUserId: String?
     @State private var showingPostDetail = false
     @State private var selectedPostId: String?
+    @State private var highlightSection: String?
     @State private var showingReportSheet = false
     @State private var reportingPostId: String?
     @State private var showingSearchView = false
@@ -59,12 +61,26 @@ struct CommunityView: View {
         }
         .navigationDestination(isPresented: $showingPostDetail) {
             if let postId = selectedPostId {
-                PostDetailView(postId: postId)
+                PostDetailView(
+                    postId: postId,
+                    highlightSection: highlightSection.flatMap { section in
+                        switch section {
+                        case "likes": return .likes
+                        case "bookmarks": return .bookmarks
+                        case "comments": return .comments
+                        default: return nil
+                        }
+                    }
+                )
                     .navigationBarHidden(true)
                     .modifier(SwipeBackGestureModifier()) // 添加滑动返回手势
                     .asSubView() // 标记为子页面，隐藏Tab栏
                     .onAppear {
-                        print("🔍 社区页面：导航到帖子详情页面，帖子ID: \(postId)")
+                        print("🔍 社区页面：导航到帖子详情页面，帖子ID: \(postId), 高亮: \(highlightSection ?? "无")")
+                    }
+                    .onDisappear {
+                        // 清除高亮参数
+                        highlightSection = nil
                     }
             }
         }
@@ -143,8 +159,10 @@ struct CommunityView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("NavigateToPost"))) { notification in
             if let postId = notification.userInfo?["postId"] as? Int {
-                print("🔍 CommunityView 收到帖子详情导航通知，帖子ID: \(postId)")
+                let highlight = notification.userInfo?["highlightSection"] as? String
+                print("🔍 CommunityView 收到帖子详情导航通知，帖子ID: \(postId), 高亮区域: \(highlight ?? "无")")
                 selectedPostId = String(postId)
+                highlightSection = highlight
                 showingPostDetail = true
             }
         }

@@ -107,9 +107,10 @@ struct SplashView: View {
             }
             .padding(.horizontal, 40)
         }
+        .preferredColorScheme(.light) // 开屏页面不适配深色模式
         .onAppear {
             startAnimation()
-            // 在启动页显示期间就开始加载广告
+            // 在启动页显示期间就开始加载广告（开屏广告不受去广告权益影响）
             loadSplashAd()
         }
     }

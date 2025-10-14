@@ -70,6 +70,7 @@ struct CreatePostRequest: Codable {
     let longitude: Double?
     let checkinId: Int?
     let workoutId: Int?
+    let isAIGenerated: Bool
     let allowComments: Bool
     let allowShares: Bool
     let visibility: String
@@ -84,6 +85,7 @@ struct CreatePostRequest: Codable {
         longitude: Double? = nil,
         checkinId: Int? = nil,
         workoutId: Int? = nil,
+        isAIGenerated: Bool = false,
         allowComments: Bool = true,
         allowShares: Bool = true,
         visibility: String = "public"
@@ -97,6 +99,7 @@ struct CreatePostRequest: Codable {
         self.longitude = longitude
         self.checkinId = checkinId
         self.workoutId = workoutId
+        self.isAIGenerated = isAIGenerated
         self.allowComments = allowComments
         self.allowShares = allowShares
         self.visibility = visibility
@@ -106,6 +109,9 @@ struct CreatePostRequest: Codable {
 // MARK: - 社区视图模型
 @MainActor
 class CommunityViewModel: ObservableObject {
+    // 单例模式
+    static let shared = CommunityViewModel()
+
     @Published var posts: [Post] = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
@@ -130,17 +136,72 @@ class CommunityViewModel: ObservableObject {
     private let fileUploadService = FileUploadService.shared
     private var locationManager: AppleMapService?
 
+    // 同城功能相关属性
+    @Published var currentLatitude: Double?
+    @Published var currentLongitude: Double?
+    @Published var nearbyRadius: Int = 50  // 默认搜索半径50公里
+    @Published var isLoadingLocation: Bool = false
+    @Published var locationPermissionDenied: Bool = false
+
+    // MARK: - 缓存相关属性
+    // 缓存最后加载时间（按 tab 分别记录）
+    private var lastLoadTime: [CommunityTab: Date] = [:]
+    // 缓存有效期（秒），默认5分钟
+    private let cacheValidDuration: TimeInterval = 5 * 60
+    // 是否已经初次加载过
+    private var hasInitialLoaded: [CommunityTab: Bool] = [:]
+
+    // 私有初始化方法，防止外部创建实例
+    private init() {}
+
+    // MARK: - 检查缓存是否有效
+    func shouldLoadData(forceRefresh: Bool = false) -> Bool {
+        // 如果强制刷新，直接返回 true
+        if forceRefresh {
+            return true
+        }
+        
+        // 如果当前 tab 从未加载过，需要加载
+        if hasInitialLoaded[selectedTab] != true {
+            return true
+        }
+        
+        // 检查缓存是否过期
+        if let lastTime = lastLoadTime[selectedTab] {
+            let timeElapsed = Date().timeIntervalSince(lastTime)
+            // 如果缓存未过期，不需要重新加载
+            if timeElapsed < cacheValidDuration {
+                print("📦 社区数据缓存有效，剩余时间: \(Int(cacheValidDuration - timeElapsed))秒")
+                return false
+            }
+        }
+        
+        return true
+    }
+    
     // MARK: - 加载帖子
-    func loadPosts(refresh: Bool = false) async {
+    func loadPosts(refresh: Bool = false, isLoadingMore: Bool = false) async {
+        // 检查是否需要加载数据（除非是强制刷新或加载更多）
+        // 加载更多时不检查缓存，直接加载下一页
+        if !refresh && !isLoadingMore && !shouldLoadData(forceRefresh: false) {
+            print("📦 使用缓存数据，跳过加载")
+            return
+        }
+
         // 取消之前的请求
         currentLoadTask?.cancel()
 
+        // 如果是刷新，重置状态（必须在 guard 之前）
         if refresh {
             currentPage = 1
             hasMorePosts = true
         }
 
-        guard !isLoading && hasMorePosts else { return }
+        // 检查是否可以加载（刷新时已经重置了 hasMorePosts）
+        guard !isLoading && hasMorePosts else {
+            print("⚠️ 跳过加载 - isLoading: \(isLoading), hasMorePosts: \(hasMorePosts)")
+            return
+        }
 
         isLoading = true
         errorMessage = nil
@@ -148,39 +209,91 @@ class CommunityViewModel: ObservableObject {
         // 创建新的任务
         currentLoadTask = Task {
             do {
-                let response = try await communityService.getPosts(
-                    tab: selectedTab,
-                    category: selectedCategory,
-                    page: currentPage,
-                    limit: 20
-                )
-
-                // 检查任务是否被取消
-                guard !Task.isCancelled else { return }
-
-                print("========================================")
-                print("🔍 CommunityViewModel 加载帖子成功")
-                print("🔍 获取到 \(response.items.count) 个帖子")
-                print("🔍 refresh: \(refresh)")
-
-                // 打印前几个帖子的ID用于调试
-                for (index, post) in response.items.prefix(3).enumerated() {
-                    print("🔍 帖子 \(index): ID='\(post.id)', 标题='\(String(post.content.prefix(30)))...'")
-                }
-                print("========================================")
-
-                if refresh {
-                    posts = response.items
+                // 检查是否是同城标签，如果是则使用同城API
+                if selectedTab == .nearby {
+                    // 确保有位置信息
+                    if currentLatitude == nil || currentLongitude == nil {
+                        await loadCurrentLocation()
+                    }
+                    
+                    guard let latitude = currentLatitude, let longitude = currentLongitude else {
+                        errorMessage = "无法获取位置信息，请检查位置权限"
+                        isLoading = false
+                        return
+                    }
+                    
+                    // 调用同城API
+                    let nearbyResponse = try await communityService.getNearbyPosts(
+                        latitude: latitude,
+                        longitude: longitude,
+                        radius: nearbyRadius,
+                        page: currentPage,
+                        limit: 20
+                    )
+                    
+                    guard !Task.isCancelled else { return }
+                    
+                    print("========================================")
+                    print("🌍 CommunityViewModel 加载同城帖子成功")
+                    print("🌍 位置: (\(latitude), \(longitude)), 半径: \(nearbyRadius)km")
+                    print("🌍 获取到 \(nearbyResponse.data?.items.count ?? 0) 个帖子")
+                    print("🌍 refresh: \(refresh)")
+                    print("========================================")
+                    
+                    // 将同城帖子转换为普通帖子
+                    let nearbyPosts = nearbyResponse.data?.items.map { $0.toPost() } ?? []
+                    
+                    if refresh {
+                        posts = nearbyPosts
+                    } else {
+                        posts.append(contentsOf: nearbyPosts)
+                    }
+                    
+                    hasMorePosts = nearbyResponse.data?.pagination.hasNextPage ?? false
+                    currentPage += 1
+                    
                 } else {
-                    posts.append(contentsOf: response.items)
+                    // 使用普通帖子API
+                    let response = try await communityService.getPosts(
+                        tab: selectedTab,
+                        category: selectedCategory,
+                        page: currentPage,
+                        limit: 20
+                    )
+
+                    // 检查任务是否被取消
+                    guard !Task.isCancelled else { return }
+
+                    print("========================================")
+                    print("🔍 CommunityViewModel 加载帖子成功")
+                    print("🔍 获取到 \(response.items.count) 个帖子")
+                    print("🔍 refresh: \(refresh)")
+
+                    // 打印前几个帖子的ID用于调试
+                    for (index, post) in response.items.prefix(3).enumerated() {
+                        print("🔍 帖子 \(index): ID='\(post.id)', 标题='\(String(post.content.prefix(30)))...'")
+                    }
+                    print("========================================")
+
+                    if refresh {
+                        posts = response.items
+                    } else {
+                        posts.append(contentsOf: response.items)
+                    }
+
+                    hasMorePosts = response.pagination.hasNextPage
+                    currentPage += 1
+
+                    print("🔍 更新后总帖子数: \(posts.count)")
+                    print("🔍 hasMorePosts: \(hasMorePosts)")
+                    print("========================================")
                 }
-
-                hasMorePosts = response.pagination.hasNextPage
-                currentPage += 1
-
-                print("🔍 更新后总帖子数: \(posts.count)")
-                print("🔍 hasMorePosts: \(hasMorePosts)")
-                print("========================================")
+                
+                // 标记当前 tab 已初次加载完成
+                hasInitialLoaded[selectedTab] = true
+                // 更新最后加载时间
+                lastLoadTime[selectedTab] = Date()
+                print("📦 缓存已更新，tab: \(selectedTab.displayName)")
 
             } catch {
                 // 检查任务是否被取消
@@ -218,13 +331,25 @@ class CommunityViewModel: ObservableObject {
 
     // MARK: - 加载更多帖子
     func loadMorePosts() async {
-        await loadPosts(refresh: false)
+        await loadPosts(refresh: false, isLoadingMore: true)
     }
 
     // MARK: - 切换Tab
     func switchTab(_ tab: CommunityTab) async {
+        // 如果点击的是当前已选中的标签，强制刷新数据
+        let isSameTab = (selectedTab == tab)
+
         selectedTab = tab
-        await refreshPosts()
+
+        if isSameTab {
+            // 点击当前标签，强制刷新（忽略缓存）
+            print("🔄 点击当前标签 \(tab.displayName)，强制刷新数据")
+            await loadPosts(refresh: true, isLoadingMore: false)
+        } else {
+            // 切换到不同标签，正常刷新（会检查缓存）
+            print("🔄 切换到标签 \(tab.displayName)")
+            await refreshPosts()
+        }
     }
 
     // MARK: - 切换分类
@@ -290,6 +415,69 @@ class CommunityViewModel: ObservableObject {
             // 可以显示举报成功的提示
         } catch {
             errorMessage = error.localizedDescription
+        }
+    }
+    
+    // MARK: - 同城功能 - 获取当前位置
+    func loadCurrentLocation() async {
+        isLoadingLocation = true
+        locationPermissionDenied = false
+        
+        // 初始化位置管理器
+        if locationManager == nil {
+            locationManager = AppleMapService.shared
+        }
+        
+        guard let manager = locationManager else {
+            errorMessage = "无法初始化位置服务"
+            isLoadingLocation = false
+            return
+        }
+        
+        // 检查权限状态
+        switch manager.authorizationStatus {
+        case .notDetermined:
+            // 请求权限
+            manager.requestLocationPermission()
+            // 等待权限结果
+            try? await Task.sleep(nanoseconds: 2_000_000_000) // 等待2秒
+            
+        case .denied, .restricted:
+            locationPermissionDenied = true
+            errorMessage = "位置权限被拒绝，请在设置中开启"
+            isLoadingLocation = false
+            return
+            
+        case .authorizedWhenInUse, .authorizedAlways:
+            break
+            
+        @unknown default:
+            break
+        }
+        
+        // 等待位置更新
+        var retryCount = 0
+        while manager.currentLocation == nil && retryCount < 10 {
+            try? await Task.sleep(nanoseconds: 500_000_000) // 等待0.5秒
+            retryCount += 1
+        }
+        
+        if let location = manager.currentLocation {
+            currentLatitude = location.coordinate.latitude
+            currentLongitude = location.coordinate.longitude
+            print("📍 获取到当前位置: (\(currentLatitude!), \(currentLongitude!))")
+        } else {
+            errorMessage = "无法获取当前位置，请检查GPS信号"
+        }
+        
+        isLoadingLocation = false
+    }
+    
+    // MARK: - 更新搜索半径
+    func updateNearbyRadius(_ radius: Int) async {
+        nearbyRadius = radius
+        if selectedTab == .nearby {
+            await refreshPosts()
         }
     }
 
@@ -710,6 +898,7 @@ class CommunityViewModel: ObservableObject {
         longitude: Double? = nil,
         checkinId: Int? = nil,
         workoutId: Int? = nil,
+        isAIGenerated: Bool = false,
         onSuccess: (() -> Void)? = nil,
         onFailure: ((String) -> Void)? = nil
     ) {
@@ -780,6 +969,7 @@ class CommunityViewModel: ObservableObject {
                     longitude: longitude,
                     checkinId: checkinId,
                     workoutId: workoutId,
+                    isAIGenerated: isAIGenerated,
                     allowComments: allowComments,
                     allowShares: allowShares,
                     visibility: visibility

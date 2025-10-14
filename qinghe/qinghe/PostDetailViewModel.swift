@@ -16,6 +16,10 @@ class PostDetailViewModel: ObservableObject {
     @Published var showError = false
     @Published var totalCommentsCount = 0
     @Published var commentSortType: CommentSortType = .newest
+    
+    // 互动用户列表相关
+    @Published var showingLikesUsers = false
+    @Published var showingBookmarksUsers = false
 
     // 添加postId属性
     private(set) var postId: String = ""
@@ -68,7 +72,22 @@ class PostDetailViewModel: ObservableObject {
             }
         } catch {
             await MainActor.run {
-                self.errorMessage = "加载帖子失败: \(error.localizedDescription)"
+                // 检查是否是网络错误，包含服务器返回的错误消息
+                if let networkError = error as? NetworkManager.NetworkError {
+                    switch networkError {
+                    case .serverMessage(let message):
+                        // 使用服务器返回的错误消息(如"帖子不存在或已被删除")
+                        self.errorMessage = message
+                    case .serverError(let code) where code == 404:
+                        self.errorMessage = "该帖子不存在或已被删除"
+                    case .decodingError:
+                        self.errorMessage = "数据解析失败,请稍后重试"
+                    default:
+                        self.errorMessage = networkError.localizedDescription
+                    }
+                } else {
+                    self.errorMessage = "加载帖子失败: \(error.localizedDescription)"
+                }
                 self.showError = true
                 print("❌ PostDetailViewModel: 网络请求异常: \(error.localizedDescription)")
             }

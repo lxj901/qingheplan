@@ -4,7 +4,7 @@ struct GongGuoRecordEditorView: View {
     enum Kind: String, CaseIterable { case merit = "功", demerit = "过" }
 
     let date: Date
-    var onSave: (Kind, String, Int) -> Void = { _,_,_ in }
+    let viewModel: MeritViewModel
 
     @Environment(\.dismiss) private var dismiss
 
@@ -17,6 +17,9 @@ struct GongGuoRecordEditorView: View {
     @State private var cachedCategories: [String] = []
     @State private var itemsFiltered: [GongGuoStandardBook.Item] = []
     @State private var itemsDeduped: [GongGuoStandardBook.Item] = []
+    @State private var isSaving = false
+    @State private var showingError = false
+    @State private var errorMessage = ""
 
     private var sourceItems: [GongGuoStandardBook.Item] {
         (kind == .merit) ? GongGuoStandardBook.merits : GongGuoStandardBook.demerits
@@ -117,17 +120,18 @@ struct GongGuoRecordEditorView: View {
             }
             ToolbarItem(placement: .confirmationAction) {
                 Button(action: {
-                    if let s = selectedItem {
-                        saveRecentTitle(s.title)
-                        onSave(kind, s.title, points)
-                    }
-                    dismiss()
+                    saveRecord()
                 }) {
-                    Text("保存")
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundColor(selectedItem == nil ? Color.black.opacity(0.3) : .black)
+                    if isSaving {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle())
+                    } else {
+                        Text("保存")
+                            .font(.system(size: 17, weight: .semibold))
+                            .foregroundColor(selectedItem == nil ? Color.black.opacity(0.3) : .black)
+                    }
                 }
-                .disabled(selectedItem == nil)
+                .disabled(selectedItem == nil || isSaving)
             }
         }
         .toolbarBackground(.visible, for: .navigationBar)
@@ -156,13 +160,59 @@ struct GongGuoRecordEditorView: View {
         }
         .animation(nil, value: kind)
         .animation(nil, value: selectedCategory)
+        .alert("错误", isPresented: $showingError) {
+            Button("确定", role: .cancel) { }
+        } message: {
+            Text(errorMessage)
+        }
+    }
+    
+    // MARK: - 保存记录
+    private func saveRecord() {
+        guard let item = selectedItem else { return }
+        
+        isSaving = true
+        
+        Task {
+            // 提取分类
+            let category = extractCategory(from: item.title)
+            
+            let success = await viewModel.createRecord(
+                type: kind == .merit ? "merit" : "demerit",
+                category: category,
+                title: item.title,
+                points: points,
+                date: date,
+                notes: nil
+            )
+            
+            isSaving = false
+            
+            if success {
+                saveRecentTitle(item.title)
+                dismiss()
+            } else {
+                errorMessage = viewModel.errorMessage ?? "保存失败"
+                showingError = true
+            }
+        }
+    }
+    
+    private func extractCategory(from title: String) -> String {
+        if let idx = title.firstIndex(of: "·") {
+            return String(title[..<idx])
+        }
+        // 如果没有分类标识，返回默认分类
+        return kind == .merit ? "其他" : "其他"
     }
 }
 
 // 已移除日期格式化函数（不再在页面底部显示日期）
 
     #Preview {
-        GongGuoRecordEditorView(date: Date())
+        NavigationStack {
+            GongGuoRecordEditorView(date: Date(), viewModel: MeritViewModel())
+        }
     }
 
 // MARK: - UI Helpers

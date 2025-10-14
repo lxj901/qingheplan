@@ -482,18 +482,18 @@ struct TemptationStatisticsView: View {
             }
         }
         .padding(20)
-        .background(Color.white)
+        .background(Color(.systemBackground))
         .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.04), radius: 8, x: 0, y: 2)
+        .shadow(color: Color(.systemGray4).opacity(0.3), radius: 8, x: 0, y: 2)
     }
-    
+
     // MARK: - Helper Properties
-    
+
     private var backgroundGradient: some View {
         LinearGradient(
             gradient: Gradient(colors: [
-                Color(red: 248/255, green: 250/255, blue: 252/255),
-                Color(red: 241/255, green: 245/255, blue: 249/255)
+                Color(.secondarySystemBackground),
+                Color(.tertiarySystemBackground)
             ]),
             startPoint: .topLeading,
             endPoint: .bottomTrailing

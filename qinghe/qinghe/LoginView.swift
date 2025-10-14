@@ -33,6 +33,10 @@ struct LoginView: View {
     @State private var timer: Timer?
     @State private var appleSignInDelegate: AppleSignInDelegate?
     @State private var isPasswordMode = false // 控制登录方式：false=验证码登录，true=密码登录
+    @State private var showUserAgreement = false
+    @State private var showPrivacyPolicy = false
+    @State private var agreementNavPath = NavigationPath()
+    @State private var privacyNavPath = NavigationPath()
 
     // 认证服务
     private let authService = AuthService.shared
@@ -94,9 +98,24 @@ struct LoginView: View {
         } message: {
             Text(alertMessage)
         }
+        // 弹出：用户协议
+        .sheet(isPresented: $showUserAgreement) {
+            NavigationStack(path: $agreementNavPath) {
+                UserAgreementView(navigationPath: $agreementNavPath)
+                    .navigationBarHidden(true)
+            }
+        }
+        // 弹出：隐私政策
+        .sheet(isPresented: $showPrivacyPolicy) {
+            NavigationStack(path: $privacyNavPath) {
+                PrivacyPolicyView(navigationPath: $privacyNavPath)
+                    .navigationBarHidden(true)
+            }
+        }
         .onDisappear {
             timer?.invalidate()
         }
+        .preferredColorScheme(.light) // 登录页面不适配深色模式
     }
 
     // MARK: - 装饰性元素
@@ -467,9 +486,7 @@ struct LoginView: View {
                         .font(.system(size: 13, weight: .medium))
                         .foregroundColor(textSecondary)
 
-                    Button("《用户协议》") {
-                        // TODO: 显示用户协议
-                    }
+                    Button("《用户协议》") { showUserAgreement = true }
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundColor(primaryGreen)
 
@@ -477,9 +494,7 @@ struct LoginView: View {
                         .font(.system(size: 13, weight: .medium))
                         .foregroundColor(textSecondary)
 
-                    Button("《隐私政策》") {
-                        // TODO: 显示隐私政策
-                    }
+                    Button("《隐私政策》") { showPrivacyPolicy = true }
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundColor(primaryGreen)
                 }

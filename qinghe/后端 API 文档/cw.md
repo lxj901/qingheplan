@@ -1,1258 +1,279 @@
- 数据解析错误: keyNotFound(CodingKeys(stringValue: "analyzedAt", intValue: nil), Swift.DecodingError.Context(codingPath: [CodingKeys(stringValue: "data", intValue: nil), CodingKeys(stringValue: "recommendations", intValue: nil), CodingKeys(stringValue: "constitution", intValue: nil)], debugDescription: "No value associated with key CodingKeys(stringValue: \"analyzedAt\", intValue: nil) (\"analyzedAt\").", underlyingError: nil))
-🔍 错误响应内容: ["code": 0, "data": {
-    detailedAnalysis =     {
-        constitution =         {
-            analysisReport =             {
-                primaryConstitution =                 {
-                    characteristics =                     (
-                        "\U4f53\U6001\U9002\U4e2d",
-                        "\U9762\U8272\U7ea2\U6da6",
-                        "\U7cbe\U529b\U5145\U6c9b",
-                        "\U7761\U7720\U826f\U597d",
-                        "\U6027\U683c\U968f\U548c"
-                    );
-                    description = "\U4f53\U6001\U9002\U4e2d\Uff0c\U9762\U8272\U7ea2\U6da6\Uff0c\U7cbe\U529b\U5145\U6c9b\Uff0c\U7761\U7720\U826f\U597d\Uff0c\U6027\U683c\U968f\U548c\U5f00\U6717";
-                    element = "\U571f";
-                    healthLevel = excellent;
-                    name = "\U5e73\U548c\U8d28";
-                    score = 0;
-                };
-                recommendations =                 {
-                    diet =                     (
-                        "\U5747\U8861\U996e\U98df",
-                        "\U4e94\U8c37\U6742\U7cae",
-                        "\U65b0\U9c9c\U852c\U679c",
-                        "\U9002\U91cf\U8089\U7c7b",
-                        "\U8865\U6c14\U98df\U7269",
-                        "\U5c71\U836f",
-                        "\U5927\U67a3",
-                        "\U9ec4\U82aa",
-                        "\U4eba\U53c2"
-                    );
-                    emotional =                     (
-                        "\U4fdd\U6301\U4e50\U89c2",
-                        "\U5fc3\U6001\U5e73\U548c"
-                    );
-                    exercise =                     (
-                        "\U9002\U5ea6\U8fd0\U52a8",
-                        "\U592a\U6781\U62f3",
-                        "\U6162\U8dd1",
-                        "\U6e38\U6cf3",
-                        "\U8f7b\U5ea6\U8fd0\U52a8",
-                        "\U6563\U6b65",
-                        "\U516b\U6bb5\U9526",
-                        "\U907f\U514d\U5267\U70c8\U8fd0\U52a8"
-                    );
-                    lifestyle =                     (
-                        "\U89c4\U5f8b\U4f5c\U606f",
-                        "\U4fdd\U6301\U5fc3\U60c5\U6109\U5feb",
-                        "\U9002\U5ea6\U5de5\U4f5c"
-                    );
-                };
-                riskFactors =                 (
-                );
-                seasonalAdvice =                 {
-                    autumn = "\U79cb\U5b63\U5e73\U548c\U8d28\U5e94\U6ce8\U610f\U6da6\U71e5\U517b\U80ba\Uff0c\U591a\U98df\U767d\U8272\U98df\U7269";
-                    spring = "\U6625\U5b63\U5e73\U548c\U8d28\U5e94\U6ce8\U610f\U758f\U809d\U7406\U6c14\Uff0c\U591a\U98df\U7eff\U8272\U852c\U83dc";
-                    summer = "\U590f\U5b63\U5e73\U548c\U8d28\U5e94\U6ce8\U610f\U6e05\U70ed\U89e3\U6691\Uff0c\U907f\U514d\U8fc7\U5ea6\U51fa\U6c57";
-                    winter = "\U51ac\U5b63\U5e73\U548c\U8d28\U5e94\U6ce8\U610f\U6e29\U9633\U8865\U80be\Uff0c\U591a\U98df\U9ed1\U8272\U98df\U7269";
-                };
-                secondaryConstitution =                 {
-                    description = "\U5143\U6c14\U4e0d\U8db3\Uff0c\U75b2\U4e4f\U65e0\U529b\Uff0c\U6c14\U77ed\U61d2\U8a00\Uff0c\U6613\U51fa\U6c57\Uff0c\U6613\U611f\U5192";
-                    name = "\U6c14\U865a\U8d28";
-                    score = 0;
-                };
-                summary = "\U60a8\U7684\U4e3b\U8981\U4f53\U8d28\U7c7b\U578b\U662f\U5e73\U548c\U8d28\Uff0c\U8bc4\U52060\U5206";
-            };
-            analyzedAt = "2025-09-29T15:43:15.574Z";
-            confidence = "0.5";
-            constitutionRanking =             (
-                                {
-                    info =                     {
-                        characteristics =                         (
-                            "\U4f53\U6001\U9002\U4e2d",
-                            "\U9762\U8272\U7ea2\U6da6",
-                            "\U7cbe\U529b\U5145\U6c9b",
-                            "\U7761\U7720\U826f\U597d",
-                            "\U6027\U683c\U968f\U548c"
-                        );
-                        description = "\U4f53\U6001\U9002\U4e2d\Uff0c\U9762\U8272\U7ea2\U6da6\Uff0c\U7cbe\U529b\U5145\U6c9b\Uff0c\U7761\U7720\U826f\U597d\Uff0c\U6027\U683c\U968f\U548c\U5f00\U6717";
-                        element = "\U571f";
-                        englishName = balanced;
-                        healthLevel = excellent;
-                        name = "\U5e73\U548c\U8d28";
-                        organs =                         (
-                            "\U813e",
-                            "\U80c3"
-                        );
-                        season = "\U957f\U590f";
-                    };
-                    name = "\U5e73\U548c\U8d28";
-                    score = 0;
-                },
-                                {
-                    info =                     {
-                        characteristics =                         (
-                            "\U75b2\U4e4f\U65e0\U529b",
-                            "\U6c14\U77ed\U61d2\U8a00",
-                            "\U6613\U51fa\U6c57",
-                            "\U6613\U611f\U5192",
-                            "\U58f0\U97f3\U4f4e\U5f31"
-                        );
-                        description = "\U5143\U6c14\U4e0d\U8db3\Uff0c\U75b2\U4e4f\U65e0\U529b\Uff0c\U6c14\U77ed\U61d2\U8a00\Uff0c\U6613\U51fa\U6c57\Uff0c\U6613\U611f\U5192";
-                        element = "\U571f";
-                        englishName = "qi_deficiency";
-                        healthLevel = poor;
-                        name = "\U6c14\U865a\U8d28";
-                        organs =                         (
-                            "\U813e",
-                            "\U80ba"
-                        );
-                        season = "\U957f\U590f";
-                    };
-                    name = "\U6c14\U865a\U8d28";
-                    score = 0;
-                },
-                                {
-                    info =                     {
-                        characteristics =                         (
-                            "\U754f\U5bd2\U6015\U51b7",
-                            "\U624b\U8db3\U4e0d\U6e29",
-                            "\U7cbe\U795e\U4e0d\U632f",
-                            "\U8170\U819d\U9178\U8f6f",
-                            "\U591c\U5c3f\U9891\U591a"
-                        );
-                        description = "\U9633\U6c14\U4e0d\U8db3\Uff0c\U754f\U5bd2\U6015\U51b7\Uff0c\U624b\U8db3\U4e0d\U6e29\Uff0c\U7cbe\U795e\U4e0d\U632f";
-                        element = "\U706b";
-                        englishName = "yang_deficiency";
-                        healthLevel = poor;
-                        name = "\U9633\U865a\U8d28";
-                        organs =                         (
-                            "\U80be",
-                            "\U813e"
-                        );
-                        season = "\U590f";
-                    };
-                    name = "\U9633\U865a\U8d28";
-                    score = 0;
-                },
-                                {
-                    info =                     {
-                        characteristics =                         (
-                            "\U53e3\U71e5\U54bd\U5e72",
-                            "\U624b\U8db3\U5fc3\U70ed",
-                            "\U6f6e\U70ed\U76d7\U6c57",
-                            "\U5fc3\U70e6\U5931\U7720",
-                            "\U4fbf\U79d8"
-                        );
-                        description = "\U9634\U6db2\U4e0d\U8db3\Uff0c\U53e3\U71e5\U54bd\U5e72\Uff0c\U624b\U8db3\U5fc3\U70ed\Uff0c\U6f6e\U70ed\U76d7\U6c57";
-                        element = "\U6c34";
-                        englishName = "yin_deficiency";
-                        healthLevel = poor;
-                        name = "\U9634\U865a\U8d28";
-                        organs =                         (
-                            "\U80be",
-                            "\U80ba"
-                        );
-                        season = "\U51ac";
-                    };
-                    name = "\U9634\U865a\U8d28";
-                    score = 0;
-                },
-                                {
-                    info =                     {
-                        characteristics =                         (
-                            "\U5f62\U4f53\U80a5\U80d6",
-                            "\U8179\U90e8\U80a5\U6ee1",
-                            "\U80f8\U95f7\U75f0\U591a",
-                            "\U5bb9\U6613\U56f0\U5026",
-                            "\U8eab\U91cd\U4e0d\U723d"
-                        );
-                        description = "\U5f62\U4f53\U80a5\U80d6\Uff0c\U8179\U90e8\U80a5\U6ee1\Uff0c\U80f8\U95f7\U75f0\U591a\Uff0c\U5bb9\U6613\U56f0\U5026";
-                        element = "\U571f";
-                        englishName = "phlegm_dampness";
-                        healthLevel = fair;
-                        name = "\U75f0\U6e7f\U8d28";
-                        organs =                         (
-                            "\U813e",
-                            "\U80ba"
-                        );
-                        season = "\U957f\U590f";
-                    };
-                    name = "\U75f0\U6e7f\U8d28";
-                    score = 0;
-                },
-                                {
-                    info =                     {
-                        characteristics =                         (
-                            "\U9762\U57a2\U6cb9\U817b",
-                            "\U53e3\U82e6\U53e3\U5e72",
-                            "\U8eab\U91cd\U56f0\U5026",
-                            "\U5927\U4fbf\U9ecf\U6ede",
-                            "\U5c0f\U4fbf\U77ed\U8d64"
-                        );
-                        description = "\U9762\U57a2\U6cb9\U817b\Uff0c\U53e3\U82e6\U53e3\U5e72\Uff0c\U8eab\U91cd\U56f0\U5026\Uff0c\U5927\U4fbf\U9ecf\U6ede";
-                        element = "\U706b";
-                        englishName = "damp_heat";
-                        healthLevel = fair;
-                        name = "\U6e7f\U70ed\U8d28";
-                        organs =                         (
-                            "\U813e",
-                            "\U809d"
-                        );
-                        season = "\U590f";
-                    };
-                    name = "\U6e7f\U70ed\U8d28";
-                    score = 0;
-                },
-                                {
-                    info =                     {
-                        characteristics =                         (
-                            "\U80a4\U8272\U6666\U6697",
-                            "\U8272\U7d20\U6c89\U7740",
-                            "\U5bb9\U6613\U7600\U6591",
-                            "\U53e3\U5507\U6697\U6de1",
-                            "\U820c\U8d28\U7d2b\U6697"
-                        );
-                        description = "\U80a4\U8272\U6666\U6697\Uff0c\U8272\U7d20\U6c89\U7740\Uff0c\U5bb9\U6613\U51fa\U73b0\U7600\U6591\Uff0c\U53e3\U5507\U6697\U6de1";
-                        element = "\U6c34";
-                        englishName = "blood_stasis";
-                        healthLevel = fair;
-                        name = "\U8840\U7600\U8d28";
-                        organs =                         (
-                            "\U5fc3",
-                            "\U809d"
-                        );
-                        season = "\U51ac";
-                    };
-                    name = "\U8840\U7600\U8d28";
-                    score = 0;
-                },
-                                {
-                    info =                     {
-                        characteristics =                         (
-                            "\U795e\U60c5\U6291\U90c1",
-                            "\U60c5\U7eea\U4e0d\U7a33",
-                            "\U70e6\U95f7\U4e0d\U4e50",
-                            "\U80f8\U80c1\U80c0\U6ee1",
-                            "\U5584\U592a\U606f"
-                        );
-                        description = "\U795e\U60c5\U6291\U90c1\Uff0c\U60c5\U7eea\U4e0d\U7a33\Uff0c\U70e6\U95f7\U4e0d\U4e50\Uff0c\U80f8\U80c1\U80c0\U6ee1";
-                        element = "\U6728";
-                        englishName = "qi_stagnation";
-                        healthLevel = fair;
-                        name = "\U6c14\U90c1\U8d28";
-                        organs =                         (
-                            "\U809d",
-                            "\U80c6"
-                        );
-                        season = "\U6625";
-                    };
-                    name = "\U6c14\U90c1\U8d28";
-                    score = 0;
-                },
-                                {
-                    info =                     {
-                        characteristics =                         (
-                            "\U8fc7\U654f\U4f53\U8d28",
-                            "\U9057\U4f20\U7f3a\U9677",
-                            "\U80ce\U4f20\U5f02\U5e38",
-                            "\U836f\U7269\U8fc7\U654f",
-                            "\U9002\U5e94\U80fd\U529b\U5dee"
-                        );
-                        description = "\U8fc7\U654f\U4f53\U8d28\Uff0c\U5bb9\U6613\U836f\U7269\U8fc7\U654f\U3001\U82b1\U7c89\U8fc7\U654f\U7b49";
-                        element = "\U91d1";
-                        englishName = "special_constitution";
-                        healthLevel = poor;
-                        name = "\U7279\U7980\U8d28";
-                        organs =                         (
-                            "\U80ba",
-                            "\U80be"
-                        );
-                        season = "\U79cb";
-                    };
-                    name = "\U7279\U7980\U8d28";
-                    score = 0;
-                }
-            );
-            constitutionScores =             {
-                "\U5e73\U548c\U8d28" = 0;
-                "\U6c14\U865a\U8d28" = 0;
-                "\U6c14\U90c1\U8d28" = 0;
-                "\U6e7f\U70ed\U8d28" = 0;
-                "\U7279\U7980\U8d28" = 0;
-                "\U75f0\U6e7f\U8d28" = 0;
-                "\U8840\U7600\U8d28" = 0;
-                "\U9633\U865a\U8d28" = 0;
-                "\U9634\U865a\U8d28" = 0;
-            };
-            hasAnalysis = 1;
-            primaryConstitution = "\U5e73\U548c\U8d28";
-            secondaryConstitution = "\U6c14\U865a\U8d28";
-        };
-        fiveElements =         {
-            analysisId = 470;
-            currentSolarTerm = "\U79cb\U5206";
-            fiveMovements =             {
-                characteristics =                 {
-                    symptoms =                     (
-                        "\U6c14\U77ed\U4e4f\U529b",
-                        "\U6613\U611f\U5916\U90aa"
-                    );
-                    traits =                     (
-                        "\U706b\U6c14\U5236\U91d1",
-                        "\U80ba\U6c14\U4e0d\U8db3"
-                    );
-                };
-                element = "\U91d1";
-                influence = "\U80ba\U6c14\U4e0d\U8db3\Uff0c\U6613\U611f\U5916\U90aa\Uff0c\U5b9c\U8865\U76ca\U80ba\U6c14";
-                nature = "\U4e0d\U53ca";
-            };
-            hostGuestMovements =             {
-                guestMovement =                 {
-                    element = "\U91d1";
-                    influence = "\U80ba\U6c14\U4e0d\U8db3\Uff0c\U6613\U611f\U5916\U90aa\Uff0c\U5b9c\U8865\U76ca\U80ba\U6c14";
-                    nature = "\U4e0d\U53ca";
-                };
-                hostMovements =                 (
-                                        {
-                        duration = "73\U59295\U523b";
-                        element = "\U571f";
-                        nature = "\U5e38\U8fd0";
-                        period = "\U7b2c1\U6b65";
-                    },
-                                        {
-                        duration = "73\U59295\U523b";
-                        element = "\U91d1";
-                        nature = "\U5e38\U8fd0";
-                        period = "\U7b2c2\U6b65";
-                    },
-                                        {
-                        duration = "73\U59295\U523b";
-                        element = "\U6c34";
-                        nature = "\U4e2d\U8fd0";
-                        period = "\U7b2c3\U6b65";
-                    },
-                                        {
-                        duration = "73\U59295\U523b";
-                        element = "\U6728";
-                        nature = "\U5e38\U8fd0";
-                        period = "\U7b2c4\U6b65";
-                    },
-                                        {
-                        duration = "73\U59295\U523b";
-                        element = "\U706b";
-                        nature = "\U5e38\U8fd0";
-                        period = "\U7b2c5\U6b65";
-                    }
-                );
-            };
-            hostGuestQi =             {
-                guestQi =                 {
-                    characteristics =                     {
-                        nature = "\U98ce";
-                        organs =                         (
-                            "\U809d",
-                            "\U80c6"
-                        );
-                        traits =                         (
-                            "\U4e3b\U52a8",
-                            "\U4e3b\U5347"
-                        );
-                    };
-                    influence = "\U98ce\U6c14\U4e3b\U4ee4\Uff0c\U6613\U53d1\U809d\U80c6\U75be\U75c5\Uff0c\U6ce8\U610f\U758f\U809d\U7406\U6c14";
-                    name = "\U53a5\U9634\U98ce\U6728";
-                };
-                hostQi =                 (
-                                        {
-                        name = "\U53a5\U9634\U98ce\U6728";
-                        period = "\U521d\U4e4b\U6c14";
-                        season = "\U6625\U5206\U524d\U540e";
-                    },
-                                        {
-                        name = "\U5c11\U9634\U541b\U706b";
-                        period = "\U4e8c\U4e4b\U6c14";
-                        season = "\U5c0f\U6ee1\U524d\U540e";
-                    },
-                                        {
-                        name = "\U5c11\U9633\U76f8\U706b";
-                        period = "\U4e09\U4e4b\U6c14";
-                        season = "\U5927\U6691\U524d\U540e";
-                    },
-                                        {
-                        name = "\U592a\U9634\U6e7f\U571f";
-                        period = "\U56db\U4e4b\U6c14";
-                        season = "\U79cb\U5206\U524d\U540e";
-                    },
-                                        {
-                        name = "\U9633\U660e\U71e5\U91d1";
-                        period = "\U4e94\U4e4b\U6c14";
-                        season = "\U5c0f\U96ea\U524d\U540e";
-                    },
-                                        {
-                        name = "\U592a\U9633\U5bd2\U6c34";
-                        period = "\U7ec8\U4e4b\U6c14";
-                        season = "\U5927\U5bd2\U524d\U540e";
-                    }
-                );
-            };
-            lunarInfo =             {
-                day = 29;
-                dayBranch = "\U536f";
-                dayStem = "\U8f9b";
-                month = 9;
-                monthBranch = "\U620c";
-                monthStem = "\U4e19";
-                year = 2025;
-                yearBranch = "\U5df3";
-                yearStem = "\U4e59";
-            };
-            personalizedAdvice =             {
-                dietTherapy =                 {
-                    comprehensive =                     (
-                        "\U4e94\U8c37\U6742\U7cae",
-                        "\U65b0\U9c9c\U852c\U679c",
-                        "\U9002\U91cf\U8089\U7c7b",
-                        "\U5747\U8861\U8425\U517b",
-                        "\U767d\U8272\U98df\U7269",
-                        "\U8f9b\U5473\U98df\U7269",
-                        "\U6da6\U80ba\U98df\U54c1",
-                        "\U9002\U5ea6\U8865\U76ca",
-                        "\U589e\U5f3a\U8425\U517b"
-                    );
-                    "constitution_based" =                     (
-                        "\U4e94\U8c37\U6742\U7cae",
-                        "\U65b0\U9c9c\U852c\U679c",
-                        "\U9002\U91cf\U8089\U7c7b",
-                        "\U5747\U8861\U8425\U517b"
-                    );
-                    "relation_based" =                     (
-                        "\U9002\U5ea6\U8865\U76ca",
-                        "\U589e\U5f3a\U8425\U517b"
-                    );
-                    seasonal =                     (
-                        "\U767d\U8272\U98df\U7269",
-                        "\U8f9b\U5473\U98df\U7269",
-                        "\U6da6\U80ba\U98df\U54c1"
-                    );
-                };
-                diseaseRiskPrediction =                 {
-                    "constitution_risks" =                     (
-                        "\U5e73\U548c\U8d28\U6613\U60a3\U75be\U75c5"
-                    );
-                    "prevention_advice" =                     (
-                        "\U9884\U9632\U5efa\U8bae"
-                    );
-                    "relation_risks" =                     (
-                        "\U4f53\U8d28\U4e0e\U8fd0\U6c14\U5173\U7cfb\U4e0d\U660e\U786e\Uff0c\U5efa\U8bae\U5747\U8861\U8c03\U517b"
-                    );
-                    "seasonal_risks" =                     (
-                        "\U79cb\U5206\U6613\U53d1\U75be\U75c5"
-                    );
-                };
-                emotionalCare =                 {
-                    "constitution_advice" =                     (
-                        "\U5e73\U548c\U8d28\U60c5\U5fd7\U8c03\U517b\U5efa\U8bae"
-                    );
-                    meditation =                     (
-                        "\U5e73\U548c\U8d28\U51a5\U60f3\U5efa\U8bae"
-                    );
-                    "music_therapy" =                     (
-                        "\U5e73\U548c\U8d28\U97f3\U4e50\U7597\U6cd5"
-                    );
-                    "seasonal_advice" =                     (
-                        "\U79cb\U5206\U60c5\U5fd7\U8c03\U517b"
-                    );
-                };
-                exerciseAdvice =                 {
-                    "constitution_based" =                     (
-                        "\U9002\U5ea6\U8fd0\U52a8",
-                        "\U592a\U6781\U62f3",
-                        "\U6162\U8dd1",
-                        "\U6e38\U6cf3"
-                    );
-                    intensity = "\U9002\U5ea6\U5f3a\U5ea6";
-                    "recommended_time" = "\U4e0b\U53483-5\U70b9\Uff0c\U80ba\U7ecf\U5f53\U4ee4";
-                    seasonal =                     (
-                        "\U547c\U5438\U8fd0\U52a8",
-                        "\U80ba\U90e8\U953b\U70bc",
-                        "\U907f\U514d\U5e72\U71e5"
-                    );
-                };
-                healthTips =                 {
-                    "constitution_tips" =                     (
-                        "\U5e73\U548c\U8d28\U4fdd\U5065\U8981\U70b9"
-                    );
-                    "daily_tips" =                     (
-                        "\U5e73\U548c\U8d28\U65e5\U5e38\U4fdd\U5065"
-                    );
-                    "five_elements_tips" =                     (
-                        "\U4e94\U8fd0\U516d\U6c14\U517b\U751f\U8981\U70b9"
-                    );
-                    "seasonal_tips" =                     (
-                        "\U79cb\U5206\U517b\U751f\U8981\U70b9"
-                    );
-                };
-                lifestyleAdvice =                 {
-                    "daily_routine" =                     (
-                        "\U5e73\U548c\U8d28\U65e5\U5e38\U8d77\U5c45"
-                    );
-                    environment =                     (
-                        "\U5e73\U548c\U8d28\U73af\U5883\U8c03\U8282"
-                    );
-                    "seasonal_care" =                     (
-                        "\U79cb\U5206\U8d77\U5c45\U8c03\U6444"
-                    );
-                    "sleep_schedule" = "\U79cb\U5206\U4f5c\U606f\U5efa\U8bae";
-                };
-            };
-            qiMovementCombination =             {
-                healthImpact =                 {
-                    advice = "\U6ce8\U610f\U9884\U9632\Uff0c\U53ca\U65f6\U8c03\U7406";
-                    level = fair;
-                };
-                influence = "\U8fd0\U6c14\U5236\U7ea6\U4f53\U8d28\Uff0c\U6613\U751f\U75be\U75c5\Uff0c\U5b9c\U9884\U9632\U8c03\U7406";
-                movementElement = "\U91d1";
-                qiElement = "\U6728";
-                relation =                 {
-                    description = "\U4f53\U8d28\U514b\U5f53\U524d\U8fd0\U6c14\Uff0c\U6613\U8fc7\U5ea6\U6d88\U8017\Uff0c\U5b9c\U8282\U5236";
-                    type = "\U76f8\U514b";
-                };
-            };
-            sixQi =             {
-                characteristics =                 {
-                    nature = "\U98ce";
-                    organs =                     (
-                        "\U809d",
-                        "\U80c6"
-                    );
-                    traits =                     (
-                        "\U4e3b\U52a8",
-                        "\U4e3b\U5347"
-                    );
-                };
-                influence = "\U98ce\U6c14\U4e3b\U4ee4\Uff0c\U6613\U53d1\U809d\U80c6\U75be\U75c5\Uff0c\U6ce8\U610f\U758f\U809d\U7406\U6c14";
-                qi = "\U53a5\U9634\U98ce\U6728";
-                season = "\U7acb\U590f";
-            };
-            solarTermCharacteristics =             {
-                advice = "\U5e73\U8865\U80ba\U80be\Uff0c\U8c03\U548c\U9634\U9633";
-                element = "\U91d1";
-                nature = "\U5e73\U8861";
-            };
-        };
-        healthMetrics =         {
-            bmi = "<null>";
-            constitution = 80;
-            exercise = "<null>";
-            sleep = "<null>";
-        };
-        sleepSummary =         {
-            average3DaySessions = 0;
-            averageSleepDuration = 0;
-            averageWeeklySessions = 0;
-            lastSleepDate = "2025-07-23 18:32:36";
-            recentRecords =             (
-                                {
-                    actualDuration = "<null>";
-                    "created_at" = "2025-07-23 18:32:36";
-                    deviceInfo =                     {
-                        appVersion = "1.0";
-                        deviceType = iPhone;
-                        osVersion = "18.3.1";
-                    };
-                    endTime = "2025-07-23 18:32:36";
-                    environmentData =                     {
-                        humidity = 50;
-                        noiseLevel = 30;
-                        temperature = 22;
-                    };
-                    id = 73;
-                    localSessionId = "local_6347D458-B269-4B34-9106-F912920B05C4";
-                    overallQuality = "<null>";
-                    processingStatus = failed;
-                    sleepEfficiency = "<null>";
-                    sleepQualityRating = 5;
-                    startTime = "2025-07-23 18:32:30";
-                    targetDuration = 480;
-                    targetWakeTime = "2025-07-24 02:32:30";
-                    "updated_at" = "2025-07-23 18:33:00";
-                    userId = 1;
-                    userNotes = "\U624b\U52a8\U7ed3\U675f";
-                    wakeupMethod = manual;
-                },
-                                {
-                    actualDuration = "<null>";
-                    "created_at" = "2025-07-23 18:30:55";
-                    deviceInfo =                     {
-                        appVersion = "1.0";
-                        deviceType = iPhone;
-                        osVersion = "18.3.1";
-                    };
-                    endTime = "2025-07-23 18:30:55";
-                    environmentData =                     {
-                        humidity = 50;
-                        noiseLevel = 30;
-                        temperature = 22;
-                    };
-                    id = 72;
-                    localSessionId = "local_33860B33-C762-4301-BB39-BC67E41BC331";
-                    overallQuality = "<null>";
-                    processingStatus = failed;
-                    sleepEfficiency = "<null>";
-                    sleepQualityRating = 5;
-                    startTime = "2025-07-23 18:30:44";
-                    targetDuration = 480;
-                    targetWakeTime = "2025-07-24 02:30:44";
-                    "updated_at" = "2025-07-23 18:31:19";
-                    userId = 1;
-                    userNotes = "\U624b\U52a8\U7ed3\U675f";
-                    wakeupMethod = manual;
-                },
-                                {
-                    actualDuration = "<null>";
-                    "created_at" = "2025-07-22 15:49:11";
-                    deviceInfo =                     {
-                        appVersion = "1.0";
-                        deviceType = iPhone;
-                        osVersion = "18.3.1";
-                    };
-                    endTime = "2025-07-22 15:49:10";
-                    environmentData =                     {
-                        humidity = 50;
-                        noiseLevel = 30;
-                        temperature = 22;
-                    };
-                    id = 71;
-                    localSessionId = "local_465F9807-F0BD-45A1-A0E1-17CAE1CB90D2";
-                    overallQuality = "<null>";
-                    processingStatus = failed;
-                    sleepEfficiency = "<null>";
-                    sleepQualityRating = 5;
-                    startTime = "2025-07-22 15:49:03";
-                    targetDuration = 480;
-                    targetWakeTime = "2025-07-22 23:49:03";
-                    "updated_at" = "2025-07-22 15:49:35";
-                    userId = 1;
-                    userNotes = "\U624b\U52a8\U7ed3\U675f";
-                    wakeupMethod = manual;
-                },
-                                {
-                    actualDuration = 480;
-                    "created_at" = "2025-07-22 13:29:20";
-                    deviceInfo =                     {
-                        appVersion = "1.0.0";
-                        deviceType = iPhone;
-                        osVersion = "17.0";
-                    };
-                    endTime = "2025-07-22 13:29:20";
-                    environmentData =                     {
-                        humidity = 60;
-                        noiseLevel = 30;
-                        temperature = "22.5";
-                    };
-                    id = 70;
-                    localSessionId = "test_session_1753162160490";
-                    overallQuality = "<null>";
-                    processingStatus = pending;
-                    sleepEfficiency = "<null>";
-                    sleepQualityRating = "<null>";
-                    startTime = "2025-07-22 05:29:20";
-                    targetDuration = 480;
-                    targetWakeTime = "2025-07-22 13:29:20";
-                    "updated_at" = "2025-07-22 13:29:20";
-                    userId = 1;
-                    userNotes = "\U6d4b\U8bd5\U7761\U7720\U4f1a\U8bdd";
-                    wakeupMethod = "<null>";
-                },
-                                {
-                    actualDuration = 480;
-                    "created_at" = "2025-07-22 13:27:58";
-                    deviceInfo =                     {
-                        appVersion = "1.0.0";
-                        deviceType = iPhone;
-                        osVersion = "17.0";
-                    };
-                    endTime = "2025-07-22 13:27:58";
-                    environmentData =                     {
-                        humidity = 60;
-                        noiseLevel = 30;
-                        temperature = "22.5";
-                    };
-                    id = 69;
-                    localSessionId = "test_session_1753162078774";
-                    overallQuality = "<null>";
-                    processingStatus = pending;
-                    sleepEfficiency = "<null>";
-                    sleepQualityRating = "<null>";
-                    startTime = "2025-07-22 05:27:58";
-                    targetDuration = 480;
-                    targetWakeTime = "2025-07-22 13:27:58";
-                    "updated_at" = "2025-07-22 13:27:58";
-                    userId = 1;
-                    userNotes = "\U6d4b\U8bd5\U7761\U7720\U4f1a\U8bdd";
-                    wakeupMethod = "<null>";
-                },
-                                {
-                    actualDuration = "<null>";
-                    "created_at" = "2025-07-22 11:49:43";
-                    deviceInfo =                     {
-                        appVersion = "1.0.0";
-                        deviceType = iPhone;
-                        osVersion = "17.0";
-                    };
-                    endTime = "2025-07-22 11:49:43";
-                    environmentData =                     {
-                        humidity = 60;
-                        noiseLevel = 30;
-                        temperature = "22.5";
-                    };
-                    id = 68;
-                    localSessionId = "test_session_1753156183503";
-                    overallQuality = "<null>";
-                    processingStatus = failed;
-                    sleepEfficiency = "<null>";
-                    sleepQualityRating = 8;
-                    startTime = "2025-07-22 03:49:43";
-                    targetDuration = 480;
-                    targetWakeTime = "2025-07-22 11:49:43";
-                    "updated_at" = "2025-07-22 11:50:08";
-                    userId = 1;
-                    userNotes = "\U6d4b\U8bd5\U7761\U7720\U6570\U636e";
-                    wakeupMethod = natural;
-                },
-                                {
-                    actualDuration = "<null>";
-                    "created_at" = "2025-07-22 11:48:47";
-                    deviceInfo =                     {
-                        appVersion = "1.0.0";
-                        deviceType = iPhone;
-                        osVersion = "17.0";
-                    };
-                    endTime = "2025-07-22 11:48:47";
-                    environmentData =                     {
-                        humidity = 60;
-                        noiseLevel = 30;
-                        temperature = "22.5";
-                    };
-                    id = 67;
-                    localSessionId = "test_session_1753156127887";
-                    overallQuality = "<null>";
-                    processingStatus = failed;
-                    sleepEfficiency = "<null>";
-                    sleepQualityRating = 8;
-                    startTime = "2025-07-22 03:48:47";
-                    targetDuration = 480;
-                    targetWakeTime = "2025-07-22 11:48:47";
-                    "updated_at" = "2025-07-22 11:49:14";
-                    userId = 1;
-                    userNotes = "\U6d4b\U8bd5\U7761\U7720\U6570\U636e";
-                    wakeupMethod = natural;
-                },
-                                {
-                    actualDuration = "<null>";
-                    "created_at" = "2025-07-22 08:51:35";
-                    deviceInfo =                     {
-                        appVersion = "1.0";
-                        deviceType = iPhone;
-                        osVersion = "18.3.1";
-                    };
-                    endTime = "2025-07-22 08:51:35";
-                    environmentData =                     {
-                        humidity = 50;
-                        noiseLevel = 30;
-                        temperature = 22;
-                    };
-                    id = 66;
-                    localSessionId = "local_D10BB2F4-B42C-41C1-8EE6-D7ABD2523C9B";
-                    overallQuality = "<null>";
-                    processingStatus = failed;
-                    sleepEfficiency = "<null>";
-                    sleepQualityRating = 5;
-                    startTime = "2025-07-22 01:43:36";
-                    targetDuration = 480;
-                    targetWakeTime = "2025-07-22 09:43:36";
-                    "updated_at" = "2025-07-22 08:52:02";
-                    userId = 1;
-                    userNotes = "\U624b\U52a8\U7ed3\U675f";
-                    wakeupMethod = manual;
-                },
-                                {
-                    actualDuration = "<null>";
-                    "created_at" = "2025-07-21 21:42:39";
-                    deviceInfo =                     {
-                        appVersion = "1.0";
-                        deviceType = iPhone;
-                        osVersion = "18.3.1";
-                    };
-                    endTime = "2025-07-21 21:42:39";
-                    environmentData =                     {
-                        humidity = 50;
-                        noiseLevel = 30;
-                        temperature = 22;
-                    };
-                    id = 65;
-                    localSessionId = "local_6F352BC0-FEDA-4C4F-8041-A4B37551D110";
-                    overallQuality = "<null>";
-                    processingStatus = failed;
-                    sleepEfficiency = "<null>";
-                    sleepQualityRating = 5;
-                    startTime = "2025-07-21 21:39:43";
-                    targetDuration = 480;
-                    targetWakeTime = "2025-07-22 05:39:43";
-                    "updated_at" = "2025-07-21 21:43:07";
-                    userId = 1;
-                    userNotes = "\U624b\U52a8\U7ed3\U675f";
-                    wakeupMethod = manual;
-                },
-                                {
-                    actualDuration = "<null>";
-                    "created_at" = "2025-07-21 20:54:35";
-                    deviceInfo =                     {
-                        appVersion = "1.0";
-                        deviceType = iPhone;
-                        osVersion = "18.3.1";
-                    };
-                    endTime = "2025-07-21 20:54:35";
-                    environmentData =                     {
-                        humidity = 50;
-                        noiseLevel = 30;
-                        temperature = 22;
-                    };
-                    id = 64;
-                    localSessionId = "local_80C64E74-460B-4AAE-8F4C-2DA2C6B76015";
-                    overallQuality = "<null>";
-                    processingStatus = failed;
-                    sleepEfficiency = "<null>";
-                    sleepQualityRating = 5;
-                    startTime = "2025-07-21 20:48:04";
-                    targetDuration = 480;
-                    targetWakeTime = "2025-07-22 04:48:04";
-                    "updated_at" = "2025-07-21 20:55:01";
-                    userId = 1;
-                    userNotes = "\U624b\U52a8\U7ed3\U675f";
-                    wakeupMethod = manual;
-                }
-            );
-            recentSessions = 0;
-            totalSessions = 72;
-            weeklySessions = 0;
-        };
-        workoutSummary =         {
-            average3DayWorkouts = 0;
-            averageWeeklyWorkouts = 0;
-            lastWorkoutDate = "2025-09-19 16:38:12";
-            recentRecords =             (
-                                {
-                    averagePace = "2.41";
-                    calories = 3;
-                    "created_at" = "2025-09-19 16:38:12";
-                    deviceInfo =                     {
-                        appVersion = "1.0";
-                        dataSource = Manual;
-                        deviceModel = iPhone;
-                        deviceType = iPhone;
-                    };
-                    duration = 58;
-                    endTime = "2025-09-19 16:38:11";
-                    maxSpeed = "24.94";
-                    notes = "\U901a\U8fc7\U9752\U79be\U8ba1\U5212iOS\U5e94\U7528\U5b8c\U6210\U7684\U6b65\U884c\U8fd0\U52a8 - \U8ddd\U79bb\U57fa\U4e8e\U82f9\U679c\U5730\U56fe\U8def\U5f84\U8ba1\U7b97\Uff0c\U5fc3\U7387\U6570\U636e\U6765\U6e90\Uff1aHealthKit\U4f20\U611f\U5668";
-                    startTime = "2025-09-19 16:37:13";
-                    totalDistance = "0.40";
-                    totalSteps = 0;
-                    "updated_at" = "2025-09-19 16:38:12";
-                    userId = 1;
-                    weatherInfo = "<null>";
-                    workoutId = 171;
-                    workoutType = walking;
-                },
-                                {
-                    averagePace = "11.71";
-                    calories = 25;
-                    "created_at" = "2025-09-17 07:09:07";
-                    deviceInfo =                     {
-                        appVersion = "1.0";
-                        dataSource = Manual;
-                        deviceModel = iPhone;
-                        deviceType = iPhone;
-                    };
-                    duration = 379;
-                    endTime = "2025-09-17 07:09:06";
-                    maxSpeed = "5.12";
-                    notes = "\U901a\U8fc7\U9752\U79be\U8ba1\U5212iOS\U5e94\U7528\U5b8c\U6210\U7684\U6b65\U884c\U8fd0\U52a8 - \U8ddd\U79bb\U57fa\U4e8e\U82f9\U679c\U5730\U56fe\U8def\U5f84\U8ba1\U7b97\Uff0c\U5fc3\U7387\U6570\U636e\U6765\U6e90\Uff1aHealthKit\U4f20\U611f\U5668";
-                    startTime = "2025-09-17 07:02:47";
-                    totalDistance = "0.54";
-                    totalSteps = 698;
-                    "updated_at" = "2025-09-17 07:09:07";
-                    userId = 1;
-                    weatherInfo = "<null>";
-                    workoutId = 170;
-                    workoutType = walking;
-                },
-                                {
-                    averagePace = "16.27";
-                    calories = 2;
-                    "created_at" = "2025-09-16 12:35:02";
-                    deviceInfo =                     {
-                        appVersion = "1.0";
-                        dataSource = Manual;
-                        deviceModel = iPhone;
-                        deviceType = iPhone;
-                    };
-                    duration = 44;
-                    endTime = "2025-09-16 12:35:02";
-                    maxSpeed = "3.69";
-                    notes = "\U901a\U8fc7\U9752\U79be\U8ba1\U5212iOS\U5e94\U7528\U5b8c\U6210\U7684\U6b65\U884c\U8fd0\U52a8 - \U8ddd\U79bb\U57fa\U4e8e\U82f9\U679c\U5730\U56fe\U8def\U5f84\U8ba1\U7b97\Uff0c\U5fc3\U7387\U6570\U636e\U6765\U6e90\Uff1aHealthKit\U4f20\U611f\U5668";
-                    startTime = "2025-09-16 12:34:18";
-                    totalDistance = "0.05";
-                    totalSteps = 29;
-                    "updated_at" = "2025-09-16 12:35:02";
-                    userId = 1;
-                    weatherInfo = "<null>";
-                    workoutId = 169;
-                    workoutType = walking;
-                },
-                                {
-                    averagePace = "35.25";
-                    calories = 5;
-                    "created_at" = "2025-09-16 12:32:17";
-                    deviceInfo =                     {
-                        appVersion = "1.0";
-                        dataSource = Manual;
-                        deviceModel = iPhone;
-                        deviceType = iPhone;
-                    };
-                    duration = 80;
-                    endTime = "2025-09-16 12:32:16";
-                    maxSpeed = "1.70";
-                    notes = "\U901a\U8fc7\U9752\U79be\U8ba1\U5212iOS\U5e94\U7528\U5b8c\U6210\U7684\U6b65\U884c\U8fd0\U52a8 - \U8ddd\U79bb\U57fa\U4e8e\U82f9\U679c\U5730\U56fe\U8def\U5f84\U8ba1\U7b97\Uff0c\U5fc3\U7387\U6570\U636e\U6765\U6e90\Uff1aHealthKit\U4f20\U611f\U5668";
-                    startTime = "2025-09-16 12:30:56";
-                    totalDistance = "0.04";
-                    totalSteps = 0;
-                    "updated_at" = "2025-09-16 12:32:17";
-                    userId = 1;
-                    weatherInfo = "<null>";
-                    workoutId = 168;
-                    workoutType = walking;
-                },
-                                {
-                    averagePace = "8.36";
-                    calories = 3;
-                    "created_at" = "2025-09-15 22:52:27";
-                    deviceInfo =                     {
-                        appVersion = "1.0";
-                        dataSource = Manual;
-                        deviceModel = iPhone;
-                        deviceType = iPhone;
-                    };
-                    duration = 52;
-                    endTime = "2025-09-15 22:52:26";
-                    maxSpeed = "7.17";
-                    notes = "\U901a\U8fc7\U9752\U79be\U8ba1\U5212iOS\U5e94\U7528\U5b8c\U6210\U7684\U6b65\U884c\U8fd0\U52a8 - \U8ddd\U79bb\U57fa\U4e8e\U82f9\U679c\U5730\U56fe\U8def\U5f84\U8ba1\U7b97\Uff0c\U5fc3\U7387\U6570\U636e\U6765\U6e90\Uff1aHealthKit\U4f20\U611f\U5668";
-                    startTime = "2025-09-15 22:51:34";
-                    totalDistance = "0.10";
-                    totalSteps = 14;
-                    "updated_at" = "2025-09-15 22:52:27";
-                    userId = 1;
-                    weatherInfo = "<null>";
-                    workoutId = 167;
-                    workoutType = walking;
-                },
-                                {
-                    averagePace = "0.00";
-                    calories = 0;
-                    "created_at" = "2025-09-15 20:07:44";
-                    deviceInfo =                     {
-                        appVersion = "1.0";
-                        dataSource = Manual;
-                        deviceModel = iPhone;
-                        deviceType = iPhone;
-                    };
-                    duration = 185;
-                    endTime = "2025-09-15 20:07:44";
-                    maxSpeed = "0.00";
-                    notes = "\U901a\U8fc7\U9752\U79be\U8ba1\U5212iOS\U5e94\U7528\U5b8c\U6210\U7684\U6b65\U884c\U8fd0\U52a8 - \U8ddd\U79bb\U57fa\U4e8e\U82f9\U679c\U5730\U56fe\U8def\U5f84\U8ba1\U7b97";
-                    startTime = "2025-09-15 20:04:39";
-                    totalDistance = "0.00";
-                    totalSteps = 0;
-                    "updated_at" = "2025-09-15 20:07:44";
-                    userId = 1;
-                    weatherInfo = "<null>";
-                    workoutId = 166;
-                    workoutType = walking;
-                },
-                                {
-                    averagePace = "0.00";
-                    calories = 0;
-                    "created_at" = "2025-09-15 19:58:14";
-                    deviceInfo =                     {
-                        appVersion = "1.0";
-                        dataSource = Manual;
-                        deviceModel = iPhone;
-                        deviceType = iPhone;
-                    };
-                    duration = 31;
-                    endTime = "2025-09-15 19:58:13";
-                    maxSpeed = "0.00";
-                    notes = "\U901a\U8fc7\U9752\U79be\U8ba1\U5212iOS\U5e94\U7528\U5b8c\U6210\U7684\U6b65\U884c\U8fd0\U52a8 - \U8ddd\U79bb\U57fa\U4e8e\U82f9\U679c\U5730\U56fe\U8def\U5f84\U8ba1\U7b97";
-                    startTime = "2025-09-15 19:57:42";
-                    totalDistance = "0.00";
-                    totalSteps = 0;
-                    "updated_at" = "2025-09-15 19:58:14";
-                    userId = 1;
-                    weatherInfo = "<null>";
-                    workoutId = 165;
-                    workoutType = walking;
-                },
-                                {
-                    averagePace = "0.00";
-                    calories = 0;
-                    "created_at" = "2025-09-15 18:25:45";
-                    deviceInfo =                     {
-                        appVersion = "1.0";
-                        dataSource = Manual;
-                        deviceModel = iPhone;
-                        deviceType = iPhone;
-                    };
-                    duration = 751;
-                    endTime = "2025-09-15 18:25:44";
-                    maxSpeed = "0.00";
-                    notes = "\U901a\U8fc7\U9752\U79be\U8ba1\U5212iOS\U5e94\U7528\U5b8c\U6210\U7684\U6b65\U884c\U8fd0\U52a8 - \U8ddd\U79bb\U57fa\U4e8e\U82f9\U679c\U5730\U56fe\U8def\U5f84\U8ba1\U7b97";
-                    startTime = "2025-09-15 18:13:13";
-                    totalDistance = "0.00";
-                    totalSteps = 1258;
-                    "updated_at" = "2025-09-15 18:25:45";
-                    userId = 1;
-                    weatherInfo = "<null>";
-                    workoutId = 164;
-                    workoutType = walking;
-                },
-                                {
-                    averagePace = "0.00";
-                    calories = 0;
-                    "created_at" = "2025-09-14 05:06:00";
-                    deviceInfo =                     {
-                        appVersion = "1.0";
-                        dataSource = Manual;
-                        deviceModel = iPhone;
-                        deviceType = iPhone;
-                    };
-                    duration = 40;
-                    endTime = "2025-09-14 05:06:00";
-                    maxSpeed = "0.00";
-                    notes = "\U901a\U8fc7\U9752\U79be\U8ba1\U5212iOS\U5e94\U7528\U5b8c\U6210\U7684\U6b65\U884c\U8fd0\U52a8 - \U8ddd\U79bb\U57fa\U4e8e\U82f9\U679c\U5730\U56fe\U8def\U5f84\U8ba1\U7b97";
-                    startTime = "2025-09-14 05:05:20";
-                    totalDistance = "0.00";
-                    totalSteps = 0;
-                    "updated_at" = "2025-09-14 05:06:00";
-                    userId = 1;
-                    weatherInfo = "<null>";
-                    workoutId = 163;
-                    workoutType = walking;
-                },
-                                {
-                    averagePace = "0.00";
-                    calories = 0;
-                    "created_at" = "2025-09-13 18:04:35";
-                    deviceInfo =                     {
-                        appVersion = "1.0";
-                        dataSource = Manual;
-                        deviceModel = iPhone;
-                        deviceType = iPhone;
-                    };
-                    duration = 271;
-                    endTime = "2025-09-13 18:04:34";
-                    maxSpeed = "0.00";
-                    notes = "\U901a\U8fc7\U9752\U79be\U8ba1\U5212iOS\U5e94\U7528\U5b8c\U6210\U7684\U6b65\U884c\U8fd0\U52a8 - \U8ddd\U79bb\U57fa\U4e8e\U82f9\U679c\U5730\U56fe\U8def\U5f84\U8ba1\U7b97";
-                    startTime = "2025-09-13 18:00:03";
-                    totalDistance = "0.00";
-                    totalSteps = 0;
-                    "updated_at" = "2025-09-13 18:04:35";
-                    userId = 1;
-                    weatherInfo = "<null>";
-                    workoutId = 162;
-                    workoutType = walking;
-                }
-            );
-            recentWorkouts = 0;
-            totalWorkouts = 143;
-            weeklyWorkouts = 0;
-        };
-    };
-    generatedAt = "2025-09-29T15:43:15.611Z";
-    healthOverview =     {
-        currentSolarTerm = "\U79cb\U5206";
-        healthLevel = good;
-        overallScore = 80;
-        primaryConstitution = "\U5e73\U548c\U8d28";
-    };
-    healthTrends =     {
-        exercise = stable;
-        overall = stable;
-        sleep = "needs_improvement";
-    };
-    nextUpdateSuggested = "2025-10-02T15:43:15.611Z";
-    recommendations =     {
-        constitution =         {
-            diet =             (
-                "\U5747\U8861\U996e\U98df",
-                "\U4e94\U8c37\U6742\U7cae",
-                "\U65b0\U9c9c\U852c\U679c",
-                "\U9002\U91cf\U8089\U7c7b",
-                "\U8865\U6c14\U98df\U7269",
-                "\U5c71\U836f",
-                "\U5927\U67a3",
-                "\U9ec4\U82aa",
-                "\U4eba\U53c2"
-            );
-            emotional =             (
-                "\U4fdd\U6301\U4e50\U89c2",
-                "\U5fc3\U6001\U5e73\U548c"
-            );
-            exercise =             (
-                "\U9002\U5ea6\U8fd0\U52a8",
-                "\U592a\U6781\U62f3",
-                "\U6162\U8dd1",
-                "\U6e38\U6cf3",
-                "\U8f7b\U5ea6\U8fd0\U52a8",
-                "\U6563\U6b65",
-                "\U516b\U6bb5\U9526",
-                "\U907f\U514d\U5267\U70c8\U8fd0\U52a8"
-            );
-            lifestyle =             (
-                "\U89c4\U5f8b\U4f5c\U606f",
-                "\U4fdd\U6301\U5fc3\U60c5\U6109\U5feb",
-                "\U9002\U5ea6\U5de5\U4f5c"
-            );
-        };
-        fiveElements =         {
-            dietTherapy =             {
-                comprehensive =                 (
-                    "\U4e94\U8c37\U6742\U7cae",
-                    "\U65b0\U9c9c\U852c\U679c",
-                    "\U9002\U91cf\U8089\U7c7b",
-                    "\U5747\U8861\U8425\U517b",
-                    "\U767d\U8272\U98df\U7269",
-                    "\U8f9b\U5473\U98df\U7269",
-                    "\U6da6\U80ba\U98df\U54c1",
-                    "\U9002\U5ea6\U8865\U76ca",
-                    "\U589e\U5f3a\U8425\U517b"
-                );
-                "constitution_based" =                 (
-                    "\U4e94\U8c37\U6742\U7cae",
-                    "\U65b0\U9c9c\U852c\U679c",
-                    "\U9002\U91cf\U8089\U7c7b",
-                    "\U5747\U8861\U8425\U517b"
-                );
-                "relation_based" =                 (
-                    "\U9002\U5ea6\U8865\U76ca",
-                    "\U589e\U5f3a\U8425\U517b"
-                );
-                seasonal =                 (
-                    "\U767d\U8272\U98df\U7269",
-                    "\U8f9b\U5473\U98df\U7269",
-                    "\U6da6\U80ba\U98df\U54c1"
-                );
-            };
-            diseaseRiskPrediction =             {
-                "constitution_risks" =                 (
-                    "\U5e73\U548c\U8d28\U6613\U60a3\U75be\U75c5"
-                );
-                "prevention_advice" =                 (
-                    "\U9884\U9632\U5efa\U8bae"
-                );
-                "relation_risks" =                 (
-                    "\U4f53\U8d28\U4e0e\U8fd0\U6c14\U5173\U7cfb\U4e0d\U660e\U786e\Uff0c\U5efa\U8bae\U5747\U8861\U8c03\U517b"
-                );
-                "seasonal_risks" =                 (
-                    "\U79cb\U5206\U6613\U53d1\U75be\U75c5"
-                );
-            };
-            emotionalCare =             {
-                "constitution_advice" =                 (
-                    "\U5e73\U548c\U8d28\U60c5\U5fd7\U8c03\U517b\U5efa\U8bae"
-                );
-                meditation =                 (
-                    "\U5e73\U548c\U8d28\U51a5\U60f3\U5efa\U8bae"
-                );
-                "music_therapy" =                 (
-                    "\U5e73\U548c\U8d28\U97f3\U4e50\U7597\U6cd5"
-                );
-                "seasonal_advice" =                 (
-                    "\U79cb\U5206\U60c5\U5fd7\U8c03\U517b"
-                );
-            };
-            exerciseAdvice =             {
-                "constitution_based" =                 (
-                    "\U9002\U5ea6\U8fd0\U52a8",
-                    "\U592a\U6781\U62f3",
-                    "\U6162\U8dd1",
-                    "\U6e38\U6cf3"
-                );
-                intensity = "\U9002\U5ea6\U5f3a\U5ea6";
-                "recommended_time" = "\U4e0b\U53483-5\U70b9\Uff0c\U80ba\U7ecf\U5f53\U4ee4";
-                seasonal =                 (
-                    "\U547c\U5438\U8fd0\U52a8",
-                    "\U80ba\U90e8\U953b\U70bc",
-                    "\U907f\U514d\U5e72\U71e5"
-                );
-            };
-            healthTips =             {
-                "constitution_tips" =                 (
-                    "\U5e73\U548c\U8d28\U4fdd\U5065\U8981\U70b9"
-                );
-                "daily_tips" =                 (
-                    "\U5e73\U548c\U8d28\U65e5\U5e38\U4fdd\U5065"
-                );
-                "five_elements_tips" =                 (
-                    "\U4e94\U8fd0\U516d\U6c14\U517b\U751f\U8981\U70b9"
-                );
-                "seasonal_tips" =                 (
-                    "\U79cb\U5206\U517b\U751f\U8981\U70b9"
-                );
-            };
-            lifestyleAdvice =             {
-                "daily_routine" =                 (
-                    "\U5e73\U548c\U8d28\U65e5\U5e38\U8d77\U5c45"
-                );
-                environment =                 (
-                    "\U5e73\U548c\U8d28\U73af\U5883\U8c03\U8282"
-                );
-                "seasonal_care" =                 (
-                    "\U79cb\U5206\U8d77\U5c45\U8c03\U6444"
-                );
-                "sleep_schedule" = "\U79cb\U5206\U4f5c\U606f\U5efa\U8bae";
-            };
-        };
-        immediate =         (
-            "\U8c03\U6574\U996e\U98df\U7ed3\U6784\Uff0c\U63a7\U5236\U4f53\U91cd"
-        );
-        lifestyle =         (
-            "\U589e\U52a0\U8fd0\U52a8\U9891\U7387\Uff0c\U5efa\U8bae\U6bcf\U5468\U81f3\U5c113\U6b21\U6709\U6c27\U8fd0\U52a8",
-            "\U6539\U5584\U7761\U7720\U8d28\U91cf\Uff0c\U4fdd\U6301\U89c4\U5f8b\U4f5c\U606f"
-        );
-        longTerm =         (
-            "\U5efa\U7acb\U5065\U5eb7\U7684\U751f\U6d3b\U65b9\U5f0f",
-            "\U5b9a\U671f\U8fdb\U884c\U5065\U5eb7\U68c0\U67e5",
-            "\U4fdd\U6301\U826f\U597d\U7684\U5fc3\U7406\U72b6\U6001",
-            "\U57f9\U517b\U8fd0\U52a8\U4e60\U60ef"
-        );
-        priority = low;
-    };
-    reportId = "HR_1759160595611_1";
-    reportType = comprehensive;
-    riskAssessment =     (
-                {
-            advice = "\U589e\U52a0\U8fd0\U52a8\U9891\U7387";
-            factor = "\U8fd0\U52a8\U4e0d\U8db3";
-            level = low;
-        }
-    );
-    userInfo =     {
-        age = 21;
-        gender = male;
-        memberSince = "2025-06-21 20:14:38";
-        userId = 1;
-        username = "\U674e\U65ed\U6770";
-    };
-}, "msg": 获取成功, "success": 1]
+NetworkManager.request 开始
+🔍 baseURL: 'https://api.qinghejihua.com.cn/api/v1'
+🔍 endpoint: '/health/profile'
+🔍 method: GET
+🔍 完整请求URL: 'https://api.qinghejihua.com.cn/api/v1/health/profile'
+🔍 URL长度: 52
+========================================
+🔍 HTTP方法: GET
+🔄 HealthProfileDataManager 乐观更新日期: 2025-10-04
+========================================
+🔍 NetworkManager.request 开始
+🔍 baseURL: 'https://api.qinghejihua.com.cn/api/v1'
+🔍 endpoint: '/health/five-elements/current'
+🔍 method: GET
+🔍 完整请求URL: 'https://api.qinghejihua.com.cn/api/v1/health/five-elements/current'
+🔍 URL长度: 66
+========================================
+🔍 HTTP方法: GET
+🔄 HealthProfileDataManager 乐观更新日期: 2025-10-04
+🔄 HealthProfileDataManager 乐观更新日期: 2025-10-04
+========================================
+🔍 NetworkManager.request 开始
+🔍 baseURL: 'https://api.qinghejihua.com.cn/api/v1'
+🔍 endpoint: '/health/five-elements/current'
+🔍 method: GET
+🔍 完整请求URL: 'https://api.qinghejihua.com.cn/api/v1/health/five-elements/current'
+🔍 URL长度: 66
+========================================
+🔍 HTTP方法: GET
+========================================
+🔍 NetworkManager.request 开始
+🔄 HealthProfileDataManager 乐观更新日期: 2025-10-04
+🔍 baseURL: 'https://api.qinghejihua.com.cn/api/v1'
+🔍 endpoint: '/health/profile'
+========================================
+🔍 method: GET
+🔍 完整请求URL: 'https://api.qinghejihua.com.cn/api/v1/health/profile'
+🔍 URL长度: 52
+========================================
+🔍 NetworkManager.request 开始
+🔍 baseURL: 'https://api.qinghejihua.com.cn/api/v1'
+========================================
+🔍 NetworkManager.request 开始
+🔍 baseURL: 'https://api.qinghejihua.com.cn/api/v1'
+🔍 endpoint: '/health/five-elements/current'
+🔍 method: GET
+========================================
+🔍 NetworkManager.request 开始
+🔍 baseURL: 'https://api.qinghejihua.com.cn/api/v1'
+🔍 endpoint: '/health/profile'
+🔍 method: GET
+🔍 完整请求URL: 'https://api.qinghejihua.com.cn/api/v1/health/profile'
+🔍 URL长度: 52
+========================================
+========================================
+🔍 NetworkManager.request 开始
+🔍 baseURL: 'https://api.qinghejihua.com.cn/api/v1'
+🔍 endpoint: '/health/five-elements/current'
+🔍 method: GET
+🔍 完整请求URL: 'https://api.qinghejihua.com.cn/api/v1/health/five-elements/current'
+🔍 URL长度: 66
+🔍 endpoint: '/health/profile'
+🔍 method: GET
+🔍 完整请求URL: 'https://api.qinghejihua.com.cn/api/v1/health/profile'
+🔍 URL长度: 52
+========================================
+🔍 完整请求URL: 'https://api.qinghejihua.com.cn/api/v1/health/five-elements/current'
+🔍 URL长度: 66
+========================================
+🔍 HTTP方法: GET
+🔍 HTTP方法: GET
+🔍 HTTP方法: GET
+========================================
+🔍 HTTP方法: GET
+🔍 HTTP方法: GET
+========================================
+========================================
+========================================
+🔍 NetworkManager.request 开始
+🔍 NetworkManager.request 开始
+🔍 baseURL: 'https://api.qinghejihua.com.cn/api/v1'
+🔍 NetworkManager.request 开始
+🔍 baseURL: 'https://api.qinghejihua.com.cn/api/v1'
+🔍 endpoint: '/health/report/generate'
+========================================
+🔍 NetworkManager.request 开始
+🔍 baseURL: 'https://api.qinghejihua.com.cn/api/v1'
+🔍 endpoint: '/health/report/generate'
+🔍 baseURL: 'https://api.qinghejihua.com.cn/api/v1'
+🔍 endpoint: '/health/report/generate'
+🔍 endpoint: '/health/report/generate'
+🔍 method: POST
+🔍 method: POST
+🔍 method: POST
+🔍 完整请求URL: 'https://api.qinghejihua.com.cn/api/v1/health/report/generate'
+🔍 URL长度: 60
+========================================
+🔍 完整请求URL: 'https://api.qinghejihua.com.cn/api/v1/health/report/generate'
+🔍 URL长度: 60
+========================================
+🔍 HTTP方法: POST
+🔍 method: POST
+🔍 完整请求URL: 'https://api.qinghejihua.com.cn/api/v1/health/report/generate'
+🔍 URL长度: 60
+========================================
+🔍 完整请求URL: 'https://api.qinghejihua.com.cn/api/v1/health/report/generate'
+🔍 URL长度: 60
+========================================
+🔍 HTTP方法: POST
+📤 实际发送的JSON: {"reportType":"comprehensive"}
+📤 JSON字节数: 30
+📤 实际发送的JSON: {"reportType":"comprehensive"}
+📤 JSON字节数: 30
+🔍 HTTP方法: POST
+🔍 HTTP方法: POST
+📤 实际发送的JSON: {"reportType":"comprehensive"}
+📤 JSON字节数: 30
+📤 实际发送的JSON: {"reportType":"comprehensive"}
+📤 JSON字节数: 30
+🔍 服务器响应: {"success":true,"data":{"lunarInfo":{"year":2025,"month":10,"day":4,"yearStem":"乙","yearBranch":"巳","monthStem":"丁","monthBranch":"亥","dayStem":"丙","dayBranch":"申"},"fiveMovements":{"element":"金","nature":"不及","characteristics":{"traits":["火气制金","肺气不足"],"symptoms":["气短乏力","易感外邪"]},"influence":"肺气不足，易感外邪，宜补益肺气"},"sixQi":{"qi":"厥阴风木","season":"立夏","characteristics":{"nature":"风","traits":["主动","主升"],"organs":["肝","胆"]},"influence":"风气主令，易发肝胆疾病，注意疏肝理气"},"hostGuestMovements":{"hostMovements":[{"period":"第1步","element":"土","nature":"常运","duration":"73天5刻"},{"period":"第2步","element":"金","nature":"常运","duration":"73天5刻"},{"period":"第3步","element":"水","nature":"中运","duration":"73天5刻"},{"period":"第4步","element":"木","nature":"常运","duration":"73天5刻"},{"period":"第5步","element":"火","nature":"常运","duration":"73天5刻"}],"guestMovement":{"element":"金","nature":"不及","influence":"肺气不足，易感外邪，宜补益肺气"}},"hostGuestQi":{"hostQi":[{"name":"厥阴风木","period":"初之气","season":"春分前后"},{"name":"少阴君火","period":"二之气","season":"小满前后"},{"name":"少阳相火","period":"三之气","season":"大暑前后"},{"name":"太阴湿土","period":"四之气","season":"秋分前后"},{"name":"阳明燥金","period":"五之气","season":"小雪前后"},{"name":"太阳寒水","period":"终之气","season":"大寒前后"}],"guestQi":{"name":"厥阴风木","influence":"风气主令，易发肝胆疾病，注意疏肝理气","characteristics":{"nature":"风","traits":["主动","主升"],"organs":["肝","胆"]}}},"qiMovementCombination":{"movementElement":"金","qiElement":"木","relation":{"type":"相克","description":"体质克当前运气，易过度消耗，宜节制"},"influence":"运气制约体质，易生疾病，宜预防调理","healthImpact":{"level":"fair","advice":"注意预防，及时调理"}},"currentSolarTerm":"秋分","solarTermCharacteristics":{"element":"金","nature":"平衡","advice":"平补肺肾，调和阴阳"},"personalizedAdvice":{"dietTherapy":{"constitution_based":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养"],"seasonal":["白色食物","辛味食物","润肺食品"],"relation_based":["适度补益","增强营养"],"comprehensive":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养","白色食物","辛味食物","润肺食品","适度补益","增强营养"]},"exerciseAdvice":{"constitution_based":["适度运动","太极拳","慢跑","游泳"],"seasonal":["呼吸运动","肺部锻炼","避免干燥"],"recommended_time":"下午3-5点，肺经当令","intensity":"适度强度"},"emotionalCare":{"constitution_advice":["阴虚体质、湿热体质情志调养建议"],"seasonal_advice":["秋分情志调养"],"meditation":["阴虚体质、湿热体质冥想建议"],"music_therapy":["阴虚体质、湿热体质音乐疗法"]},"lifestyleAdvice":{"sleep_schedule":"秋分作息建议","daily_routine":["阴虚体质、湿热体质日常起居"],"environment":["阴虚体质、湿热体质环境调节"],"seasonal_care":["秋分起居调摄"]},"diseaseRiskPrediction":{"constitution_risks":["阴虚体质、湿热体质易患疾病"],"seasonal_risks":["秋分易发疾病"],"relation_risks":["体质与运气关系不明确，建议均衡调养"],"prevention_advice":["预防建议"]},"healthTips":{"daily_tips":["阴虚体质、湿热体质日常保健"],"seasonal_tips":["秋分养生要点"],"constitution_tips":["阴虚体质、湿热体质保健要点"],"five_elements_tips":["五运六气养生要点"]}},"constitutionMatch":{"constitution":"阴虚体质、湿热体质","constitutionElement":"土","movementMatch":{"element":"金","relation":"相生","score":70,"description":"体质生当前运气，消耗较大，宜补益"},"qiMatch":{"element":"木","relation":"被克","score":30,"description":"当前运气克体质，易生疾病，宜防护"},"overallScore":50,"overallLevel":"fair","recommendations":["当前时期需要特别注意调养","建议咨询中医师制定个性化调理方案"]},"userConstitution":"阴虚体质、湿热体质","analysisId":1074}}
+📡 HTTP状态码: 200
+🔍 服务器响应: {"success":true,"data":{"healthProfile":{"id":"1","userId":1,"height":null,"weight":null,"bloodType":"unknown","primaryConstitution":"阴虚体质、湿热体质","secondaryConstitution":null,"constitutionScore":null,"healthMetrics":{"age":21,"bmi":null,"gender":"male","sleepScore":40,"overallScore":29,"activityLevel":"lightly_active","exerciseScore":60,"lastCalculated":"2025-10-04T12:36:29.899Z","sleepQualityLevel":"poor"},"latestTongueAnalysis":{"analyzedAt":"2025-10-04T12:36:32.297Z","constitutionScore":85,"primaryConstitution":"平和质"},"latestFaceAnalysis":{"analyzedAt":"2025-10-04T12:39:08.197Z","confidenceScore":94,"primaryConclusion":"血瘀体质、血虚体质"},"sleepDataSummary":{"records":[{"endTime":"2025-10-05T08:00:00.000Z","sleepDate":"2025-10-05","startTime":"2025-10-05T01:00:00.000Z","userNotes":null,"dataSource":"manual","uploadedAt":"2025-10-04T12:36:29.866Z","sleepStages":null,"movementData":null,"sleepQuality":4.5,"awakeDuration":null,"heartRateData":null,"sleepDuration":420,"environmentData":null,"sleepEfficiency":null,"remSleepDuration":null,"deepSleepDuration":null,"lightSleepDuration":null},{"endTime":"2025-10-04T12:27:01.749Z","sleepDate":"2025-10-04","startTime":"2025-10-04T12:24:54.525Z","userNotes":null,"dataSource":"manual","uploadedAt":"2025-10-04T12:27:43.171Z","sleepStages":null,"movementData":null,"sleepQuality":5.3,"awakeDuration":null,"heartRateData":null,"sleepDuration":2,"environmentData":null,"sleepEfficiency":null,"remSleepDuration":null,"deepSleepDuration":null,"lightSleepDuration":null},{"endTime":"2025-10-04T02:00:00.000Z","sleepDate":"2025-10-03","startTime":"2025-10-03T23:00:00.000Z","userNotes":null,"dataSource":"manual","uploadedAt":"2025-10-04T12:15:12.268Z","sleepStages":null,"movementData":null,"sleepQuality":4.5,"awakeDuration":null,"heartRateData":null,"sleepDuration":180,"environmentData":null,"sleepEfficiency":null,"remSleepDuration":30,"deepSleepDuration":60,"lightSleepDuration":90}],"updatedAt":"2025-10-04T04:21:33.439Z","lastUpdated":"2025-10-04T12:36:29.866Z","sleepPattern":"poor","totalRecords":3,"lastSleepDate":"2025-07-23 18:32:30","recentRecords":[{"id":"73","endTime":"2025-07-23 18:32:36","startTime":"2025-07-23 18:32:30","sleepStages":[{"duration":90,"stageType":"light"},{"duration":120,"stageType":"deep"},{"duration":90,"stageType":"rem"},{"duration":30,"stageType":"light"}],"actualDuration":null,"targetDuration":480,"sleepEfficiency":null,"sleepQualityRating":5},{"id":"72","endTime":"2025-07-23 18:30:55","startTime":"2025-07-23 18:30:44","sleepStages":[{"duration":90,"stageType":"light"},{"duration":120,"stageType":"deep"},{"duration":90,"stageType":"rem"},{"duration":30,"stageType":"light"}],"actualDuration":null,"targetDuration":480,"sleepEfficiency":null,"sleepQualityRating":5},{"id":"71","endTime":"2025-07-22 15:49:10","startTime":"2025-07-22 15:49:03","sleepStages":[{"duration":90,"stageType":"light"},{"duration":120,"stageType":"deep"},{"duration":90,"stageType":"rem"},{"duration":30,"stageType":"light"}],"actualDuration":null,"targetDuration":480,"sleepEfficiency":null,"sleepQualityRating":5},{"id":"70","endTime":"2025-07-22 13:29:20","startTime":"2025-07-22 05:29:20","sleepStages":[],"actualDuration":480,"targetDuration":480,"sleepEfficiency":null,"sleepQualityRating":null},{"id":"69","endTime":"2025-07-22 13:27:58","startTime":"2025-07-22 05:27:58","sleepStages":[],"actualDuration":480,"targetDuration":480,"sleepEfficiency":null,"sleepQualityRating":null}],"totalSessions":72,"recentSessions":0,"weeklySessions":0,"sleepConsistency":0,"sleepStageAnalysis":{"averageRemSleep":90,"averageDeepSleep":120,"averageLightSleep":169.63,"remSleepPercentage":24,"deepSleepPercentage":32,"lightSleepPercentage":45},"averageSleepQuality":4.77,"averageSleepDuration":3.34,"averageSleepEfficiency":0},"workoutDataSummary":{"updatedAt":"2025-10-04T04:21:33.374Z","workoutTypes":{"walking":10},"recentRecords":[{"endTime":"2025-10-04 12:21:32","calories":1,"duration":27,"startTime":"2025-10-04 12:21:05","workoutId":"172","workoutType":"walking","totalDistance":"0.04","advancedMetrics":{"maxHeartRate":95,"averageHeartRate":75}},{"endTime":"2025-09-19 16:38:11","calories":3,"duration":58,"startTime":"2025-09-19 16:37:13","workoutId":"171","workoutType":"walking","totalDistance":"0.40","advancedMetrics":{"maxHeartRate":95,"averageHeartRate":75}},{"endTime":"2025-09-17 07:09:06","calories":25,"duration":379,"startTime":"2025-09-17 07:02:47","workoutId":"170","workoutType":"walking","totalDistance":"0.54","advancedMetrics":{"maxHeartRate":95,"averageHeartRate":75}},{"endTime":"2025-09-16 12:35:02","calories":2,"duration":44,"startTime":"2025-09-16 12:34:18","workoutId":"169","workoutType":"walking","totalDistance":"0.05","advancedMetrics":{"maxHeartRate":95,"averageHeartRate":75}},{"endTime":"2025-09-16 12:32:16","calories":5,"duration":80,"startTime":"2025-09-16 12:30:56","workoutId":"168","workoutType":"walking","totalDistance":"0.04","advancedMetrics":{"maxHeartRate":95,"averageHeartRate":75}}],"totalCalories":39,"totalDistance":"00.040.400.540.050.040.100.000.000.000.00","totalWorkouts":144,"recentWorkouts":19,"weeklyWorkouts":1,"averageDuration":165,"lastWorkoutDate":"2025-10-04 12:21:05","averageHeartRate":75,"workoutFrequency":"lightly_active"},"fiveElementsMatch":{"sixQi":{"qi":"厥阴风木","season":"立夏","influence":"风气主令，易发肝胆疾病，注意疏肝理气","characteristics":{"nature":"风","organs":["肝","胆"],"traits":["主动","主升"]}},"analysisId":1067,"lastUpdated":"2025-10-04T12:40:40.144Z","analysisDate":"2025-10-04T12:40:40.144Z","fiveMovements":{"nature":"不及","element":"金","influence":"肺气不足，易感外邪，宜补益肺气","characteristics":{"traits":["火气制金","肺气不足"],"symptoms":["气短乏力","易感外邪"]}},"constitutionMatch":{"qiMatch":{"score":30,"element":"木","relation":"被克","description":"当前运气克体质，易生疾病，宜防护"},"constitution":"阴虚体质、湿热体质","overallLevel":"fair","overallScore":50,"movementMatch":{"score":70,"element":"金","relation":"相生","description":"体质生当前运气，消耗较大，宜补益"},"recommendations":["当前时期需要特别注意调养","建议咨询中医师制定个性化调理方案"],"constitutionElement":"土"},"personalizedAdvice":{"healthTips":{"daily_tips":["阴虚体质、湿热体质日常保健"],"seasonal_tips":["秋分养生要点"],"constitution_tips":["阴虚体质、湿热体质保健要点"],"five_elements_tips":["五运六气养生要点"]},"dietTherapy":{"seasonal":["白色食物","辛味食物","润肺食品"],"comprehensive":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养","白色食物","辛味食物","润肺食品","适度补益","增强营养"],"relation_based":["适度补益","增强营养"],"constitution_based":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养"]},"emotionalCare":{"meditation":["阴虚体质、湿热体质冥想建议"],"music_therapy":["阴虚体质、湿热体质音乐疗法"],"seasonal_advice":["秋分情志调养"],"constitution_advice":["阴虚体质、湿热体质情志调养建议"]},"exerciseAdvice":{"seasonal":["呼吸运动","肺部锻炼","避免干燥"],"intensity":"适度强度","recommended_time":"下午3-5点，肺经当令","constitution_based":["适度运动","太极拳","慢跑","游泳"]},"lifestyleAdvice":{"environment":["阴虚体质、湿热体质环境调节"],"daily_routine":["阴虚体质、湿热体质日常起居"],"seasonal_care":["秋分起居调摄"],"sleep_schedule":"秋分作息建议"},"diseaseRiskPrediction":{"relation_risks":["体质与运气关系不明确，建议均衡调养"],"seasonal_risks":["秋分易发疾病"],"prevention_advice":["预防建议"],"constitution_risks":["阴虚体质、湿热体质易患疾病"]}}},"healthRiskAssessment":null,"personalizedAdvice":{"longTerm":["建立健康的生活方式","定期进行健康检查","保持良好的心理状态","培养运动习惯"],"priority":"high","immediate":["立即咨询医生，进行全面体检","调整饮食结构，控制体重"],"lifestyle":["增加运动频率，建议每周至少3次有氧运动","改善睡眠质量，保持规律作息"],"constitution":{"diet":["均衡饮食","五谷杂粮","新鲜蔬果","适量肉类","补气食物","山药","大枣","黄芪","人参"],"exercise":["适度运动","太极拳","慢跑","游泳","轻度运动","散步","八段锦","避免剧烈运动"],"emotional":["保持乐观","心态平和"],"lifestyle":["规律作息","保持心情愉快","适度工作"]},"fiveElements":{"healthTips":{"daily_tips":["平和质日常保健"],"seasonal_tips":["秋分养生要点"],"constitution_tips":["平和质保健要点"],"five_elements_tips":["五运六气养生要点"]},"dietTherapy":{"seasonal":["白色食物","辛味食物","润肺食品"],"comprehensive":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养","白色食物","辛味食物","润肺食品","适度补益","增强营养"],"relation_based":["适度补益","增强营养"],"constitution_based":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养"]},"emotionalCare":{"meditation":["平和质冥想建议"],"music_therapy":["平和质音乐疗法"],"seasonal_advice":["秋分情志调养"],"constitution_advice":["平和质情志调养建议"]},"exerciseAdvice":{"seasonal":["呼吸运动","肺部锻炼","避免干燥"],"intensity":"适度强度","recommended_time":"下午3-5点，肺经当令","constitution_based":["适度运动","太极拳","慢跑","游泳"]},"lifestyleAdvice":{"environment":["平和质环境调节"],"daily_routine":["平和质日常起居"],"seasonal_care":["秋分起居调摄"],"sleep_schedule":"秋分作息建议"},"diseaseRiskPrediction":{"relation_risks":["体质与运气关系不明确，建议均衡调养"],"seasonal_risks":["秋分易发疾病"],"prevention_advice":["预防建议"],"constitution_risks":["平和质易患疾病"]}}},"caregiverPlan":null,"overallHealthScore":53,"healthLevel":"poor","lastUpdated":"2025-10-04 20:40:40","nextUpdateSuggested":"2025-10-07 20:40:40","created_at":"2025-09-21 16:42:52","updated_at":"2025-10-04 20:40:40"},"latestTongueAnalysis":{"id":"266","userId":1,"originalImageUrl":"https://example.com/invalid.jpg","cutTongueUrl":"","analysisStatus":"completed","constitutionAnalysis":{"score":85,"warning":"继续保持良好的生活习惯，注意劳逸结合","features":[{"desc":"面色红润有光泽，气色良好","name":"面色","value":"红润","status":"正常","confidence":0.85}],"symptoms":"面色红润、精力充沛、睡眠良好、食欲正常","description":"体质均衡，各脏腑功能协调，精神饱满，是最理想的体质状态。","constitution":"平和质","distribution":[{"name":"平和质","score":85}],"detectMatches":null},"tongueCharacteristics":{"cracks":"无","features":[{"desc":"面色红润有光泽，气色良好","name":"面色","value":"红润","status":"正常","confidence":0.85}],"moisture":"润泽","bodyColor":"淡红","teethMarks":"无","coatingColor":"薄白","coatingThickness":"适中"},"syndromeAnalysis":{"name":"正常体质","warning":"继续保持良好的生活习惯，注意劳逸结合","symptoms":"面色红润、精力充沛、睡眠良好、食欲正常","syndrome":"正常体质","description":"身体健康，各项机能正常","introduction":"身体健康，各项机能正常"},"treatmentAdvice":{"tcm":["适当按摩","艾灸保健","中药调理"],"diet":{"forbidden":["过于油腻","过辣","过甜","冷饮"],"recommended":["新鲜蔬菜","水果","粗粮","鱼肉","豆制品"]},"music":["舒缓音乐","古典音乐","自然音效"],"emotion":["保持乐观","减少压力","适当放松"],"therapy":["银耳莲子汤","山药粥","红枣茶"],"exercise":["散步","太极","瑜伽","游泳","适量有氧运动"],"products":["养生茶","艾灸仪","按摩器","保健品"],"lifestyle":["规律作息","早睡早起","保证7-8小时睡眠"]},"primaryConstitution":"平和质","constitutionScore":"85.00","apiProvider":"aliyun","apiCallId":"ba27b2f9-607b-429d-82a2-448bca58412c","errorMessage":null,"userNotes":"","analyzedAt":"2025-10-04 20:39:48","created_at":"2025-10-04 20:39:46","updated_at":"2025-10-04 20:39:48"},"latestFaceAnalysis":{"id":"78","userId":1,"originalImageUrl":"https://qinghe-uploads.oss-cn-beijing.aliyuncs.com/health/1759581540341-e6irpzxza.jpg","analysisStatus":"completed","facialFeatures":{"score":94,"features":[{"desc":"面色较正常偏黄，主要由脾胃虚弱、气血不足导致。","name":"面色黄","value":"异常","status":"异常","confidence":0.749847588338626},{"desc":"面色鲜明有光泽，表示身体健康状态良好；若有疾病表现，多处于疾病早期，病情轻，易康复，不容易出现并发症等。","name":"面色明亮","value":"正常","status":"正常","confidence":0.7369595400973179},{"desc":"目光明亮，精神饱满。","name":"有神","value":"正常","status":"正常","confidence":0.9344547506053024},{"desc":"眉间正常，无皱纹凹陷。","name":"正常","value":"正常","status":"正常","confidence":0.9489741569285752},{"desc":"眉毛浓厚。","name":"浓眉","value":"正常","status":"正常","confidence":0.811814830133905},{"desc":"眼皮无褶皱。","name":"单眼皮","value":"正常","status":"正常","confidence":0.7050674281042091},{"desc":"上下任意唇体饱满，成曲面，状似鱼肚。","name":"唇厚","value":"正常","status":"正常","confidence":0.905936466042662},{"desc":"唇色较正常偏紫。多见于瘀血，常见于心气不足、心阳虚衰，或严重呼吸困难者。","name":"唇紫","value":"异常","status":"异常","confidence":0.9346074005392094}],"constitution":"血瘀体质、血虚体质"},"faceConclusion":{"warning":"血瘀体质兼夹血虚体质的人可能会遇到一系列健康挑战。以下是这类体质人群容易出现的一些问题：\n心血管疾病：血瘀体质可能导致血液循环不畅，增加心脑血管疾病的风险，如心绞痛、心肌梗死、脑梗死等。\n疼痛症状：由于血液运行不畅，血瘀体质者常常会有固定部位的疼痛，如胸痛、头痛、关节痛等，疼痛性质可能为刺痛或夜间加重。\n皮肤问题：皮肤可能呈现晦暗无光，容易形成色斑、瘀斑，且这些斑点不易消退。\n消化系统问题：血瘀体质可能影响脾胃的运化，导致胃痛、胃胀、消化不良等症状。\n神经系统：容易出现失眠和健忘现象。血虚导致的心神失养，可能引起入睡困难、睡眠质量差，以及记忆力减退。\n精神状态：经常感到疲劳、精神不振，思考能力和集中力下降，情绪可能变得不稳定，容易心烦意乱。\n肌肉与关节：有可能出现肌肉无力、肢体麻木、筋脉拘挛等症状，因为血液不足以濡养肌肉和骨骼系统。\n其他身体症状：还包括头晕眼花、多梦不安、免疫力下降等症状。","symptoms":"皮肤偏暗；色素沉着；口唇紫；眼眶暗黑；鼻部暗滞；易脱发；肌肤干燥；皮肤粗糙；面色白或黄；眼睑浮肿；肢体有麻木感","syndrome":"心肾两虚证","description":"您的体质主要是血瘀体质兼血虚体质，体质的形成可能受到多种因素的影响：\n血瘀体质多因外伤、手术等引起血液流出血管，淤积体内；或者因为感受寒邪、热邪、湿邪等引起身体血液循环障碍；或者因为精神压力大，情绪压抑导致血液循环障碍。\n血虚体质多因先天不足，或慢性消耗（过度劳累、过度出汗、失血、久病等）、或营养摄入不足（节食、厌食、偏食等）等导致身体能量不足，脏腑功能下降。","distribution":[{"name":"血瘀体质","score":50,"confidence":0.8192871549955509},{"name":"血虚体质","score":50,"confidence":0.7954120822547365}],"introduction":"因先天不足，或久病虚损，心肾阳气或阴精亏虚所致。临床以眩晕，心悸，自汗或盗汗，腰膝酸软，失眠，健忘，夜尿增多，舌质淡或偏红，边有齿痕，舌苔薄白或润，脉沉弱或细数，伴见下肢浮肿，神疲、乏力，胸闷、气短，面白，小便清长、频数，或痫病频发，神思恍惚，面色晦暗，耳轮枯焦，大便干燥等为特征的证候。"},"dietaryAdvice":{"tcm":["可做保健性艾灸。先将艾条点燃，放在灸盒中的铁纱上，并将温灸盒置于关元穴上方，盖好封盖以调节温度。每次灸20~30分钟。每日1次，7~10次为1个疗程。注意预防烫伤。","可做保健性耳穴疗法。取神门、心、脾、颈椎、肩、颈、等耳穴。将耳穴消毒，在耳穴上贴王不留行籽或耳穴压丸，用拇、食指进行垂直按压，施压至患出现沉、重、胀、痛感。每穴按压1分钟左右。每穴重复操作2~3遍，每天3~5次。双侧耳穴轮流使用，2日1次替换。","可用六字诀进行呼吸训练以达到保健效果。六字诀是一种吐纳法。它是通过呬、呵、呼、嘘、吹、嘻六个字的不同发音口型，唇齿喉舌的用力不同，以牵动不同的脏腑经络气血的运行。\n方法：首先预备姿势，两足开立，与肩同宽，头正颈直，含胸拔背，松腰松胯，双膝微屈，全身放松，呼吸自然。\n其次联系呼吸，顺腹式呼吸，先呼后吸，呼所时读字，同时提肛缩肾，体重移至足跟。\n最后调息， 每个字读六遍后，调息一次，以稍事休息，恢复自然。","可行叩齿保健法以达到健脾益胃，纳气补肾的效果，古人认为齿健则身健，身健则长寿。方法：口唇轻闭，首先，上下门牙齿叩击9次，然后左侧上下牙齿叩击9次，右侧上下齿叩击9次，最后上下门齿再叩击9次。每日早晚各一次，每次3分钟左右。叩齿时可用双手指有节律地搓双侧耳孔，提拉双耳廓直到发热为止。"],"music":["商音（适合血瘀调理）"],"emotion":["保持情志舒畅，减少思虑，多与人沟通交流。"],"therapy":["黄芪炖鸡","红枣桂圆茶","山药莲子粥"],"exercise":["适度运动，进行一些简单易行的锻炼项目，如：散步、跑步、八段锦、太极拳、五禽戏等。"],"products":["艾灸仪","精油","拔罐器","助眠灯","健康茶饮"],"forbidden":["少食辛辣、咖啡、浓茶等刺激之品。"],"lifestyle":["音乐疗法：道教音乐崇尚“中和”的审美特征，具体来说体现为“阴、阳调和”、“动、静结合”和“散、正相间”等方面，常听这类曲目能让体内脏腑、气血平衡，使人心情愉快，精神饱满；改善睡眠；增强抗压能力等。其代表性曲目有：《啸咏朱陵府》《卫灵咒》《华夏颂》等。","注意保暖，尤其腰腹部，春天温度变化大别着急穿太薄。","病室应通风透气，光线柔和。"],"recommended":["饮食均衡、清淡，粗细搭配适当，荤素配伍合理。"]},"primaryConclusion":"血瘀体质、血虚体质","confidenceScore":"94.00","apiProvider":"aliyun","apiCallId":"e16a88a9-ef96-4ec4-a87b-95d2ddf24989","errorMessage":null,"userNotes":"","analyzedAt":"2025-10-04 20:39:08","created_at":"2025-10-04 20:39:04","updated_at":"2025-10-04 20:39:08"}}}
+🔍 服务器响应: {"success":true,"data":{"healthProfile":{"id":"1","userId":1,"height":null,"weight":null,"bloodType":"unknown","primaryConstitution":"阴虚体质、湿热体质","secondaryConstitution":null,"constitutionScore":null,"healthMetrics":{"age":21,"bmi":null,"gender":"male","sleepScore":40,"overallScore":29,"activityLevel":"lightly_active","exerciseScore":60,"lastCalculated":"2025-10-04T12:36:29.899Z","sleepQualityLevel":"poor"},"latestTongueAnalysis":{"analyzedAt":"2025-10-04T12:36:32.297Z","constitutionScore":85,"primaryConstitution":"平和质"},"latestFaceAnalysis":{"analyzedAt":"2025-10-04T12:39:08.197Z","confidenceScore":94,"primaryConclusion":"血瘀体质、血虚体质"},"sleepDataSummary":{"records":[{"endTime":"2025-10-05T08:00:00.000Z","sleepDate":"2025-10-05","startTime":"2025-10-05T01:00:00.000Z","userNotes":null,"dataSource":"manual","uploadedAt":"2025-10-04T12:36:29.866Z","sleepStages":null,"movementData":null,"sleepQuality":4.5,"awakeDuration":null,"heartRateData":null,"sleepDuration":420,"environmentData":null,"sleepEfficiency":null,"remSleepDuration":null,"deepSleepDuration":null,"lightSleepDuration":null},{"endTime":"2025-10-04T12:27:01.749Z","sleepDate":"2025-10-04","startTime":"2025-10-04T12:24:54.525Z","userNotes":null,"dataSource":"manual","uploadedAt":"2025-10-04T12:27:43.171Z","sleepStages":null,"movementData":null,"sleepQuality":5.3,"awakeDuration":null,"heartRateData":null,"sleepDuration":2,"environmentData":null,"sleepEfficiency":null,"remSleepDuration":null,"deepSleepDuration":null,"lightSleepDuration":null},{"endTime":"2025-10-04T02:00:00.000Z","sleepDate":"2025-10-03","startTime":"2025-10-03T23:00:00.000Z","userNotes":null,"dataSource":"manual","uploadedAt":"2025-10-04T12:15:12.268Z","sleepStages":null,"movementData":null,"sleepQuality":4.5,"awakeDuration":null,"heartRateData":null,"sleepDuration":180,"environmentData":null,"sleepEfficiency":null,"remSleepDuration":30,"deepSleepDuration":60,"lightSleepDuration":90}],"updatedAt":"2025-10-04T04:21:33.439Z","lastUpdated":"2025-10-04T12:36:29.866Z","sleepPattern":"poor","totalRecords":3,"lastSleepDate":"2025-07-23 18:32:30","recentRecords":[{"id":"73","endTime":"2025-07-23 18:32:36","startTime":"2025-07-23 18:32:30","sleepStages":[{"duration":90,"stageType":"light"},{"duration":120,"stageType":"deep"},{"duration":90,"stageType":"rem"},{"duration":30,"stageType":"light"}],"actualDuration":null,"targetDuration":480,"sleepEfficiency":null,"sleepQualityRating":5},{"id":"72","endTime":"2025-07-23 18:30:55","startTime":"2025-07-23 18:30:44","sleepStages":[{"duration":90,"stageType":"light"},{"duration":120,"stageType":"deep"},{"duration":90,"stageType":"rem"},{"duration":30,"stageType":"light"}],"actualDuration":null,"targetDuration":480,"sleepEfficiency":null,"sleepQualityRating":5},{"id":"71","endTime":"2025-07-22 15:49:10","startTime":"2025-07-22 15:49:03","sleepStages":[{"duration":90,"stageType":"light"},{"duration":120,"stageType":"deep"},{"duration":90,"stageType":"rem"},{"duration":30,"stageType":"light"}],"actualDuration":null,"targetDuration":480,"sleepEfficiency":null,"sleepQualityRating":5},{"id":"70","endTime":"2025-07-22 13:29:20","startTime":"2025-07-22 05:29:20","sleepStages":[],"actualDuration":480,"targetDuration":480,"sleepEfficiency":null,"sleepQualityRating":null},{"id":"69","endTime":"2025-07-22 13:27:58","startTime":"2025-07-22 05:27:58","sleepStages":[],"actualDuration":480,"targetDuration":480,"sleepEfficiency":null,"sleepQualityRating":null}],"totalSessions":72,"recentSessions":0,"weeklySessions":0,"sleepConsistency":0,"sleepStageAnalysis":{"averageRemSleep":90,"averageDeepSleep":120,"averageLightSleep":169.63,"remSleepPercentage":24,"deepSleepPercentage":32,"lightSleepPercentage":45},"averageSleepQuality":4.77,"averageSleepDuration":3.34,"averageSleepEfficiency":0},"workoutDataSummary":{"updatedAt":"2025-10-04T04:21:33.374Z","workoutTypes":{"walking":10},"recentRecords":[{"endTime":"2025-10-04 12:21:32","calories":1,"duration":27,"startTime":"2025-10-04 12:21:05","workoutId":"172","workoutType":"walking","totalDistance":"0.04","advancedMetrics":{"maxHeartRate":95,"averageHeartRate":75}},{"endTime":"2025-09-19 16:38:11","calories":3,"duration":58,"startTime":"2025-09-19 16:37:13","workoutId":"171","workoutType":"walking","totalDistance":"0.40","advancedMetrics":{"maxHeartRate":95,"averageHeartRate":75}},{"endTime":"2025-09-17 07:09:06","calories":25,"duration":379,"startTime":"2025-09-17 07:02:47","workoutId":"170","workoutType":"walking","totalDistance":"0.54","advancedMetrics":{"maxHeartRate":95,"averageHeartRate":75}},{"endTime":"2025-09-16 12:35:02","calories":2,"duration":44,"startTime":"2025-09-16 12:34:18","workoutId":"169","workoutType":"walking","totalDistance":"0.05","advancedMetrics":{"maxHeartRate":95,"averageHeartRate":75}},{"endTime":"2025-09-16 12:32:16","calories":5,"duration":80,"startTime":"2025-09-16 12:30:56","workoutId":"168","workoutType":"walking","totalDistance":"0.04","advancedMetrics":{"maxHeartRate":95,"averageHeartRate":75}}],"totalCalories":39,"totalDistance":"00.040.400.540.050.040.100.000.000.000.00","totalWorkouts":144,"recentWorkouts":19,"weeklyWorkouts":1,"averageDuration":165,"lastWorkoutDate":"2025-10-04 12:21:05","averageHeartRate":75,"workoutFrequency":"lightly_active"},"fiveElementsMatch":{"sixQi":{"qi":"厥阴风木","season":"立夏","influence":"风气主令，易发肝胆疾病，注意疏肝理气","characteristics":{"nature":"风","organs":["肝","胆"],"traits":["主动","主升"]}},"analysisId":1067,"lastUpdated":"2025-10-04T12:40:40.144Z","analysisDate":"2025-10-04T12:40:40.144Z","fiveMovements":{"nature":"不及","element":"金","influence":"肺气不足，易感外邪，宜补益肺气","characteristics":{"traits":["火气制金","肺气不足"],"symptoms":["气短乏力","易感外邪"]}},"constitutionMatch":{"qiMatch":{"score":30,"element":"木","relation":"被克","description":"当前运气克体质，易生疾病，宜防护"},"constitution":"阴虚体质、湿热体质","overallLevel":"fair","overallScore":50,"movementMatch":{"score":70,"element":"金","relation":"相生","description":"体质生当前运气，消耗较大，宜补益"},"recommendations":["当前时期需要特别注意调养","建议咨询中医师制定个性化调理方案"],"constitutionElement":"土"},"personalizedAdvice":{"healthTips":{"daily_tips":["阴虚体质、湿热体质日常保健"],"seasonal_tips":["秋分养生要点"],"constitution_tips":["阴虚体质、湿热体质保健要点"],"five_elements_tips":["五运六气养生要点"]},"dietTherapy":{"seasonal":["白色食物","辛味食物","润肺食品"],"comprehensive":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养","白色食物","辛味食物","润肺食品","适度补益","增强营养"],"relation_based":["适度补益","增强营养"],"constitution_based":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养"]},"emotionalCare":{"meditation":["阴虚体质、湿热体质冥想建议"],"music_therapy":["阴虚体质、湿热体质音乐疗法"],"seasonal_advice":["秋分情志调养"],"constitution_advice":["阴虚体质、湿热体质情志调养建议"]},"exerciseAdvice":{"seasonal":["呼吸运动","肺部锻炼","避免干燥"],"intensity":"适度强度","recommended_time":"下午3-5点，肺经当令","constitution_based":["适度运动","太极拳","慢跑","游泳"]},"lifestyleAdvice":{"environment":["阴虚体质、湿热体质环境调节"],"daily_routine":["阴虚体质、湿热体质日常起居"],"seasonal_care":["秋分起居调摄"],"sleep_schedule":"秋分作息建议"},"diseaseRiskPrediction":{"relation_risks":["体质与运气关系不明确，建议均衡调养"],"seasonal_risks":["秋分易发疾病"],"prevention_advice":["预防建议"],"constitution_risks":["阴虚体质、湿热体质易患疾病"]}}},"healthRiskAssessment":null,"personalizedAdvice":{"longTerm":["建立健康的生活方式","定期进行健康检查","保持良好的心理状态","培养运动习惯"],"priority":"high","immediate":["立即咨询医生，进行全面体检","调整饮食结构，控制体重"],"lifestyle":["增加运动频率，建议每周至少3次有氧运动","改善睡眠质量，保持规律作息"],"constitution":{"diet":["均衡饮食","五谷杂粮","新鲜蔬果","适量肉类","补气食物","山药","大枣","黄芪","人参"],"exercise":["适度运动","太极拳","慢跑","游泳","轻度运动","散步","八段锦","避免剧烈运动"],"emotional":["保持乐观","心态平和"],"lifestyle":["规律作息","保持心情愉快","适度工作"]},"fiveElements":{"healthTips":{"daily_tips":["平和质日常保健"],"seasonal_tips":["秋分养生要点"],"constitution_tips":["平和质保健要点"],"five_elements_tips":["五运六气养生要点"]},"dietTherapy":{"seasonal":["白色食物","辛味食物","润肺食品"],"comprehensive":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养","白色食物","辛味食物","润肺食品","适度补益","增强营养"],"relation_based":["适度补益","增强营养"],"constitution_based":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养"]},"emotionalCare":{"meditation":["平和质冥想建议"],"music_therapy":["平和质音乐疗法"],"seasonal_advice":["秋分情志调养"],"constitution_advice":["平和质情志调养建议"]},"exerciseAdvice":{"seasonal":["呼吸运动","肺部锻炼","避免干燥"],"intensity":"适度强度","recommended_time":"下午3-5点，肺经当令","constitution_based":["适度运动","太极拳","慢跑","游泳"]},"lifestyleAdvice":{"environment":["平和质环境调节"],"daily_routine":["平和质日常起居"],"seasonal_care":["秋分起居调摄"],"sleep_schedule":"秋分作息建议"},"diseaseRiskPrediction":{"relation_risks":["体质与运气关系不明确，建议均衡调养"],"seasonal_risks":["秋分易发疾病"],"prevention_advice":["预防建议"],"constitution_risks":["平和质易患疾病"]}}},"caregiverPlan":null,"overallHealthScore":53,"healthLevel":"poor","lastUpdated":"2025-10-04 20:40:40","nextUpdateSuggested":"2025-10-07 20:40:40","created_at":"2025-09-21 16:42:52","updated_at":"2025-10-04 20:40:40"},"latestTongueAnalysis":{"id":"266","userId":1,"originalImageUrl":"https://example.com/invalid.jpg","cutTongueUrl":"","analysisStatus":"completed","constitutionAnalysis":{"score":85,"warning":"继续保持良好的生活习惯，注意劳逸结合","features":[{"desc":"面色红润有光泽，气色良好","name":"面色","value":"红润","status":"正常","confidence":0.85}],"symptoms":"面色红润、精力充沛、睡眠良好、食欲正常","description":"体质均衡，各脏腑功能协调，精神饱满，是最理想的体质状态。","constitution":"平和质","distribution":[{"name":"平和质","score":85}],"detectMatches":null},"tongueCharacteristics":{"cracks":"无","features":[{"desc":"面色红润有光泽，气色良好","name":"面色","value":"红润","status":"正常","confidence":0.85}],"moisture":"润泽","bodyColor":"淡红","teethMarks":"无","coatingColor":"薄白","coatingThickness":"适中"},"syndromeAnalysis":{"name":"正常体质","warning":"继续保持良好的生活习惯，注意劳逸结合","symptoms":"面色红润、精力充沛、睡眠良好、食欲正常","syndrome":"正常体质","description":"身体健康，各项机能正常","introduction":"身体健康，各项机能正常"},"treatmentAdvice":{"tcm":["适当按摩","艾灸保健","中药调理"],"diet":{"forbidden":["过于油腻","过辣","过甜","冷饮"],"recommended":["新鲜蔬菜","水果","粗粮","鱼肉","豆制品"]},"music":["舒缓音乐","古典音乐","自然音效"],"emotion":["保持乐观","减少压力","适当放松"],"therapy":["银耳莲子汤","山药粥","红枣茶"],"exercise":["散步","太极","瑜伽","游泳","适量有氧运动"],"products":["养生茶","艾灸仪","按摩器","保健品"],"lifestyle":["规律作息","早睡早起","保证7-8小时睡眠"]},"primaryConstitution":"平和质","constitutionScore":"85.00","apiProvider":"aliyun","apiCallId":"ba27b2f9-607b-429d-82a2-448bca58412c","errorMessage":null,"userNotes":"","analyzedAt":"2025-10-04 20:39:48","created_at":"2025-10-04 20:39:46","updated_at":"2025-10-04 20:39:48"},"latestFaceAnalysis":{"id":"78","userId":1,"originalImageUrl":"https://qinghe-uploads.oss-cn-beijing.aliyuncs.com/health/1759581540341-e6irpzxza.jpg","analysisStatus":"completed","facialFeatures":{"score":94,"features":[{"desc":"面色较正常偏黄，主要由脾胃虚弱、气血不足导致。","name":"面色黄","value":"异常","status":"异常","confidence":0.749847588338626},{"desc":"面色鲜明有光泽，表示身体健康状态良好；若有疾病表现，多处于疾病早期，病情轻，易康复，不容易出现并发症等。","name":"面色明亮","value":"正常","status":"正常","confidence":0.7369595400973179},{"desc":"目光明亮，精神饱满。","name":"有神","value":"正常","status":"正常","confidence":0.9344547506053024},{"desc":"眉间正常，无皱纹凹陷。","name":"正常","value":"正常","status":"正常","confidence":0.9489741569285752},{"desc":"眉毛浓厚。","name":"浓眉","value":"正常","status":"正常","confidence":0.811814830133905},{"desc":"眼皮无褶皱。","name":"单眼皮","value":"正常","status":"正常","confidence":0.7050674281042091},{"desc":"上下任意唇体饱满，成曲面，状似鱼肚。","name":"唇厚","value":"正常","status":"正常","confidence":0.905936466042662},{"desc":"唇色较正常偏紫。多见于瘀血，常见于心气不足、心阳虚衰，或严重呼吸困难者。","name":"唇紫","value":"异常","status":"异常","confidence":0.9346074005392094}],"constitution":"血瘀体质、血虚体质"},"faceConclusion":{"warning":"血瘀体质兼夹血虚体质的人可能会遇到一系列健康挑战。以下是这类体质人群容易出现的一些问题：\n心血管疾病：血瘀体质可能导致血液循环不畅，增加心脑血管疾病的风险，如心绞痛、心肌梗死、脑梗死等。\n疼痛症状：由于血液运行不畅，血瘀体质者常常会有固定部位的疼痛，如胸痛、头痛、关节痛等，疼痛性质可能为刺痛或夜间加重。\n皮肤问题：皮肤可能呈现晦暗无光，容易形成色斑、瘀斑，且这些斑点不易消退。\n消化系统问题：血瘀体质可能影响脾胃的运化，导致胃痛、胃胀、消化不良等症状。\n神经系统：容易出现失眠和健忘现象。血虚导致的心神失养，可能引起入睡困难、睡眠质量差，以及记忆力减退。\n精神状态：经常感到疲劳、精神不振，思考能力和集中力下降，情绪可能变得不稳定，容易心烦意乱。\n肌肉与关节：有可能出现肌肉无力、肢体麻木、筋脉拘挛等症状，因为血液不足以濡养肌肉和骨骼系统。\n其他身体症状：还包括头晕眼花、多梦不安、免疫力下降等症状。","symptoms":"皮肤偏暗；色素沉着；口唇紫；眼眶暗黑；鼻部暗滞；易脱发；肌肤干燥；皮肤粗糙；面色白或黄；眼睑浮肿；肢体有麻木感","syndrome":"心肾两虚证","description":"您的体质主要是血瘀体质兼血虚体质，体质的形成可能受到多种因素的影响：\n血瘀体质多因外伤、手术等引起血液流出血管，淤积体内；或者因为感受寒邪、热邪、湿邪等引起身体血液循环障碍；或者因为精神压力大，情绪压抑导致血液循环障碍。\n血虚体质多因先天不足，或慢性消耗（过度劳累、过度出汗、失血、久病等）、或营养摄入不足（节食、厌食、偏食等）等导致身体能量不足，脏腑功能下降。","distribution":[{"name":"血瘀体质","score":50,"confidence":0.8192871549955509},{"name":"血虚体质","score":50,"confidence":0.7954120822547365}],"introduction":"因先天不足，或久病虚损，心肾阳气或阴精亏虚所致。临床以眩晕，心悸，自汗或盗汗，腰膝酸软，失眠，健忘，夜尿增多，舌质淡或偏红，边有齿痕，舌苔薄白或润，脉沉弱或细数，伴见下肢浮肿，神疲、乏力，胸闷、气短，面白，小便清长、频数，或痫病频发，神思恍惚，面色晦暗，耳轮枯焦，大便干燥等为特征的证候。"},"dietaryAdvice":{"tcm":["可做保健性艾灸。先将艾条点燃，放在灸盒中的铁纱上，并将温灸盒置于关元穴上方，盖好封盖以调节温度。每次灸20~30分钟。每日1次，7~10次为1个疗程。注意预防烫伤。","可做保健性耳穴疗法。取神门、心、脾、颈椎、肩、颈、等耳穴。将耳穴消毒，在耳穴上贴王不留行籽或耳穴压丸，用拇、食指进行垂直按压，施压至患出现沉、重、胀、痛感。每穴按压1分钟左右。每穴重复操作2~3遍，每天3~5次。双侧耳穴轮流使用，2日1次替换。","可用六字诀进行呼吸训练以达到保健效果。六字诀是一种吐纳法。它是通过呬、呵、呼、嘘、吹、嘻六个字的不同发音口型，唇齿喉舌的用力不同，以牵动不同的脏腑经络气血的运行。\n方法：首先预备姿势，两足开立，与肩同宽，头正颈直，含胸拔背，松腰松胯，双膝微屈，全身放松，呼吸自然。\n其次联系呼吸，顺腹式呼吸，先呼后吸，呼所时读字，同时提肛缩肾，体重移至足跟。\n最后调息， 每个字读六遍后，调息一次，以稍事休息，恢复自然。","可行叩齿保健法以达到健脾益胃，纳气补肾的效果，古人认为齿健则身健，身健则长寿。方法：口唇轻闭，首先，上下门牙齿叩击9次，然后左侧上下牙齿叩击9次，右侧上下齿叩击9次，最后上下门齿再叩击9次。每日早晚各一次，每次3分钟左右。叩齿时可用双手指有节律地搓双侧耳孔，提拉双耳廓直到发热为止。"],"music":["商音（适合血瘀调理）"],"emotion":["保持情志舒畅，减少思虑，多与人沟通交流。"],"therapy":["黄芪炖鸡","红枣桂圆茶","山药莲子粥"],"exercise":["适度运动，进行一些简单易行的锻炼项目，如：散步、跑步、八段锦、太极拳、五禽戏等。"],"products":["艾灸仪","精油","拔罐器","助眠灯","健康茶饮"],"forbidden":["少食辛辣、咖啡、浓茶等刺激之品。"],"lifestyle":["音乐疗法：道教音乐崇尚“中和”的审美特征，具体来说体现为“阴、阳调和”、“动、静结合”和“散、正相间”等方面，常听这类曲目能让体内脏腑、气血平衡，使人心情愉快，精神饱满；改善睡眠；增强抗压能力等。其代表性曲目有：《啸咏朱陵府》《卫灵咒》《华夏颂》等。","注意保暖，尤其腰腹部，春天温度变化大别着急穿太薄。","病室应通风透气，光线柔和。"],"recommended":["饮食均衡、清淡，粗细搭配适当，荤素配伍合理。"]},"primaryConclusion":"血瘀体质、血虚体质","confidenceScore":"94.00","apiProvider":"aliyun","apiCallId":"e16a88a9-ef96-4ec4-a87b-95d2ddf24989","errorMessage":null,"userNotes":"","analyzedAt":"2025-10-04 20:39:08","created_at":"2025-10-04 20:39:04","updated_at":"2025-10-04 20:39:08"}}}
+✅ 五运六气分析获取成功
+📡 HTTP状态码: 200
+📡 HTTP状态码: 200
+🔍 服务器响应: {"success":true,"data":{"healthProfile":{"id":"1","userId":1,"height":null,"weight":null,"bloodType":"unknown","primaryConstitution":"阴虚体质、湿热体质","secondaryConstitution":null,"constitutionScore":null,"healthMetrics":{"age":21,"bmi":null,"gender":"male","sleepScore":40,"overallScore":29,"activityLevel":"lightly_active","exerciseScore":60,"lastCalculated":"2025-10-04T12:36:29.899Z","sleepQualityLevel":"poor"},"latestTongueAnalysis":{"analyzedAt":"2025-10-04T12:36:32.297Z","constitutionScore":85,"primaryConstitution":"平和质"},"latestFaceAnalysis":{"analyzedAt":"2025-10-04T12:39:08.197Z","confidenceScore":94,"primaryConclusion":"血瘀体质、血虚体质"},"sleepDataSummary":{"records":[{"endTime":"2025-10-05T08:00:00.000Z","sleepDate":"2025-10-05","startTime":"2025-10-05T01:00:00.000Z","userNotes":null,"dataSource":"manual","uploadedAt":"2025-10-04T12:36:29.866Z","sleepStages":null,"movementData":null,"sleepQuality":4.5,"awakeDuration":null,"heartRateData":null,"sleepDuration":420,"environmentData":null,"sleepEfficiency":null,"remSleepDuration":null,"deepSleepDuration":null,"lightSleepDuration":null},{"endTime":"2025-10-04T12:27:01.749Z","sleepDate":"2025-10-04","startTime":"2025-10-04T12:24:54.525Z","userNotes":null,"dataSource":"manual","uploadedAt":"2025-10-04T12:27:43.171Z","sleepStages":null,"movementData":null,"sleepQuality":5.3,"awakeDuration":null,"heartRateData":null,"sleepDuration":2,"environmentData":null,"sleepEfficiency":null,"remSleepDuration":null,"deepSleepDuration":null,"lightSleepDuration":null},{"endTime":"2025-10-04T02:00:00.000Z","sleepDate":"2025-10-03","startTime":"2025-10-03T23:00:00.000Z","userNotes":null,"dataSource":"manual","uploadedAt":"2025-10-04T12:15:12.268Z","sleepStages":null,"movementData":null,"sleepQuality":4.5,"awakeDuration":null,"heartRateData":null,"sleepDuration":180,"environmentData":null,"sleepEfficiency":null,"remSleepDuration":30,"deepSleepDuration":60,"lightSleepDuration":90}],"updatedAt":"2025-10-04T04:21:33.439Z","lastUpdated":"2025-10-04T12:36:29.866Z","sleepPattern":"poor","totalRecords":3,"lastSleepDate":"2025-07-23 18:32:30","recentRecords":[{"id":"73","endTime":"2025-07-23 18:32:36","startTime":"2025-07-23 18:32:30","sleepStages":[{"duration":90,"stageType":"light"},{"duration":120,"stageType":"deep"},{"duration":90,"stageType":"rem"},{"duration":30,"stageType":"light"}],"actualDuration":null,"targetDuration":480,"sleepEfficiency":null,"sleepQualityRating":5},{"id":"72","endTime":"2025-07-23 18:30:55","startTime":"2025-07-23 18:30:44","sleepStages":[{"duration":90,"stageType":"light"},{"duration":120,"stageType":"deep"},{"duration":90,"stageType":"rem"},{"duration":30,"stageType":"light"}],"actualDuration":null,"targetDuration":480,"sleepEfficiency":null,"sleepQualityRating":5},{"id":"71","endTime":"2025-07-22 15:49:10","startTime":"2025-07-22 15:49:03","sleepStages":[{"duration":90,"stageType":"light"},{"duration":120,"stageType":"deep"},{"duration":90,"stageType":"rem"},{"duration":30,"stageType":"light"}],"actualDuration":null,"targetDuration":480,"sleepEfficiency":null,"sleepQualityRating":5},{"id":"70","endTime":"2025-07-22 13:29:20","startTime":"2025-07-22 05:29:20","sleepStages":[],"actualDuration":480,"targetDuration":480,"sleepEfficiency":null,"sleepQualityRating":null},{"id":"69","endTime":"2025-07-22 13:27:58","startTime":"2025-07-22 05:27:58","sleepStages":[],"actualDuration":480,"targetDuration":480,"sleepEfficiency":null,"sleepQualityRating":null}],"totalSessions":72,"recentSessions":0,"weeklySessions":0,"sleepConsistency":0,"sleepStageAnalysis":{"averageRemSleep":90,"averageDeepSleep":120,"averageLightSleep":169.63,"remSleepPercentage":24,"deepSleepPercentage":32,"lightSleepPercentage":45},"averageSleepQuality":4.77,"averageSleepDuration":3.34,"averageSleepEfficiency":0},"workoutDataSummary":{"updatedAt":"2025-10-04T04:21:33.374Z","workoutTypes":{"walking":10},"recentRecords":[{"endTime":"2025-10-04 12:21:32","calories":1,"duration":27,"startTime":"2025-10-04 12:21:05","workoutId":"172","workoutType":"walking","totalDistance":"0.04","advancedMetrics":{"maxHeartRate":95,"averageHeartRate":75}},{"endTime":"2025-09-19 16:38:11","calories":3,"duration":58,"startTime":"2025-09-19 16:37:13","workoutId":"171","workoutType":"walking","totalDistance":"0.40","advancedMetrics":{"maxHeartRate":95,"averageHeartRate":75}},{"endTime":"2025-09-17 07:09:06","calories":25,"duration":379,"startTime":"2025-09-17 07:02:47","workoutId":"170","workoutType":"walking","totalDistance":"0.54","advancedMetrics":{"maxHeartRate":95,"averageHeartRate":75}},{"endTime":"2025-09-16 12:35:02","calories":2,"duration":44,"startTime":"2025-09-16 12:34:18","workoutId":"169","workoutType":"walking","totalDistance":"0.05","advancedMetrics":{"maxHeartRate":95,"averageHeartRate":75}},{"endTime":"2025-09-16 12:32:16","calories":5,"duration":80,"startTime":"2025-09-16 12:30:56","workoutId":"168","workoutType":"walking","totalDistance":"0.04","advancedMetrics":{"maxHeartRate":95,"averageHeartRate":75}}],"totalCalories":39,"totalDistance":"00.040.400.540.050.040.100.000.000.000.00","totalWorkouts":144,"recentWorkouts":19,"weeklyWorkouts":1,"averageDuration":165,"lastWorkoutDate":"2025-10-04 12:21:05","averageHeartRate":75,"workoutFrequency":"lightly_active"},"fiveElementsMatch":{"sixQi":{"qi":"厥阴风木","season":"立夏","influence":"风气主令，易发肝胆疾病，注意疏肝理气","characteristics":{"nature":"风","organs":["肝","胆"],"traits":["主动","主升"]}},"analysisId":1067,"lastUpdated":"2025-10-04T12:40:40.144Z","analysisDate":"2025-10-04T12:40:40.144Z","fiveMovements":{"nature":"不及","element":"金","influence":"肺气不足，易感外邪，宜补益肺气","characteristics":{"traits":["火气制金","肺气不足"],"symptoms":["气短乏力","易感外邪"]}},"constitutionMatch":{"qiMatch":{"score":30,"element":"木","relation":"被克","description":"当前运气克体质，易生疾病，宜防护"},"constitution":"阴虚体质、湿热体质","overallLevel":"fair","overallScore":50,"movementMatch":{"score":70,"element":"金","relation":"相生","description":"体质生当前运气，消耗较大，宜补益"},"recommendations":["当前时期需要特别注意调养","建议咨询中医师制定个性化调理方案"],"constitutionElement":"土"},"personalizedAdvice":{"healthTips":{"daily_tips":["阴虚体质、湿热体质日常保健"],"seasonal_tips":["秋分养生要点"],"constitution_tips":["阴虚体质、湿热体质保健要点"],"five_elements_tips":["五运六气养生要点"]},"dietTherapy":{"seasonal":["白色食物","辛味食物","润肺食品"],"comprehensive":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养","白色食物","辛味食物","润肺食品","适度补益","增强营养"],"relation_based":["适度补益","增强营养"],"constitution_based":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养"]},"emotionalCare":{"meditation":["阴虚体质、湿热体质冥想建议"],"music_therapy":["阴虚体质、湿热体质音乐疗法"],"seasonal_advice":["秋分情志调养"],"constitution_advice":["阴虚体质、湿热体质情志调养建议"]},"exerciseAdvice":{"seasonal":["呼吸运动","肺部锻炼","避免干燥"],"intensity":"适度强度","recommended_time":"下午3-5点，肺经当令","constitution_based":["适度运动","太极拳","慢跑","游泳"]},"lifestyleAdvice":{"environment":["阴虚体质、湿热体质环境调节"],"daily_routine":["阴虚体质、湿热体质日常起居"],"seasonal_care":["秋分起居调摄"],"sleep_schedule":"秋分作息建议"},"diseaseRiskPrediction":{"relation_risks":["体质与运气关系不明确，建议均衡调养"],"seasonal_risks":["秋分易发疾病"],"prevention_advice":["预防建议"],"constitution_risks":["阴虚体质、湿热体质易患疾病"]}}},"healthRiskAssessment":null,"personalizedAdvice":{"longTerm":["建立健康的生活方式","定期进行健康检查","保持良好的心理状态","培养运动习惯"],"priority":"high","immediate":["立即咨询医生，进行全面体检","调整饮食结构，控制体重"],"lifestyle":["增加运动频率，建议每周至少3次有氧运动","改善睡眠质量，保持规律作息"],"constitution":{"diet":["均衡饮食","五谷杂粮","新鲜蔬果","适量肉类","补气食物","山药","大枣","黄芪","人参"],"exercise":["适度运动","太极拳","慢跑","游泳","轻度运动","散步","八段锦","避免剧烈运动"],"emotional":["保持乐观","心态平和"],"lifestyle":["规律作息","保持心情愉快","适度工作"]},"fiveElements":{"healthTips":{"daily_tips":["平和质日常保健"],"seasonal_tips":["秋分养生要点"],"constitution_tips":["平和质保健要点"],"five_elements_tips":["五运六气养生要点"]},"dietTherapy":{"seasonal":["白色食物","辛味食物","润肺食品"],"comprehensive":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养","白色食物","辛味食物","润肺食品","适度补益","增强营养"],"relation_based":["适度补益","增强营养"],"constitution_based":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养"]},"emotionalCare":{"meditation":["平和质冥想建议"],"music_therapy":["平和质音乐疗法"],"seasonal_advice":["秋分情志调养"],"constitution_advice":["平和质情志调养建议"]},"exerciseAdvice":{"seasonal":["呼吸运动","肺部锻炼","避免干燥"],"intensity":"适度强度","recommended_time":"下午3-5点，肺经当令","constitution_based":["适度运动","太极拳","慢跑","游泳"]},"lifestyleAdvice":{"environment":["平和质环境调节"],"daily_routine":["平和质日常起居"],"seasonal_care":["秋分起居调摄"],"sleep_schedule":"秋分作息建议"},"diseaseRiskPrediction":{"relation_risks":["体质与运气关系不明确，建议均衡调养"],"seasonal_risks":["秋分易发疾病"],"prevention_advice":["预防建议"],"constitution_risks":["平和质易患疾病"]}}},"caregiverPlan":null,"overallHealthScore":53,"healthLevel":"poor","lastUpdated":"2025-10-04 20:40:40","nextUpdateSuggested":"2025-10-07 20:40:40","created_at":"2025-09-21 16:42:52","updated_at":"2025-10-04 20:40:40"},"latestTongueAnalysis":{"id":"266","userId":1,"originalImageUrl":"https://example.com/invalid.jpg","cutTongueUrl":"","analysisStatus":"completed","constitutionAnalysis":{"score":85,"warning":"继续保持良好的生活习惯，注意劳逸结合","features":[{"desc":"面色红润有光泽，气色良好","name":"面色","value":"红润","status":"正常","confidence":0.85}],"symptoms":"面色红润、精力充沛、睡眠良好、食欲正常","description":"体质均衡，各脏腑功能协调，精神饱满，是最理想的体质状态。","constitution":"平和质","distribution":[{"name":"平和质","score":85}],"detectMatches":null},"tongueCharacteristics":{"cracks":"无","features":[{"desc":"面色红润有光泽，气色良好","name":"面色","value":"红润","status":"正常","confidence":0.85}],"moisture":"润泽","bodyColor":"淡红","teethMarks":"无","coatingColor":"薄白","coatingThickness":"适中"},"syndromeAnalysis":{"name":"正常体质","warning":"继续保持良好的生活习惯，注意劳逸结合","symptoms":"面色红润、精力充沛、睡眠良好、食欲正常","syndrome":"正常体质","description":"身体健康，各项机能正常","introduction":"身体健康，各项机能正常"},"treatmentAdvice":{"tcm":["适当按摩","艾灸保健","中药调理"],"diet":{"forbidden":["过于油腻","过辣","过甜","冷饮"],"recommended":["新鲜蔬菜","水果","粗粮","鱼肉","豆制品"]},"music":["舒缓音乐","古典音乐","自然音效"],"emotion":["保持乐观","减少压力","适当放松"],"therapy":["银耳莲子汤","山药粥","红枣茶"],"exercise":["散步","太极","瑜伽","游泳","适量有氧运动"],"products":["养生茶","艾灸仪","按摩器","保健品"],"lifestyle":["规律作息","早睡早起","保证7-8小时睡眠"]},"primaryConstitution":"平和质","constitutionScore":"85.00","apiProvider":"aliyun","apiCallId":"ba27b2f9-607b-429d-82a2-448bca58412c","errorMessage":null,"userNotes":"","analyzedAt":"2025-10-04 20:39:48","created_at":"2025-10-04 20:39:46","updated_at":"2025-10-04 20:39:48"},"latestFaceAnalysis":{"id":"78","userId":1,"originalImageUrl":"https://qinghe-uploads.oss-cn-beijing.aliyuncs.com/health/1759581540341-e6irpzxza.jpg","analysisStatus":"completed","facialFeatures":{"score":94,"features":[{"desc":"面色较正常偏黄，主要由脾胃虚弱、气血不足导致。","name":"面色黄","value":"异常","status":"异常","confidence":0.749847588338626},{"desc":"面色鲜明有光泽，表示身体健康状态良好；若有疾病表现，多处于疾病早期，病情轻，易康复，不容易出现并发症等。","name":"面色明亮","value":"正常","status":"正常","confidence":0.7369595400973179},{"desc":"目光明亮，精神饱满。","name":"有神","value":"正常","status":"正常","confidence":0.9344547506053024},{"desc":"眉间正常，无皱纹凹陷。","name":"正常","value":"正常","status":"正常","confidence":0.9489741569285752},{"desc":"眉毛浓厚。","name":"浓眉","value":"正常","status":"正常","confidence":0.811814830133905},{"desc":"眼皮无褶皱。","name":"单眼皮","value":"正常","status":"正常","confidence":0.7050674281042091},{"desc":"上下任意唇体饱满，成曲面，状似鱼肚。","name":"唇厚","value":"正常","status":"正常","confidence":0.905936466042662},{"desc":"唇色较正常偏紫。多见于瘀血，常见于心气不足、心阳虚衰，或严重呼吸困难者。","name":"唇紫","value":"异常","status":"异常","confidence":0.9346074005392094}],"constitution":"血瘀体质、血虚体质"},"faceConclusion":{"warning":"血瘀体质兼夹血虚体质的人可能会遇到一系列健康挑战。以下是这类体质人群容易出现的一些问题：\n心血管疾病：血瘀体质可能导致血液循环不畅，增加心脑血管疾病的风险，如心绞痛、心肌梗死、脑梗死等。\n疼痛症状：由于血液运行不畅，血瘀体质者常常会有固定部位的疼痛，如胸痛、头痛、关节痛等，疼痛性质可能为刺痛或夜间加重。\n皮肤问题：皮肤可能呈现晦暗无光，容易形成色斑、瘀斑，且这些斑点不易消退。\n消化系统问题：血瘀体质可能影响脾胃的运化，导致胃痛、胃胀、消化不良等症状。\n神经系统：容易出现失眠和健忘现象。血虚导致的心神失养，可能引起入睡困难、睡眠质量差，以及记忆力减退。\n精神状态：经常感到疲劳、精神不振，思考能力和集中力下降，情绪可能变得不稳定，容易心烦意乱。\n肌肉与关节：有可能出现肌肉无力、肢体麻木、筋脉拘挛等症状，因为血液不足以濡养肌肉和骨骼系统。\n其他身体症状：还包括头晕眼花、多梦不安、免疫力下降等症状。","symptoms":"皮肤偏暗；色素沉着；口唇紫；眼眶暗黑；鼻部暗滞；易脱发；肌肤干燥；皮肤粗糙；面色白或黄；眼睑浮肿；肢体有麻木感","syndrome":"心肾两虚证","description":"您的体质主要是血瘀体质兼血虚体质，体质的形成可能受到多种因素的影响：\n血瘀体质多因外伤、手术等引起血液流出血管，淤积体内；或者因为感受寒邪、热邪、湿邪等引起身体血液循环障碍；或者因为精神压力大，情绪压抑导致血液循环障碍。\n血虚体质多因先天不足，或慢性消耗（过度劳累、过度出汗、失血、久病等）、或营养摄入不足（节食、厌食、偏食等）等导致身体能量不足，脏腑功能下降。","distribution":[{"name":"血瘀体质","score":50,"confidence":0.8192871549955509},{"name":"血虚体质","score":50,"confidence":0.7954120822547365}],"introduction":"因先天不足，或久病虚损，心肾阳气或阴精亏虚所致。临床以眩晕，心悸，自汗或盗汗，腰膝酸软，失眠，健忘，夜尿增多，舌质淡或偏红，边有齿痕，舌苔薄白或润，脉沉弱或细数，伴见下肢浮肿，神疲、乏力，胸闷、气短，面白，小便清长、频数，或痫病频发，神思恍惚，面色晦暗，耳轮枯焦，大便干燥等为特征的证候。"},"dietaryAdvice":{"tcm":["可做保健性艾灸。先将艾条点燃，放在灸盒中的铁纱上，并将温灸盒置于关元穴上方，盖好封盖以调节温度。每次灸20~30分钟。每日1次，7~10次为1个疗程。注意预防烫伤。","可做保健性耳穴疗法。取神门、心、脾、颈椎、肩、颈、等耳穴。将耳穴消毒，在耳穴上贴王不留行籽或耳穴压丸，用拇、食指进行垂直按压，施压至患出现沉、重、胀、痛感。每穴按压1分钟左右。每穴重复操作2~3遍，每天3~5次。双侧耳穴轮流使用，2日1次替换。","可用六字诀进行呼吸训练以达到保健效果。六字诀是一种吐纳法。它是通过呬、呵、呼、嘘、吹、嘻六个字的不同发音口型，唇齿喉舌的用力不同，以牵动不同的脏腑经络气血的运行。\n方法：首先预备姿势，两足开立，与肩同宽，头正颈直，含胸拔背，松腰松胯，双膝微屈，全身放松，呼吸自然。\n其次联系呼吸，顺腹式呼吸，先呼后吸，呼所时读字，同时提肛缩肾，体重移至足跟。\n最后调息， 每个字读六遍后，调息一次，以稍事休息，恢复自然。","可行叩齿保健法以达到健脾益胃，纳气补肾的效果，古人认为齿健则身健，身健则长寿。方法：口唇轻闭，首先，上下门牙齿叩击9次，然后左侧上下牙齿叩击9次，右侧上下齿叩击9次，最后上下门齿再叩击9次。每日早晚各一次，每次3分钟左右。叩齿时可用双手指有节律地搓双侧耳孔，提拉双耳廓直到发热为止。"],"music":["商音（适合血瘀调理）"],"emotion":["保持情志舒畅，减少思虑，多与人沟通交流。"],"therapy":["黄芪炖鸡","红枣桂圆茶","山药莲子粥"],"exercise":["适度运动，进行一些简单易行的锻炼项目，如：散步、跑步、八段锦、太极拳、五禽戏等。"],"products":["艾灸仪","精油","拔罐器","助眠灯","健康茶饮"],"forbidden":["少食辛辣、咖啡、浓茶等刺激之品。"],"lifestyle":["音乐疗法：道教音乐崇尚“中和”的审美特征，具体来说体现为“阴、阳调和”、“动、静结合”和“散、正相间”等方面，常听这类曲目能让体内脏腑、气血平衡，使人心情愉快，精神饱满；改善睡眠；增强抗压能力等。其代表性曲目有：《啸咏朱陵府》《卫灵咒》《华夏颂》等。","注意保暖，尤其腰腹部，春天温度变化大别着急穿太薄。","病室应通风透气，光线柔和。"],"recommended":["饮食均衡、清淡，粗细搭配适当，荤素配伍合理。"]},"primaryConclusion":"血瘀体质、血虚体质","confidenceScore":"94.00","apiProvider":"aliyun","apiCallId":"e16a88a9-ef96-4ec4-a87b-95d2ddf24989","errorMessage":null,"userNotes":"","analyzedAt":"2025-10-04 20:39:08","created_at":"2025-10-04 20:39:04","updated_at":"2025-10-04 20:39:08"}}}
+📡 HTTP状态码: 200
+✅ 健康档案获取成功: 平和质
+✅ 健康档案获取成功: 平和质
+✅ 健康档案获取成功: 平和质
+🔍 服务器响应: {"success":true,"data":{"lunarInfo":{"year":2025,"month":10,"day":4,"yearStem":"乙","yearBranch":"巳","monthStem":"丁","monthBranch":"亥","dayStem":"丙","dayBranch":"申"},"fiveMovements":{"element":"金","nature":"不及","characteristics":{"traits":["火气制金","肺气不足"],"symptoms":["气短乏力","易感外邪"]},"influence":"肺气不足，易感外邪，宜补益肺气"},"sixQi":{"qi":"厥阴风木","season":"立夏","characteristics":{"nature":"风","traits":["主动","主升"],"organs":["肝","胆"]},"influence":"风气主令，易发肝胆疾病，注意疏肝理气"},"hostGuestMovements":{"hostMovements":[{"period":"第1步","element":"土","nature":"常运","duration":"73天5刻"},{"period":"第2步","element":"金","nature":"常运","duration":"73天5刻"},{"period":"第3步","element":"水","nature":"中运","duration":"73天5刻"},{"period":"第4步","element":"木","nature":"常运","duration":"73天5刻"},{"period":"第5步","element":"火","nature":"常运","duration":"73天5刻"}],"guestMovement":{"element":"金","nature":"不及","influence":"肺气不足，易感外邪，宜补益肺气"}},"hostGuestQi":{"hostQi":[{"name":"厥阴风木","period":"初之气","season":"春分前后"},{"name":"少阴君火","period":"二之气","season":"小满前后"},{"name":"少阳相火","period":"三之气","season":"大暑前后"},{"name":"太阴湿土","period":"四之气","season":"秋分前后"},{"name":"阳明燥金","period":"五之气","season":"小雪前后"},{"name":"太阳寒水","period":"终之气","season":"大寒前后"}],"guestQi":{"name":"厥阴风木","influence":"风气主令，易发肝胆疾病，注意疏肝理气","characteristics":{"nature":"风","traits":["主动","主升"],"organs":["肝","胆"]}}},"qiMovementCombination":{"movementElement":"金","qiElement":"木","relation":{"type":"相克","description":"体质克当前运气，易过度消耗，宜节制"},"influence":"运气制约体质，易生疾病，宜预防调理","healthImpact":{"level":"fair","advice":"注意预防，及时调理"}},"currentSolarTerm":"秋分","solarTermCharacteristics":{"element":"金","nature":"平衡","advice":"平补肺肾，调和阴阳"},"personalizedAdvice":{"dietTherapy":{"constitution_based":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养"],"seasonal":["白色食物","辛味食物","润肺食品"],"relation_based":["适度补益","增强营养"],"comprehensive":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养","白色食物","辛味食物","润肺食品","适度补益","增强营养"]},"exerciseAdvice":{"constitution_based":["适度运动","太极拳","慢跑","游泳"],"seasonal":["呼吸运动","肺部锻炼","避免干燥"],"recommended_time":"下午3-5点，肺经当令","intensity":"适度强度"},"emotionalCare":{"constitution_advice":["阴虚体质、湿热体质情志调养建议"],"seasonal_advice":["秋分情志调养"],"meditation":["阴虚体质、湿热体质冥想建议"],"music_therapy":["阴虚体质、湿热体质音乐疗法"]},"lifestyleAdvice":{"sleep_schedule":"秋分作息建议","daily_routine":["阴虚体质、湿热体质日常起居"],"environment":["阴虚体质、湿热体质环境调节"],"seasonal_care":["秋分起居调摄"]},"diseaseRiskPrediction":{"constitution_risks":["阴虚体质、湿热体质易患疾病"],"seasonal_risks":["秋分易发疾病"],"relation_risks":["体质与运气关系不明确，建议均衡调养"],"prevention_advice":["预防建议"]},"healthTips":{"daily_tips":["阴虚体质、湿热体质日常保健"],"seasonal_tips":["秋分养生要点"],"constitution_tips":["阴虚体质、湿热体质保健要点"],"five_elements_tips":["五运六气养生要点"]}},"constitutionMatch":{"constitution":"阴虚体质、湿热体质","constitutionElement":"土","movementMatch":{"element":"金","relation":"相生","score":70,"description":"体质生当前运气，消耗较大，宜补益"},"qiMatch":{"element":"木","relation":"被克","score":30,"description":"当前运气克体质，易生疾病，宜防护"},"overallScore":50,"overallLevel":"fair","recommendations":["当前时期需要特别注意调养","建议咨询中医师制定个性化调理方案"]},"userConstitution":"阴虚体质、湿热体质","analysisId":1075}}
+🔍 服务器响应: {"success":true,"data":{"healthProfile":{"id":"1","userId":1,"height":null,"weight":null,"bloodType":"unknown","primaryConstitution":"阴虚体质、湿热体质","secondaryConstitution":null,"constitutionScore":null,"healthMetrics":{"age":21,"bmi":null,"gender":"male","sleepScore":40,"overallScore":29,"activityLevel":"lightly_active","exerciseScore":60,"lastCalculated":"2025-10-04T12:36:29.899Z","sleepQualityLevel":"poor"},"latestTongueAnalysis":{"analyzedAt":"2025-10-04T12:36:32.297Z","constitutionScore":85,"primaryConstitution":"平和质"},"latestFaceAnalysis":{"analyzedAt":"2025-10-04T12:39:08.197Z","confidenceScore":94,"primaryConclusion":"血瘀体质、血虚体质"},"sleepDataSummary":{"records":[{"endTime":"2025-10-05T08:00:00.000Z","sleepDate":"2025-10-05","startTime":"2025-10-05T01:00:00.000Z","userNotes":null,"dataSource":"manual","uploadedAt":"2025-10-04T12:36:29.866Z","sleepStages":null,"movementData":null,"sleepQuality":4.5,"awakeDuration":null,"heartRateData":null,"sleepDuration":420,"environmentData":null,"sleepEfficiency":null,"remSleepDuration":null,"deepSleepDuration":null,"lightSleepDuration":null},{"endTime":"2025-10-04T12:27:01.749Z","sleepDate":"2025-10-04","startTime":"2025-10-04T12:24:54.525Z","userNotes":null,"dataSource":"manual","uploadedAt":"2025-10-04T12:27:43.171Z","sleepStages":null,"movementData":null,"sleepQuality":5.3,"awakeDuration":null,"heartRateData":null,"sleepDuration":2,"environmentData":null,"sleepEfficiency":null,"remSleepDuration":null,"deepSleepDuration":null,"lightSleepDuration":null},{"endTime":"2025-10-04T02:00:00.000Z","sleepDate":"2025-10-03","startTime":"2025-10-03T23:00:00.000Z","userNotes":null,"dataSource":"manual","uploadedAt":"2025-10-04T12:15:12.268Z","sleepStages":null,"movementData":null,"sleepQuality":4.5,"awakeDuration":null,"heartRateData":null,"sleepDuration":180,"environmentData":null,"sleepEfficiency":null,"remSleepDuration":30,"deepSleepDuration":60,"lightSleepDuration":90}],"updatedAt":"2025-10-04T04:21:33.439Z","lastUpdated":"2025-10-04T12:36:29.866Z","sleepPattern":"poor","totalRecords":3,"lastSleepDate":"2025-07-23 18:32:30","recentRecords":[{"id":"73","endTime":"2025-07-23 18:32:36","startTime":"2025-07-23 18:32:30","sleepStages":[{"duration":90,"stageType":"light"},{"duration":120,"stageType":"deep"},{"duration":90,"stageType":"rem"},{"duration":30,"stageType":"light"}],"actualDuration":null,"targetDuration":480,"sleepEfficiency":null,"sleepQualityRating":5},{"id":"72","endTime":"2025-07-23 18:30:55","startTime":"2025-07-23 18:30:44","sleepStages":[{"duration":90,"stageType":"light"},{"duration":120,"stageType":"deep"},{"duration":90,"stageType":"rem"},{"duration":30,"stageType":"light"}],"actualDuration":null,"targetDuration":480,"sleepEfficiency":null,"sleepQualityRating":5},{"id":"71","endTime":"2025-07-22 15:49:10","startTime":"2025-07-22 15:49:03","sleepStages":[{"duration":90,"stageType":"light"},{"duration":120,"stageType":"deep"},{"duration":90,"stageType":"rem"},{"duration":30,"stageType":"light"}],"actualDuration":null,"targetDuration":480,"sleepEfficiency":null,"sleepQualityRating":5},{"id":"70","endTime":"2025-07-22 13:29:20","startTime":"2025-07-22 05:29:20","sleepStages":[],"actualDuration":480,"targetDuration":480,"sleepEfficiency":null,"sleepQualityRating":null},{"id":"69","endTime":"2025-07-22 13:27:58","startTime":"2025-07-22 05:27:58","sleepStages":[],"actualDuration":480,"targetDuration":480,"sleepEfficiency":null,"sleepQualityRating":null}],"totalSessions":72,"recentSessions":0,"weeklySessions":0,"sleepConsistency":0,"sleepStageAnalysis":{"averageRemSleep":90,"averageDeepSleep":120,"averageLightSleep":169.63,"remSleepPercentage":24,"deepSleepPercentage":32,"lightSleepPercentage":45},"averageSleepQuality":4.77,"averageSleepDuration":3.34,"averageSleepEfficiency":0},"workoutDataSummary":{"updatedAt":"2025-10-04T04:21:33.374Z","workoutTypes":{"walking":10},"recentRecords":[{"endTime":"2025-10-04 12:21:32","calories":1,"duration":27,"startTime":"2025-10-04 12:21:05","workoutId":"172","workoutType":"walking","totalDistance":"0.04","advancedMetrics":{"maxHeartRate":95,"averageHeartRate":75}},{"endTime":"2025-09-19 16:38:11","calories":3,"duration":58,"startTime":"2025-09-19 16:37:13","workoutId":"171","workoutType":"walking","totalDistance":"0.40","advancedMetrics":{"maxHeartRate":95,"averageHeartRate":75}},{"endTime":"2025-09-17 07:09:06","calories":25,"duration":379,"startTime":"2025-09-17 07:02:47","workoutId":"170","workoutType":"walking","totalDistance":"0.54","advancedMetrics":{"maxHeartRate":95,"averageHeartRate":75}},{"endTime":"2025-09-16 12:35:02","calories":2,"duration":44,"startTime":"2025-09-16 12:34:18","workoutId":"169","workoutType":"walking","totalDistance":"0.05","advancedMetrics":{"maxHeartRate":95,"averageHeartRate":75}},{"endTime":"2025-09-16 12:32:16","calories":5,"duration":80,"startTime":"2025-09-16 12:30:56","workoutId":"168","workoutType":"walking","totalDistance":"0.04","advancedMetrics":{"maxHeartRate":95,"averageHeartRate":75}}],"totalCalories":39,"totalDistance":"00.040.400.540.050.040.100.000.000.000.00","totalWorkouts":144,"recentWorkouts":19,"weeklyWorkouts":1,"averageDuration":165,"lastWorkoutDate":"2025-10-04 12:21:05","averageHeartRate":75,"workoutFrequency":"lightly_active"},"fiveElementsMatch":{"sixQi":{"qi":"厥阴风木","season":"立夏","influence":"风气主令，易发肝胆疾病，注意疏肝理气","characteristics":{"nature":"风","organs":["肝","胆"],"traits":["主动","主升"]}},"analysisId":1067,"lastUpdated":"2025-10-04T12:40:40.144Z","analysisDate":"2025-10-04T12:40:40.144Z","fiveMovements":{"nature":"不及","element":"金","influence":"肺气不足，易感外邪，宜补益肺气","characteristics":{"traits":["火气制金","肺气不足"],"symptoms":["气短乏力","易感外邪"]}},"constitutionMatch":{"qiMatch":{"score":30,"element":"木","relation":"被克","description":"当前运气克体质，易生疾病，宜防护"},"constitution":"阴虚体质、湿热体质","overallLevel":"fair","overallScore":50,"movementMatch":{"score":70,"element":"金","relation":"相生","description":"体质生当前运气，消耗较大，宜补益"},"recommendations":["当前时期需要特别注意调养","建议咨询中医师制定个性化调理方案"],"constitutionElement":"土"},"personalizedAdvice":{"healthTips":{"daily_tips":["阴虚体质、湿热体质日常保健"],"seasonal_tips":["秋分养生要点"],"constitution_tips":["阴虚体质、湿热体质保健要点"],"five_elements_tips":["五运六气养生要点"]},"dietTherapy":{"seasonal":["白色食物","辛味食物","润肺食品"],"comprehensive":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养","白色食物","辛味食物","润肺食品","适度补益","增强营养"],"relation_based":["适度补益","增强营养"],"constitution_based":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养"]},"emotionalCare":{"meditation":["阴虚体质、湿热体质冥想建议"],"music_therapy":["阴虚体质、湿热体质音乐疗法"],"seasonal_advice":["秋分情志调养"],"constitution_advice":["阴虚体质、湿热体质情志调养建议"]},"exerciseAdvice":{"seasonal":["呼吸运动","肺部锻炼","避免干燥"],"intensity":"适度强度","recommended_time":"下午3-5点，肺经当令","constitution_based":["适度运动","太极拳","慢跑","游泳"]},"lifestyleAdvice":{"environment":["阴虚体质、湿热体质环境调节"],"daily_routine":["阴虚体质、湿热体质日常起居"],"seasonal_care":["秋分起居调摄"],"sleep_schedule":"秋分作息建议"},"diseaseRiskPrediction":{"relation_risks":["体质与运气关系不明确，建议均衡调养"],"seasonal_risks":["秋分易发疾病"],"prevention_advice":["预防建议"],"constitution_risks":["阴虚体质、湿热体质易患疾病"]}}},"healthRiskAssessment":null,"personalizedAdvice":{"longTerm":["建立健康的生活方式","定期进行健康检查","保持良好的心理状态","培养运动习惯"],"priority":"high","immediate":["立即咨询医生，进行全面体检","调整饮食结构，控制体重"],"lifestyle":["增加运动频率，建议每周至少3次有氧运动","改善睡眠质量，保持规律作息"],"constitution":{"diet":["均衡饮食","五谷杂粮","新鲜蔬果","适量肉类","补气食物","山药","大枣","黄芪","人参"],"exercise":["适度运动","太极拳","慢跑","游泳","轻度运动","散步","八段锦","避免剧烈运动"],"emotional":["保持乐观","心态平和"],"lifestyle":["规律作息","保持心情愉快","适度工作"]},"fiveElements":{"healthTips":{"daily_tips":["平和质日常保健"],"seasonal_tips":["秋分养生要点"],"constitution_tips":["平和质保健要点"],"five_elements_tips":["五运六气养生要点"]},"dietTherapy":{"seasonal":["白色食物","辛味食物","润肺食品"],"comprehensive":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养","白色食物","辛味食物","润肺食品","适度补益","增强营养"],"relation_based":["适度补益","增强营养"],"constitution_based":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养"]},"emotionalCare":{"meditation":["平和质冥想建议"],"music_therapy":["平和质音乐疗法"],"seasonal_advice":["秋分情志调养"],"constitution_advice":["平和质情志调养建议"]},"exerciseAdvice":{"seasonal":["呼吸运动","肺部锻炼","避免干燥"],"intensity":"适度强度","recommended_time":"下午3-5点，肺经当令","constitution_based":["适度运动","太极拳","慢跑","游泳"]},"lifestyleAdvice":{"environment":["平和质环境调节"],"daily_routine":["平和质日常起居"],"seasonal_care":["秋分起居调摄"],"sleep_schedule":"秋分作息建议"},"diseaseRiskPrediction":{"relation_risks":["体质与运气关系不明确，建议均衡调养"],"seasonal_risks":["秋分易发疾病"],"prevention_advice":["预防建议"],"constitution_risks":["平和质易患疾病"]}}},"caregiverPlan":null,"overallHealthScore":53,"healthLevel":"poor","lastUpdated":"2025-10-04 20:40:40","nextUpdateSuggested":"2025-10-07 20:40:40","created_at":"2025-09-21 16:42:52","updated_at":"2025-10-04 20:40:40"},"latestTongueAnalysis":{"id":"266","userId":1,"originalImageUrl":"https://example.com/invalid.jpg","cutTongueUrl":"","analysisStatus":"completed","constitutionAnalysis":{"score":85,"warning":"继续保持良好的生活习惯，注意劳逸结合","features":[{"desc":"面色红润有光泽，气色良好","name":"面色","value":"红润","status":"正常","confidence":0.85}],"symptoms":"面色红润、精力充沛、睡眠良好、食欲正常","description":"体质均衡，各脏腑功能协调，精神饱满，是最理想的体质状态。","constitution":"平和质","distribution":[{"name":"平和质","score":85}],"detectMatches":null},"tongueCharacteristics":{"cracks":"无","features":[{"desc":"面色红润有光泽，气色良好","name":"面色","value":"红润","status":"正常","confidence":0.85}],"moisture":"润泽","bodyColor":"淡红","teethMarks":"无","coatingColor":"薄白","coatingThickness":"适中"},"syndromeAnalysis":{"name":"正常体质","warning":"继续保持良好的生活习惯，注意劳逸结合","symptoms":"面色红润、精力充沛、睡眠良好、食欲正常","syndrome":"正常体质","description":"身体健康，各项机能正常","introduction":"身体健康，各项机能正常"},"treatmentAdvice":{"tcm":["适当按摩","艾灸保健","中药调理"],"diet":{"forbidden":["过于油腻","过辣","过甜","冷饮"],"recommended":["新鲜蔬菜","水果","粗粮","鱼肉","豆制品"]},"music":["舒缓音乐","古典音乐","自然音效"],"emotion":["保持乐观","减少压力","适当放松"],"therapy":["银耳莲子汤","山药粥","红枣茶"],"exercise":["散步","太极","瑜伽","游泳","适量有氧运动"],"products":["养生茶","艾灸仪","按摩器","保健品"],"lifestyle":["规律作息","早睡早起","保证7-8小时睡眠"]},"primaryConstitution":"平和质","constitutionScore":"85.00","apiProvider":"aliyun","apiCallId":"ba27b2f9-607b-429d-82a2-448bca58412c","errorMessage":null,"userNotes":"","analyzedAt":"2025-10-04 20:39:48","created_at":"2025-10-04 20:39:46","updated_at":"2025-10-04 20:39:48"},"latestFaceAnalysis":{"id":"78","userId":1,"originalImageUrl":"https://qinghe-uploads.oss-cn-beijing.aliyuncs.com/health/1759581540341-e6irpzxza.jpg","analysisStatus":"completed","facialFeatures":{"score":94,"features":[{"desc":"面色较正常偏黄，主要由脾胃虚弱、气血不足导致。","name":"面色黄","value":"异常","status":"异常","confidence":0.749847588338626},{"desc":"面色鲜明有光泽，表示身体健康状态良好；若有疾病表现，多处于疾病早期，病情轻，易康复，不容易出现并发症等。","name":"面色明亮","value":"正常","status":"正常","confidence":0.7369595400973179},{"desc":"目光明亮，精神饱满。","name":"有神","value":"正常","status":"正常","confidence":0.9344547506053024},{"desc":"眉间正常，无皱纹凹陷。","name":"正常","value":"正常","status":"正常","confidence":0.9489741569285752},{"desc":"眉毛浓厚。","name":"浓眉","value":"正常","status":"正常","confidence":0.811814830133905},{"desc":"眼皮无褶皱。","name":"单眼皮","value":"正常","status":"正常","confidence":0.7050674281042091},{"desc":"上下任意唇体饱满，成曲面，状似鱼肚。","name":"唇厚","value":"正常","status":"正常","confidence":0.905936466042662},{"desc":"唇色较正常偏紫。多见于瘀血，常见于心气不足、心阳虚衰，或严重呼吸困难者。","name":"唇紫","value":"异常","status":"异常","confidence":0.9346074005392094}],"constitution":"血瘀体质、血虚体质"},"faceConclusion":{"warning":"血瘀体质兼夹血虚体质的人可能会遇到一系列健康挑战。以下是这类体质人群容易出现的一些问题：\n心血管疾病：血瘀体质可能导致血液循环不畅，增加心脑血管疾病的风险，如心绞痛、心肌梗死、脑梗死等。\n疼痛症状：由于血液运行不畅，血瘀体质者常常会有固定部位的疼痛，如胸痛、头痛、关节痛等，疼痛性质可能为刺痛或夜间加重。\n皮肤问题：皮肤可能呈现晦暗无光，容易形成色斑、瘀斑，且这些斑点不易消退。\n消化系统问题：血瘀体质可能影响脾胃的运化，导致胃痛、胃胀、消化不良等症状。\n神经系统：容易出现失眠和健忘现象。血虚导致的心神失养，可能引起入睡困难、睡眠质量差，以及记忆力减退。\n精神状态：经常感到疲劳、精神不振，思考能力和集中力下降，情绪可能变得不稳定，容易心烦意乱。\n肌肉与关节：有可能出现肌肉无力、肢体麻木、筋脉拘挛等症状，因为血液不足以濡养肌肉和骨骼系统。\n其他身体症状：还包括头晕眼花、多梦不安、免疫力下降等症状。","symptoms":"皮肤偏暗；色素沉着；口唇紫；眼眶暗黑；鼻部暗滞；易脱发；肌肤干燥；皮肤粗糙；面色白或黄；眼睑浮肿；肢体有麻木感","syndrome":"心肾两虚证","description":"您的体质主要是血瘀体质兼血虚体质，体质的形成可能受到多种因素的影响：\n血瘀体质多因外伤、手术等引起血液流出血管，淤积体内；或者因为感受寒邪、热邪、湿邪等引起身体血液循环障碍；或者因为精神压力大，情绪压抑导致血液循环障碍。\n血虚体质多因先天不足，或慢性消耗（过度劳累、过度出汗、失血、久病等）、或营养摄入不足（节食、厌食、偏食等）等导致身体能量不足，脏腑功能下降。","distribution":[{"name":"血瘀体质","score":50,"confidence":0.8192871549955509},{"name":"血虚体质","score":50,"confidence":0.7954120822547365}],"introduction":"因先天不足，或久病虚损，心肾阳气或阴精亏虚所致。临床以眩晕，心悸，自汗或盗汗，腰膝酸软，失眠，健忘，夜尿增多，舌质淡或偏红，边有齿痕，舌苔薄白或润，脉沉弱或细数，伴见下肢浮肿，神疲、乏力，胸闷、气短，面白，小便清长、频数，或痫病频发，神思恍惚，面色晦暗，耳轮枯焦，大便干燥等为特征的证候。"},"dietaryAdvice":{"tcm":["可做保健性艾灸。先将艾条点燃，放在灸盒中的铁纱上，并将温灸盒置于关元穴上方，盖好封盖以调节温度。每次灸20~30分钟。每日1次，7~10次为1个疗程。注意预防烫伤。","可做保健性耳穴疗法。取神门、心、脾、颈椎、肩、颈、等耳穴。将耳穴消毒，在耳穴上贴王不留行籽或耳穴压丸，用拇、食指进行垂直按压，施压至患出现沉、重、胀、痛感。每穴按压1分钟左右。每穴重复操作2~3遍，每天3~5次。双侧耳穴轮流使用，2日1次替换。","可用六字诀进行呼吸训练以达到保健效果。六字诀是一种吐纳法。它是通过呬、呵、呼、嘘、吹、嘻六个字的不同发音口型，唇齿喉舌的用力不同，以牵动不同的脏腑经络气血的运行。\n方法：首先预备姿势，两足开立，与肩同宽，头正颈直，含胸拔背，松腰松胯，双膝微屈，全身放松，呼吸自然。\n其次联系呼吸，顺腹式呼吸，先呼后吸，呼所时读字，同时提肛缩肾，体重移至足跟。\n最后调息， 每个字读六遍后，调息一次，以稍事休息，恢复自然。","可行叩齿保健法以达到健脾益胃，纳气补肾的效果，古人认为齿健则身健，身健则长寿。方法：口唇轻闭，首先，上下门牙齿叩击9次，然后左侧上下牙齿叩击9次，右侧上下齿叩击9次，最后上下门齿再叩击9次。每日早晚各一次，每次3分钟左右。叩齿时可用双手指有节律地搓双侧耳孔，提拉双耳廓直到发热为止。"],"music":["商音（适合血瘀调理）"],"emotion":["保持情志舒畅，减少思虑，多与人沟通交流。"],"therapy":["黄芪炖鸡","红枣桂圆茶","山药莲子粥"],"exercise":["适度运动，进行一些简单易行的锻炼项目，如：散步、跑步、八段锦、太极拳、五禽戏等。"],"products":["艾灸仪","精油","拔罐器","助眠灯","健康茶饮"],"forbidden":["少食辛辣、咖啡、浓茶等刺激之品。"],"lifestyle":["音乐疗法：道教音乐崇尚“中和”的审美特征，具体来说体现为“阴、阳调和”、“动、静结合”和“散、正相间”等方面，常听这类曲目能让体内脏腑、气血平衡，使人心情愉快，精神饱满；改善睡眠；增强抗压能力等。其代表性曲目有：《啸咏朱陵府》《卫灵咒》《华夏颂》等。","注意保暖，尤其腰腹部，春天温度变化大别着急穿太薄。","病室应通风透气，光线柔和。"],"recommended":["饮食均衡、清淡，粗细搭配适当，荤素配伍合理。"]},"primaryConclusion":"血瘀体质、血虚体质","confidenceScore":"94.00","apiProvider":"aliyun","apiCallId":"e16a88a9-ef96-4ec4-a87b-95d2ddf24989","errorMessage":null,"userNotes":"","analyzedAt":"2025-10-04 20:39:08","created_at":"2025-10-04 20:39:04","updated_at":"2025-10-04 20:39:08"}}}
+📡 HTTP状态码: 200
+🔍 服务器响应: {"success":true,"data":{"lunarInfo":{"year":2025,"month":10,"day":4,"yearStem":"乙","yearBranch":"巳","monthStem":"丁","monthBranch":"亥","dayStem":"丙","dayBranch":"申"},"fiveMovements":{"element":"金","nature":"不及","characteristics":{"traits":["火气制金","肺气不足"],"symptoms":["气短乏力","易感外邪"]},"influence":"肺气不足，易感外邪，宜补益肺气"},"sixQi":{"qi":"厥阴风木","season":"立夏","characteristics":{"nature":"风","traits":["主动","主升"],"organs":["肝","胆"]},"influence":"风气主令，易发肝胆疾病，注意疏肝理气"},"hostGuestMovements":{"hostMovements":[{"period":"第1步","element":"土","nature":"常运","duration":"73天5刻"},{"period":"第2步","element":"金","nature":"常运","duration":"73天5刻"},{"period":"第3步","element":"水","nature":"中运","duration":"73天5刻"},{"period":"第4步","element":"木","nature":"常运","duration":"73天5刻"},{"period":"第5步","element":"火","nature":"常运","duration":"73天5刻"}],"guestMovement":{"element":"金","nature":"不及","influence":"肺气不足，易感外邪，宜补益肺气"}},"hostGuestQi":{"hostQi":[{"name":"厥阴风木","period":"初之气","season":"春分前后"},{"name":"少阴君火","period":"二之气","season":"小满前后"},{"name":"少阳相火","period":"三之气","season":"大暑前后"},{"name":"太阴湿土","period":"四之气","season":"秋分前后"},{"name":"阳明燥金","period":"五之气","season":"小雪前后"},{"name":"太阳寒水","period":"终之气","season":"大寒前后"}],"guestQi":{"name":"厥阴风木","influence":"风气主令，易发肝胆疾病，注意疏肝理气","characteristics":{"nature":"风","traits":["主动","主升"],"organs":["肝","胆"]}}},"qiMovementCombination":{"movementElement":"金","qiElement":"木","relation":{"type":"相克","description":"体质克当前运气，易过度消耗，宜节制"},"influence":"运气制约体质，易生疾病，宜预防调理","healthImpact":{"level":"fair","advice":"注意预防，及时调理"}},"currentSolarTerm":"秋分","solarTermCharacteristics":{"element":"金","nature":"平衡","advice":"平补肺肾，调和阴阳"},"personalizedAdvice":{"dietTherapy":{"constitution_based":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养"],"seasonal":["白色食物","辛味食物","润肺食品"],"relation_based":["适度补益","增强营养"],"comprehensive":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养","白色食物","辛味食物","润肺食品","适度补益","增强营养"]},"exerciseAdvice":{"constitution_based":["适度运动","太极拳","慢跑","游泳"],"seasonal":["呼吸运动","肺部锻炼","避免干燥"],"recommended_time":"下午3-5点，肺经当令","intensity":"适度强度"},"emotionalCare":{"constitution_advice":["阴虚体质、湿热体质情志调养建议"],"seasonal_advice":["秋分情志调养"],"meditation":["阴虚体质、湿热体质冥想建议"],"music_therapy":["阴虚体质、湿热体质音乐疗法"]},"lifestyleAdvice":{"sleep_schedule":"秋分作息建议","daily_routine":["阴虚体质、湿热体质日常起居"],"environment":["阴虚体质、湿热体质环境调节"],"seasonal_care":["秋分起居调摄"]},"diseaseRiskPrediction":{"constitution_risks":["阴虚体质、湿热体质易患疾病"],"seasonal_risks":["秋分易发疾病"],"relation_risks":["体质与运气关系不明确，建议均衡调养"],"prevention_advice":["预防建议"]},"healthTips":{"daily_tips":["阴虚体质、湿热体质日常保健"],"seasonal_tips":["秋分养生要点"],"constitution_tips":["阴虚体质、湿热体质保健要点"],"five_elements_tips":["五运六气养生要点"]}},"constitutionMatch":{"constitution":"阴虚体质、湿热体质","constitutionElement":"土","movementMatch":{"element":"金","relation":"相生","score":70,"description":"体质生当前运气，消耗较大，宜补益"},"qiMatch":{"element":"木","relation":"被克","score":30,"description":"当前运气克体质，易生疾病，宜防护"},"overallScore":50,"overallLevel":"fair","recommendations":["当前时期需要特别注意调养","建议咨询中医师制定个性化调理方案"]},"userConstitution":"阴虚体质、湿热体质","analysisId":1073}}
+📡 HTTP状态码: 200
+📡 HTTP状态码: 200
+✅ 健康档案获取成功: 平和质
+✅ 五运六气分析获取成功
+✅ 五运六气分析获取成功
+🔍 服务器响应: {"success":true,"data":{"lunarInfo":{"year":2025,"month":10,"day":4,"yearStem":"乙","yearBranch":"巳","monthStem":"丁","monthBranch":"亥","dayStem":"丙","dayBranch":"申"},"fiveMovements":{"element":"金","nature":"不及","characteristics":{"traits":["火气制金","肺气不足"],"symptoms":["气短乏力","易感外邪"]},"influence":"肺气不足，易感外邪，宜补益肺气"},"sixQi":{"qi":"厥阴风木","season":"立夏","characteristics":{"nature":"风","traits":["主动","主升"],"organs":["肝","胆"]},"influence":"风气主令，易发肝胆疾病，注意疏肝理气"},"hostGuestMovements":{"hostMovements":[{"period":"第1步","element":"土","nature":"常运","duration":"73天5刻"},{"period":"第2步","element":"金","nature":"常运","duration":"73天5刻"},{"period":"第3步","element":"水","nature":"中运","duration":"73天5刻"},{"period":"第4步","element":"木","nature":"常运","duration":"73天5刻"},{"period":"第5步","element":"火","nature":"常运","duration":"73天5刻"}],"guestMovement":{"element":"金","nature":"不及","influence":"肺气不足，易感外邪，宜补益肺气"}},"hostGuestQi":{"hostQi":[{"name":"厥阴风木","period":"初之气","season":"春分前后"},{"name":"少阴君火","period":"二之气","season":"小满前后"},{"name":"少阳相火","period":"三之气","season":"大暑前后"},{"name":"太阴湿土","period":"四之气","season":"秋分前后"},{"name":"阳明燥金","period":"五之气","season":"小雪前后"},{"name":"太阳寒水","period":"终之气","season":"大寒前后"}],"guestQi":{"name":"厥阴风木","influence":"风气主令，易发肝胆疾病，注意疏肝理气","characteristics":{"nature":"风","traits":["主动","主升"],"organs":["肝","胆"]}}},"qiMovementCombination":{"movementElement":"金","qiElement":"木","relation":{"type":"相克","description":"体质克当前运气，易过度消耗，宜节制"},"influence":"运气制约体质，易生疾病，宜预防调理","healthImpact":{"level":"fair","advice":"注意预防，及时调理"}},"currentSolarTerm":"秋分","solarTermCharacteristics":{"element":"金","nature":"平衡","advice":"平补肺肾，调和阴阳"},"personalizedAdvice":{"dietTherapy":{"constitution_based":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养"],"seasonal":["白色食物","辛味食物","润肺食品"],"relation_based":["适度补益","增强营养"],"comprehensive":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养","白色食物","辛味食物","润肺食品","适度补益","增强营养"]},"exerciseAdvice":{"constitution_based":["适度运动","太极拳","慢跑","游泳"],"seasonal":["呼吸运动","肺部锻炼","避免干燥"],"recommended_time":"下午3-5点，肺经当令","intensity":"适度强度"},"emotionalCare":{"constitution_advice":["阴虚体质、湿热体质情志调养建议"],"seasonal_advice":["秋分情志调养"],"meditation":["阴虚体质、湿热体质冥想建议"],"music_therapy":["阴虚体质、湿热体质音乐疗法"]},"lifestyleAdvice":{"sleep_schedule":"秋分作息建议","daily_routine":["阴虚体质、湿热体质日常起居"],"environment":["阴虚体质、湿热体质环境调节"],"seasonal_care":["秋分起居调摄"]},"diseaseRiskPrediction":{"constitution_risks":["阴虚体质、湿热体质易患疾病"],"seasonal_risks":["秋分易发疾病"],"relation_risks":["体质与运气关系不明确，建议均衡调养"],"prevention_advice":["预防建议"]},"healthTips":{"daily_tips":["阴虚体质、湿热体质日常保健"],"seasonal_tips":["秋分养生要点"],"constitution_tips":["阴虚体质、湿热体质保健要点"],"five_elements_tips":["五运六气养生要点"]}},"constitutionMatch":{"constitution":"阴虚体质、湿热体质","constitutionElement":"土","movementMatch":{"element":"金","relation":"相生","score":70,"description":"体质生当前运气，消耗较大，宜补益"},"qiMatch":{"element":"木","relation":"被克","score":30,"description":"当前运气克体质，易生疾病，宜防护"},"overallScore":50,"overallLevel":"fair","recommendations":["当前时期需要特别注意调养","建议咨询中医师制定个性化调理方案"]},"userConstitution":"阴虚体质、湿热体质","analysisId":1076}}
+📡 HTTP状态码: 200
+✅ 五运六气分析获取成功
+🔍 服务器响应: {"success":true,"message":"健康报告生成成功","data":{"reportId":"HR_1759581961783_1","reportType":"comprehensive","generatedAt":"2025-10-04T12:46:01.783Z","userInfo":{"userId":1,"username":"李旭杰","gender":"male","age":21,"memberSince":"2025-06-21 20:14:38"},"healthOverview":{"overallScore":53,"healthLevel":"poor","primaryConstitution":"平和质","currentSolarTerm":"秋分"},"detailedAnalysis":{"constitution":{"hasAnalysis":true,"primaryConstitution":"平和质","secondaryConstitution":"气虚质","constitutionScores":{"平和质":0,"气虚质":0,"阳虚质":0,"阴虚质":0,"痰湿质":0,"湿热质":0,"血瘀质":0,"气郁质":0,"特禀质":0},"constitutionRanking":[{"name":"平和质","score":0,"info":{"name":"平和质","englishName":"balanced","description":"体态适中，面色红润，精力充沛，睡眠良好，性格随和开朗","characteristics":["体态适中","面色红润","精力充沛","睡眠良好","性格随和"],"element":"土","season":"长夏","organs":["脾","胃"],"healthLevel":"excellent"}},{"name":"气虚质","score":0,"info":{"name":"气虚质","englishName":"qi_deficiency","description":"元气不足，疲乏无力，气短懒言，易出汗，易感冒","characteristics":["疲乏无力","气短懒言","易出汗","易感冒","声音低弱"],"element":"土","season":"长夏","organs":["脾","肺"],"healthLevel":"poor"}},{"name":"阳虚质","score":0,"info":{"name":"阳虚质","englishName":"yang_deficiency","description":"阳气不足，畏寒怕冷，手足不温，精神不振","characteristics":["畏寒怕冷","手足不温","精神不振","腰膝酸软","夜尿频多"],"element":"火","season":"夏","organs":["肾","脾"],"healthLevel":"poor"}},{"name":"阴虚质","score":0,"info":{"name":"阴虚质","englishName":"yin_deficiency","description":"阴液不足，口燥咽干，手足心热，潮热盗汗","characteristics":["口燥咽干","手足心热","潮热盗汗","心烦失眠","便秘"],"element":"水","season":"冬","organs":["肾","肺"],"healthLevel":"poor"}},{"name":"痰湿质","score":0,"info":{"name":"痰湿质","englishName":"phlegm_dampness","description":"形体肥胖，腹部肥满，胸闷痰多，容易困倦","characteristics":["形体肥胖","腹部肥满","胸闷痰多","容易困倦","身重不爽"],"element":"土","season":"长夏","organs":["脾","肺"],"healthLevel":"fair"}},{"name":"湿热质","score":0,"info":{"name":"湿热质","englishName":"damp_heat","description":"面垢油腻，口苦口干，身重困倦，大便黏滞","characteristics":["面垢油腻","口苦口干","身重困倦","大便黏滞","小便短赤"],"element":"火","season":"夏","organs":["脾","肝"],"healthLevel":"fair"}},{"name":"血瘀质","score":0,"info":{"name":"血瘀质","englishName":"blood_stasis","description":"肤色晦暗，色素沉着，容易出现瘀斑，口唇暗淡","characteristics":["肤色晦暗","色素沉着","容易瘀斑","口唇暗淡","舌质紫暗"],"element":"水","season":"冬","organs":["心","肝"],"healthLevel":"fair"}},{"name":"气郁质","score":0,"info":{"name":"气郁质","englishName":"qi_stagnation","description":"神情抑郁，情绪不稳，烦闷不乐，胸胁胀满","characteristics":["神情抑郁","情绪不稳","烦闷不乐","胸胁胀满","善太息"],"element":"木","season":"春","organs":["肝","胆"],"healthLevel":"fair"}},{"name":"特禀质","score":0,"info":{"name":"特禀质","englishName":"special_constitution","description":"过敏体质，容易药物过敏、花粉过敏等","characteristics":["过敏体质","遗传缺陷","胎传异常","药物过敏","适应能力差"],"element":"金","season":"秋","organs":["肺","肾"],"healthLevel":"poor"}}],"analysisReport":{"summary":"您的主要体质类型是平和质，评分0分","primaryConstitution":{"name":"平和质","score":0,"description":"体态适中，面色红润，精力充沛，睡眠良好，性格随和开朗","characteristics":["体态适中","面色红润","精力充沛","睡眠良好","性格随和"],"element":"土","healthLevel":"excellent"},"secondaryConstitution":{"name":"气虚质","score":0,"description":"元气不足，疲乏无力，气短懒言，易出汗，易感冒"},"recommendations":{"diet":["均衡饮食","五谷杂粮","新鲜蔬果","适量肉类","补气食物","山药","大枣","黄芪","人参"],"exercise":["适度运动","太极拳","慢跑","游泳","轻度运动","散步","八段锦","避免剧烈运动"],"lifestyle":["规律作息","保持心情愉快","适度工作"],"emotional":["保持乐观","心态平和"]},"riskFactors":[],"seasonalAdvice":{"spring":"春季平和质应注意疏肝理气，多食绿色蔬菜","summer":"夏季平和质应注意清热解暑，避免过度出汗","autumn":"秋季平和质应注意润燥养肺，多食白色食物","winter":"冬季平和质应注意温阳补肾，多食黑色食物"}},"confidence":0.5,"analyzedAt":"2025-10-04T12:46:01.751Z"},"fiveElements":{"analysisId":1077,"lunarInfo":{"year":2025,"month":10,"day":4,"yearStem":"乙","yearBranch":"巳","monthStem":"丁","monthBranch":"亥","dayStem":"丙","dayBranch":"申"},"fiveMovements":{"element":"金","nature":"不及","characteristics":{"traits":["火气制金","肺气不足"],"symptoms":["气短乏力","易感外邪"]},"influence":"肺气不足，易感外邪，宜补益肺气"},"sixQi":{"qi":"厥阴风木","season":"立夏","characteristics":{"nature":"风","traits":["主动","主升"],"organs":["肝","胆"]},"influence":"风气主令，易发肝胆疾病，注意疏肝理气"},"hostGuestMovements":{"hostMovements":[{"period":"第1步","element":"土","nature":"常运","duration":"73天5刻"},{"period":"第2步","element":"金","nature":"常运","duration":"73天5刻"},{"period":"第3步","element":"水","nature":"中运","duration":"73天5刻"},{"period":"第4步","element":"木","nature":"常运","duration":"73天5刻"},{"period":"第5步","element":"火","nature":"常运","duration":"73天5刻"}],"guestMovement":{"element":"金","nature":"不及","influence":"肺气不足，易感外邪，宜补益肺气"}},"hostGuestQi":{"hostQi":[{"name":"厥阴风木","period":"初之气","season":"春分前后"},{"name":"少阴君火","period":"二之气","season":"小满前后"},{"name":"少阳相火","period":"三之气","season":"大暑前后"},{"name":"太阴湿土","period":"四之气","season":"秋分前后"},{"name":"阳明燥金","period":"五之气","season":"小雪前后"},{"name":"太阳寒水","period":"终之气","season":"大寒前后"}],"guestQi":{"name":"厥阴风木","influence":"风气主令，易发肝胆疾病，注意疏肝理气","characteristics":{"nature":"风","traits":["主动","主升"],"organs":["肝","胆"]}}},"qiMovementCombination":{"movementElement":"金","qiElement":"木","relation":{"type":"相克","description":"体质克当前运气，易过度消耗，宜节制"},"influence":"运气制约体质，易生疾病，宜预防调理","healthImpact":{"level":"fair","advice":"注意预防，及时调理"}},"currentSolarTerm":"秋分","solarTermCharacteristics":{"element":"金","nature":"平衡","advice":"平补肺肾，调和阴阳"},"personalizedAdvice":{"dietTherapy":{"constitution_based":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养"],"seasonal":["白色食物","辛味食物","润肺食品"],"relation_based":["适度补益","增强营养"],"comprehensive":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养","白色食物","辛味食物","润肺食品","适度补益","增强营养"]},"exerciseAdvice":{"constitution_based":["适度运动","太极拳","慢跑","游泳"],"seasonal":["呼吸运动","肺部锻炼","避免干燥"],"recommended_time":"下午3-5点，肺经当令","intensity":"适度强度"},"emotionalCare":{"constitution_advice":["平和质情志调养建议"],"seasonal_advice":["秋分情志调养"],"meditation":["平和质冥想建议"],"music_therapy":["平和质音乐疗法"]},"lifestyleAdvice":{"sleep_schedule":"秋分作息建议","daily_routine":["平和质日常起居"],"environment":["平和质环境调节"],"seasonal_care":["秋分起居调摄"]},"diseaseRiskPrediction":{"constitution_risks":["平和质易患疾病"],"seasonal_risks":["秋分易发疾病"],"relation_risks":["体质与运气关系不明确，建议均衡调养"],"prevention_advice":["预防建议"]},"healthTips":{"daily_tips":["平和质日常保健"],"seasonal_tips":["秋分养生要点"],"constitution_tips":["平和质保健要点"],"five_elements_tips":["五运六气养生要点"]}}},"healthMetrics":{"bmi":null,"constitution":80,"exercise":20,"sleep":null},"workoutSummary":{"totalWorkouts":144,"recentWorkouts":1,"weeklyWorkouts":1,"averageWeeklyWorkouts":1,"average3DayWorkouts":1,"recentRecords":[{"workoutId":"172","userId":1,"workoutType":"walking","startTime":"2025-10-04 12:21:05","endTime":"2025-10-04 12:21:32","duration":27,"totalDistance":"0.04","totalSteps":38,"calories":1,"averagePace":"10.54","maxSpeed":"5.69","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-10-04 12:21:33","updated_at":"2025-10-04 12:21:33"},{"workoutId":"171","userId":1,"workoutType":"walking","startTime":"2025-09-19 16:37:13","endTime":"2025-09-19 16:38:11","duration":58,"totalDistance":"0.40","totalSteps":0,"calories":3,"averagePace":"2.41","maxSpeed":"24.94","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-09-19 16:38:12","updated_at":"2025-09-19 16:38:12"},{"workoutId":"170","userId":1,"workoutType":"walking","startTime":"2025-09-17 07:02:47","endTime":"2025-09-17 07:09:06","duration":379,"totalDistance":"0.54","totalSteps":698,"calories":25,"averagePace":"11.71","maxSpeed":"5.12","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-09-17 07:09:07","updated_at":"2025-09-17 07:09:07"},{"workoutId":"169","userId":1,"workoutType":"walking","startTime":"2025-09-16 12:34:18","endTime":"2025-09-16 12:35:02","duration":44,"totalDistance":"0.05","totalSteps":29,"calories":2,"averagePace":"16.27","maxSpeed":"3.69","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-09-16 12:35:02","updated_at":"2025-09-16 12:35:02"},{"workoutId":"168","userId":1,"workoutType":"walking","startTime":"2025-09-16 12:30:56","endTime":"2025-09-16 12:32:16","duration":80,"totalDistance":"0.04","totalSteps":0,"calories":5,"averagePace":"35.25","maxSpeed":"1.70","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-09-16 12:32:17","updated_at":"2025-09-16 12:32:17"},{"workoutId":"167","userId":1,"workoutType":"walking","startTime":"2025-09-15 22:51:34","endTime":"2025-09-15 22:52:26","duration":52,"totalDistance":"0.10","totalSteps":14,"calories":3,"averagePace":"8.36","maxSpeed":"7.17","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-09-15 22:52:27","updated_at":"2025-09-15 22:52:27"},{"workoutId":"166","userId":1,"workoutType":"walking","startTime":"2025-09-15 20:04:39","endTime":"2025-09-15 20:07:44","duration":185,"totalDistance":"0.00","totalSteps":0,"calories":0,"averagePace":"0.00","maxSpeed":"0.00","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算","created_at":"2025-09-15 20:07:44","updated_at":"2025-09-15 20:07:44"},{"workoutId":"165","userId":1,"workoutType":"walking","startTime":"2025-09-15 19:57:42","endTime":"2025-09-15 19:58:13","duration":31,"totalDistance":"0.00","totalSteps":0,"calories":0,"averagePace":"0.00","maxSpeed":"0.00","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算","created_at":"2025-09-15 19:58:14","updated_at":"2025-09-15 19:58:14"},{"workoutId":"164","userId":1,"workoutType":"walking","startTime":"2025-09-15 18:13:13","endTime":"2025-09-15 18:25:44","duration":751,"totalDistance":"0.00","totalSteps":1258,"calories":0,"averagePace":"0.00","maxSpeed":"0.00","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算","created_at":"2025-09-15 18:25:45","updated_at":"2025-09-15 18:25:45"},{"workoutId":"163","userId":1,"workoutType":"walking","startTime":"2025-09-14 05:05:20","endTime":"2025-09-14 05:06:00","duration":40,"totalDistance":"0.00","totalSteps":0,"calories":0,"averagePace":"0.00","maxSpeed":"0.00","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算","created_at":"2025-09-14 05:06:00","updated_at":"2025-09-14 05:06:00"}],"lastWorkoutDate":"2025-10-04 12:21:33"},"sleepSummary":{"totalSessions":72,"recentSessions":0,"weeklySessions":0,"averageWeeklySessions":0,"average3DaySessions":0,"averageSleepDuration":0,"recentRecords":[{"id":"73","userId":1,"localSessionId":"local_6347D458-B269-4B34-9106-F912920B05C4","startTime":"2025-07-23 18:32:30","endTime":"2025-07-23 18:32:36","targetWakeTime":"2025-07-24 02:32:30","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-23 18:32:36","updated_at":"2025-07-23 18:33:00"},{"id":"72","userId":1,"localSessionId":"local_33860B33-C762-4301-BB39-BC67E41BC331","startTime":"2025-07-23 18:30:44","endTime":"2025-07-23 18:30:55","targetWakeTime":"2025-07-24 02:30:44","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-23 18:30:55","updated_at":"2025-07-23 18:31:19"},{"id":"71","userId":1,"localSessionId":"local_465F9807-F0BD-45A1-A0E1-17CAE1CB90D2","startTime":"2025-07-22 15:49:03","endTime":"2025-07-22 15:49:10","targetWakeTime":"2025-07-22 23:49:03","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-22 15:49:11","updated_at":"2025-07-22 15:49:35"},{"id":"70","userId":1,"localSessionId":"test_session_1753162160490","startTime":"2025-07-22 05:29:20","endTime":"2025-07-22 13:29:20","targetWakeTime":"2025-07-22 13:29:20","targetDuration":480,"actualDuration":480,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"17.0","appVersion":"1.0.0","deviceType":"iPhone"},"environmentData":{"humidity":60,"noiseLevel":30,"temperature":22.5},"userNotes":"测试睡眠会话","processingStatus":"pending","wakeupMethod":null,"sleepQualityRating":null,"created_at":"2025-07-22 13:29:20","updated_at":"2025-07-22 13:29:20"},{"id":"69","userId":1,"localSessionId":"test_session_1753162078774","startTime":"2025-07-22 05:27:58","endTime":"2025-07-22 13:27:58","targetWakeTime":"2025-07-22 13:27:58","targetDuration":480,"actualDuration":480,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"17.0","appVersion":"1.0.0","deviceType":"iPhone"},"environmentData":{"humidity":60,"noiseLevel":30,"temperature":22.5},"userNotes":"测试睡眠会话","processingStatus":"pending","wakeupMethod":null,"sleepQualityRating":null,"created_at":"2025-07-22 13:27:58","updated_at":"2025-07-22 13:27:58"},{"id":"68","userId":1,"localSessionId":"test_session_1753156183503","startTime":"2025-07-22 03:49:43","endTime":"2025-07-22 11:49:43","targetWakeTime":"2025-07-22 11:49:43","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"17.0","appVersion":"1.0.0","deviceType":"iPhone"},"environmentData":{"humidity":60,"noiseLevel":30,"temperature":22.5},"userNotes":"测试睡眠数据","processingStatus":"failed","wakeupMethod":"natural","sleepQualityRating":8,"created_at":"2025-07-22 11:49:43","updated_at":"2025-07-22 11:50:08"},{"id":"67","userId":1,"localSessionId":"test_session_1753156127887","startTime":"2025-07-22 03:48:47","endTime":"2025-07-22 11:48:47","targetWakeTime":"2025-07-22 11:48:47","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"17.0","appVersion":"1.0.0","deviceType":"iPhone"},"environmentData":{"humidity":60,"noiseLevel":30,"temperature":22.5},"userNotes":"测试睡眠数据","processingStatus":"failed","wakeupMethod":"natural","sleepQualityRating":8,"created_at":"2025-07-22 11:48:47","updated_at":"2025-07-22 11:49:14"},{"id":"66","userId":1,"localSessionId":"local_D10BB2F4-B42C-41C1-8EE6-D7ABD2523C9B","startTime":"2025-07-22 01:43:36","endTime":"2025-07-22 08:51:35","targetWakeTime":"2025-07-22 09:43:36","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-22 08:51:35","updated_at":"2025-07-22 08:52:02"},{"id":"65","userId":1,"localSessionId":"local_6F352BC0-FEDA-4C4F-8041-A4B37551D110","startTime":"2025-07-21 21:39:43","endTime":"2025-07-21 21:42:39","targetWakeTime":"2025-07-22 05:39:43","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-21 21:42:39","updated_at":"2025-07-21 21:43:07"},{"id":"64","userId":1,"localSessionId":"local_80C64E74-460B-4AAE-8F4C-2DA2C6B76015","startTime":"2025-07-21 20:48:04","endTime":"2025-07-21 20:54:35","targetWakeTime":"2025-07-22 04:48:04","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-21 20:54:35","updated_at":"2025-07-21 20:55:01"}],"lastSleepDate":"2025-07-23 18:32:36"}},"recommendations":{"priority":"high","constitution":{"diet":["均衡饮食","五谷杂粮","新鲜蔬果","适量肉类","补气食物","山药","大枣","黄芪","人参"],"exercise":["适度运动","太极拳","慢跑","游泳","轻度运动","散步","八段锦","避免剧烈运动"],"lifestyle":["规律作息","保持心情愉快","适度工作"],"emotional":["保持乐观","心态平和"]},"fiveElements":{"dietTherapy":{"constitution_based":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养"],"seasonal":["白色食物","辛味食物","润肺食品"],"relation_based":["适度补益","增强营养"],"comprehensive":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养","白色食物","辛味食物","润肺食品","适度补益","增强营养"]},"exerciseAdvice":{"constitution_based":["适度运动","太极拳","慢跑","游泳"],"seasonal":["呼吸运动","肺部锻炼","避免干燥"],"recommended_time":"下午3-5点，肺经当令","intensity":"适度强度"},"emotionalCare":{"constitution_advice":["平和质情志调养建议"],"seasonal_advice":["秋分情志调养"],"meditation":["平和质冥想建议"],"music_therapy":["平和质音乐疗法"]},"lifestyleAdvice":{"sleep_schedule":"秋分作息建议","daily_routine":["平和质日常起居"],"environment":["平和质环境调节"],"seasonal_care":["秋分起居调摄"]},"diseaseRiskPrediction":{"constitution_risks":["平和质易患疾病"],"seasonal_risks":["秋分易发疾病"],"relation_risks":["体质与运气关系不明确，建议均衡调养"],"prevention_advice":["预防建议"]},"healthTips":{"daily_tips":["平和质日常保健"],"seasonal_tips":["秋分养生要点"],"constitution_tips":["平和质保健要点"],"five_elements_tips":["五运六气养生要点"]}},"lifestyle":["增加运动频率，建议每周至少3次有氧运动","改善睡眠质量，保持规律作息"],"immediate":["立即咨询医生，进行全面体检","调整饮食结构，控制体重"],"longTerm":["建立健康的生活方式","定期进行健康检查","保持良好的心理状态","培养运动习惯"]},"healthTrends":{"exercise":"stable","sleep":"needs_improvement","overall":"stable"},"riskAssessment":[{"level":"medium","factor":"综合健康状况","advice":"需要改善整体健康状况"},{"level":"low","factor":"运动不足","advice":"增加运动频率"}],"nextUpdateSuggested":"2025-10-07T12:46:01.783Z","saveInfo":{"success":true,"reportId":"14","reportDate":"2025-10-04","generatedAt":"2025-10-04T12:46:01.783Z"}}}
+📡 HTTP状态码: 200
+✅ 健康报告生成成功: Optional("HR_1759581961783_1")
+✅ 确认报告日期: 2025-10-04, reportId: HR_1759581961783_1
+🚀 开始加载可用报告日期列表...
+📡 正在请求 /health/report/dates 接口...
+========================================
+🔍 NetworkManager.request 开始
+🔍 baseURL: 'https://api.qinghejihua.com.cn/api/v1'
+🔍 endpoint: '/health/report/dates'
+🔍 method: GET
+🔍 完整请求URL: 'https://api.qinghejihua.com.cn/api/v1/health/report/dates'
+🔍 URL长度: 57
+========================================
+🔍 HTTP方法: GET
+🔍 服务器响应: {"success":true,"message":"健康报告生成成功","data":{"reportId":"HR_1759581961805_1","reportType":"comprehensive","generatedAt":"2025-10-04T12:46:01.805Z","userInfo":{"userId":1,"username":"李旭杰","gender":"male","age":21,"memberSince":"2025-06-21 20:14:38"},"healthOverview":{"overallScore":53,"healthLevel":"poor","primaryConstitution":"平和质","currentSolarTerm":"秋分"},"detailedAnalysis":{"constitution":{"hasAnalysis":true,"primaryConstitution":"平和质","secondaryConstitution":"气虚质","constitutionScores":{"平和质":0,"气虚质":0,"阳虚质":0,"阴虚质":0,"痰湿质":0,"湿热质":0,"血瘀质":0,"气郁质":0,"特禀质":0},"constitutionRanking":[{"name":"平和质","score":0,"info":{"name":"平和质","englishName":"balanced","description":"体态适中，面色红润，精力充沛，睡眠良好，性格随和开朗","characteristics":["体态适中","面色红润","精力充沛","睡眠良好","性格随和"],"element":"土","season":"长夏","organs":["脾","胃"],"healthLevel":"excellent"}},{"name":"气虚质","score":0,"info":{"name":"气虚质","englishName":"qi_deficiency","description":"元气不足，疲乏无力，气短懒言，易出汗，易感冒","characteristics":["疲乏无力","气短懒言","易出汗","易感冒","声音低弱"],"element":"土","season":"长夏","organs":["脾","肺"],"healthLevel":"poor"}},{"name":"阳虚质","score":0,"info":{"name":"阳虚质","englishName":"yang_deficiency","description":"阳气不足，畏寒怕冷，手足不温，精神不振","characteristics":["畏寒怕冷","手足不温","精神不振","腰膝酸软","夜尿频多"],"element":"火","season":"夏","organs":["肾","脾"],"healthLevel":"poor"}},{"name":"阴虚质","score":0,"info":{"name":"阴虚质","englishName":"yin_deficiency","description":"阴液不足，口燥咽干，手足心热，潮热盗汗","characteristics":["口燥咽干","手足心热","潮热盗汗","心烦失眠","便秘"],"element":"水","season":"冬","organs":["肾","肺"],"healthLevel":"poor"}},{"name":"痰湿质","score":0,"info":{"name":"痰湿质","englishName":"phlegm_dampness","description":"形体肥胖，腹部肥满，胸闷痰多，容易困倦","characteristics":["形体肥胖","腹部肥满","胸闷痰多","容易困倦","身重不爽"],"element":"土","season":"长夏","organs":["脾","肺"],"healthLevel":"fair"}},{"name":"湿热质","score":0,"info":{"name":"湿热质","englishName":"damp_heat","description":"面垢油腻，口苦口干，身重困倦，大便黏滞","characteristics":["面垢油腻","口苦口干","身重困倦","大便黏滞","小便短赤"],"element":"火","season":"夏","organs":["脾","肝"],"healthLevel":"fair"}},{"name":"血瘀质","score":0,"info":{"name":"血瘀质","englishName":"blood_stasis","description":"肤色晦暗，色素沉着，容易出现瘀斑，口唇暗淡","characteristics":["肤色晦暗","色素沉着","容易瘀斑","口唇暗淡","舌质紫暗"],"element":"水","season":"冬","organs":["心","肝"],"healthLevel":"fair"}},{"name":"气郁质","score":0,"info":{"name":"气郁质","englishName":"qi_stagnation","description":"神情抑郁，情绪不稳，烦闷不乐，胸胁胀满","characteristics":["神情抑郁","情绪不稳","烦闷不乐","胸胁胀满","善太息"],"element":"木","season":"春","organs":["肝","胆"],"healthLevel":"fair"}},{"name":"特禀质","score":0,"info":{"name":"特禀质","englishName":"special_constitution","description":"过敏体质，容易药物过敏、花粉过敏等","characteristics":["过敏体质","遗传缺陷","胎传异常","药物过敏","适应能力差"],"element":"金","season":"秋","organs":["肺","肾"],"healthLevel":"poor"}}],"analysisReport":{"summary":"您的主要体质类型是平和质，评分0分","primaryConstitution":{"name":"平和质","score":0,"description":"体态适中，面色红润，精力充沛，睡眠良好，性格随和开朗","characteristics":["体态适中","面色红润","精力充沛","睡眠良好","性格随和"],"element":"土","healthLevel":"excellent"},"secondaryConstitution":{"name":"气虚质","score":0,"description":"元气不足，疲乏无力，气短懒言，易出汗，易感冒"},"recommendations":{"diet":["均衡饮食","五谷杂粮","新鲜蔬果","适量肉类","补气食物","山药","大枣","黄芪","人参"],"exercise":["适度运动","太极拳","慢跑","游泳","轻度运动","散步","八段锦","避免剧烈运动"],"lifestyle":["规律作息","保持心情愉快","适度工作"],"emotional":["保持乐观","心态平和"]},"riskFactors":[],"seasonalAdvice":{"spring":"春季平和质应注意疏肝理气，多食绿色蔬菜","summer":"夏季平和质应注意清热解暑，避免过度出汗","autumn":"秋季平和质应注意润燥养肺，多食白色食物","winter":"冬季平和质应注意温阳补肾，多食黑色食物"}},"confidence":0.5,"analyzedAt":"2025-10-04T12:46:01.775Z"},"fiveElements":{"analysisId":1079,"lunarInfo":{"year":2025,"month":10,"day":4,"yearStem":"乙","yearBranch":"巳","monthStem":"丁","monthBranch":"亥","dayStem":"丙","dayBranch":"申"},"fiveMovements":{"element":"金","nature":"不及","characteristics":{"traits":["火气制金","肺气不足"],"symptoms":["气短乏力","易感外邪"]},"influence":"肺气不足，易感外邪，宜补益肺气"},"sixQi":{"qi":"厥阴风木","season":"立夏","characteristics":{"nature":"风","traits":["主动","主升"],"organs":["肝","胆"]},"influence":"风气主令，易发肝胆疾病，注意疏肝理气"},"hostGuestMovements":{"hostMovements":[{"period":"第1步","element":"土","nature":"常运","duration":"73天5刻"},{"period":"第2步","element":"金","nature":"常运","duration":"73天5刻"},{"period":"第3步","element":"水","nature":"中运","duration":"73天5刻"},{"period":"第4步","element":"木","nature":"常运","duration":"73天5刻"},{"period":"第5步","element":"火","nature":"常运","duration":"73天5刻"}],"guestMovement":{"element":"金","nature":"不及","influence":"肺气不足，易感外邪，宜补益肺气"}},"hostGuestQi":{"hostQi":[{"name":"厥阴风木","period":"初之气","season":"春分前后"},{"name":"少阴君火","period":"二之气","season":"小满前后"},{"name":"少阳相火","period":"三之气","season":"大暑前后"},{"name":"太阴湿土","period":"四之气","season":"秋分前后"},{"name":"阳明燥金","period":"五之气","season":"小雪前后"},{"name":"太阳寒水","period":"终之气","season":"大寒前后"}],"guestQi":{"name":"厥阴风木","influence":"风气主令，易发肝胆疾病，注意疏肝理气","characteristics":{"nature":"风","traits":["主动","主升"],"organs":["肝","胆"]}}},"qiMovementCombination":{"movementElement":"金","qiElement":"木","relation":{"type":"相克","description":"体质克当前运气，易过度消耗，宜节制"},"influence":"运气制约体质，易生疾病，宜预防调理","healthImpact":{"level":"fair","advice":"注意预防，及时调理"}},"currentSolarTerm":"秋分","solarTermCharacteristics":{"element":"金","nature":"平衡","advice":"平补肺肾，调和阴阳"},"personalizedAdvice":{"dietTherapy":{"constitution_based":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养"],"seasonal":["白色食物","辛味食物","润肺食品"],"relation_based":["适度补益","增强营养"],"comprehensive":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养","白色食物","辛味食物","润肺食品","适度补益","增强营养"]},"exerciseAdvice":{"constitution_based":["适度运动","太极拳","慢跑","游泳"],"seasonal":["呼吸运动","肺部锻炼","避免干燥"],"recommended_time":"下午3-5点，肺经当令","intensity":"适度强度"},"emotionalCare":{"constitution_advice":["平和质情志调养建议"],"seasonal_advice":["秋分情志调养"],"meditation":["平和质冥想建议"],"music_therapy":["平和质音乐疗法"]},"lifestyleAdvice":{"sleep_schedule":"秋分作息建议","daily_routine":["平和质日常起居"],"environment":["平和质环境调节"],"seasonal_care":["秋分起居调摄"]},"diseaseRiskPrediction":{"constitution_risks":["平和质易患疾病"],"seasonal_risks":["秋分易发疾病"],"relation_risks":["体质与运气关系不明确，建议均衡调养"],"prevention_advice":["预防建议"]},"healthTips":{"daily_tips":["平和质日常保健"],"seasonal_tips":["秋分养生要点"],"constitution_tips":["平和质保健要点"],"five_elements_tips":["五运六气养生要点"]}}},"healthMetrics":{"bmi":null,"constitution":80,"exercise":20,"sleep":null},"workoutSummary":{"totalWorkouts":144,"recentWorkouts":1,"weeklyWorkouts":1,"averageWeeklyWorkouts":1,"average3DayWorkouts":1,"recentRecords":[{"workoutId":"172","userId":1,"workoutType":"walking","startTime":"2025-10-04 12:21:05","endTime":"2025-10-04 12:21:32","duration":27,"totalDistance":"0.04","totalSteps":38,"calories":1,"averagePace":"10.54","maxSpeed":"5.69","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-10-04 12:21:33","updated_at":"2025-10-04 12:21:33"},{"workoutId":"171","userId":1,"workoutType":"walking","startTime":"2025-09-19 16:37:13","endTime":"2025-09-19 16:38:11","duration":58,"totalDistance":"0.40","totalSteps":0,"calories":3,"averagePace":"2.41","maxSpeed":"24.94","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-09-19 16:38:12","updated_at":"2025-09-19 16:38:12"},{"workoutId":"170","userId":1,"workoutType":"walking","startTime":"2025-09-17 07:02:47","endTime":"2025-09-17 07:09:06","duration":379,"totalDistance":"0.54","totalSteps":698,"calories":25,"averagePace":"11.71","maxSpeed":"5.12","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-09-17 07:09:07","updated_at":"2025-09-17 07:09:07"},{"workoutId":"169","userId":1,"workoutType":"walking","startTime":"2025-09-16 12:34:18","endTime":"2025-09-16 12:35:02","duration":44,"totalDistance":"0.05","totalSteps":29,"calories":2,"averagePace":"16.27","maxSpeed":"3.69","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-09-16 12:35:02","updated_at":"2025-09-16 12:35:02"},{"workoutId":"168","userId":1,"workoutType":"walking","startTime":"2025-09-16 12:30:56","endTime":"2025-09-16 12:32:16","duration":80,"totalDistance":"0.04","totalSteps":0,"calories":5,"averagePace":"35.25","maxSpeed":"1.70","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-09-16 12:32:17","updated_at":"2025-09-16 12:32:17"},{"workoutId":"167","userId":1,"workoutType":"walking","startTime":"2025-09-15 22:51:34","endTime":"2025-09-15 22:52:26","duration":52,"totalDistance":"0.10","totalSteps":14,"calories":3,"averagePace":"8.36","maxSpeed":"7.17","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-09-15 22:52:27","updated_at":"2025-09-15 22:52:27"},{"workoutId":"166","userId":1,"workoutType":"walking","startTime":"2025-09-15 20:04:39","endTime":"2025-09-15 20:07:44","duration":185,"totalDistance":"0.00","totalSteps":0,"calories":0,"averagePace":"0.00","maxSpeed":"0.00","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算","created_at":"2025-09-15 20:07:44","updated_at":"2025-09-15 20:07:44"},{"workoutId":"165","userId":1,"workoutType":"walking","startTime":"2025-09-15 19:57:42","endTime":"2025-09-15 19:58:13","duration":31,"totalDistance":"0.00","totalSteps":0,"calories":0,"averagePace":"0.00","maxSpeed":"0.00","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算","created_at":"2025-09-15 19:58:14","updated_at":"2025-09-15 19:58:14"},{"workoutId":"164","userId":1,"workoutType":"walking","startTime":"2025-09-15 18:13:13","endTime":"2025-09-15 18:25:44","duration":751,"totalDistance":"0.00","totalSteps":1258,"calories":0,"averagePace":"0.00","maxSpeed":"0.00","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算","created_at":"2025-09-15 18:25:45","updated_at":"2025-09-15 18:25:45"},{"workoutId":"163","userId":1,"workoutType":"walking","startTime":"2025-09-14 05:05:20","endTime":"2025-09-14 05:06:00","duration":40,"totalDistance":"0.00","totalSteps":0,"calories":0,"averagePace":"0.00","maxSpeed":"0.00","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算","created_at":"2025-09-14 05:06:00","updated_at":"2025-09-14 05:06:00"}],"lastWorkoutDate":"2025-10-04 12:21:33"},"sleepSummary":{"totalSessions":72,"recentSessions":0,"weeklySessions":0,"averageWeeklySessions":0,"average3DaySessions":0,"averageSleepDuration":0,"recentRecords":[{"id":"73","userId":1,"localSessionId":"local_6347D458-B269-4B34-9106-F912920B05C4","startTime":"2025-07-23 18:32:30","endTime":"2025-07-23 18:32:36","targetWakeTime":"2025-07-24 02:32:30","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-23 18:32:36","updated_at":"2025-07-23 18:33:00"},{"id":"72","userId":1,"localSessionId":"local_33860B33-C762-4301-BB39-BC67E41BC331","startTime":"2025-07-23 18:30:44","endTime":"2025-07-23 18:30:55","targetWakeTime":"2025-07-24 02:30:44","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-23 18:30:55","updated_at":"2025-07-23 18:31:19"},{"id":"71","userId":1,"localSessionId":"local_465F9807-F0BD-45A1-A0E1-17CAE1CB90D2","startTime":"2025-07-22 15:49:03","endTime":"2025-07-22 15:49:10","targetWakeTime":"2025-07-22 23:49:03","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-22 15:49:11","updated_at":"2025-07-22 15:49:35"},{"id":"70","userId":1,"localSessionId":"test_session_1753162160490","startTime":"2025-07-22 05:29:20","endTime":"2025-07-22 13:29:20","targetWakeTime":"2025-07-22 13:29:20","targetDuration":480,"actualDuration":480,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"17.0","appVersion":"1.0.0","deviceType":"iPhone"},"environmentData":{"humidity":60,"noiseLevel":30,"temperature":22.5},"userNotes":"测试睡眠会话","processingStatus":"pending","wakeupMethod":null,"sleepQualityRating":null,"created_at":"2025-07-22 13:29:20","updated_at":"2025-07-22 13:29:20"},{"id":"69","userId":1,"localSessionId":"test_session_1753162078774","startTime":"2025-07-22 05:27:58","endTime":"2025-07-22 13:27:58","targetWakeTime":"2025-07-22 13:27:58","targetDuration":480,"actualDuration":480,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"17.0","appVersion":"1.0.0","deviceType":"iPhone"},"environmentData":{"humidity":60,"noiseLevel":30,"temperature":22.5},"userNotes":"测试睡眠会话","processingStatus":"pending","wakeupMethod":null,"sleepQualityRating":null,"created_at":"2025-07-22 13:27:58","updated_at":"2025-07-22 13:27:58"},{"id":"68","userId":1,"localSessionId":"test_session_1753156183503","startTime":"2025-07-22 03:49:43","endTime":"2025-07-22 11:49:43","targetWakeTime":"2025-07-22 11:49:43","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"17.0","appVersion":"1.0.0","deviceType":"iPhone"},"environmentData":{"humidity":60,"noiseLevel":30,"temperature":22.5},"userNotes":"测试睡眠数据","processingStatus":"failed","wakeupMethod":"natural","sleepQualityRating":8,"created_at":"2025-07-22 11:49:43","updated_at":"2025-07-22 11:50:08"},{"id":"67","userId":1,"localSessionId":"test_session_1753156127887","startTime":"2025-07-22 03:48:47","endTime":"2025-07-22 11:48:47","targetWakeTime":"2025-07-22 11:48:47","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"17.0","appVersion":"1.0.0","deviceType":"iPhone"},"environmentData":{"humidity":60,"noiseLevel":30,"temperature":22.5},"userNotes":"测试睡眠数据","processingStatus":"failed","wakeupMethod":"natural","sleepQualityRating":8,"created_at":"2025-07-22 11:48:47","updated_at":"2025-07-22 11:49:14"},{"id":"66","userId":1,"localSessionId":"local_D10BB2F4-B42C-41C1-8EE6-D7ABD2523C9B","startTime":"2025-07-22 01:43:36","endTime":"2025-07-22 08:51:35","targetWakeTime":"2025-07-22 09:43:36","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-22 08:51:35","updated_at":"2025-07-22 08:52:02"},{"id":"65","userId":1,"localSessionId":"local_6F352BC0-FEDA-4C4F-8041-A4B37551D110","startTime":"2025-07-21 21:39:43","endTime":"2025-07-21 21:42:39","targetWakeTime":"2025-07-22 05:39:43","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-21 21:42:39","updated_at":"2025-07-21 21:43:07"},{"id":"64","userId":1,"localSessionId":"local_80C64E74-460B-4AAE-8F4C-2DA2C6B76015","startTime":"2025-07-21 20:48:04","endTime":"2025-07-21 20:54:35","targetWakeTime":"2025-07-22 04:48:04","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-21 20:54:35","updated_at":"2025-07-21 20:55:01"}],"lastSleepDate":"2025-07-23 18:32:36"}},"recommendations":{"priority":"high","constitution":{"diet":["均衡饮食","五谷杂粮","新鲜蔬果","适量肉类","补气食物","山药","大枣","黄芪","人参"],"exercise":["适度运动","太极拳","慢跑","游泳","轻度运动","散步","八段锦","避免剧烈运动"],"lifestyle":["规律作息","保持心情愉快","适度工作"],"emotional":["保持乐观","心态平和"]},"fiveElements":{"dietTherapy":{"constitution_based":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养"],"seasonal":["白色食物","辛味食物","润肺食品"],"relation_based":["适度补益","增强营养"],"comprehensive":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养","白色食物","辛味食物","润肺食品","适度补益","增强营养"]},"exerciseAdvice":{"constitution_based":["适度运动","太极拳","慢跑","游泳"],"seasonal":["呼吸运动","肺部锻炼","避免干燥"],"recommended_time":"下午3-5点，肺经当令","intensity":"适度强度"},"emotionalCare":{"constitution_advice":["平和质情志调养建议"],"seasonal_advice":["秋分情志调养"],"meditation":["平和质冥想建议"],"music_therapy":["平和质音乐疗法"]},"lifestyleAdvice":{"sleep_schedule":"秋分作息建议","daily_routine":["平和质日常起居"],"environment":["平和质环境调节"],"seasonal_care":["秋分起居调摄"]},"diseaseRiskPrediction":{"constitution_risks":["平和质易患疾病"],"seasonal_risks":["秋分易发疾病"],"relation_risks":["体质与运气关系不明确，建议均衡调养"],"prevention_advice":["预防建议"]},"healthTips":{"daily_tips":["平和质日常保健"],"seasonal_tips":["秋分养生要点"],"constitution_tips":["平和质保健要点"],"five_elements_tips":["五运六气养生要点"]}},"lifestyle":["增加运动频率，建议每周至少3次有氧运动","改善睡眠质量，保持规律作息"],"immediate":["立即咨询医生，进行全面体检","调整饮食结构，控制体重"],"longTerm":["建立健康的生活方式","定期进行健康检查","保持良好的心理状态","培养运动习惯"]},"healthTrends":{"exercise":"stable","sleep":"needs_improvement","overall":"stable"},"riskAssessment":[{"level":"medium","factor":"综合健康状况","advice":"需要改善整体健康状况"},{"level":"low","factor":"运动不足","advice":"增加运动频率"}],"nextUpdateSuggested":"2025-10-07T12:46:01.805Z","saveInfo":{"success":true,"reportId":"14","reportDate":"2025-10-04","generatedAt":"2025-10-04T12:46:01.805Z"}}}
+📡 HTTP状态码: 200
+✅ 健康报告生成成功: Optional("HR_1759581961805_1")
+✅ 确认报告日期: 2025-10-04, reportId: HR_1759581961805_1
+🚀 开始加载可用报告日期列表...
+📡 正在请求 /health/report/dates 接口...
+========================================
+🔍 NetworkManager.request 开始
+🔍 baseURL: 'https://api.qinghejihua.com.cn/api/v1'
+🔍 endpoint: '/health/report/dates'
+🔍 method: GET
+🔍 完整请求URL: 'https://api.qinghejihua.com.cn/api/v1/health/report/dates'
+🔍 URL长度: 57
+========================================
+🔍 HTTP方法: GET
+🔍 服务器响应: {"code":0,"success":true,"msg":"获取成功","data":{"total":7,"dates":[{"date":"2025-10-04","type":"comprehensive","generatedAt":"2025-10-04 20:46:01"},{"date":"2025-10-03","type":"comprehensive","generatedAt":"2025-10-03 23:12:34"},{"date":"2025-10-02","type":"comprehensive","generatedAt":"2025-10-02 08:26:42"},{"date":"2025-10-01","type":"comprehensive","generatedAt":"2025-10-01 22:23:55"},{"date":"2025-09-30","type":"comprehensive","generatedAt":"2025-09-30 16:41:39"},{"date":"2025-09-29","type":"comprehensive","generatedAt":"2025-09-29 23:43:15"},{"date":"2025-09-28","type":"comprehensive","generatedAt":"2025-09-28 23:45:51"}],"timestamp":"2025-10-04T12:46:02.165Z"}}
+📡 HTTP状态码: 200
+📡 API响应: success=true, code=0, msg=获取成功
+📅 API返回的报告日期数据: total=7, dates count=7
+📅 处理日期记录: date=2025-10-04, type=comprehensive, generatedAt=2025-10-04 20:46:01
+✅ 解析成功: 2025-10-04
+📅 处理日期记录: date=2025-10-03, type=comprehensive, generatedAt=2025-10-03 23:12:34
+🔍 服务器响应: {"success":true,"message":"健康报告生成成功","data":{"reportId":"HR_1759581961817_1","reportType":"comprehensive","generatedAt":"2025-10-04T12:46:01.817Z","userInfo":{"userId":1,"username":"李旭杰","gender":"male","age":21,"memberSince":"2025-06-21 20:14:38"},"healthOverview":{"overallScore":53,"healthLevel":"poor","primaryConstitution":"平和质","currentSolarTerm":"秋分"},"detailedAnalysis":{"constitution":{"hasAnalysis":true,"primaryConstitution":"平和质","secondaryConstitution":"气虚质","constitutionScores":{"平和质":0,"气虚质":0,"阳虚质":0,"阴虚质":0,"痰湿质":0,"湿热质":0,"血瘀质":0,"气郁质":0,"特禀质":0},"constitutionRanking":[{"name":"平和质","score":0,"info":{"name":"平和质","englishName":"balanced","description":"体态适中，面色红润，精力充沛，睡眠良好，性格随和开朗","characteristics":["体态适中","面色红润","精力充沛","睡眠良好","性格随和"],"element":"土","season":"长夏","organs":["脾","胃"],"healthLevel":"excellent"}},{"name":"气虚质","score":0,"info":{"name":"气虚质","englishName":"qi_deficiency","description":"元气不足，疲乏无力，气短懒言，易出汗，易感冒","characteristics":["疲乏无力","气短懒言","易出汗","易感冒","声音低弱"],"element":"土","season":"长夏","organs":["脾","肺"],"healthLevel":"poor"}},{"name":"阳虚质","score":0,"info":{"name":"阳虚质","englishName":"yang_deficiency","description":"阳气不足，畏寒怕冷，手足不温，精神不振","characteristics":["畏寒怕冷","手足不温","精神不振","腰膝酸软","夜尿频多"],"element":"火","season":"夏","organs":["肾","脾"],"healthLevel":"poor"}},{"name":"阴虚质","score":0,"info":{"name":"阴虚质","englishName":"yin_deficiency","description":"阴液不足，口燥咽干，手足心热，潮热盗汗","characteristics":["口燥咽干","手足心热","潮热盗汗","心烦失眠","便秘"],"element":"水","season":"冬","organs":["肾","肺"],"healthLevel":"poor"}},{"name":"痰湿质","score":0,"info":{"name":"痰湿质","englishName":"phlegm_dampness","description":"形体肥胖，腹部肥满，胸闷痰多，容易困倦","characteristics":["形体肥胖","腹部肥满","胸闷痰多","容易困倦","身重不爽"],"element":"土","season":"长夏","organs":["脾","肺"],"healthLevel":"fair"}},{"name":"湿热质","score":0,"info":{"name":"湿热质","englishName":"damp_heat","description":"面垢油腻，口苦口干，身重困倦，大便黏滞","characteristics":["面垢油腻","口苦口干","身重困倦","大便黏滞","小便短赤"],"element":"火","season":"夏","organs":["脾","肝"],"healthLevel":"fair"}},{"name":"血瘀质","score":0,"info":{"name":"血瘀质","englishName":"blood_stasis","description":"肤色晦暗，色素沉着，容易出现瘀斑，口唇暗淡","characteristics":["肤色晦暗","色素沉着","容易瘀斑","口唇暗淡","舌质紫暗"],"element":"水","season":"冬","organs":["心","肝"],"healthLevel":"fair"}},{"name":"气郁质","score":0,"info":{"name":"气郁质","englishName":"qi_stagnation","description":"神情抑郁，情绪不稳，烦闷不乐，胸胁胀满","characteristics":["神情抑郁","情绪不稳","烦闷不乐","胸胁胀满","善太息"],"element":"木","season":"春","organs":["肝","胆"],"healthLevel":"fair"}},{"name":"特禀质","score":0,"info":{"name":"特禀质","englishName":"special_constitution","description":"过敏体质，容易药物过敏、花粉过敏等","characteristics":["过敏体质","遗传缺陷","胎传异常","药物过敏","适应能力差"],"element":"金","season":"秋","organs":["肺","肾"],"healthLevel":"poor"}}],"analysisReport":{"summary":"您的主要体质类型是平和质，评分0分","primaryConstitution":{"name":"平和质","score":0,"description":"体态适中，面色红润，精力充沛，睡眠良好，性格随和开朗","characteristics":["体态适中","面色红润","精力充沛","睡眠良好","性格随和"],"element":"土","healthLevel":"excellent"},"secondaryConstitution":{"name":"气虚质","score":0,"description":"元气不足，疲乏无力，气短懒言，易出汗，易感冒"},"recommendations":{"diet":["均衡饮食","五谷杂粮","新鲜蔬果","适量肉类","补气食物","山药","大枣","黄芪","人参"],"exercise":["适度运动","太极拳","慢跑","游泳","轻度运动","散步","八段锦","避免剧烈运动"],"lifestyle":["规律作息","保持心情愉快","适度工作"],"emotional":["保持乐观","心态平和"]},"riskFactors":[],"seasonalAdvice":{"spring":"春季平和质应注意疏肝理气，多食绿色蔬菜","summer":"夏季平和质应注意清热解暑，避免过度出汗","autumn":"秋季平和质应注意润燥养肺，多食白色食物","winter":"冬季平和质应注意温阳补肾，多食黑色食物"}},"confidence":0.5,"analyzedAt":"2025-10-04T12:46:01.787Z"},"fiveElements":{"analysisId":1080,"lunarInfo":{"year":2025,"month":10,"day":4,"yearStem":"乙","yearBranch":"巳","monthStem":"丁","monthBranch":"亥","dayStem":"丙","dayBranch":"申"},"fiveMovements":{"element":"金","nature":"不及","characteristics":{"traits":["火气制金","肺气不足"],"symptoms":["气短乏力","易感外邪"]},"influence":"肺气不足，易感外邪，宜补益肺气"},"sixQi":{"qi":"厥阴风木","season":"立夏","characteristics":{"nature":"风","traits":["主动","主升"],"organs":["肝","胆"]},"influence":"风气主令，易发肝胆疾病，注意疏肝理气"},"hostGuestMovements":{"hostMovements":[{"period":"第1步","element":"土","nature":"常运","duration":"73天5刻"},{"period":"第2步","element":"金","nature":"常运","duration":"73天5刻"},{"period":"第3步","element":"水","nature":"中运","duration":"73天5刻"},{"period":"第4步","element":"木","nature":"常运","duration":"73天5刻"},{"period":"第5步","element":"火","nature":"常运","duration":"73天5刻"}],"guestMovement":{"element":"金","nature":"不及","influence":"肺气不足，易感外邪，宜补益肺气"}},"hostGuestQi":{"hostQi":[{"name":"厥阴风木","period":"初之气","season":"春分前后"},{"name":"少阴君火","period":"二之气","season":"小满前后"},{"name":"少阳相火","period":"三之气","season":"大暑前后"},{"name":"太阴湿土","period":"四之气","season":"秋分前后"},{"name":"阳明燥金","period":"五之气","season":"小雪前后"},{"name":"太阳寒水","period":"终之气","season":"大寒前后"}],"guestQi":{"name":"厥阴风木","influence":"风气主令，易发肝胆疾病，注意疏肝理气","characteristics":{"nature":"风","traits":["主动","主升"],"organs":["肝","胆"]}}},"qiMovementCombination":{"movementElement":"金","qiElement":"木","relation":{"type":"相克","description":"体质克当前运气，易过度消耗，宜节制"},"influence":"运气制约体质，易生疾病，宜预防调理","healthImpact":{"level":"fair","advice":"注意预防，及时调理"}},"currentSolarTerm":"秋分","solarTermCharacteristics":{"element":"金","nature":"平衡","advice":"平补肺肾，调和阴阳"},"personalizedAdvice":{"dietTherapy":{"constitution_based":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养"],"seasonal":["白色食物","辛味食物","润肺食品"],"relation_based":["适度补益","增强营养"],"comprehensive":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养","白色食物","辛味食物","润肺食品","适度补益","增强营养"]},"exerciseAdvice":{"constitution_based":["适度运动","太极拳","慢跑","游泳"],"seasonal":["呼吸运动","肺部锻炼","避免干燥"],"recommended_time":"下午3-5点，肺经当令","intensity":"适度强度"},"emotionalCare":{"constitution_advice":["平和质情志调养建议"],"seasonal_advice":["秋分情志调养"],"meditation":["平和质冥想建议"],"music_therapy":["平和质音乐疗法"]},"lifestyleAdvice":{"sleep_schedule":"秋分作息建议","daily_routine":["平和质日常起居"],"environment":["平和质环境调节"],"seasonal_care":["秋分起居调摄"]},"diseaseRiskPrediction":{"constitution_risks":["平和质易患疾病"],"seasonal_risks":["秋分易发疾病"],"relation_risks":["体质与运气关系不明确，建议均衡调养"],"prevention_advice":["预防建议"]},"healthTips":{"daily_tips":["平和质日常保健"],"seasonal_tips":["秋分养生要点"],"constitution_tips":["平和质保健要点"],"five_elements_tips":["五运六气养生要点"]}}},"healthMetrics":{"bmi":null,"constitution":80,"exercise":20,"sleep":null},"workoutSummary":{"totalWorkouts":144,"recentWorkouts":1,"weeklyWorkouts":1,"averageWeeklyWorkouts":1,"average3DayWorkouts":1,"recentRecords":[{"workoutId":"172","userId":1,"workoutType":"walking","startTime":"2025-10-04 12:21:05","endTime":"2025-10-04 12:21:32","duration":27,"totalDistance":"0.04","totalSteps":38,"calories":1,"averagePace":"10.54","maxSpeed":"5.69","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-10-04 12:21:33","updated_at":"2025-10-04 12:21:33"},{"workoutId":"171","userId":1,"workoutType":"walking","startTime":"2025-09-19 16:37:13","endTime":"2025-09-19 16:38:11","duration":58,"totalDistance":"0.40","totalSteps":0,"calories":3,"averagePace":"2.41","maxSpeed":"24.94","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-09-19 16:38:12","updated_at":"2025-09-19 16:38:12"},{"workoutId":"170","userId":1,"workoutType":"walking","startTime":"2025-09-17 07:02:47","endTime":"2025-09-17 07:09:06","duration":379,"totalDistance":"0.54","totalSteps":698,"calories":25,"averagePace":"11.71","maxSpeed":"5.12","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-09-17 07:09:07","updated_at":"2025-09-17 07:09:07"},{"workoutId":"169","userId":1,"workoutType":"walking","startTime":"2025-09-16 12:34:18","endTime":"2025-09-16 12:35:02","duration":44,"totalDistance":"0.05","totalSteps":29,"calories":2,"averagePace":"16.27","maxSpeed":"3.69","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-09-16 12:35:02","updated_at":"2025-09-16 12:35:02"},{"workoutId":"168","userId":1,"workoutType":"walking","startTime":"2025-09-16 12:30:56","endTime":"2025-09-16 12:32:16","duration":80,"totalDistance":"0.04","totalSteps":0,"calories":5,"averagePace":"35.25","maxSpeed":"1.70","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-09-16 12:32:17","updated_at":"2025-09-16 12:32:17"},{"workoutId":"167","userId":1,"workoutType":"walking","startTime":"2025-09-15 22:51:34","endTime":"2025-09-15 22:52:26","duration":52,"totalDistance":"0.10","totalSteps":14,"calories":3,"averagePace":"8.36","maxSpeed":"7.17","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-09-15 22:52:27","updated_at":"2025-09-15 22:52:27"},{"workoutId":"166","userId":1,"workoutType":"walking","startTime":"2025-09-15 20:04:39","endTime":"2025-09-15 20:07:44","duration":185,"totalDistance":"0.00","totalSteps":0,"calories":0,"averagePace":"0.00","maxSpeed":"0.00","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算","created_at":"2025-09-15 20:07:44","updated_at":"2025-09-15 20:07:44"},{"workoutId":"165","userId":1,"workoutType":"walking","startTime":"2025-09-15 19:57:42","endTime":"2025-09-15 19:58:13","duration":31,"totalDistance":"0.00","totalSteps":0,"calories":0,"averagePace":"0.00","maxSpeed":"0.00","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算","created_at":"2025-09-15 19:58:14","updated_at":"2025-09-15 19:58:14"},{"workoutId":"164","userId":1,"workoutType":"walking","startTime":"2025-09-15 18:13:13","endTime":"2025-09-15 18:25:44","duration":751,"totalDistance":"0.00","totalSteps":1258,"calories":0,"averagePace":"0.00","maxSpeed":"0.00","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算","created_at":"2025-09-15 18:25:45","updated_at":"2025-09-15 18:25:45"},{"workoutId":"163","userId":1,"workoutType":"walking","startTime":"2025-09-14 05:05:20","endTime":"2025-09-14 05:06:00","duration":40,"totalDistance":"0.00","totalSteps":0,"calories":0,"averagePace":"0.00","maxSpeed":"0.00","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算","created_at":"2025-09-14 05:06:00","updated_at":"2025-09-14 05:06:00"}],"lastWorkoutDate":"2025-10-04 12:21:33"},"sleepSummary":{"totalSessions":72,"recentSessions":0,"weeklySessions":0,"averageWeeklySessions":0,"average3DaySessions":0,"averageSleepDuration":0,"recentRecords":[{"id":"73","userId":1,"localSessionId":"local_6347D458-B269-4B34-9106-F912920B05C4","startTime":"2025-07-23 18:32:30","endTime":"2025-07-23 18:32:36","targetWakeTime":"2025-07-24 02:32:30","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-23 18:32:36","updated_at":"2025-07-23 18:33:00"},{"id":"72","userId":1,"localSessionId":"local_33860B33-C762-4301-BB39-BC67E41BC331","startTime":"2025-07-23 18:30:44","endTime":"2025-07-23 18:30:55","targetWakeTime":"2025-07-24 02:30:44","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-23 18:30:55","updated_at":"2025-07-23 18:31:19"},{"id":"71","userId":1,"localSessionId":"local_465F9807-F0BD-45A1-A0E1-17CAE1CB90D2","startTime":"2025-07-22 15:49:03","endTime":"2025-07-22 15:49:10","targetWakeTime":"2025-07-22 23:49:03","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-22 15:49:11","updated_at":"2025-07-22 15:49:35"},{"id":"70","userId":1,"localSessionId":"test_session_1753162160490","startTime":"2025-07-22 05:29:20","endTime":"2025-07-22 13:29:20","targetWakeTime":"2025-07-22 13:29:20","targetDuration":480,"actualDuration":480,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"17.0","appVersion":"1.0.0","deviceType":"iPhone"},"environmentData":{"humidity":60,"noiseLevel":30,"temperature":22.5},"userNotes":"测试睡眠会话","processingStatus":"pending","wakeupMethod":null,"sleepQualityRating":null,"created_at":"2025-07-22 13:29:20","updated_at":"2025-07-22 13:29:20"},{"id":"69","userId":1,"localSessionId":"test_session_1753162078774","startTime":"2025-07-22 05:27:58","endTime":"2025-07-22 13:27:58","targetWakeTime":"2025-07-22 13:27:58","targetDuration":480,"actualDuration":480,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"17.0","appVersion":"1.0.0","deviceType":"iPhone"},"environmentData":{"humidity":60,"noiseLevel":30,"temperature":22.5},"userNotes":"测试睡眠会话","processingStatus":"pending","wakeupMethod":null,"sleepQualityRating":null,"created_at":"2025-07-22 13:27:58","updated_at":"2025-07-22 13:27:58"},{"id":"68","userId":1,"localSessionId":"test_session_1753156183503","startTime":"2025-07-22 03:49:43","endTime":"2025-07-22 11:49:43","targetWakeTime":"2025-07-22 11:49:43","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"17.0","appVersion":"1.0.0","deviceType":"iPhone"},"environmentData":{"humidity":60,"noiseLevel":30,"temperature":22.5},"userNotes":"测试睡眠数据","processingStatus":"failed","wakeupMethod":"natural","sleepQualityRating":8,"created_at":"2025-07-22 11:49:43","updated_at":"2025-07-22 11:50:08"},{"id":"67","userId":1,"localSessionId":"test_session_1753156127887","startTime":"2025-07-22 03:48:47","endTime":"2025-07-22 11:48:47","targetWakeTime":"2025-07-22 11:48:47","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"17.0","appVersion":"1.0.0","deviceType":"iPhone"},"environmentData":{"humidity":60,"noiseLevel":30,"temperature":22.5},"userNotes":"测试睡眠数据","processingStatus":"failed","wakeupMethod":"natural","sleepQualityRating":8,"created_at":"2025-07-22 11:48:47","updated_at":"2025-07-22 11:49:14"},{"id":"66","userId":1,"localSessionId":"local_D10BB2F4-B42C-41C1-8EE6-D7ABD2523C9B","startTime":"2025-07-22 01:43:36","endTime":"2025-07-22 08:51:35","targetWakeTime":"2025-07-22 09:43:36","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-22 08:51:35","updated_at":"2025-07-22 08:52:02"},{"id":"65","userId":1,"localSessionId":"local_6F352BC0-FEDA-4C4F-8041-A4B37551D110","startTime":"2025-07-21 21:39:43","endTime":"2025-07-21 21:42:39","targetWakeTime":"2025-07-22 05:39:43","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-21 21:42:39","updated_at":"2025-07-21 21:43:07"},{"id":"64","userId":1,"localSessionId":"local_80C64E74-460B-4AAE-8F4C-2DA2C6B76015","startTime":"2025-07-21 20:48:04","endTime":"2025-07-21 20:54:35","targetWakeTime":"2025-07-22 04:48:04","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-21 20:54:35","updated_at":"2025-07-21 20:55:01"}],"lastSleepDate":"2025-07-23 18:32:36"}},"recommendations":{"priority":"high","constitution":{"diet":["均衡饮食","五谷杂粮","新鲜蔬果","适量肉类","补气食物","山药","大枣","黄芪","人参"],"exercise":["适度运动","太极拳","慢跑","游泳","轻度运动","散步","八段锦","避免剧烈运动"],"lifestyle":["规律作息","保持心情愉快","适度工作"],"emotional":["保持乐观","心态平和"]},"fiveElements":{"dietTherapy":{"constitution_based":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养"],"seasonal":["白色食物","辛味食物","润肺食品"],"relation_based":["适度补益","增强营养"],"comprehensive":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养","白色食物","辛味食物","润肺食品","适度补益","增强营养"]},"exerciseAdvice":{"constitution_based":["适度运动","太极拳","慢跑","游泳"],"seasonal":["呼吸运动","肺部锻炼","避免干燥"],"recommended_time":"下午3-5点，肺经当令","intensity":"适度强度"},"emotionalCare":{"constitution_advice":["平和质情志调养建议"],"seasonal_advice":["秋分情志调养"],"meditation":["平和质冥想建议"],"music_therapy":["平和质音乐疗法"]},"lifestyleAdvice":{"sleep_schedule":"秋分作息建议","daily_routine":["平和质日常起居"],"environment":["平和质环境调节"],"seasonal_care":["秋分起居调摄"]},"diseaseRiskPrediction":{"constitution_risks":["平和质易患疾病"],"seasonal_risks":["秋分易发疾病"],"relation_risks":["体质与运气关系不明确，建议均衡调养"],"prevention_advice":["预防建议"]},"healthTips":{"daily_tips":["平和质日常保健"],"seasonal_tips":["秋分养生要点"],"constitution_tips":["平和质保健要点"],"five_elements_tips":["五运六气养生要点"]}},"lifestyle":["增加运动频率，建议每周至少3次有氧运动","改善睡眠质量，保持规律作息"],"immediate":["立即咨询医生，进行全面体检","调整饮食结构，控制体重"],"longTerm":["建立健康的生活方式","定期进行健康检查","保持良好的心理状态","培养运动习惯"]},"healthTrends":{"exercise":"stable","sleep":"needs_improvement","overall":"stable"},"riskAssessment":[{"level":"medium","factor":"综合健康状况","advice":"需要改善整体健康状况"},{"level":"low","factor":"运动不足","advice":"增加运动频率"}],"nextUpdateSuggested":"2025-10-07T12:46:01.817Z","saveInfo":{"success":true,"reportId":"14","reportDate":"2025-10-04","generatedAt":"2025-10-04T12:46:01.817Z"}}}
+✅ 解析成功: 2025-10-03
+📡 HTTP状态码: 200
+📅 处理日期记录: date=2025-10-02, type=comprehensive, generatedAt=2025-10-02 08:26:42
+✅ 健康报告生成成功: Optional("HR_1759581961817_1")
+✅ 解析成功: 2025-10-02
+📅 处理日期记录: date=2025-10-01, type=comprehensive, generatedAt=2025-10-01 22:23:55
+✅ 解析成功: 2025-10-01
+📅 处理日期记录: date=2025-09-30, type=comprehensive, generatedAt=2025-09-30 16:41:39
+✅ 确认报告日期: 2025-10-04, reportId: HR_1759581961817_1
+🚀 开始加载可用报告日期列表...
+📡 正在请求 /health/report/dates 接口...
+========================================
+🔍 NetworkManager.request 开始
+🔍 baseURL: 'https://api.qinghejihua.com.cn/api/v1'
+🔍 endpoint: '/health/report/dates'
+🔍 method: GET
+🔍 完整请求URL: 'https://api.qinghejihua.com.cn/api/v1/health/report/dates'
+🔍 URL长度: 57
+========================================
+🔍 HTTP方法: GET
+✅ 解析成功: 2025-09-30
+📅 处理日期记录: date=2025-09-29, type=comprehensive, generatedAt=2025-09-29 23:43:15
+✅ 解析成功: 2025-09-29
+📅 处理日期记录: date=2025-09-28, type=comprehensive, generatedAt=2025-09-28 23:45:51
+✅ 解析成功: 2025-09-28
+📅 最终可用日期集合 (7个): ["2025-09-28", "2025-09-29", "2025-09-30", "2025-10-01", "2025-10-02", "2025-10-03", "2025-10-04"]
+🔍 服务器响应: {"success":true,"message":"健康报告生成成功","data":{"reportId":"HR_1759581961804_1","reportType":"comprehensive","generatedAt":"2025-10-04T12:46:01.804Z","userInfo":{"userId":1,"username":"李旭杰","gender":"male","age":21,"memberSince":"2025-06-21 20:14:38"},"healthOverview":{"overallScore":53,"healthLevel":"poor","primaryConstitution":"平和质","currentSolarTerm":"秋分"},"detailedAnalysis":{"constitution":{"hasAnalysis":true,"primaryConstitution":"平和质","secondaryConstitution":"气虚质","constitutionScores":{"平和质":0,"气虚质":0,"阳虚质":0,"阴虚质":0,"痰湿质":0,"湿热质":0,"血瘀质":0,"气郁质":0,"特禀质":0},"constitutionRanking":[{"name":"平和质","score":0,"info":{"name":"平和质","englishName":"balanced","description":"体态适中，面色红润，精力充沛，睡眠良好，性格随和开朗","characteristics":["体态适中","面色红润","精力充沛","睡眠良好","性格随和"],"element":"土","season":"长夏","organs":["脾","胃"],"healthLevel":"excellent"}},{"name":"气虚质","score":0,"info":{"name":"气虚质","englishName":"qi_deficiency","description":"元气不足，疲乏无力，气短懒言，易出汗，易感冒","characteristics":["疲乏无力","气短懒言","易出汗","易感冒","声音低弱"],"element":"土","season":"长夏","organs":["脾","肺"],"healthLevel":"poor"}},{"name":"阳虚质","score":0,"info":{"name":"阳虚质","englishName":"yang_deficiency","description":"阳气不足，畏寒怕冷，手足不温，精神不振","characteristics":["畏寒怕冷","手足不温","精神不振","腰膝酸软","夜尿频多"],"element":"火","season":"夏","organs":["肾","脾"],"healthLevel":"poor"}},{"name":"阴虚质","score":0,"info":{"name":"阴虚质","englishName":"yin_deficiency","description":"阴液不足，口燥咽干，手足心热，潮热盗汗","characteristics":["口燥咽干","手足心热","潮热盗汗","心烦失眠","便秘"],"element":"水","season":"冬","organs":["肾","肺"],"healthLevel":"poor"}},{"name":"痰湿质","score":0,"info":{"name":"痰湿质","englishName":"phlegm_dampness","description":"形体肥胖，腹部肥满，胸闷痰多，容易困倦","characteristics":["形体肥胖","腹部肥满","胸闷痰多","容易困倦","身重不爽"],"element":"土","season":"长夏","organs":["脾","肺"],"healthLevel":"fair"}},{"name":"湿热质","score":0,"info":{"name":"湿热质","englishName":"damp_heat","description":"面垢油腻，口苦口干，身重困倦，大便黏滞","characteristics":["面垢油腻","口苦口干","身重困倦","大便黏滞","小便短赤"],"element":"火","season":"夏","organs":["脾","肝"],"healthLevel":"fair"}},{"name":"血瘀质","score":0,"info":{"name":"血瘀质","englishName":"blood_stasis","description":"肤色晦暗，色素沉着，容易出现瘀斑，口唇暗淡","characteristics":["肤色晦暗","色素沉着","容易瘀斑","口唇暗淡","舌质紫暗"],"element":"水","season":"冬","organs":["心","肝"],"healthLevel":"fair"}},{"name":"气郁质","score":0,"info":{"name":"气郁质","englishName":"qi_stagnation","description":"神情抑郁，情绪不稳，烦闷不乐，胸胁胀满","characteristics":["神情抑郁","情绪不稳","烦闷不乐","胸胁胀满","善太息"],"element":"木","season":"春","organs":["肝","胆"],"healthLevel":"fair"}},{"name":"特禀质","score":0,"info":{"name":"特禀质","englishName":"special_constitution","description":"过敏体质，容易药物过敏、花粉过敏等","characteristics":["过敏体质","遗传缺陷","胎传异常","药物过敏","适应能力差"],"element":"金","season":"秋","organs":["肺","肾"],"healthLevel":"poor"}}],"analysisReport":{"summary":"您的主要体质类型是平和质，评分0分","primaryConstitution":{"name":"平和质","score":0,"description":"体态适中，面色红润，精力充沛，睡眠良好，性格随和开朗","characteristics":["体态适中","面色红润","精力充沛","睡眠良好","性格随和"],"element":"土","healthLevel":"excellent"},"secondaryConstitution":{"name":"气虚质","score":0,"description":"元气不足，疲乏无力，气短懒言，易出汗，易感冒"},"recommendations":{"diet":["均衡饮食","五谷杂粮","新鲜蔬果","适量肉类","补气食物","山药","大枣","黄芪","人参"],"exercise":["适度运动","太极拳","慢跑","游泳","轻度运动","散步","八段锦","避免剧烈运动"],"lifestyle":["规律作息","保持心情愉快","适度工作"],"emotional":["保持乐观","心态平和"]},"riskFactors":[],"seasonalAdvice":{"spring":"春季平和质应注意疏肝理气，多食绿色蔬菜","summer":"夏季平和质应注意清热解暑，避免过度出汗","autumn":"秋季平和质应注意润燥养肺，多食白色食物","winter":"冬季平和质应注意温阳补肾，多食黑色食物"}},"confidence":0.5,"analyzedAt":"2025-10-04T12:46:01.753Z"},"fiveElements":{"analysisId":1078,"lunarInfo":{"year":2025,"month":10,"day":4,"yearStem":"乙","yearBranch":"巳","monthStem":"丁","monthBranch":"亥","dayStem":"丙","dayBranch":"申"},"fiveMovements":{"element":"金","nature":"不及","characteristics":{"traits":["火气制金","肺气不足"],"symptoms":["气短乏力","易感外邪"]},"influence":"肺气不足，易感外邪，宜补益肺气"},"sixQi":{"qi":"厥阴风木","season":"立夏","characteristics":{"nature":"风","traits":["主动","主升"],"organs":["肝","胆"]},"influence":"风气主令，易发肝胆疾病，注意疏肝理气"},"hostGuestMovements":{"hostMovements":[{"period":"第1步","element":"土","nature":"常运","duration":"73天5刻"},{"period":"第2步","element":"金","nature":"常运","duration":"73天5刻"},{"period":"第3步","element":"水","nature":"中运","duration":"73天5刻"},{"period":"第4步","element":"木","nature":"常运","duration":"73天5刻"},{"period":"第5步","element":"火","nature":"常运","duration":"73天5刻"}],"guestMovement":{"element":"金","nature":"不及","influence":"肺气不足，易感外邪，宜补益肺气"}},"hostGuestQi":{"hostQi":[{"name":"厥阴风木","period":"初之气","season":"春分前后"},{"name":"少阴君火","period":"二之气","season":"小满前后"},{"name":"少阳相火","period":"三之气","season":"大暑前后"},{"name":"太阴湿土","period":"四之气","season":"秋分前后"},{"name":"阳明燥金","period":"五之气","season":"小雪前后"},{"name":"太阳寒水","period":"终之气","season":"大寒前后"}],"guestQi":{"name":"厥阴风木","influence":"风气主令，易发肝胆疾病，注意疏肝理气","characteristics":{"nature":"风","traits":["主动","主升"],"organs":["肝","胆"]}}},"qiMovementCombination":{"movementElement":"金","qiElement":"木","relation":{"type":"相克","description":"体质克当前运气，易过度消耗，宜节制"},"influence":"运气制约体质，易生疾病，宜预防调理","healthImpact":{"level":"fair","advice":"注意预防，及时调理"}},"currentSolarTerm":"秋分","solarTermCharacteristics":{"element":"金","nature":"平衡","advice":"平补肺肾，调和阴阳"},"personalizedAdvice":{"dietTherapy":{"constitution_based":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养"],"seasonal":["白色食物","辛味食物","润肺食品"],"relation_based":["适度补益","增强营养"],"comprehensive":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养","白色食物","辛味食物","润肺食品","适度补益","增强营养"]},"exerciseAdvice":{"constitution_based":["适度运动","太极拳","慢跑","游泳"],"seasonal":["呼吸运动","肺部锻炼","避免干燥"],"recommended_time":"下午3-5点，肺经当令","intensity":"适度强度"},"emotionalCare":{"constitution_advice":["平和质情志调养建议"],"seasonal_advice":["秋分情志调养"],"meditation":["平和质冥想建议"],"music_therapy":["平和质音乐疗法"]},"lifestyleAdvice":{"sleep_schedule":"秋分作息建议","daily_routine":["平和质日常起居"],"environment":["平和质环境调节"],"seasonal_care":["秋分起居调摄"]},"diseaseRiskPrediction":{"constitution_risks":["平和质易患疾病"],"seasonal_risks":["秋分易发疾病"],"relation_risks":["体质与运气关系不明确，建议均衡调养"],"prevention_advice":["预防建议"]},"healthTips":{"daily_tips":["平和质日常保健"],"seasonal_tips":["秋分养生要点"],"constitution_tips":["平和质保健要点"],"five_elements_tips":["五运六气养生要点"]}}},"healthMetrics":{"bmi":null,"constitution":80,"exercise":20,"sleep":null},"workoutSummary":{"totalWorkouts":144,"recentWorkouts":1,"weeklyWorkouts":1,"averageWeeklyWorkouts":1,"average3DayWorkouts":1,"recentRecords":[{"workoutId":"172","userId":1,"workoutType":"walking","startTime":"2025-10-04 12:21:05","endTime":"2025-10-04 12:21:32","duration":27,"totalDistance":"0.04","totalSteps":38,"calories":1,"averagePace":"10.54","maxSpeed":"5.69","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-10-04 12:21:33","updated_at":"2025-10-04 12:21:33"},{"workoutId":"171","userId":1,"workoutType":"walking","startTime":"2025-09-19 16:37:13","endTime":"2025-09-19 16:38:11","duration":58,"totalDistance":"0.40","totalSteps":0,"calories":3,"averagePace":"2.41","maxSpeed":"24.94","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-09-19 16:38:12","updated_at":"2025-09-19 16:38:12"},{"workoutId":"170","userId":1,"workoutType":"walking","startTime":"2025-09-17 07:02:47","endTime":"2025-09-17 07:09:06","duration":379,"totalDistance":"0.54","totalSteps":698,"calories":25,"averagePace":"11.71","maxSpeed":"5.12","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-09-17 07:09:07","updated_at":"2025-09-17 07:09:07"},{"workoutId":"169","userId":1,"workoutType":"walking","startTime":"2025-09-16 12:34:18","endTime":"2025-09-16 12:35:02","duration":44,"totalDistance":"0.05","totalSteps":29,"calories":2,"averagePace":"16.27","maxSpeed":"3.69","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-09-16 12:35:02","updated_at":"2025-09-16 12:35:02"},{"workoutId":"168","userId":1,"workoutType":"walking","startTime":"2025-09-16 12:30:56","endTime":"2025-09-16 12:32:16","duration":80,"totalDistance":"0.04","totalSteps":0,"calories":5,"averagePace":"35.25","maxSpeed":"1.70","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-09-16 12:32:17","updated_at":"2025-09-16 12:32:17"},{"workoutId":"167","userId":1,"workoutType":"walking","startTime":"2025-09-15 22:51:34","endTime":"2025-09-15 22:52:26","duration":52,"totalDistance":"0.10","totalSteps":14,"calories":3,"averagePace":"8.36","maxSpeed":"7.17","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算，心率数据来源：HealthKit传感器","created_at":"2025-09-15 22:52:27","updated_at":"2025-09-15 22:52:27"},{"workoutId":"166","userId":1,"workoutType":"walking","startTime":"2025-09-15 20:04:39","endTime":"2025-09-15 20:07:44","duration":185,"totalDistance":"0.00","totalSteps":0,"calories":0,"averagePace":"0.00","maxSpeed":"0.00","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算","created_at":"2025-09-15 20:07:44","updated_at":"2025-09-15 20:07:44"},{"workoutId":"165","userId":1,"workoutType":"walking","startTime":"2025-09-15 19:57:42","endTime":"2025-09-15 19:58:13","duration":31,"totalDistance":"0.00","totalSteps":0,"calories":0,"averagePace":"0.00","maxSpeed":"0.00","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算","created_at":"2025-09-15 19:58:14","updated_at":"2025-09-15 19:58:14"},{"workoutId":"164","userId":1,"workoutType":"walking","startTime":"2025-09-15 18:13:13","endTime":"2025-09-15 18:25:44","duration":751,"totalDistance":"0.00","totalSteps":1258,"calories":0,"averagePace":"0.00","maxSpeed":"0.00","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算","created_at":"2025-09-15 18:25:45","updated_at":"2025-09-15 18:25:45"},{"workoutId":"163","userId":1,"workoutType":"walking","startTime":"2025-09-14 05:05:20","endTime":"2025-09-14 05:06:00","duration":40,"totalDistance":"0.00","totalSteps":0,"calories":0,"averagePace":"0.00","maxSpeed":"0.00","deviceInfo":{"appVersion":"1.0","dataSource":"Manual","deviceType":"iPhone","deviceModel":"iPhone"},"weatherInfo":null,"notes":"通过青禾计划iOS应用完成的步行运动 - 距离基于苹果地图路径计算","created_at":"2025-09-14 05:06:00","updated_at":"2025-09-14 05:06:00"}],"lastWorkoutDate":"2025-10-04 12:21:33"},"sleepSummary":{"totalSessions":72,"recentSessions":0,"weeklySessions":0,"averageWeeklySessions":0,"average3DaySessions":0,"averageSleepDuration":0,"recentRecords":[{"id":"73","userId":1,"localSessionId":"local_6347D458-B269-4B34-9106-F912920B05C4","startTime":"2025-07-23 18:32:30","endTime":"2025-07-23 18:32:36","targetWakeTime":"2025-07-24 02:32:30","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-23 18:32:36","updated_at":"2025-07-23 18:33:00"},{"id":"72","userId":1,"localSessionId":"local_33860B33-C762-4301-BB39-BC67E41BC331","startTime":"2025-07-23 18:30:44","endTime":"2025-07-23 18:30:55","targetWakeTime":"2025-07-24 02:30:44","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-23 18:30:55","updated_at":"2025-07-23 18:31:19"},{"id":"71","userId":1,"localSessionId":"local_465F9807-F0BD-45A1-A0E1-17CAE1CB90D2","startTime":"2025-07-22 15:49:03","endTime":"2025-07-22 15:49:10","targetWakeTime":"2025-07-22 23:49:03","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-22 15:49:11","updated_at":"2025-07-22 15:49:35"},{"id":"70","userId":1,"localSessionId":"test_session_1753162160490","startTime":"2025-07-22 05:29:20","endTime":"2025-07-22 13:29:20","targetWakeTime":"2025-07-22 13:29:20","targetDuration":480,"actualDuration":480,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"17.0","appVersion":"1.0.0","deviceType":"iPhone"},"environmentData":{"humidity":60,"noiseLevel":30,"temperature":22.5},"userNotes":"测试睡眠会话","processingStatus":"pending","wakeupMethod":null,"sleepQualityRating":null,"created_at":"2025-07-22 13:29:20","updated_at":"2025-07-22 13:29:20"},{"id":"69","userId":1,"localSessionId":"test_session_1753162078774","startTime":"2025-07-22 05:27:58","endTime":"2025-07-22 13:27:58","targetWakeTime":"2025-07-22 13:27:58","targetDuration":480,"actualDuration":480,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"17.0","appVersion":"1.0.0","deviceType":"iPhone"},"environmentData":{"humidity":60,"noiseLevel":30,"temperature":22.5},"userNotes":"测试睡眠会话","processingStatus":"pending","wakeupMethod":null,"sleepQualityRating":null,"created_at":"2025-07-22 13:27:58","updated_at":"2025-07-22 13:27:58"},{"id":"68","userId":1,"localSessionId":"test_session_1753156183503","startTime":"2025-07-22 03:49:43","endTime":"2025-07-22 11:49:43","targetWakeTime":"2025-07-22 11:49:43","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"17.0","appVersion":"1.0.0","deviceType":"iPhone"},"environmentData":{"humidity":60,"noiseLevel":30,"temperature":22.5},"userNotes":"测试睡眠数据","processingStatus":"failed","wakeupMethod":"natural","sleepQualityRating":8,"created_at":"2025-07-22 11:49:43","updated_at":"2025-07-22 11:50:08"},{"id":"67","userId":1,"localSessionId":"test_session_1753156127887","startTime":"2025-07-22 03:48:47","endTime":"2025-07-22 11:48:47","targetWakeTime":"2025-07-22 11:48:47","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"17.0","appVersion":"1.0.0","deviceType":"iPhone"},"environmentData":{"humidity":60,"noiseLevel":30,"temperature":22.5},"userNotes":"测试睡眠数据","processingStatus":"failed","wakeupMethod":"natural","sleepQualityRating":8,"created_at":"2025-07-22 11:48:47","updated_at":"2025-07-22 11:49:14"},{"id":"66","userId":1,"localSessionId":"local_D10BB2F4-B42C-41C1-8EE6-D7ABD2523C9B","startTime":"2025-07-22 01:43:36","endTime":"2025-07-22 08:51:35","targetWakeTime":"2025-07-22 09:43:36","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-22 08:51:35","updated_at":"2025-07-22 08:52:02"},{"id":"65","userId":1,"localSessionId":"local_6F352BC0-FEDA-4C4F-8041-A4B37551D110","startTime":"2025-07-21 21:39:43","endTime":"2025-07-21 21:42:39","targetWakeTime":"2025-07-22 05:39:43","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-21 21:42:39","updated_at":"2025-07-21 21:43:07"},{"id":"64","userId":1,"localSessionId":"local_80C64E74-460B-4AAE-8F4C-2DA2C6B76015","startTime":"2025-07-21 20:48:04","endTime":"2025-07-21 20:54:35","targetWakeTime":"2025-07-22 04:48:04","targetDuration":480,"actualDuration":null,"sleepEfficiency":null,"overallQuality":null,"deviceInfo":{"osVersion":"18.3.1","appVersion":"1.0","deviceType":"iPhone"},"environmentData":{"humidity":50,"noiseLevel":30,"temperature":22},"userNotes":"手动结束","processingStatus":"failed","wakeupMethod":"manual","sleepQualityRating":5,"created_at":"2025-07-21 20:54:35","updated_at":"2025-07-21 20:55:01"}],"lastSleepDate":"2025-07-23 18:32:36"}},"recommendations":{"priority":"high","constitution":{"diet":["均衡饮食","五谷杂粮","新鲜蔬果","适量肉类","补气食物","山药","大枣","黄芪","人参"],"exercise":["适度运动","太极拳","慢跑","游泳","轻度运动","散步","八段锦","避免剧烈运动"],"lifestyle":["规律作息","保持心情愉快","适度工作"],"emotional":["保持乐观","心态平和"]},"fiveElements":{"dietTherapy":{"constitution_based":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养"],"seasonal":["白色食物","辛味食物","润肺食品"],"relation_based":["适度补益","增强营养"],"comprehensive":["五谷杂粮","新鲜蔬果","适量肉类","均衡营养","白色食物","辛味食物","润肺食品","适度补益","增强营养"]},"exerciseAdvice":{"constitution_based":["适度运动","太极拳","慢跑","游泳"],"seasonal":["呼吸运动","肺部锻炼","避免干燥"],"recommended_time":"下午3-5点，肺经当令","intensity":"适度强度"},"emotionalCare":{"constitution_advice":["平和质情志调养建议"],"seasonal_advice":["秋分情志调养"],"meditation":["平和质冥想建议"],"music_therapy":["平和质音乐疗法"]},"lifestyleAdvice":{"sleep_schedule":"秋分作息建议","daily_routine":["平和质日常起居"],"environment":["平和质环境调节"],"seasonal_care":["秋分起居调摄"]},"diseaseRiskPrediction":{"constitution_risks":["平和质易患疾病"],"seasonal_risks":["秋分易发疾病"],"relation_risks":["体质与运气关系不明确，建议均衡调养"],"prevention_advice":["预防建议"]},"healthTips":{"daily_tips":["平和质日常保健"],"seasonal_tips":["秋分养生要点"],"constitution_tips":["平和质保健要点"],"five_elements_tips":["五运六气养生要点"]}},"lifestyle":["增加运动频率，建议每周至少3次有氧运动","改善睡眠质量，保持规律作息"],"immediate":["立即咨询医生，进行全面体检","调整饮食结构，控制体重"],"longTerm":["建立健康的生活方式","定期进行健康检查","保持良好的心理状态","培养运动习惯"]},"healthTrends":{"exercise":"stable","sleep":"needs_improvement","overall":"stable"},"riskAssessment":[{"level":"medium","factor":"综合健康状况","advice":"需要改善整体健康状况"},{"level":"low","factor":"运动不足","advice":"增加运动频率"}],"nextUpdateSuggested":"2025-10-07T12:46:01.805Z","saveInfo":{"success":true,"reportId":"14","reportDate":"2025-10-04","generatedAt":"2025-10-04T12:46:01.804Z"}}}
+📡 HTTP状态码: 200
+✅ 健康报告生成成功: Optional("HR_1759581961804_1")
+✅ 确认报告日期: 2025-10-04, reportId: HR_1759581961804_1
+🚀 开始加载可用报告日期列表...
+📡 正在请求 /health/report/dates 接口...
+========================================
+🔍 NetworkManager.request 开始
+🔍 baseURL: 'https://api.qinghejihua.com.cn/api/v1'
+🔍 endpoint: '/health/report/dates'
+🔍 method: GET
+🔍 完整请求URL: 'https://api.qinghejihua.com.cn/api/v1/health/report/dates'
+🔍 URL长度: 57
+========================================
+🔍 HTTP方法: GET
+🔍 服务器响应: {"code":0,"success":true,"msg":"获取成功","data":{"total":7,"dates":[{"date":"2025-10-04","type":"comprehensive","generatedAt":"2025-10-04 20:46:01"},{"date":"2025-10-03","type":"comprehensive","generatedAt":"2025-10-03 23:12:34"},{"date":"2025-10-02","type":"comprehensive","generatedAt":"2025-10-02 08:26:42"},{"date":"2025-10-01","type":"comprehensive","generatedAt":"2025-10-01 22:23:55"},{"date":"2025-09-30","type":"comprehensive","generatedAt":"2025-09-30 16:41:39"},{"date":"2025-09-29","type":"comprehensive","generatedAt":"2025-09-29 23:43:15"},{"date":"2025-09-28","type":"comprehensive","generatedAt":"2025-09-28 23:45:51"}],"timestamp":"2025-10-04T12:46:02.295Z"}}
+📡 HTTP状态码: 200
+📡 API响应: success=true, code=0, msg=获取成功
+📅 API返回的报告日期数据: total=7, dates count=7
+📅 处理日期记录: date=2025-10-04, type=comprehensive, generatedAt=2025-10-04 20:46:01
+✅ 解析成功: 2025-10-04
+📅 处理日期记录: date=2025-10-03, type=comprehensive, generatedAt=2025-10-03 23:12:34
+✅ 解析成功: 2025-10-03
+📅 处理日期记录: date=2025-10-02, type=comprehensive, generatedAt=2025-10-02 08:26:42
+✅ 解析成功: 2025-10-02
+📅 处理日期记录: date=2025-10-01, type=comprehensive, generatedAt=2025-10-01 22:23:55
+✅ 解析成功: 2025-10-01
+📅 处理日期记录: date=2025-09-30, type=comprehensive, generatedAt=2025-09-30 16:41:39
+✅ 解析成功: 2025-09-30
+📅 处理日期记录: date=2025-09-29, type=comprehensive, generatedAt=2025-09-29 23:43:15
+✅ 解析成功: 2025-09-29
+📅 处理日期记录: date=2025-09-28, type=comprehensive, generatedAt=2025-09-28 23:45:51
+✅ 解析成功: 2025-09-28
+📅 最终可用日期集合 (7个): ["2025-09-28", "2025-09-29", "2025-09-30", "2025-10-01", "2025-10-02", "2025-10-03", "2025-10-04"]
+🔍 服务器响应: {"code":0,"success":true,"msg":"获取成功","data":{"total":7,"dates":[{"date":"2025-10-04","type":"comprehensive","generatedAt":"2025-10-04 20:46:01"},{"date":"2025-10-03","type":"comprehensive","generatedAt":"2025-10-03 23:12:34"},{"date":"2025-10-02","type":"comprehensive","generatedAt":"2025-10-02 08:26:42"},{"date":"2025-10-01","type":"comprehensive","generatedAt":"2025-10-01 22:23:55"},{"date":"2025-09-30","type":"comprehensive","generatedAt":"2025-09-30 16:41:39"},{"date":"2025-09-29","type":"comprehensive","generatedAt":"2025-09-29 23:43:15"},{"date":"2025-09-28","type":"comprehensive","generatedAt":"2025-09-28 23:45:51"}],"timestamp":"2025-10-04T12:46:02.325Z"}}
+📡 HTTP状态码: 200
+📡 API响应: success=true, code=0, msg=获取成功
+📅 API返回的报告日期数据: total=7, dates count=7
+📅 处理日期记录: date=2025-10-04, type=comprehensive, generatedAt=2025-10-04 20:46:01
+✅ 解析成功: 2025-10-04
+📅 处理日期记录: date=2025-10-03, type=comprehensive, generatedAt=2025-10-03 23:12:34
+✅ 解析成功: 2025-10-03
+📅 处理日期记录: date=2025-10-02, type=comprehensive, generatedAt=2025-10-02 08:26:42
+✅ 解析成功: 2025-10-02
+📅 处理日期记录: date=2025-10-01, type=comprehensive, generatedAt=2025-10-01 22:23:55
+✅ 解析成功: 2025-10-01
+📅 处理日期记录: date=2025-09-30, type=comprehensive, generatedAt=2025-09-30 16:41:39
+✅ 解析成功: 2025-09-30
+📅 处理日期记录: date=2025-09-29, type=comprehensive, generatedAt=2025-09-29 23:43:15
+✅ 解析成功: 2025-09-29
+📅 处理日期记录: date=2025-09-28, type=comprehensive, generatedAt=2025-09-28 23:45:51
+✅ 解析成功: 2025-09-28
+📅 最终可用日期集合 (7个): ["2025-09-28", "2025-09-29", "2025-09-30", "2025-10-01", "2025-10-02", "2025-10-03", "2025-10-04"]
+🔍 服务器响应: {"code":0,"success":true,"msg":"获取成功","data":{"total":7,"dates":[{"date":"2025-10-04","type":"comprehensive","generatedAt":"2025-10-04 20:46:01"},{"date":"2025-10-03","type":"comprehensive","generatedAt":"2025-10-03 23:12:34"},{"date":"2025-10-02","type":"comprehensive","generatedAt":"2025-10-02 08:26:42"},{"date":"2025-10-01","type":"comprehensive","generatedAt":"2025-10-01 22:23:55"},{"date":"2025-09-30","type":"comprehensive","generatedAt":"2025-09-30 16:41:39"},{"date":"2025-09-29","type":"comprehensive","generatedAt":"2025-09-29 23:43:15"},{"date":"2025-09-28","type":"comprehensive","generatedAt":"2025-09-28 23:45:51"}],"timestamp":"2025-10-04T12:46:02.445Z"}}
+📡 HTTP状态码: 200
+📡 API响应: success=true, code=0, msg=获取成功
+📅 API返回的报告日期数据: total=7, dates count=7
+📅 处理日期记录: date=2025-10-04, type=comprehensive, generatedAt=2025-10-04 20:46:01
+✅ 解析成功: 2025-10-04
+📅 处理日期记录: date=2025-10-03, type=comprehensive, generatedAt=2025-10-03 23:12:34
+✅ 解析成功: 2025-10-03
+📅 处理日期记录: date=2025-10-02, type=comprehensive, generatedAt=2025-10-02 08:26:42
+✅ 解析成功: 2025-10-02
+📅 处理日期记录: date=2025-10-01, type=comprehensive, generatedAt=2025-10-01 22:23:55
+✅ 解析成功: 2025-10-01
+📅 处理日期记录: date=2025-09-30, type=comprehensive, generatedAt=2025-09-30 16:41:39
+✅ 解析成功: 2025-09-30
+📅 处理日期记录: date=2025-09-29, type=comprehensive, generatedAt=2025-09-29 23:43:15
+✅ 解析成功: 2025-09-29
+📅 处理日期记录: date=2025-09-28, type=comprehensive, generatedAt=2025-09-28 23:45:51
+✅ 解析成功: 2025-09-28
+📅 最终可用日期集合 (7个): ["2025-09-28", "2025-09-29", "2025-09-30", "2025-10-01", "2025-10-02", "2025-10-03", "2025-10-04"]

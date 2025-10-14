@@ -8,6 +8,7 @@ struct NotificationRowView: View {
     let onDelete: () -> Void
     
     @State private var showingActionSheet = false
+    @State private var showingSystemNotificationDetail = false
 
     var body: some View {
         HStack(spacing: 12) {
@@ -35,6 +36,9 @@ struct NotificationRowView: View {
         }
         .actionSheet(isPresented: $showingActionSheet) {
             notificationActionSheet
+        }
+        .sheet(isPresented: $showingSystemNotificationDetail) {
+            SystemNotificationDetailView(notification: notification)
         }
     }
     
@@ -134,43 +138,52 @@ struct NotificationRowView: View {
 
         // 根据通知类型跳转到相应页面
         switch notification.type {
-        case .like, .bookmark:
-            print("🔔 \(notification.type.displayName)通知数据: \(String(describing: notification.data))")
-            if let postIdString = notification.data?.postId,
-               let postId = Int(postIdString) {
-                print("🔔 \(notification.type.displayName)通知：跳转到帖子详情，帖子ID: \(postId)")
-                navigationManager.navigateToPost(id: postId)
+        case .like:
+            print("🔔 点赞通知数据: \(String(describing: notification.data))")
+            // 获取点赞用户的ID
+            let likerUserId = notification.data?.liker?.id ?? notification.fromUser?.id
+            // 优先使用 data.postId，如果不存在则使用 relatedId
+            if let postId = notification.data?.postId {
+                print("🔔 点赞通知：跳转到帖子详情并高亮点赞区域，帖子ID: \(postId), 用户ID: \(String(describing: likerUserId))")
+                navigationManager.navigateToPost(id: postId, highlightSection: "likes", highlightUserId: likerUserId.map { String($0) })
+            } else if let relatedId = notification.relatedId, notification.relatedType == "post" {
+                print("🔔 点赞通知：使用relatedId作为帖子ID: \(relatedId), 用户ID: \(String(describing: likerUserId))")
+                navigationManager.navigateToPost(id: relatedId, highlightSection: "likes", highlightUserId: likerUserId.map { String($0) })
             } else {
-                print("⚠️ \(notification.type.displayName)通知：缺少帖子ID数据")
+                print("⚠️ 点赞通知：缺少帖子ID数据")
                 print("⚠️ 通知数据详情: postId=\(String(describing: notification.data?.postId)), relatedId=\(String(describing: notification.relatedId)), relatedType=\(String(describing: notification.relatedType))")
+            }
 
-                // 尝试使用relatedId作为备用方案
-                if let relatedId = notification.relatedId, let postId = Int(relatedId) {
-                    print("🔔 使用relatedId作为帖子ID: \(postId)")
-                    navigationManager.navigateToPost(id: postId)
-                }
+        case .bookmark:
+            print("🔔 收藏通知数据: \(String(describing: notification.data))")
+            // 获取收藏用户的ID（收藏通知中可能没有专门的字段，使用fromUser）
+            let bookmarkerUserId = notification.fromUser?.id
+            // 优先使用 data.postId，如果不存在则使用 relatedId
+            if let postId = notification.data?.postId {
+                print("🔔 收藏通知：跳转到帖子详情并高亮收藏区域，帖子ID: \(postId), 用户ID: \(String(describing: bookmarkerUserId))")
+                navigationManager.navigateToPost(id: postId, highlightSection: "bookmarks", highlightUserId: bookmarkerUserId.map { String($0) })
+            } else if let relatedId = notification.relatedId, notification.relatedType == "post" {
+                print("🔔 收藏通知：使用relatedId作为帖子ID: \(relatedId), 用户ID: \(String(describing: bookmarkerUserId))")
+                navigationManager.navigateToPost(id: relatedId, highlightSection: "bookmarks", highlightUserId: bookmarkerUserId.map { String($0) })
+            } else {
+                print("⚠️ 收藏通知：缺少帖子ID数据")
+                print("⚠️ 通知数据详情: postId=\(String(describing: notification.data?.postId)), relatedId=\(String(describing: notification.relatedId)), relatedType=\(String(describing: notification.relatedType))")
             }
         case .comment:
             print("🔔 评论通知数据: \(String(describing: notification.data))")
-            if let postIdString = notification.data?.postId,
-               let commentIdString = notification.data?.commentId,
-               let postId = Int(postIdString),
-               let commentId = Int(commentIdString) {
+            // 优先使用 data.postId 和 commentId
+            if let postId = notification.data?.postId, let commentId = notification.data?.commentId {
                 print("🔔 评论通知：跳转到评论详情，帖子ID: \(postId), 评论ID: \(commentId)")
                 navigationManager.navigateToComment(postId: postId, commentId: commentId)
-            } else if let postIdString = notification.data?.postId,
-                      let postId = Int(postIdString) {
+            } else if let postId = notification.data?.postId {
                 print("🔔 评论通知：跳转到帖子详情，帖子ID: \(postId)")
                 navigationManager.navigateToPost(id: postId)
+            } else if let relatedId = notification.relatedId, notification.relatedType == "post" {
+                print("🔔 评论通知：使用relatedId作为帖子ID: \(relatedId)")
+                navigationManager.navigateToPost(id: relatedId)
             } else {
                 print("⚠️ 评论通知：缺少帖子ID数据")
                 print("⚠️ 通知数据详情: postId=\(String(describing: notification.data?.postId)), relatedId=\(String(describing: notification.relatedId)), relatedType=\(String(describing: notification.relatedType))")
-
-                // 尝试使用relatedId作为备用方案
-                if let relatedId = notification.relatedId, let postId = Int(relatedId) {
-                    print("🔔 使用relatedId作为帖子ID: \(postId)")
-                    navigationManager.navigateToPost(id: postId)
-                }
             }
         case .follow:
             // 优先使用新的数据结构
@@ -187,43 +200,177 @@ struct NotificationRowView: View {
                 print("⚠️ 关注通知：缺少用户ID数据")
             }
         case .system:
-            print("🔔 系统通知：处理系统通知")
-            handleSystemNotification()
+            print("🔔 系统通知：以 sheet 方式打开")
+            showingSystemNotificationDetail = true
         }
     }
+}
 
-    // MARK: - 处理系统通知
-    private func handleSystemNotification() {
-        let navigationManager = NavigationManager.shared
+/// 系统通知详情视图
+struct SystemNotificationDetailView: View {
+    let notification: SystemNotification
+    @Environment(\.dismiss) private var dismiss
 
-        // 根据系统通知的内容决定跳转行为
-        print("处理系统通知: \(notification.content)")
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 24) {
+                    titleSection
+                    Divider()
+                    contentSection
+                    timeSection
 
-        // 解析系统通知的相关数据
-        if let relatedType = notification.relatedType, let relatedId = notification.relatedId {
-            switch relatedType {
-            case "post":
-                // 跳转到帖子详情
-                if let postId = Int(relatedId) {
-                    navigationManager.navigateToPost(id: postId)
+                    if notification.fromUser != nil {
+                        Divider()
+                        fromUserSection
+                    }
+
+                    if notification.relatedType != nil || notification.relatedId != nil {
+                        Divider()
+                        relatedInfoSection
+                    }
+
+                    Spacer()
                 }
-            case "user":
-                // 跳转到用户资料
-                if let userId = Int(relatedId) {
-                    navigationManager.navigateToProfile(userId: userId)
-                }
-            case "announcement":
-                // 系统公告，可以跳转到公告详情页面
-                print("📢 系统公告通知: \(notification.content)")
-                // 这里可以添加跳转到公告页面的逻辑
-            default:
-                print("⚠️ 未知的系统通知类型: \(relatedType)")
+                .padding(20)
             }
-        } else {
-            // 如果没有相关数据，可能是纯文本系统通知
-            print("📝 纯文本系统通知: \(notification.content)")
+            .navigationTitle("通知详情")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("关闭") {
+                        dismiss()
+                    }
+                }
+            }
         }
     }
+
+    // MARK: - 子视图
+
+    private var headerSection: some View {
+        EmptyView()
+    }
+
+    private var titleSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("标题")
+                .font(.system(size: 14, weight: .medium))
+                .foregroundColor(.secondary)
+
+            Text(notification.title)
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundColor(.primary)
+        }
+    }
+
+    private var contentSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("内容")
+                .font(.system(size: 14, weight: .medium))
+                .foregroundColor(.secondary)
+
+            Text(notification.content)
+                .font(.system(size: 16))
+                .foregroundColor(.primary)
+                .lineSpacing(4)
+        }
+    }
+    
+    private var timeSection: some View {
+        Text(notification.createdAt.formattedDateTime)
+            .font(.system(size: 14))
+            .foregroundColor(.secondary)
+            .padding(.top, 4)
+    }
+
+    private var fromUserSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("发送者")
+                .font(.system(size: 14, weight: .medium))
+                .foregroundColor(.secondary)
+
+            if let fromUser = notification.fromUser {
+                HStack(spacing: 12) {
+                    userAvatar(fromUser)
+                    userInfo(fromUser)
+                }
+            }
+        }
+    }
+
+    private func userAvatar(_ fromUser: NotificationFromUser) -> some View {
+        Group {
+            if !fromUser.avatar.isEmpty {
+                AsyncImage(url: URL(string: fromUser.avatar)) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    Image(systemName: "person.circle.fill")
+                        .resizable()
+                        .foregroundColor(.gray)
+                }
+                .frame(width: 40, height: 40)
+                .clipShape(Circle())
+            } else {
+                Image(systemName: "person.circle.fill")
+                    .resizable()
+                    .foregroundColor(.gray)
+                    .frame(width: 40, height: 40)
+            }
+        }
+    }
+
+    private func userInfo(_ fromUser: NotificationFromUser) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(spacing: 4) {
+                Text(fromUser.nickname)
+                    .font(.system(size: 16, weight: .medium))
+
+                if fromUser.isVerified {
+                    Image(systemName: "checkmark.seal.fill")
+                        .font(.system(size: 14))
+                        .foregroundColor(.blue)
+                }
+            }
+
+            Text("ID: \(fromUser.id)")
+                .font(.system(size: 14))
+                .foregroundColor(.secondary)
+        }
+    }
+
+    private var relatedInfoSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("相关信息")
+                .font(.system(size: 14, weight: .medium))
+                .foregroundColor(.secondary)
+
+            if let relatedType = notification.relatedType {
+                HStack {
+                    Text("类型:")
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                    Text(relatedType)
+                        .font(.system(size: 14))
+                        .foregroundColor(.primary)
+                }
+            }
+
+            if let relatedId = notification.relatedId {
+                HStack {
+                    Text("ID:")
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                    Text(relatedId)
+                        .font(.system(size: 14))
+                        .foregroundColor(.primary)
+                }
+            }
+        }
+    }
+
 }
 
 /// 空状态通知视图

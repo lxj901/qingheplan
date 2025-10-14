@@ -106,16 +106,11 @@ struct EditGroupInfoView: View {
         .navigationTitle("编辑群信息")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button("取消") {
-                    dismiss()
-                }
-            }
-
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("保存") {
                     saveGroupInfo()
                 }
+                .foregroundColor(.black)
                 .disabled(groupName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isLoading)
             }
         }
@@ -137,6 +132,11 @@ struct EditGroupInfoView: View {
                     .background(Color.black.opacity(0.3))
             }
         }
+        .alert("错误", isPresented: $viewModel.showError) {
+            Button("确定", role: .cancel) {}
+        } message: {
+            Text(viewModel.errorMessage ?? "未知错误")
+        }
     }
     
     // MARK: - 私有方法
@@ -145,6 +145,9 @@ struct EditGroupInfoView: View {
         groupName = conversation.title ?? ""
         groupDescription = conversation.description ?? ""
         groupAvatar = conversation.avatar ?? ""
+        
+        // 设置 viewModel 的 conversation
+        viewModel.conversation = conversation
     }
 
     private func uploadImageAndUpdateAvatar(_ image: UIImage) {

@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - 多语言测试页面
 struct LocalizationTestView: View {
-    @StateObject private var localizationManager = LocalizationManager()
+    @StateObject private var localizationManager = LocalizationManager.shared
     
     var body: some View {
         NavigationView {

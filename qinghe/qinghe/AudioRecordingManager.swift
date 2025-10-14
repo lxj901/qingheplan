@@ -105,10 +105,9 @@ class AudioRecordingManager: NSObject, ObservableObject {
         }
         
         do {
-            // 设置音频会话
-            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker])
-            try audioSession.setActive(true)
-            
+            // 统一交由 AudioOrchestrator 管理录音场景
+            AudioOrchestrator.shared.beginBackgroundRecording()
+
             // 创建录音文件URL
             let recordingURL = getRecordingURL()
             
@@ -155,10 +154,12 @@ class AudioRecordingManager: NSObject, ObservableObject {
         
         recorder.stop()
         
-        do {
-            try audioSession.setActive(false)
-        } catch {
-            print("🎤 停用音频会话失败: \(error)")
+        // 释放音频会话；若白噪音正在播放则保留会话，避免后台播放被中断
+        if WhiteNoisePlayer.shared.isPlaying {
+            print("ℹ️ AudioRecordingManager: 保留音频会话（白噪音正在播放）")
+        } else {
+            AudioOrchestrator.shared.endBackgroundRecording()
+            print("✅ AudioRecordingManager: 音频会话交由 Orchestrator 释放")
         }
         
         // 检查录制时长
@@ -183,10 +184,16 @@ class AudioRecordingManager: NSObject, ObservableObject {
         
         recorder.stop()
         
-        do {
-            try audioSession.setActive(false)
-        } catch {
-            print("🎤 停用音频会话失败: \(error)")
+        // 释放音频会话；若白噪音正在播放则保留会话，避免后台播放被中断
+        if WhiteNoisePlayer.shared.isPlaying {
+            print("ℹ️ AudioRecordingManager: 保留音频会话（白噪音正在播放）")
+        } else {
+            do {
+                try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
+                print("✅ AudioRecordingManager: 音频会话已释放")
+            } catch {
+                print("⚠️ AudioRecordingManager: 音频会话释放失败: \(error)")
+            }
         }
         
         // 删除录音文件
@@ -198,13 +205,9 @@ class AudioRecordingManager: NSObject, ObservableObject {
     
     /// 设置音频会话
     private func setupAudioSession() {
-        do {
-            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker])
-        } catch {
-            print("🎤 音频会话设置失败: \(error)")
-        }
+        print("ℹ️ AudioRecordingManager: 音频会话由 AudioOrchestrator 统一管理")
     }
-    
+
     /// 检查麦克风权限
     private func checkMicrophonePermission() {
         if #available(iOS 17.0, *) {

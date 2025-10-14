@@ -370,6 +370,87 @@ struct HealthProfile: Codable {
     let latestFaceAnalysis: LatestAnalysis?
     let fiveElementsMatch: FiveElementsMatch?
     
+    private enum CodingKeys: String, CodingKey {
+        case userId, height, weight, bloodType, primaryConstitution
+        case overallHealthScore, healthLevel, lastUpdated
+        case id, secondaryConstitution, constitutionScore
+        case healthMetrics, latestTongueAnalysis, latestFaceAnalysis, fiveElementsMatch
+    }
+    
+    // Memberwise initializer
+    init(userId: Int? = nil,
+         height: Double? = nil,
+         weight: Double? = nil,
+         bloodType: String? = nil,
+         primaryConstitution: String? = nil,
+         overallHealthScore: Int? = nil,
+         healthLevel: String? = nil,
+         lastUpdated: String? = nil,
+         id: String? = nil,
+         secondaryConstitution: String? = nil,
+         constitutionScore: String? = nil,
+         healthMetrics: HealthMetrics? = nil,
+         latestTongueAnalysis: LatestAnalysis? = nil,
+         latestFaceAnalysis: LatestAnalysis? = nil,
+         fiveElementsMatch: FiveElementsMatch? = nil) {
+        self.userId = userId
+        self.height = height
+        self.weight = weight
+        self.bloodType = bloodType
+        self.primaryConstitution = primaryConstitution
+        self.overallHealthScore = overallHealthScore
+        self.healthLevel = healthLevel
+        self.lastUpdated = lastUpdated
+        self.id = id
+        self.secondaryConstitution = secondaryConstitution
+        self.constitutionScore = constitutionScore
+        self.healthMetrics = healthMetrics
+        self.latestTongueAnalysis = latestTongueAnalysis
+        self.latestFaceAnalysis = latestFaceAnalysis
+        self.fiveElementsMatch = fiveElementsMatch
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        // 基础字段
+        self.userId = try? container.decode(Int.self, forKey: .userId)
+        self.bloodType = try? container.decode(String.self, forKey: .bloodType)
+        self.primaryConstitution = try? container.decode(String.self, forKey: .primaryConstitution)
+        self.overallHealthScore = try? container.decode(Int.self, forKey: .overallHealthScore)
+        self.healthLevel = try? container.decode(String.self, forKey: .healthLevel)
+        self.lastUpdated = try? container.decode(String.self, forKey: .lastUpdated)
+        
+        // 兼容height字段：可能是字符串或数字
+        if let doubleVal = try? container.decode(Double.self, forKey: .height) {
+            self.height = doubleVal
+        } else if let stringVal = try? container.decode(String.self, forKey: .height), 
+                  let doubleVal = Double(stringVal) {
+            self.height = doubleVal
+        } else {
+            self.height = nil
+        }
+        
+        // 兼容weight字段：可能是字符串或数字
+        if let doubleVal = try? container.decode(Double.self, forKey: .weight) {
+            self.weight = doubleVal
+        } else if let stringVal = try? container.decode(String.self, forKey: .weight),
+                  let doubleVal = Double(stringVal) {
+            self.weight = doubleVal
+        } else {
+            self.weight = nil
+        }
+        
+        // 复杂数据字段
+        self.id = try? container.decode(String.self, forKey: .id)
+        self.secondaryConstitution = try? container.decode(String.self, forKey: .secondaryConstitution)
+        self.constitutionScore = try? container.decode(String.self, forKey: .constitutionScore)
+        self.healthMetrics = try? container.decode(HealthMetrics.self, forKey: .healthMetrics)
+        self.latestTongueAnalysis = try? container.decode(LatestAnalysis.self, forKey: .latestTongueAnalysis)
+        self.latestFaceAnalysis = try? container.decode(LatestAnalysis.self, forKey: .latestFaceAnalysis)
+        self.fiveElementsMatch = try? container.decode(FiveElementsMatch.self, forKey: .fiveElementsMatch)
+    }
+    
     struct HealthMetrics: Codable {
         let age: Int?
         let bmi: Double?
@@ -380,6 +461,34 @@ struct HealthProfile: Codable {
         let exerciseScore: Int?
         let lastCalculated: String?
         let sleepQualityLevel: String?
+        
+        private enum CodingKeys: String, CodingKey {
+            case age, bmi, gender, sleepScore, overallScore
+            case activityLevel, exerciseScore, lastCalculated, sleepQualityLevel
+        }
+        
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            
+            self.age = try? container.decode(Int.self, forKey: .age)
+            self.gender = try? container.decode(String.self, forKey: .gender)
+            self.sleepScore = try? container.decode(Int.self, forKey: .sleepScore)
+            self.overallScore = try? container.decode(Int.self, forKey: .overallScore)
+            self.activityLevel = try? container.decode(String.self, forKey: .activityLevel)
+            self.exerciseScore = try? container.decode(Int.self, forKey: .exerciseScore)
+            self.lastCalculated = try? container.decode(String.self, forKey: .lastCalculated)
+            self.sleepQualityLevel = try? container.decode(String.self, forKey: .sleepQualityLevel)
+            
+            // 兼容bmi字段：可能是字符串或数字
+            if let doubleVal = try? container.decode(Double.self, forKey: .bmi) {
+                self.bmi = doubleVal
+            } else if let stringVal = try? container.decode(String.self, forKey: .bmi),
+                      let doubleVal = Double(stringVal) {
+                self.bmi = doubleVal
+            } else {
+                self.bmi = nil
+            }
+        }
     }
     
     struct LatestAnalysis: Codable {
@@ -692,50 +801,32 @@ final class HealthProfileDataManager: ObservableObject {
     
     // 计算属性
     var primaryConstitution: String {
-        // 优先使用健康报告中的体质结果
-        if let reportConstitution = healthReport?.healthOverview?.primaryConstitution {
-            return reportConstitution
+        // 最优先使用健康档案主字段的体质（这是API返回的权威数据）
+        if let constitution = healthProfile?.primaryConstitution,
+           !constitution.isEmpty && constitution != "unknown" {
+            return constitution
         }
-        // 其次使用健康报告详细分析中的体质结果
-        if let detailedConstitution = healthReport?.detailedAnalysis?.constitution?.primaryConstitution {
-            return detailedConstitution
-        }
-        // 再次使用舌诊分析中的体质结果
+        // 备选:使用舌诊分析中的体质结果
         if let tongueConstitution = comprehensiveProfile?.latestTongueAnalysis?.constitutionAnalysis?.constitution {
             return tongueConstitution
-        }
-        // 兜底使用健康档案中的体质
-        if let constitution = healthProfile?.primaryConstitution {
-            return constitution
         }
         return "--"
     }
     
     var overallHealthScore: Int {
-        // 优先使用健康报告中的总分
-        if let reportScore = healthReport?.healthOverview?.overallScore {
-            return reportScore
+        // 优先使用健康档案中的评分
+        if let score = healthProfile?.overallHealthScore {
+            return score
         }
-        // 其次使用健康指标中的总分
+        // 备选:使用健康指标中的总分
         if let score = healthProfile?.healthMetrics?.overallScore {
             return score
         }
-        // 兜底使用健康档案中的评分
-        return healthProfile?.overallHealthScore ?? 0
+        return 0
     }
     
     var healthLevel: String {
-        // 优先使用健康报告中的健康等级
-        if let reportLevel = healthReport?.healthOverview?.healthLevel {
-            switch reportLevel {
-            case "excellent": return "优秀"
-            case "good": return "良好" 
-            case "fair": return "一般"
-            case "poor": return "较差"
-            default: return reportLevel
-            }
-        }
-        
+        // 使用健康档案中的健康等级
         let level = healthProfile?.healthLevel
         switch level {
         case "excellent": return "优秀"
@@ -747,20 +838,6 @@ final class HealthProfileDataManager: ObservableObject {
     }
     
     var currentSolarTerm: String {
-        // 优先使用健康报告中的节气信息
-        if let reportTerm = healthReport?.healthOverview?.currentSolarTerm {
-            let df = DateFormatter()
-            df.dateFormat = "MM-dd"
-            df.locale = Locale(identifier: "zh_CN")
-            return "\(reportTerm) · \(df.string(from: Date()))"
-        }
-        // 其次使用健康报告详细分析中的节气信息
-        if let detailedTerm = healthReport?.detailedAnalysis?.fiveElements?.currentSolarTerm {
-            let df = DateFormatter()
-            df.dateFormat = "MM-dd"
-            df.locale = Locale(identifier: "zh_CN")
-            return "\(detailedTerm) · \(df.string(from: Date()))"
-        }
         // 使用五运六气分析中的节气信息
         if let term = fiveElementsAnalysis?.currentSolarTerm {
             let df = DateFormatter()
@@ -772,13 +849,7 @@ final class HealthProfileDataManager: ObservableObject {
     }
     
     var fiveMovementsText: String {
-        // 优先使用健康报告中的五运信息
-        if let reportMovements = healthReport?.detailedAnalysis?.fiveElements?.fiveMovements {
-            let element = reportMovements.element ?? "未知"
-            let nature = reportMovements.nature ?? "未知"
-            return "\(element)运\(nature) / 当前 \(element)运"
-        }
-        // 兜底使用五运六气分析
+        // 使用五运六气分析
         if let movements = fiveElementsAnalysis?.fiveMovements {
             let element = movements.element ?? "未知"
             let nature = movements.nature ?? "未知"
@@ -788,12 +859,7 @@ final class HealthProfileDataManager: ObservableObject {
     }
     
     var sixQiText: String {
-        // 优先使用健康报告中的六气信息
-        if let reportQi = healthReport?.detailedAnalysis?.fiveElements?.sixQi {
-            let qiName = reportQi.qi ?? "未知"
-            return "主气：\(qiName) · 客气：立夏"
-        }
-        // 兜底使用五运六气分析
+        // 使用五运六气分析
         if let qi = fiveElementsAnalysis?.sixQi {
             let qiName = qi.qi ?? "未知"
             let season = qi.season ?? "未知"
@@ -824,7 +890,16 @@ final class HealthProfileDataManager: ObservableObject {
                 comprehensiveProfile = data
                 healthProfile = data.healthProfile
                 lastUpdateTime = Date()
-                print("✅ 健康档案获取成功: \(primaryConstitution)")
+                
+                // 【调试日志】打印数据来源和最终显示的体质
+                let apiConstitution = data.healthProfile?.primaryConstitution ?? "nil"
+                let displayedConstitution = primaryConstitution
+                print("✅ 健康档案获取成功")
+                print("   📥 API返回体质: \(apiConstitution)")
+                print("   📺 最终显示体质: \(displayedConstitution)")
+                if apiConstitution != displayedConstitution {
+                    print("   ⚠️  注意:显示体质与API返回不一致,可能使用了其他数据源")
+                }
             } else {
                 lastError = response.error ?? response.message ?? "获取健康档案失败"
                 print("❌ 健康档案获取失败: \(lastError ?? "未知错误")")

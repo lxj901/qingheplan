@@ -204,9 +204,10 @@ class HealthReportManager: ObservableObject {
         let endString = formatDateForAPI(end)
         
         do {
-            let response: ReportRangeResponse = try await networkManager.request(
-                endpoint: "/health/report/range?start=\(startString)&end=\(endString)",
-                method: .GET,
+            // 使用查询参数，确保正确URL编码
+            let response: ReportRangeResponse = try await networkManager.get(
+                endpoint: "/health/report/range",
+                parameters: ["start": startString, "end": endString],
                 responseType: ReportRangeResponse.self
             )
             

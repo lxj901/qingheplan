@@ -10,6 +10,10 @@ struct GroupMemberListView: View {
     @State private var showingAddMember = false
     @State private var selectedMember: MemberRecord?
     @State private var showingMemberActions = false
+    @State private var showUserProfile = false
+    @State private var showRemoveConfirmation = false
+    @State private var createdConversation: ChatConversation?
+    @State private var showingChatDetail = false
     
     var body: some View {
         VStack(spacing: 0) {
@@ -22,17 +26,12 @@ struct GroupMemberListView: View {
         .navigationTitle("群成员(\(viewModel.members.count))")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button("关闭") {
-                    dismiss()
-                }
-            }
-
             if viewModel.canAddMembers {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("添加") {
                         showingAddMember = true
                     }
+                    .foregroundColor(.black)
                 }
             }
         }
@@ -44,6 +43,31 @@ struct GroupMemberListView: View {
         }
         .actionSheet(isPresented: $showingMemberActions) {
             memberActionSheet
+        }
+        .sheet(isPresented: $showUserProfile) {
+            if let member = selectedMember {
+                UserProfileView(userId: String(member.user.id), isRootView: false)
+            }
+        }
+        .navigationDestination(isPresented: $showingChatDetail) {
+            if let conversation = createdConversation {
+                ChatDetailView(conversation: conversation)
+                    .asSubView()
+            }
+        }
+        .alert("移除成员", isPresented: $showRemoveConfirmation) {
+            Button("取消", role: .cancel) { }
+            Button("移除", role: .destructive) {
+                if let member = selectedMember {
+                    Task {
+                        await viewModel.removeMember(member)
+                    }
+                }
+            }
+        } message: {
+            if let member = selectedMember {
+                Text("确定要将 \(member.user.nickname) 移出群聊吗？")
+            }
         }
         .onAppear {
             viewModel.loadMembers(conversation)
@@ -106,22 +130,22 @@ struct GroupMemberListView: View {
         
         // 查看资料
         buttons.append(.default(Text("查看资料")) {
-            // TODO: 显示用户资料
+            showUserProfile = true
         })
         
         // 发送消息
         if member.user.id != AuthManager.shared.currentUser?.id {
             buttons.append(.default(Text("发送消息")) {
-                // TODO: 跳转到私聊
+                Task {
+                    await createPrivateChat(with: member)
+                }
             })
         }
         
         // 移除成员（仅群主和管理员）
         if viewModel.canRemoveMember(member) {
-            buttons.append(.destructive(Text("移出群聊")) {
-                Task {
-                    await viewModel.removeMember(member)
-                }
+            buttons.append(.destructive(Text("移除该成员")) {
+                showRemoveConfirmation = true
             })
         }
         
@@ -131,6 +155,21 @@ struct GroupMemberListView: View {
             title: Text(member.user.nickname),
             buttons: buttons
         )
+    }
+    
+    // MARK: - 创建私聊
+    private func createPrivateChat(with member: MemberRecord) async {
+        do {
+            let conversation = try await ChatAPIService.shared.createPrivateChat(recipientId: member.user.id)
+            
+            await MainActor.run {
+                createdConversation = conversation
+                showingChatDetail = true
+            }
+        } catch {
+            print("❌ 创建私聊失败: \(error.localizedDescription)")
+            // TODO: 可以添加错误提示
+        }
     }
 }
 

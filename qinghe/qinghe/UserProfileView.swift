@@ -67,8 +67,16 @@ struct UserProfileView: View {
     // 聊天相关
     @State private var showingChatDetail = false
 
+    // 帖子详情相关
+    @State private var showingPostDetail = false
+    @State private var selectedPostId: String?
+
     // Tab切换相关
     @Environment(\.tabSelection) private var tabSelection
+
+    // 菜单导航相关
+    @State private var showingHealthStats = false
+    @State private var showingMemberCenter = false
 
     // 便利初始化方法，默认为子视图（隐藏Tab栏）
     init(userId: String) {
@@ -121,6 +129,14 @@ struct UserProfileView: View {
                 ))
             }
         }
+        .navigationDestination(isPresented: $showingHealthStats) {
+            WorkoutAnalysisDetailView()
+                .asSubView()
+        }
+        .navigationDestination(isPresented: $showingMemberCenter) {
+            MembershipCenterView()
+                .asSubView()
+        }
         .sheet(isPresented: $showingReportSheet) {
             if let postId = reportingPostId {
                 ReportPostView(postId: postId) { reason, description in
@@ -130,6 +146,13 @@ struct UserProfileView: View {
                     }
                 }
             }
+        }
+        .alert("无法关注", isPresented: $viewModel.showBlockedUserAlert) {
+            Button("确定", role: .cancel) {
+                viewModel.showBlockedUserAlert = false
+            }
+        } message: {
+            Text(viewModel.blockedUserMessage ?? "您已屏蔽该用户，如需关注请先从黑名单中移除")
         }
         .sheet(isPresented: $showingChatDetail) {
             if let userProfile = viewModel.userProfile {
@@ -146,6 +169,14 @@ struct UserProfileView: View {
                 }
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
+            }
+        }
+        .sheet(isPresented: $showingPostDetail) {
+            if let postId = selectedPostId {
+                NavigationStack {
+                    PostDetailView(postId: postId, isSheetPresentation: true)
+                        .navigationBarHidden(true)
+                }
             }
         }
         .actionSheet(isPresented: $showMoreOptions) {
@@ -893,21 +924,36 @@ struct UserProfileView: View {
     private func actionButtonsSection(_ userProfile: UserProfile) -> some View {
         HStack(spacing: 12) {
             if !userProfile.safeIsMe {
-                // 关注按钮
-                Button(userProfile.safeIsFollowing ? "已关注" : "关注") {
-                    Task {
-                        if userProfile.safeIsFollowing {
-                            await viewModel.unfollowUser()
-                        } else {
-                            await viewModel.followUser()
+                // 根据屏蔽状态显示不同的按钮
+                if userProfile.safeIsBlocked {
+                    // 显示"移出黑名单"按钮
+                    Button("移出黑名单") {
+                        Task {
+                            await viewModel.unblockUser()
                         }
                     }
+                    .font(.system(size: 16, weight: .medium))
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                    .background(Color(.systemGray5))
+                    .foregroundColor(.red)
+                    .cornerRadius(22)
+                } else {
+                    // 关注按钮
+                    Button(userProfile.safeIsFollowing ? "已关注" : "关注") {
+                        Task {
+                            if userProfile.safeIsFollowing {
+                                await viewModel.unfollowUser()
+                            } else {
+                                await viewModel.followUser()
+                            }
+                        }
+                    }
+                    .font(.system(size: 16, weight: .medium))
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                    .background(userProfile.safeIsFollowing ? Color(.systemGray5) : ModernDesignSystem.Colors.primaryGreen)
+                    .foregroundColor(userProfile.safeIsFollowing ? .primary : .white)
+                    .cornerRadius(22)
                 }
-                .font(.system(size: 16, weight: .medium))
-                .frame(maxWidth: .infinity, minHeight: 44)
-                .background(userProfile.safeIsFollowing ? Color(.systemGray5) : ModernDesignSystem.Colors.primaryGreen)
-                .foregroundColor(userProfile.safeIsFollowing ? .primary : .white)
-                .cornerRadius(22)
 
                 // 发私信按钮
                 Button(action: {
@@ -930,6 +976,14 @@ struct UserProfileView: View {
     // MARK: - 用户帖子列表区域
     private func userPostsSection(_ userProfile: UserProfile) -> some View {
         VStack(spacing: 0) {
+            // 菜单栏（运动统计、会员中心）
+            if userProfile.safeIsMe {
+                menuBar
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .background(Color(.systemBackground))
+            }
+
             // 帖子标签栏
             HStack(spacing: 0) {
                 Button(action: {
@@ -1042,13 +1096,8 @@ struct UserProfileView: View {
                         },
                         onNavigateToDetail: { postId in
                             print("🔍 UserProfileView: 导航到帖子详情，帖子ID: \(postId)")
-                            Task { @MainActor in
-                                NotificationCenter.default.post(
-                                    name: NSNotification.Name("NavigateToPost"),
-                                    object: nil,
-                                    userInfo: ["postId": postId]
-                                )
-                            }
+                            selectedPostId = postId
+                            showingPostDetail = true
                         },
                         onNavigateToUserProfile: { author in
                             // 在用户详情页面，不需要跳转到自己
@@ -1176,13 +1225,8 @@ struct UserProfileView: View {
                         },
                         onNavigateToDetail: { postId in
                             print("🔍 UserProfileView: 导航到帖子详情，帖子ID: \(postId)")
-                            Task { @MainActor in
-                                NotificationCenter.default.post(
-                                    name: NSNotification.Name("NavigateToPost"),
-                                    object: nil,
-                                    userInfo: ["postId": postId]
-                                )
-                            }
+                            selectedPostId = postId
+                            showingPostDetail = true
                         },
                         onNavigateToUserProfile: { author in
                             // 可以跳转到作者的用户详情页面
@@ -1369,21 +1413,36 @@ struct UserProfileView: View {
                 .foregroundColor(.primary)
                 .cornerRadius(22)
             } else {
-                // 关注按钮
-                Button(userProfile.safeIsFollowing ? "已关注" : "关注") {
-                    Task {
-                        if userProfile.safeIsFollowing {
-                            await viewModel.unfollowUser()
-                        } else {
-                            await viewModel.followUser()
+                // 根据屏蔽状态显示不同的按钮
+                if userProfile.safeIsBlocked {
+                    // 显示"移出黑名单"按钮
+                    Button("移出黑名单") {
+                        Task {
+                            await viewModel.unblockUser()
                         }
                     }
+                    .font(.system(size: 16, weight: .medium))
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                    .background(Color(.systemGray5))
+                    .foregroundColor(.red)
+                    .cornerRadius(22)
+                } else {
+                    // 关注按钮
+                    Button(userProfile.safeIsFollowing ? "已关注" : "关注") {
+                        Task {
+                            if userProfile.safeIsFollowing {
+                                await viewModel.unfollowUser()
+                            } else {
+                                await viewModel.followUser()
+                            }
+                        }
+                    }
+                    .font(.system(size: 16, weight: .medium))
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                    .background(userProfile.safeIsFollowing ? Color(.systemGray5) : ModernDesignSystem.Colors.primaryGreen)
+                    .foregroundColor(userProfile.safeIsFollowing ? .primary : .white)
+                    .cornerRadius(22)
                 }
-                .font(.system(size: 16, weight: .medium))
-                .frame(maxWidth: .infinity, minHeight: 44)
-                .background(userProfile.safeIsFollowing ? Color(.systemGray5) : ModernDesignSystem.Colors.primaryGreen)
-                .foregroundColor(userProfile.safeIsFollowing ? .primary : .white)
-                .cornerRadius(22)
 
                 // 发私信按钮
                 Button(action: {
@@ -1459,6 +1518,45 @@ struct UserProfileView: View {
                 viewModel: viewModel,
                 minHeight: 400
             )
+        }
+    }
+
+    // MARK: - 菜单栏
+    private var menuBar: some View {
+        HStack(spacing: 12) {
+            // 运动统计按钮
+            Button {
+                showingHealthStats = true
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "figure.run")
+                        .font(.system(size: 16, weight: .medium))
+                    Text("运动统计")
+                        .font(.system(size: 15, weight: .medium))
+                }
+                .foregroundColor(.primary)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
+            }
+
+            // 会员中心按钮
+            Button {
+                showingMemberCenter = true
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "crown")
+                        .font(.system(size: 16, weight: .medium))
+                    Text("会员中心")
+                        .font(.system(size: 15, weight: .medium))
+                }
+                .foregroundColor(.primary)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
+            }
         }
     }
 
@@ -2166,21 +2264,37 @@ struct UserProfileView: View {
                     EmptyView()
                 } else {
                     HStack(spacing: 8) {
-                        // 关注按钮
-                        Button(userProfile.safeIsFollowing ? "已关注" : "关注") {
-                            Task {
-                                if userProfile.safeIsFollowing {
-                                    await viewModel.unfollowUser()
-                                } else {
-                                    await viewModel.followUser()
+                        // 根据屏蔽状态显示不同的按钮
+                        if userProfile.safeIsBlocked {
+                            // 显示"移出黑名单"按钮
+                            Button("移出黑名单") {
+                                Task {
+                                    await viewModel.unblockUser()
                                 }
                             }
+                            .frame(height: 32)
+                            .padding(.horizontal, 12)
+                            .background(Color(.systemGray6))
+                            .foregroundColor(.red)
+                            .cornerRadius(16)
+                            .font(.system(size: 14, weight: .medium))
+                        } else {
+                            // 关注按钮
+                            Button(userProfile.safeIsFollowing ? "已关注" : "关注") {
+                                Task {
+                                    if userProfile.safeIsFollowing {
+                                        await viewModel.unfollowUser()
+                                    } else {
+                                        await viewModel.followUser()
+                                    }
+                                }
+                            }
+                            .frame(width: 80, height: 32)
+                            .background(userProfile.safeIsFollowing ? Color(.systemGray6) : ModernDesignSystem.Colors.primaryGreen)
+                            .foregroundColor(userProfile.safeIsFollowing ? .primary : .white)
+                            .cornerRadius(16)
+                            .font(.system(size: 14, weight: .medium))
                         }
-                        .frame(width: 80, height: 32)
-                        .background(userProfile.safeIsFollowing ? Color(.systemGray6) : ModernDesignSystem.Colors.primaryGreen)
-                        .foregroundColor(userProfile.safeIsFollowing ? .primary : .white)
-                        .cornerRadius(16)
-                        .font(.system(size: 14, weight: .medium))
 
                         // 聊天按钮
                         Button(action: {
@@ -2255,21 +2369,37 @@ struct UserProfileView: View {
                 .cornerRadius(16)
             } else {
                 HStack(spacing: 8) {
-                // 关注按钮
-                Button(userProfile.safeIsFollowing ? "已关注" : "关注") {
-                    Task {
-                        if userProfile.safeIsFollowing {
-                            await viewModel.unfollowUser()
-                        } else {
-                            await viewModel.followUser()
+                // 根据屏蔽状态显示不同的按钮
+                if userProfile.safeIsBlocked {
+                    // 显示"移出黑名单"按钮
+                    Button("移出黑名单") {
+                        Task {
+                            await viewModel.unblockUser()
                         }
                     }
+                    .frame(height: 32)
+                    .padding(.horizontal, 12)
+                    .background(Color(.systemGray6))
+                    .foregroundColor(.red)
+                    .cornerRadius(16)
+                    .font(.system(size: 14, weight: .medium))
+                } else {
+                    // 关注按钮
+                    Button(userProfile.safeIsFollowing ? "已关注" : "关注") {
+                        Task {
+                            if userProfile.safeIsFollowing {
+                                await viewModel.unfollowUser()
+                            } else {
+                                await viewModel.followUser()
+                            }
+                        }
+                    }
+                    .frame(width: 80, height: 32)
+                    .background(userProfile.safeIsFollowing ? Color(.systemGray6) : ModernDesignSystem.Colors.primaryGreen)
+                    .foregroundColor(userProfile.safeIsFollowing ? .primary : .white)
+                    .cornerRadius(16)
+                    .font(.system(size: 14, weight: .medium))
                 }
-                .frame(width: 80, height: 32)
-                .background(userProfile.safeIsFollowing ? Color(.systemGray6) : ModernDesignSystem.Colors.primaryGreen)
-                .foregroundColor(userProfile.safeIsFollowing ? .primary : .white)
-                .cornerRadius(16)
-                .font(.system(size: 14, weight: .medium))
 
                 // 聊天按钮
                 Button(action: {
@@ -2532,44 +2662,66 @@ struct UserProfileView: View {
                 )
                 .cornerRadius(18)
             } else {
-                // 关注/取消关注按钮（如果不是自己）
-                Button(action: {
-                    Task {
-                        if userProfile.isFollowing == true {
-                            await viewModel.unfollowUser()
-                        } else {
-                            await viewModel.followUser()
+                // 根据屏蔽状态显示不同的按钮
+                if userProfile.safeIsBlocked {
+                    // 显示"移出黑名单"按钮
+                    Button(action: {
+                        Task {
+                            await viewModel.unblockUser()
                         }
-                    }
-                }) {
-                    HStack(spacing: 6) {
-                        if viewModel.isFollowActionLoading {
-                            ProgressView()
-                                .scaleEffect(0.8)
-                                .progressViewStyle(CircularProgressViewStyle(tint: userProfile.isFollowing == true ? .primary : .white))
-                        }
-
-                        Text(userProfile.isFollowing == true ? "已关注" : "关注")
+                    }) {
+                        Text("移出黑名单")
                             .font(.system(size: 15, weight: .semibold))
-                            .foregroundColor(userProfile.isFollowing == true ? .primary : .white)
+                            .foregroundColor(.red)
                     }
+                    .frame(height: 36)
+                    .padding(.horizontal, 20)
+                    .background(Color.clear)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 18)
+                            .stroke(Color.red, lineWidth: 1)
+                    )
+                    .cornerRadius(18)
+                } else {
+                    // 关注/取消关注按钮（如果不是自己）
+                    Button(action: {
+                        Task {
+                            if userProfile.isFollowing == true {
+                                await viewModel.unfollowUser()
+                            } else {
+                                await viewModel.followUser()
+                            }
+                        }
+                    }) {
+                        HStack(spacing: 6) {
+                            if viewModel.isFollowActionLoading {
+                                ProgressView()
+                                    .scaleEffect(0.8)
+                                    .progressViewStyle(CircularProgressViewStyle(tint: userProfile.isFollowing == true ? .primary : .white))
+                            }
+
+                            Text(userProfile.isFollowing == true ? "已关注" : "关注")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundColor(userProfile.isFollowing == true ? .primary : .white)
+                        }
+                    }
+                    .frame(height: 36)
+                    .padding(.horizontal, 20)
+                    .background(
+                        userProfile.isFollowing == true ?
+                        Color.clear : ModernDesignSystem.Colors.primaryGreen
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 18)
+                            .stroke(
+                                userProfile.isFollowing == true ?
+                                Color(.systemGray4) : Color.clear,
+                                lineWidth: 1
+                            )
+                    )
+                    .cornerRadius(18)
+                    .disabled(viewModel.isFollowActionLoading || viewModel.isLoading)
                 }
-                .frame(height: 36)
-                .padding(.horizontal, 20)
-                .background(
-                    userProfile.isFollowing == true ?
-                    Color.clear : ModernDesignSystem.Colors.primaryGreen
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 18)
-                        .stroke(
-                            userProfile.isFollowing == true ?
-                            Color(.systemGray4) : Color.clear,
-                            lineWidth: 1
-                        )
-                )
-                .cornerRadius(18)
-                .disabled(viewModel.isFollowActionLoading || viewModel.isLoading)
             }
         }
     }
@@ -2800,13 +2952,8 @@ struct UserProfileView: View {
                             },
                             onNavigateToDetail: { postId in
                                 print("🔍 UserProfileView: 导航到帖子详情，帖子ID: \(postId)")
-                                Task { @MainActor in
-                                    NotificationCenter.default.post(
-                                        name: NSNotification.Name("NavigateToPost"),
-                                        object: nil,
-                                        userInfo: ["postId": postId]
-                                    )
-                                }
+                                selectedPostId = postId
+                                showingPostDetail = true
                             },
                             onNavigateToUserProfile: { author in
                                 // 在用户详情页面，不需要跳转到自己
@@ -2954,13 +3101,8 @@ struct UserProfileView: View {
                             },
                             onNavigateToDetail: { postId in
                                 print("🔍 UserProfileView: 导航到帖子详情，帖子ID: \(postId)")
-                                Task { @MainActor in
-                                    NotificationCenter.default.post(
-                                        name: NSNotification.Name("NavigateToPost"),
-                                        object: nil,
-                                        userInfo: ["postId": postId]
-                                    )
-                                }
+                                selectedPostId = postId
+                                showingPostDetail = true
                             },
                             onNavigateToUserProfile: { author in
                                 // 可以跳转到作者的用户详情页面

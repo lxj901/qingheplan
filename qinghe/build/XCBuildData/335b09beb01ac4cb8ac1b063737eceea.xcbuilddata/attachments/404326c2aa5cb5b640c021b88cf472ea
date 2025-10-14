@@ -1,0 +1,18 @@
+{
+  "" : {
+    "diagnostics" : "/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/ /qinghe/build/qinghe.build/Debug-iphoneos/ShieldConfig.build/Objects-normal/arm64/ShieldConfig-master.dia",
+    "emit-module-dependencies" : "/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/ /qinghe/build/qinghe.build/Debug-iphoneos/ShieldConfig.build/Objects-normal/arm64/ShieldConfig-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/ /qinghe/build/qinghe.build/Debug-iphoneos/ShieldConfig.build/Objects-normal/arm64/ShieldConfig-master-emit-module.dia",
+    "swift-dependencies" : "/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/ /qinghe/build/qinghe.build/Debug-iphoneos/ShieldConfig.build/Objects-normal/arm64/ShieldConfig-master.swiftdeps"
+  },
+  "/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/ /qinghe/ShieldConfig/ShieldConfigurationExtension.swift" : {
+    "const-values" : "/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/ /qinghe/build/qinghe.build/Debug-iphoneos/ShieldConfig.build/Objects-normal/arm64/ShieldConfigurationExtension.swiftconstvalues",
+    "dependencies" : "/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/ /qinghe/build/qinghe.build/Debug-iphoneos/ShieldConfig.build/Objects-normal/arm64/ShieldConfigurationExtension.d",
+    "diagnostics" : "/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/ /qinghe/build/qinghe.build/Debug-iphoneos/ShieldConfig.build/Objects-normal/arm64/ShieldConfigurationExtension.dia",
+    "index-unit-output-path" : "/qinghe.build/Debug-iphoneos/ShieldConfig.build/Objects-normal/arm64/ShieldConfigurationExtension.o",
+    "llvm-bc" : "/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/ /qinghe/build/qinghe.build/Debug-iphoneos/ShieldConfig.build/Objects-normal/arm64/ShieldConfigurationExtension.bc",
+    "object" : "/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/ /qinghe/build/qinghe.build/Debug-iphoneos/ShieldConfig.build/Objects-normal/arm64/ShieldConfigurationExtension.o",
+    "swift-dependencies" : "/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/ /qinghe/build/qinghe.build/Debug-iphoneos/ShieldConfig.build/Objects-normal/arm64/ShieldConfigurationExtension.swiftdeps",
+    "swiftmodule" : "/Users/lixujie/Library/Mobile Documents/com~apple~CloudDocs/qinghe plan/qinghe/ /qinghe/build/qinghe.build/Debug-iphoneos/ShieldConfig.build/Objects-normal/arm64/ShieldConfigurationExtension~partial.swiftmodule"
+  }
+}

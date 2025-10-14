@@ -12,6 +12,7 @@ struct PostCardView: View {
     let onNavigateToDetail: (String) -> Void
     let onNavigateToUserProfile: (Author) -> Void
 
+    @StateObject private var localizationManager = LocalizationManager.shared
     @State private var showingActionSheet = false
     @State private var lastTapTime: Date = Date.distantPast // 防止重复点击
 
@@ -25,10 +26,17 @@ struct PostCardView: View {
 
             // 帖子内容 - 与头像对齐
             if !post.content.isEmpty {
-                postContent
-                    .padding(.leading, 16) // 与头像左边缘对齐
-                    .padding(.trailing, 16)
-                    .padding(.top, 16)
+                VStack(alignment: .leading, spacing: 8) {
+                    postContent
+
+                    // AI生成标识
+                    if post.isAIGenerated == true {
+                        aiGeneratedBadge
+                    }
+                }
+                .padding(.leading, 16) // 与头像左边缘对齐
+                .padding(.trailing, 16)
+                .padding(.top, 16)
             }
 
             // 图片内容 - 与头像对齐
@@ -108,18 +116,15 @@ struct PostCardView: View {
             
             onNavigateToDetail(post.id)
         }
-        .confirmationDialog("选择操作", isPresented: $showingActionSheet) {
-            Button("分享") {
-                onShare()
-            }
-
+        .confirmationDialog(localizationManager.localizedString(key: "select_action"), isPresented: $showingActionSheet) {
             if !showEditButton {
-                Button("举报", role: .destructive) {
+                Button(localizationManager.localizedString(key: "report"), role: .destructive) {
+                    print("⚠️ PostCardView: 点击举报按钮，帖子ID: \(post.id)")
                     onReport()
                 }
             }
 
-            Button("取消", role: .cancel) { }
+            Button(localizationManager.localizedString(key: "cancel"), role: .cancel) { }
         }
     }
 
@@ -206,7 +211,7 @@ struct PostCardView: View {
 
                     // 热门标识
                     if showHotBadge {
-                        Text("热门")
+                        Text(localizationManager.localizedString(key: "hot"))
                             .font(.system(size: 10, weight: .medium))
                             .foregroundColor(.white)
                             .padding(.horizontal, 6)
@@ -242,6 +247,21 @@ struct PostCardView: View {
             .foregroundColor(.primary)
             .lineLimit(nil)
             .multilineTextAlignment(.leading)
+    }
+
+    // AI生成标识
+    private var aiGeneratedBadge: some View {
+        HStack(spacing: 4) {
+            Image(systemName: "info.circle")
+                .font(.system(size: 11))
+            Text(localizationManager.localizedString(key: "ai_generated_content"))
+                .font(.system(size: 12))
+        }
+        .foregroundColor(.orange)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(Color.orange.opacity(0.1))
+        .cornerRadius(6)
     }
 
     // 截取内容到200字
@@ -424,7 +444,8 @@ extension PostCardView {
                     Button(action: {
                         navigateToTagSearch(tag)
                     }) {
-                        Text("#\(tag)")
+                        // 如果标签不以#开头，添加#号显示
+                        Text(tag.hasPrefix("#") ? tag : "#\(tag)")
                             .font(.system(size: 12, weight: .medium))
                             .foregroundColor(AppConstants.Colors.primaryGreen)
                             .padding(.horizontal, 8)
@@ -441,13 +462,15 @@ extension PostCardView {
 
     /// 导航到标签搜索
     private func navigateToTagSearch(_ tagName: String) {
-        print("🏷️ 点击标签: #\(tagName)")
+        // 统一标签格式：如果不以#开头，添加#号
+        let searchTag = tagName.hasPrefix("#") ? tagName : "#\(tagName)"
+        print("🏷️ 点击标签: \(searchTag)")
 
         // 发送通知，让主视图处理标签搜索导航
         NotificationCenter.default.post(
             name: NSNotification.Name("NavigateToTagSearch"),
             object: nil,
-            userInfo: ["tagName": "#\(tagName)"] // 确保包含#号
+            userInfo: ["tagName": searchTag]
         )
     }
 
@@ -459,7 +482,7 @@ extension PostCardView {
                     .font(.system(size: 16))
                     .foregroundColor(.green)
 
-                Text("打卡记录")
+                Text(localizationManager.localizedString(key: "checkin_record"))
                     .font(.system(size: 15, weight: .medium))
                     .foregroundColor(.primary)
 
@@ -468,7 +491,7 @@ extension PostCardView {
 
             VStack(alignment: .leading, spacing: 6) {
                 HStack {
-                    Text("时间:")
+                    Text(localizationManager.localizedString(key: "time") + ":")
                         .font(.system(size: 13))
                         .foregroundColor(.secondary)
                         .frame(width: 40, alignment: .leading)
@@ -482,7 +505,7 @@ extension PostCardView {
 
                 if let address = checkin.locationAddress, !address.isEmpty {
                     HStack {
-                        Text("地点:")
+                        Text(localizationManager.localizedString(key: "location") + ":")
                             .font(.system(size: 13))
                             .foregroundColor(.secondary)
                             .frame(width: 40, alignment: .leading)
@@ -500,7 +523,7 @@ extension PostCardView {
                     let formattedNote = formatCheckinNote(note)
                     if !formattedNote.isEmpty {
                         HStack(alignment: .top) {
-                            Text("备注:")
+                            Text(localizationManager.localizedString(key: "note") + ":")
                                 .font(.system(size: 13))
                                 .foregroundColor(.secondary)
                                 .frame(width: 40, alignment: .leading)
@@ -518,7 +541,7 @@ extension PostCardView {
                 // 连续打卡天数显示
                 if let consecutiveDays = checkin.consecutiveDays, consecutiveDays > 0 {
                     HStack {
-                        Text("连续:")
+                        Text(localizationManager.localizedString(key: "consecutive") + ":")
                             .font(.system(size: 13))
                             .foregroundColor(.secondary)
                             .frame(width: 40, alignment: .leading)
@@ -528,7 +551,7 @@ extension PostCardView {
                                 .font(.system(size: 12))
                                 .foregroundColor(.orange)
 
-                            Text("连续打卡 \(consecutiveDays) 天")
+                            Text(String(format: localizationManager.localizedString(key: "consecutive_days"), consecutiveDays))
                                 .font(.system(size: 13, weight: .medium))
                                 .foregroundColor(.orange)
                         }
@@ -556,7 +579,7 @@ extension PostCardView {
                     .font(.system(size: 16))
                     .foregroundColor(.orange)
 
-                Text("运动记录")
+                Text(localizationManager.localizedString(key: "workout_record"))
                     .font(.system(size: 15, weight: .medium))
                     .foregroundColor(.primary)
 
@@ -565,7 +588,7 @@ extension PostCardView {
 
             VStack(alignment: .leading, spacing: 6) {
                 HStack {
-                    Text("类型:")
+                    Text(localizationManager.localizedString(key: "type") + ":")
                         .font(.system(size: 13))
                         .foregroundColor(.secondary)
                         .frame(width: 40, alignment: .leading)
@@ -578,7 +601,7 @@ extension PostCardView {
                 }
 
                 HStack {
-                    Text("时间:")
+                    Text(localizationManager.localizedString(key: "time") + ":")
                         .font(.system(size: 13))
                         .foregroundColor(.secondary)
                         .frame(width: 40, alignment: .leading)
@@ -591,7 +614,7 @@ extension PostCardView {
                 }
 
                 HStack {
-                    Text("时长:")
+                    Text(localizationManager.localizedString(key: "duration") + ":")
                         .font(.system(size: 13))
                         .foregroundColor(.secondary)
                         .frame(width: 40, alignment: .leading)
@@ -606,7 +629,7 @@ extension PostCardView {
                 // 距离
                 if let distance = workout.totalDistance, !distance.isEmpty {
                     HStack {
-                        Text("距离:")
+                        Text(localizationManager.localizedString(key: "distance") + ":")
                             .font(.system(size: 13))
                             .foregroundColor(.secondary)
                             .frame(width: 40, alignment: .leading)
@@ -622,7 +645,7 @@ extension PostCardView {
                 // 卡路里
                 if let calories = workout.calories {
                     HStack {
-                        Text("卡路里:")
+                        Text(localizationManager.localizedString(key: "calories") + ":")
                             .font(.system(size: 13))
                             .foregroundColor(.secondary)
                             .frame(width: 40, alignment: .leading)
@@ -637,7 +660,7 @@ extension PostCardView {
 
                 if let steps = workout.totalSteps {
                     HStack {
-                        Text("步数:")
+                        Text(localizationManager.localizedString(key: "steps") + ":")
                             .font(.system(size: 13))
                             .foregroundColor(.secondary)
                             .frame(width: 40, alignment: .leading)

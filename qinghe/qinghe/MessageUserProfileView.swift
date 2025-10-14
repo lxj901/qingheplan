@@ -78,8 +78,19 @@ struct MessageUserProfileView: View {
             .asSubView()
             .navigationDestination(for: CommunityNavigationDestination.self) { destination in
                 switch destination {
-                case .postDetail(let postId):
-                    PostDetailView(postId: postId)
+                case .postDetail(let postId, let highlightSection, let highlightUserId):
+                    PostDetailView(
+                        postId: postId,
+                        highlightSection: highlightSection.flatMap { section in
+                            switch section {
+                            case "likes": return .likes
+                            case "bookmarks": return .bookmarks
+                            case "comments": return .comments
+                            default: return nil
+                            }
+                        },
+                        highlightUserId: highlightUserId
+                    )
                         .navigationBarHidden(true)
                         .asSubView() // 标记为子页面，隐藏Tab栏
                         .id(postId)
@@ -763,7 +774,7 @@ struct MessageUserProfileView: View {
                                 print("🔍 MessageUserProfileView: 导航到帖子详情，帖子ID: \(postId)")
                                 Task { @MainActor in
                                     selectedPostId = postId
-                                    navigationPath.append(CommunityNavigationDestination.postDetail(postId))
+                                    navigationPath.append(CommunityNavigationDestination.postDetail(postId, highlightSection: nil))
                                 }
                             },
                             onNavigateToUserProfile: { author in
@@ -871,7 +882,7 @@ struct MessageUserProfileView: View {
                                 print("🔍 MessageUserProfileView: 导航到帖子详情，帖子ID: \(postId)")
                                 Task { @MainActor in
                                     selectedPostId = postId
-                                    navigationPath.append(CommunityNavigationDestination.postDetail(postId))
+                                    navigationPath.append(CommunityNavigationDestination.postDetail(postId, highlightSection: nil))
                                 }
                             },
                             onNavigateToUserProfile: { author in

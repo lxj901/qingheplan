@@ -17,10 +17,15 @@ struct SleepDetailView: View {
     @State private var isLoadingLocalAnalysis = false
     @State private var localAnalysisError: String?
 
-    // 会话特定的AI分析结果
-    @State private var sessionDeepSeekAnalysis: DeepSeekSleepAnalysis?
-    @State private var isLoadingDeepSeekAnalysis = false
-    @State private var deepSeekAnalysisError: String?
+    // 服务器健康报告分析结果（替代 DeepSeek）
+    @State private var healthReportData: HealthReportData?
+    @State private var isLoadingHealthReport = false
+    @State private var healthReportError: String?
+
+    // 单次会话分析结果
+    @State private var sessionAnalysisData: SingleSessionQualityData?
+    @State private var isLoadingSessionAnalysis = false
+    @State private var sessionAnalysisError: String?
 
     // 本地音频片段状态
     @State private var localAudioSegments: [SleepLocalAudioSegment] = []
@@ -87,7 +92,8 @@ struct SleepDetailView: View {
                 await loadLocalSleepData()
                 await loadLocalAnalysisResult()
                 await loadLocalAudioSegments() 
-                await generateDeepSeekAnalysis()
+                await loadHealthReportAnalysis()  // 健康报告分析
+                await loadSessionAnalysis()  // 单次会话分析
                 
                 // 确保事件数据被加载
                 print("🔍 睡眠详情页面加载事件数据，会话 ID: \(derivedSessionId)")
@@ -118,14 +124,14 @@ struct SleepDetailView: View {
 
             Spacer()
 
-            // 分享按钮
-            Button(action: {
-                // TODO: 实现分享功能
-            }) {
-                Image(systemName: "square.and.arrow.up")
+            // 占位视图，保持标题居中
+            HStack(spacing: 8) {
+                Image(systemName: "chevron.left")
                     .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(.white)
+                Text("返回")
+                    .font(.system(size: 16, weight: .medium))
             }
+            .opacity(0)
         }
         .padding(.horizontal, 20)
         .padding(.top, 10)
@@ -1020,21 +1026,49 @@ struct SleepDetailView: View {
     // 分析标题栏
     private var analysisHeaderView: some View {
         HStack {
-            Image(systemName: "brain.head.profile")
+            Image(systemName: "heart.text.square.fill")
                 .font(.system(size: 16, weight: .medium))
-                .foregroundColor(Color(red: 0.8, green: 0.4, blue: 0.9))
+                .foregroundColor(Color(red: 0.4, green: 0.7, blue: 1.0))
 
-            Text("DeepSeek AI 分析")
+            Text("健康分析")
                 .font(.system(size: 18, weight: .semibold))
                 .foregroundColor(.white)
 
             Spacer()
 
-            // 置信度指示器
-            if let analysis = sessionDeepSeekAnalysis {
-                confidenceBadge(analysis.confidence)
+            // 显示健康等级
+            if let healthLevel = healthReportData?.healthOverview.healthLevel {
+                healthLevelBadge(healthLevel)
             }
         }
+    }
+    
+    // 健康等级徽章
+    private func healthLevelBadge(_ level: String) -> some View {
+        let (text, color): (String, Color) = {
+            switch level.lowercased() {
+            case "excellent": return ("优秀", .green)
+            case "good": return ("良好", .blue)
+            case "fair": return ("一般", .orange)
+            case "poor": return ("较差", .red)
+            default: return (level, .gray)
+            }
+        }()
+        
+        return HStack(spacing: 4) {
+            Image(systemName: "checkmark.seal.fill")
+                .font(.system(size: 12))
+                .foregroundColor(color)
+            Text(text)
+                .font(.system(size: 12, weight: .medium))
+                .foregroundColor(.white.opacity(0.8))
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(
+            RoundedRectangle(cornerRadius: 6)
+                .fill(Color.white.opacity(0.1))
+        )
     }
 
     // 置信度徽章
@@ -1055,11 +1089,11 @@ struct SleepDetailView: View {
         )
     }
 
-    // 分析主要内容
+    // 分析主要内容 - 显示单次会话分析
     private var analysisMainContent: some View {
         Group {
-            if let analysis = sessionDeepSeekAnalysis {
-                analysisContentView(analysis)
+            if let sessionData = sessionAnalysisData {
+                sessionAnalysisView(sessionData)
             } else {
                 analysisEmptyStateView
             }
@@ -1069,10 +1103,9 @@ struct SleepDetailView: View {
     // 空状态视图
     private var analysisEmptyStateView: some View {
         VStack(spacing: 12) {
-            let analysisEngine = EnhancedDeepSeekSleepAnalysisEngine.shared
-            if isLoadingDeepSeekAnalysis || analysisEngine.isAnalyzing {
-                loadingStateView
-            } else if let error = deepSeekAnalysisError {
+            if isLoadingSessionAnalysis {
+                sessionLoadingStateView
+            } else if let error = sessionAnalysisError {
                 errorStateView(error)
             } else {
                 defaultEmptyStateView
@@ -1080,6 +1113,23 @@ struct SleepDetailView: View {
         }
         .frame(maxWidth: .infinity, alignment: .center)
         .padding(.vertical, 20)
+    }
+    
+    // 单次会话加载状态视图
+    private var sessionLoadingStateView: some View {
+        VStack(spacing: 8) {
+            ProgressView()
+                .scaleEffect(0.8)
+                .tint(.white)
+
+            Text("AI 正在分析...")
+                .font(.system(size: 14))
+                .foregroundColor(.white.opacity(0.8))
+
+            Text("分析单次睡眠会话")
+                .font(.system(size: 12))
+                .foregroundColor(.white.opacity(0.6))
+        }
     }
 
     // 加载状态视图
@@ -1124,17 +1174,601 @@ struct SleepDetailView: View {
     // 默认空状态视图
     private var defaultEmptyStateView: some View {
         VStack(spacing: 8) {
-            Image(systemName: "brain.head.profile")
+            Image(systemName: "chart.bar.doc.horizontal")
                 .font(.system(size: 24))
                 .foregroundColor(.white.opacity(0.4))
 
-            Text("暂无 AI 分析结果")
+            Text("暂无健康分析数据")
                 .font(.system(size: 16))
                 .foregroundColor(.white.opacity(0.7))
 
-            Text("分析结果将在后台生成")
+            Text("数据将在后台自动生成")
                 .font(.system(size: 12))
                 .foregroundColor(.white.opacity(0.5))
+        }
+    }
+    
+    // MARK: - 单次会话分析视图
+    
+    /// 显示单次会话分析的内容
+    private func sessionAnalysisView(_ sessionData: SingleSessionQualityData) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // 整体质量评分卡片
+            sessionQualityScoreCard(sessionData.qualityAnalysis)
+            
+            // 关键指标卡片
+            sessionKeyMetricsCard(sessionData.qualityAnalysis.keyMetrics)
+            
+            // 洞察卡片
+            if !sessionData.qualityAnalysis.insights.isEmpty {
+                sessionInsightsCard(sessionData.qualityAnalysis.insights)
+            }
+        }
+    }
+    
+    // 整体质量评分卡片
+    private func sessionQualityScoreCard(_ analysis: SessionQualityAnalysis) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("睡眠质量评估")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundColor(.white.opacity(0.8))
+            
+            HStack(spacing: 16) {
+                // 整体评分
+                VStack(spacing: 4) {
+                    Text("\(analysis.overallScore)")
+                        .font(.system(size: 48, weight: .bold))
+                        .foregroundColor(Color(
+                            red: analysis.qualityColor.red,
+                            green: analysis.qualityColor.green,
+                            blue: analysis.qualityColor.blue
+                        ))
+                    Text("综合评分")
+                        .font(.system(size: 12))
+                        .foregroundColor(.white.opacity(0.6))
+                }
+                
+                Divider()
+                    .background(Color.white.opacity(0.2))
+                    .frame(height: 60)
+                
+                // 质量等级
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Image(systemName: analysis.qualityIcon)
+                            .font(.system(size: 16))
+                            .foregroundColor(Color(
+                                red: analysis.qualityColor.red,
+                                green: analysis.qualityColor.green,
+                                blue: analysis.qualityColor.blue
+                            ))
+                        Text(analysis.qualityLevelText)
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(.white.opacity(0.9))
+                    }
+                    
+                    Text("睡眠质量等级")
+                        .font(.system(size: 12))
+                        .foregroundColor(.white.opacity(0.6))
+                }
+            }
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white.opacity(0.1))
+        )
+    }
+    
+    // 关键指标卡片
+    private func sessionKeyMetricsCard(_ metrics: SessionKeyMetrics) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("关键指标")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundColor(.white.opacity(0.8))
+            
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 2), spacing: 12) {
+                sessionMetricItem(
+                    icon: "gauge.medium",
+                    label: "睡眠效率",
+                    value: "\(metrics.sleepEfficiency)%",
+                    color: .blue
+                )
+                
+                sessionMetricItem(
+                    icon: "moon.zzz.fill",
+                    label: "深睡占比",
+                    value: "\(metrics.deepSleepPercentage)%",
+                    color: .purple
+                )
+                
+                sessionMetricItem(
+                    icon: "brain.head.profile",
+                    label: "REM 占比",
+                    value: "\(metrics.remSleepPercentage)%",
+                    color: .green
+                )
+                
+                sessionMetricItem(
+                    icon: "clock.fill",
+                    label: "入睡时长",
+                    value: "\(metrics.sleepLatency)分钟",
+                    color: .orange
+                )
+            }
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white.opacity(0.1))
+        )
+    }
+    
+    // 指标项
+    private func sessionMetricItem(icon: String, label: String, value: String, color: Color) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Image(systemName: icon)
+                    .font(.system(size: 12))
+                    .foregroundColor(color)
+                Spacer()
+            }
+            
+            Text(value)
+                .font(.system(size: 16, weight: .bold))
+                .foregroundColor(.white)
+            
+            Text(label)
+                .font(.system(size: 11))
+                .foregroundColor(.white.opacity(0.6))
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color.white.opacity(0.05))
+        )
+    }
+    
+    // 洞察卡片
+    private func sessionInsightsCard(_ insights: [SessionInsight]) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("AI 洞察")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundColor(.white.opacity(0.8))
+            
+            VStack(alignment: .leading, spacing: 10) {
+                ForEach(insights.indices, id: \.self) { index in
+                    sessionInsightRow(insights[index])
+                }
+            }
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white.opacity(0.1))
+        )
+    }
+    
+    // 洞察行
+    private func sessionInsightRow(_ insight: SessionInsight) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: insight.iconName)
+                .font(.system(size: 14))
+                .foregroundColor(Color(
+                    red: insight.iconColor.red,
+                    green: insight.iconColor.green,
+                    blue: insight.iconColor.blue
+                ))
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(insight.title)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(.white.opacity(0.9))
+                
+                Text(insight.description)
+                    .font(.system(size: 12))
+                    .foregroundColor(.white.opacity(0.7))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            
+            Spacer()
+        }
+        .padding(.vertical, 8)
+    }
+    
+    // MARK: - 健康报告分析视图
+    
+    /// 显示健康报告的分析内容
+    private func healthReportAnalysisView(_ reportData: HealthReportData) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // 健康概览卡片
+            healthOverviewCard(reportData.healthOverview)
+            
+            // 睡眠汇总分析
+            if let sleepSummary = reportData.detailedAnalysis?.sleepSummary {
+                sleepSummaryCard(sleepSummary)
+            }
+            
+            // 体质分析
+            if let constitution = reportData.detailedAnalysis?.constitution {
+                detailedConstitutionCard(constitution)
+            }
+            
+            // 健康建议
+            if let recommendations = reportData.recommendations {
+                recommendationsCard(recommendations)
+            }
+            
+            // 健康趋势
+            if let trends = reportData.healthTrends {
+                healthTrendsCard(trends)
+            }
+            
+            // 风险评估
+            if let riskAssessments = reportData.riskAssessment, !riskAssessments.isEmpty {
+                riskAssessmentCard(riskAssessments)
+            }
+        }
+    }
+    
+    // 健康概览卡片
+    private func healthOverviewCard(_ overview: HealthOverview) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("健康概览")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundColor(.white.opacity(0.8))
+            
+            HStack(spacing: 16) {
+                // 综合评分
+                VStack(spacing: 4) {
+                    Text("\(overview.overallScore ?? 0)")
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(.blue)
+                    Text("综合评分")
+                        .font(.system(size: 12))
+                        .foregroundColor(.white.opacity(0.6))
+                }
+                
+                Divider()
+                    .background(Color.white.opacity(0.2))
+                    .frame(height: 50)
+                
+                // 其他信息
+                VStack(alignment: .leading, spacing: 8) {
+                    if let primaryConstitution = overview.primaryConstitution {
+                        HStack {
+                            Image(systemName: "person.fill")
+                                .font(.system(size: 12))
+                                .foregroundColor(.green)
+                            Text("体质: \(primaryConstitution)")
+                                .font(.system(size: 13))
+                                .foregroundColor(.white.opacity(0.8))
+                        }
+                    }
+                    
+                    if let solarTerm = overview.currentSolarTerm {
+                        HStack {
+                            Image(systemName: "calendar")
+                                .font(.system(size: 12))
+                                .foregroundColor(.orange)
+                            Text("节气: \(solarTerm)")
+                                .font(.system(size: 13))
+                                .foregroundColor(.white.opacity(0.8))
+                        }
+                    }
+                }
+            }
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white.opacity(0.1))
+        )
+    }
+    
+    // 睡眠汇总卡片
+    private func sleepSummaryCard(_ summary: SleepSummary) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("睡眠汇总（最近3天）")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundColor(.white.opacity(0.8))
+            
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 2), spacing: 12) {
+                summaryMetricItem(icon: "bed.double.fill", label: "总会话", value: "\(summary.totalSessions)次", color: .blue)
+                
+                summaryMetricItem(icon: "calendar", label: "本周会话", value: "\(summary.weeklySessions)次", color: .green)
+                
+                summaryMetricItem(icon: "clock.fill", label: "平均时长", value: String(format: "%.1f小时", summary.averageSleepDuration), color: .purple)
+                
+                summaryMetricItem(icon: "chart.line.uptrend.xyaxis", label: "近3天平均", value: "\(summary.average3DaySessions)次", color: .orange)
+            }
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white.opacity(0.1))
+        )
+    }
+    
+    // 汇总指标项
+    private func summaryMetricItem(icon: String, label: String, value: String, color: Color) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Image(systemName: icon)
+                    .font(.system(size: 12))
+                    .foregroundColor(color)
+                Spacer()
+            }
+            
+            Text(value)
+                .font(.system(size: 16, weight: .bold))
+                .foregroundColor(.white)
+            
+            Text(label)
+                .font(.system(size: 11))
+                .foregroundColor(.white.opacity(0.6))
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color.white.opacity(0.05))
+        )
+    }
+    
+    // 体质分析卡片（用于简单的 ConstitutionAnalysis）
+    private func constitutionCard(_ constitution: ConstitutionAnalysis) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("体质分析")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundColor(.white.opacity(0.8))
+            
+            if let hasAnalysis = constitution.hasAnalysis, hasAnalysis {
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        if let primaryConstitution = constitution.primaryConstitution {
+                            Text(primaryConstitution)
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(.green)
+                        }
+                        
+                        if let confidence = constitution.confidence {
+                            Text("置信度: \(Int(confidence * 100))%")
+                                .font(.system(size: 12))
+                                .foregroundColor(.white.opacity(0.6))
+                        }
+                    }
+                    Spacer()
+                }
+            } else {
+                Text("暂无体质分析数据")
+                    .font(.system(size: 14))
+                    .foregroundColor(.white.opacity(0.6))
+            }
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white.opacity(0.1))
+        )
+    }
+    
+    // 详细体质分析卡片（用于健康报告中的 DetailedConstitutionAnalysis）
+    private func detailedConstitutionCard(_ constitution: DetailedConstitutionAnalysis) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("体质分析")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundColor(.white.opacity(0.8))
+            
+            VStack(alignment: .leading, spacing: 8) {
+                if let primaryConstitution = constitution.primaryConstitution {
+                    HStack {
+                        Text("主要体质:")
+                            .font(.system(size: 14))
+                            .foregroundColor(.white.opacity(0.6))
+                        Text(primaryConstitution)
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(.green)
+                    }
+                }
+                
+                if let secondaryConstitution = constitution.secondaryConstitution {
+                    HStack {
+                        Text("次要体质:")
+                            .font(.system(size: 14))
+                            .foregroundColor(.white.opacity(0.6))
+                        Text(secondaryConstitution)
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(.orange)
+                    }
+                }
+                
+                HStack {
+                    Text("置信度:")
+                        .font(.system(size: 14))
+                        .foregroundColor(.white.opacity(0.6))
+                    Text("\(Int(constitution.confidence * 100))%")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(.blue)
+                }
+            }
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white.opacity(0.1))
+        )
+    }
+    
+    // 健康建议卡片
+    private func recommendationsCard(_ recommendations: Recommendations) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("健康建议")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundColor(.white.opacity(0.8))
+            
+            VStack(alignment: .leading, spacing: 8) {
+                // 即时建议
+                if let immediate = recommendations.immediate, !immediate.isEmpty {
+                    ForEach(immediate, id: \.self) { advice in
+                        HStack(alignment: .top, spacing: 8) {
+                            Image(systemName: "exclamationmark.circle.fill")
+                                .font(.system(size: 12))
+                                .foregroundColor(.orange)
+                            Text(advice)
+                                .font(.system(size: 13))
+                                .foregroundColor(.white.opacity(0.8))
+                        }
+                    }
+                }
+                
+                // 长期建议
+                if let longTerm = recommendations.longTerm, !longTerm.isEmpty {
+                    ForEach(longTerm, id: \.self) { advice in
+                        HStack(alignment: .top, spacing: 8) {
+                            Image(systemName: "lightbulb.fill")
+                                .font(.system(size: 12))
+                                .foregroundColor(.blue)
+                            Text(advice)
+                                .font(.system(size: 13))
+                                .foregroundColor(.white.opacity(0.8))
+                        }
+                    }
+                }
+            }
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white.opacity(0.1))
+        )
+    }
+    
+    // 健康趋势卡片
+    private func healthTrendsCard(_ trends: HealthTrends) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("健康趋势")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundColor(.white.opacity(0.8))
+            
+            VStack(spacing: 8) {
+                trendItem(label: "睡眠", trend: trends.sleep)
+                trendItem(label: "运动", trend: trends.exercise)
+                trendItem(label: "整体", trend: trends.overall)
+            }
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white.opacity(0.1))
+        )
+    }
+    
+    // 趋势项
+    private func trendItem(label: String, trend: String) -> some View {
+        HStack {
+            Text(label)
+                .font(.system(size: 13))
+                .foregroundColor(.white.opacity(0.7))
+            
+            Spacer()
+            
+            let (icon, color) = trendIndicator(trend)
+            HStack(spacing: 4) {
+                Image(systemName: icon)
+                    .font(.system(size: 12))
+                    .foregroundColor(color)
+                Text(trendText(trend))
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundColor(color)
+            }
+        }
+    }
+    
+    private func trendIndicator(_ trend: String) -> (String, Color) {
+        switch trend.lowercased() {
+        case "improving": return ("arrow.up.circle.fill", .green)
+        case "stable", "good": return ("minus.circle.fill", .blue)
+        case "declining": return ("arrow.down.circle.fill", .red)
+        default: return ("circle.fill", .gray)
+        }
+    }
+    
+    private func trendText(_ trend: String) -> String {
+        switch trend.lowercased() {
+        case "improving": return "改善中"
+        case "stable": return "稳定"
+        case "good": return "良好"
+        case "declining": return "下降中"
+        default: return trend
+        }
+    }
+    
+    // 风险评估卡片
+    private func riskAssessmentCard(_ assessments: [RiskAssessment]) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("风险评估")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundColor(.white.opacity(0.8))
+            
+            VStack(spacing: 8) {
+                ForEach(assessments.indices, id: \.self) { index in
+                    let assessment = assessments[index]
+                    riskItem(assessment)
+                }
+            }
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white.opacity(0.1))
+        )
+    }
+    
+    // 风险项
+    private func riskItem(_ assessment: RiskAssessment) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                let (icon, color) = riskLevelIndicator(assessment.level)
+                Image(systemName: icon)
+                    .font(.system(size: 12))
+                    .foregroundColor(color)
+                Text(riskLevelText(assessment.level))
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(color)
+                
+                Spacer()
+                
+                Text(assessment.factor)
+                    .font(.system(size: 12))
+                    .foregroundColor(.white.opacity(0.7))
+            }
+            
+            Text(assessment.advice)
+                .font(.system(size: 12))
+                .foregroundColor(.white.opacity(0.6))
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color.white.opacity(0.05))
+        )
+    }
+    
+    private func riskLevelIndicator(_ level: String) -> (String, Color) {
+        switch level.lowercased() {
+        case "high": return ("exclamationmark.triangle.fill", .red)
+        case "medium": return ("exclamationmark.circle.fill", .orange)
+        case "low": return ("checkmark.circle.fill", .green)
+        default: return ("circle.fill", .gray)
+        }
+    }
+    
+    private func riskLevelText(_ level: String) -> String {
+        switch level.lowercased() {
+        case "high": return "高风险"
+        case "medium": return "中风险"
+        case "low": return "低风险"
+        default: return level
         }
     }
 
@@ -1266,34 +1900,19 @@ struct SleepDetailView: View {
     // MARK: - 详细分析结果
     private var detailedAnalysisResults: some View {
         VStack(spacing: 20) {
-            if let analysis = sessionDeepSeekAnalysis {
-                // 睡眠阶段分析卡片
-                sleepStageAnalysisCard(analysis.stageAnalysis)
-
-                // 睡眠质量详细指标
-                sleepQualityMetricsCard(analysis.qualityAssessment)
-
-                // 所有 AI 洞察
-                if !analysis.aiInsights.isEmpty {
-                    allInsightsCard(analysis.aiInsights)
-                }
-            } else {
-                // 显示本地分析结果作为后备
-                VStack(spacing: 16) {
-                    if let localResult = localAnalysisResult {
-                        ForEach(LocalSleepAudioAnalyzer.SoundType.allCases, id: \.self) { soundType in
-                            if let stats = localResult.getStatistics(for: soundType), stats.count > 0 {
-                                localSoundTypeDetailCard(soundType: soundType, stats: stats)
-                            }
-                        }
-                    } else {
-                        Text("暂无详细分析数据")
-                            .font(.system(size: 16))
-                            .foregroundColor(.white.opacity(0.7))
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .padding(.vertical, 40)
+            // 显示本地分析结果
+            if let localResult = localAnalysisResult {
+                ForEach(LocalSleepAudioAnalyzer.SoundType.allCases, id: \.self) { soundType in
+                    if let stats = localResult.getStatistics(for: soundType), stats.count > 0 {
+                        localSoundTypeDetailCard(soundType: soundType, stats: stats)
                     }
                 }
+            } else {
+                Text("暂无详细分析数据")
+                    .font(.system(size: 16))
+                    .foregroundColor(.white.opacity(0.7))
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.vertical, 40)
             }
         }
     }
@@ -1604,23 +2223,18 @@ struct SleepDetailView: View {
                     .foregroundColor(.white)
 
                 Spacer()
-
-                // 显示建议数量
-                if let analysis = sessionDeepSeekAnalysis {
-                    Text("\(analysis.personalizedRecommendations.count) 条")
-                        .font(.system(size: 12))
-                        .foregroundColor(.white.opacity(0.6))
-                }
             }
 
-            if let analysis = sessionDeepSeekAnalysis, !analysis.personalizedRecommendations.isEmpty {
+            // 显示单次会话建议
+            if let sessionData = sessionAnalysisData,
+               !sessionData.qualityAnalysis.recommendations.isEmpty {
                 LazyVStack(alignment: .leading, spacing: 12) {
-                    ForEach(analysis.personalizedRecommendations, id: \.id) { recommendation in
-                        deepSeekRecommendationCard(recommendation)
+                    ForEach(sessionData.qualityAnalysis.recommendations.indices, id: \.self) { index in
+                        sessionRecommendationRow(sessionData.qualityAnalysis.recommendations[index])
                     }
                 }
             } else {
-                // 后备：显示基础建议
+                // 显示基础建议（后备方案）
                 LazyVStack(alignment: .leading, spacing: 12) {
                     ForEach(getSleepRecommendations(), id: \.self) { recommendation in
                         unifiedRecommendationItem(recommendation)
@@ -1637,6 +2251,78 @@ struct SleepDetailView: View {
                         .stroke(Color.white.opacity(0.15), lineWidth: 1)
                 )
         )
+    }
+    
+    // 单次会话建议行
+    private func sessionRecommendationRow(_ recommendation: SessionRecommendation) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            // 优先级图标
+            Image(systemName: recommendation.priorityIcon)
+                .font(.system(size: 14))
+                .foregroundColor(Color(
+                    red: recommendation.priorityColor.red,
+                    green: recommendation.priorityColor.green,
+                    blue: recommendation.priorityColor.blue
+                ))
+                .frame(width: 20, height: 20)
+            
+            VStack(alignment: .leading, spacing: 6) {
+                // 建议标题
+                Text(recommendation.text)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(.white.opacity(0.9))
+                
+                // 建议详情
+                Text(recommendation.description)
+                    .font(.system(size: 13))
+                    .foregroundColor(.white.opacity(0.7))
+                    .fixedSize(horizontal: false, vertical: true)
+                
+                // 优先级标签
+                HStack(spacing: 4) {
+                    Text(priorityText(recommendation.priority))
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundColor(Color(
+                            red: recommendation.priorityColor.red,
+                            green: recommendation.priorityColor.green,
+                            blue: recommendation.priorityColor.blue
+                        ))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(Color(
+                                    red: recommendation.priorityColor.red,
+                                    green: recommendation.priorityColor.green,
+                                    blue: recommendation.priorityColor.blue
+                                ).opacity(0.2))
+                        )
+                }
+                .padding(.top, 4)
+            }
+            
+            Spacer()
+        }
+        .padding(.vertical, 12)
+        .padding(.horizontal, 16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white.opacity(0.05))
+        )
+    }
+    
+    // 优先级文本
+    private func priorityText(_ priority: String) -> String {
+        switch priority {
+        case "high":
+            return "高优先级"
+        case "medium":
+            return "中等优先级"
+        case "low":
+            return "低优先级"
+        default:
+            return "一般"
+        }
     }
 
     // DeepSeek 建议卡片
@@ -1759,78 +2445,32 @@ struct SleepDetailView: View {
                     .foregroundColor(.white)
 
                 Spacer()
-
-                // 显示洞察数量
-                if let analysis = sessionDeepSeekAnalysis {
-                    let healthInsights = analysis.aiInsights.filter { $0.type == .concern || $0.type == .warning }
-                    if !healthInsights.isEmpty {
-                        Text("\(healthInsights.count) 条")
-                            .font(.system(size: 12))
-                            .foregroundColor(.white.opacity(0.6))
-                    }
-                }
             }
 
-            if let analysis = sessionDeepSeekAnalysis {
-                let healthRelatedInsights = analysis.aiInsights.filter { insight in
-                    insight.type == .concern || insight.type == .warning ||
-                    insight.relatedMetrics.contains { $0.contains("健康") || $0.contains("质量") }
+            // 显示基础健康洞察
+            LazyVStack(alignment: .leading, spacing: 12) {
+                ForEach(getHealthInsights(), id: \.self) { insight in
+                    unifiedInsightItem(insight)
                 }
-
-                if !healthRelatedInsights.isEmpty {
-                    LazyVStack(alignment: .leading, spacing: 12) {
-                        ForEach(healthRelatedInsights, id: \.id) { insight in
-                            deepSeekInsightCard(insight)
-                        }
-                    }
-                } else {
-                    // 显示积极的健康洞察
-                    let positiveInsights = analysis.aiInsights.filter { $0.type == .positive }
-                    if !positiveInsights.isEmpty {
-                        LazyVStack(alignment: .leading, spacing: 12) {
-                            ForEach(positiveInsights.prefix(3), id: \.id) { insight in
-                                deepSeekInsightCard(insight)
-                            }
-                        }
-                    } else {
-                        // 后备：显示基础健康洞察
-                        LazyVStack(alignment: .leading, spacing: 12) {
-                            ForEach(getHealthInsights(), id: \.self) { insight in
-                                unifiedInsightItem(insight)
-                            }
-                        }
-                    }
-                }
-
-                // 添加睡眠质量总结
-                if analysis.qualityAssessment.overallScore >= 80 {
+            }
+            
+            // 如果有健康报告数据，显示健康等级总结
+            if let reportData = healthReportData {
+                let healthLevel = reportData.healthOverview.healthLevel
+                if healthLevel == "优秀" || healthLevel == "良好" {
                     healthSummaryCard(
-                        title: "睡眠质量良好",
-                        description: "您的睡眠质量处于良好水平，身体得到了充分的休息和恢复。",
+                        title: "健康状态良好",
+                        description: "您的整体健康状态处于\(healthLevel)水平，请继续保持良好的生活习惯。",
                         color: .green,
                         icon: "checkmark.circle.fill"
                     )
-                } else if analysis.qualityAssessment.overallScore >= 60 {
+                } else {
                     healthSummaryCard(
-                        title: "睡眠质量有待改善",
-                        description: "您的睡眠质量中等，建议关注睡眠环境和习惯的优化。",
+                        title: "健康状态需要关注",
+                        description: "您的健康状态为\(healthLevel)，建议关注健康建议，改善生活方式。",
                         color: .orange,
                         icon: "exclamationmark.triangle.fill"
                     )
-                } else {
-                    healthSummaryCard(
-                        title: "睡眠质量需要关注",
-                        description: "您的睡眠质量较差，建议咨询专业医生并改善睡眠习惯。",
-                        color: .red,
-                        icon: "exclamationmark.circle.fill"
-                    )
-                }
-            } else {
-                // 后备：显示基础健康洞察
-                LazyVStack(alignment: .leading, spacing: 12) {
-                    ForEach(getHealthInsights(), id: \.self) { insight in
-                        unifiedInsightItem(insight)
-                    }
                 }
             }
         }
@@ -2054,54 +2694,67 @@ struct SleepDetailView: View {
     }
 
     @MainActor
-    private func generateDeepSeekAnalysis() async {
+    private func loadHealthReportAnalysis() async {
         // 清除之前的错误状态
-        deepSeekAnalysisError = nil
-
-        if let existingAnalysis = sleepManager.deepSeekAnalysisResults[derivedSessionId] {
-            sessionDeepSeekAnalysis = existingAnalysis
-            print("✅ 发现已存在的会话AI分析结果: \(derivedSessionId)")
-            return
-        }
-
-        print("🧠 开始为睡眠详情页面生成DeepSeek AI分析，会话ID: \(derivedSessionId)")
-        isLoadingDeepSeekAnalysis = true
-
-        // 检查是否有对应的睡眠会话数据
-        guard let session = findLocalSleepSession() else {
-            print("❌ 未找到对应的睡眠会话数据")
-            deepSeekAnalysisError = "未找到睡眠会话数据"
-            isLoadingDeepSeekAnalysis = false
-            return
-        }
-
-        // 获取音频文件
-        let audioFiles = getAudioFilesForSession()
-
+        healthReportError = nil
+        
+        print("📊 开始加载健康报告分析，日期: \(record.bedTime)")
+        isLoadingHealthReport = true
+        
         do {
-            // 调用增强版 DeepSeek 睡眠分析引擎
-            let analysisEngine = EnhancedDeepSeekSleepAnalysisEngine.shared
-            let analysis = try await analysisEngine.analyzeSleepSession(
-                session: session,
-                audioFiles: audioFiles
-            )
-
-            // 保存分析结果
-            sleepManager.deepSeekAnalysisResults[derivedSessionId] = analysis
-            sessionDeepSeekAnalysis = analysis
-            isLoadingDeepSeekAnalysis = false
-
-            print("✅ DeepSeek AI 分析完成，质量评分: \(analysis.qualityAssessment.overallScore)")
-
+            // 调用API获取健康报告（使用睡眠日期）
+            let reportData = try await SleepAPIService.shared.getHealthReportForDate(record.bedTime)
+            healthReportData = reportData
+            isLoadingHealthReport = false
+            
+            print("✅ 健康报告加载成功")
+            
+            // 打印睡眠分析数据
+            if let sleepSummary = reportData.detailedAnalysis?.sleepSummary {
+                print("📊 睡眠汇总: 总会话\(sleepSummary.totalSessions ?? 0)次, 平均时长\(sleepSummary.averageSleepDuration ?? 0.0)小时")
+            }
+            
         } catch {
-            print("❌ DeepSeek AI 分析失败: \(error.localizedDescription)")
-            deepSeekAnalysisError = error.localizedDescription
-            isLoadingDeepSeekAnalysis = false
-
-            // 创建一个默认的分析结果作为后备
-            let fallbackAnalysis = createFallbackAnalysis()
-            sessionDeepSeekAnalysis = fallbackAnalysis
-            sleepManager.deepSeekAnalysisResults[derivedSessionId] = fallbackAnalysis
+            print("❌ 加载健康报告失败: \(error.localizedDescription)")
+            isLoadingHealthReport = false
+            
+            // 如果当天没有报告（404），不算错误，只是显示空状态
+            if let networkError = error as? NetworkManager.NetworkError,
+               case .serverError(let code) = networkError,
+               code == 404 {
+                print("ℹ️ 该日期暂无健康报告，显示空状态")
+                healthReportError = nil
+            } else {
+                // 其他错误正常显示
+                healthReportError = error.localizedDescription
+            }
+        }
+    }
+    
+    @MainActor
+    private func loadSessionAnalysis() async {
+        // 清除之前的错误状态
+        sessionAnalysisError = nil
+        
+        print("🔍 开始加载单次会话分析，会话ID: \(derivedSessionId)")
+        isLoadingSessionAnalysis = true
+        
+        do {
+            // 调用API获取单次会话分析
+            let analysisData = try await SleepAPIService.shared.getSingleSessionQualityAnalysis(sessionId: derivedSessionId)
+            sessionAnalysisData = analysisData
+            isLoadingSessionAnalysis = false
+            
+            print("✅ 单次会话分析加载成功")
+            print("   - 整体评分: \(analysisData.qualityAnalysis.overallScore)")
+            print("   - 质量等级: \(analysisData.qualityAnalysis.qualityLevel)")
+            print("   - 洞察数量: \(analysisData.qualityAnalysis.insights.count)")
+            print("   - 建议数量: \(analysisData.qualityAnalysis.recommendations.count)")
+            
+        } catch {
+            print("❌ 加载单次会话分析失败: \(error.localizedDescription)")
+            isLoadingSessionAnalysis = false
+            sessionAnalysisError = error.localizedDescription
         }
     }
 

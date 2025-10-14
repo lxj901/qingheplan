@@ -29,46 +29,39 @@ struct WorkoutAnalysisDetailView: View {
     private let dataTypes = ["运动时长", "卡路里", "次数"]
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                // 背景色
-                Color(hex: "f9f9f9")
-                    .ignoresSafeArea()
+        ZStack {
+            // 背景色
+            Color(hex: "f9f9f9")
+                .ignoresSafeArea()
 
-                ScrollView {
-                    LazyVStack(spacing: 24) {
-                        // 时间范围选择器
-                        timeRangeSelector
-                            .padding(.horizontal, 20)
+            ScrollView {
+                LazyVStack(spacing: 24) {
+                    // 时间范围选择器
+                    timeRangeSelector
+                        .padding(.horizontal, 20)
 
-                        // 运动数据图表展示
-                        workoutDataImageView
-                            .padding(.horizontal, 20)
+                    // 运动数据图表展示
+                    workoutDataImageView
+                        .padding(.horizontal, 20)
 
-                        // 运动历史模块
-                        workoutHistorySection
-                            .padding(.horizontal, 20)
+                    // 运动历史模块
+                    workoutHistorySection
+                        .padding(.horizontal, 20)
 
-                        // 底部间距
-                        Color.clear.frame(height: 100)
-                    }
-                    .padding(.top, 10)
+                    // 底部间距
+                    Color.clear.frame(height: 100)
                 }
+                .padding(.top, 10)
             }
-            .navigationTitle("运动记录")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { dismiss() }) {
-                        HStack(spacing: 4) {
-                            Image(systemName: "chevron.left")
-                                .font(.system(size: 16, weight: .semibold))
-                            Text("返回")
-                                .font(.system(size: 16, weight: .medium))
-                        }
-                        .foregroundColor(Color(red: 76/255, green: 175/255, blue: 80/255))
-                    }
+        }
+        .navigationTitle("运动记录")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: { dismiss() }) {
+                    Image(systemName: "chevron.left")
+                        .foregroundColor(.black)
                 }
             }
         }

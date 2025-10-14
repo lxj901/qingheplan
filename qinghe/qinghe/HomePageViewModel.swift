@@ -81,6 +81,14 @@ class HomePageViewModel: ObservableObject {
     private let checkinAPIService = CheckinAPIService.shared
     private var cancellables = Set<AnyCancellable>()
     
+    // MARK: - 缓存相关属性
+    // 缓存最后加载时间
+    private var lastLoadTime: Date?
+    // 缓存有效期（秒），默认5分钟
+    private let cacheValidDuration: TimeInterval = 5 * 60
+    // 是否已经初次加载过
+    private var hasInitialLoaded: Bool = false
+    
     // MARK: - Initialization
     init() {
         setupMockData()
@@ -91,8 +99,39 @@ class HomePageViewModel: ObservableObject {
     
     // MARK: - Public Methods
     
+    // MARK: - 检查缓存是否有效
+    func shouldLoadData(forceRefresh: Bool = false) -> Bool {
+        // 如果强制刷新，直接返回 true
+        if forceRefresh {
+            return true
+        }
+        
+        // 如果从未加载过，需要加载
+        if !hasInitialLoaded {
+            return true
+        }
+        
+        // 检查缓存是否过期
+        if let lastTime = lastLoadTime {
+            let timeElapsed = Date().timeIntervalSince(lastTime)
+            // 如果缓存未过期，不需要重新加载
+            if timeElapsed < cacheValidDuration {
+                print("📦 健康页面缓存有效，剩余时间: \(Int(cacheValidDuration - timeElapsed))秒")
+                return false
+            }
+        }
+        
+        return true
+    }
+    
     /// 获取数据
-    func fetchData() async {
+    func fetchData(forceRefresh: Bool = false) async {
+        // 检查是否需要加载数据（除非是强制刷新）
+        if !forceRefresh && !shouldLoadData(forceRefresh: false) {
+            print("📦 使用缓存数据，跳过加载")
+            return
+        }
+        
         isLoading = true
         
         await withTaskGroup(of: Void.self) { group in
@@ -108,12 +147,18 @@ class HomePageViewModel: ObservableObject {
         // 计算自律时间贡献
         await calculateSelfDisciplineContributions()
         
+        // 标记已初次加载完成
+        hasInitialLoaded = true
+        // 更新最后加载时间
+        lastLoadTime = Date()
+        print("📦 健康页面缓存已更新")
+        
         isLoading = false
     }
     
-    /// 刷新数据
+    /// 刷新数据（强制刷新）
     func refreshData() async {
-        await fetchData()
+        await fetchData(forceRefresh: true)
     }
     
     /// 执行打卡

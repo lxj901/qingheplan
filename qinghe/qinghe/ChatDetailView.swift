@@ -35,6 +35,7 @@ struct ChatDetailView: View {
         case forward(ChatMessage)
         case chatExport
         case messageAction(ChatMessage)
+        case userProfile(String) // 用户个人中心
 
         var id: String {
             switch self {
@@ -45,6 +46,7 @@ struct ChatDetailView: View {
             case .forward: return "forward"
             case .chatExport: return "chatExport"
             case .messageAction: return "messageAction"
+            case .userProfile(let userId): return "userProfile_\(userId)"
             }
         }
     }
@@ -114,6 +116,7 @@ struct ChatDetailView: View {
                     .font(.system(size: 12))
                     .foregroundColor(ModernDesignSystem.Colors.textSecondary)
                     .lineLimit(1)
+                    .frame(height: 16)
             }
         }
     }
@@ -150,7 +153,9 @@ struct ChatDetailView: View {
                     }
                 } else if conversation.type == .privateChat && isConversationDetailLoaded {
                     if let otherUserId = getOtherUserId() {
-                        NavigationLink(destination: MessageUserProfileView(userId: otherUserId)) {
+                        Button(action: {
+                            activeSheet = .userProfile(otherUserId)
+                        }) {
                             Image(systemName: "ellipsis")
                                 .font(.system(size: 18))
                                 .foregroundColor(ModernDesignSystem.Colors.primaryGreen)
@@ -197,6 +202,11 @@ struct ChatDetailView: View {
 
         .sheet(item: $activeSheet) { sheet in
             switch sheet {
+            case .userProfile(let userId):
+                UserProfileView(userId: userId)
+                    .ignoresSafeArea(.all, edges: .top)
+                    .presentationDragIndicator(.hidden)
+            
             case .groupAction:
                 GroupDetailManagementView(conversation: conversation)
                     .presentationDetents([.medium, .large])
@@ -205,8 +215,9 @@ struct ChatDetailView: View {
 
             case .editGroup:
                 NavigationView {
-                    EditGroupInfoView(conversation: conversation) { _ in
-                        // 更新回调
+                    EditGroupInfoView(conversation: conversation) { updatedConversation in
+                        // 更新回调 - 更新本地会话信息
+                        self.conversation = updatedConversation
                     }
                     .asSubView()
                 }
@@ -474,10 +485,15 @@ struct ChatDetailView: View {
                 lastReadMessageId: lastMessage.id
             )
 
+            print("ChatDetailView: 已标记消息为已读 - 消息ID: \(lastMessage.id)")
+
+            // 等待一小段时间，让后端有时间更新数据库
+            try? await Task.sleep(nanoseconds: 500_000_000) // 0.5秒
+
             // 更新应用角标
             await PushNotificationManager.shared.updateBadgeCount()
 
-            print("ChatDetailView: 已标记消息为已读并更新角标 - 消息ID: \(lastMessage.id)")
+            print("ChatDetailView: 已更新角标")
         } catch {
             print("ChatDetailView: 标记消息为已读失败: \(error)")
         }

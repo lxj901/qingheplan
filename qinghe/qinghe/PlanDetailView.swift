@@ -102,19 +102,19 @@ struct PlanDetailView: View {
             Text(label)
                 .font(.system(size: 16))
                 .foregroundColor(.primary)
-            
+
             Spacer()
-            
+
             Text(value)
                 .font(.system(size: 16, weight: .medium))
                 .foregroundColor(.secondary)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
-        .background(Color.white)
+        .background(Color(.systemBackground))
         .overlay(
             Rectangle()
-                .fill(Color.gray.opacity(0.2))
+                .fill(Color(.separator))
                 .frame(height: 0.5)
                 .padding(.leading, 16),
             alignment: .bottom

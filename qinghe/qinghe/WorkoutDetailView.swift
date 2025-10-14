@@ -46,6 +46,7 @@ struct ActivityDetailView: View {
             }
         }
         .navigationBarHidden(true)
+        .preferredColorScheme(.light) // 运动详情页面不适配深色模式
     }
 }
 

@@ -2,12 +2,17 @@ import SwiftUI
 
 /// 群聊详情管理视图 - 统一管理所有群聊相关操作
 struct GroupDetailManagementView: View {
-    let conversation: ChatConversation
+    @State private var conversation: ChatConversation
     @Environment(\.dismiss) private var dismiss
     
     // 导航状态
     @State private var navigationPath = NavigationPath()
     @State private var showingLeaveAlert = false
+    
+    // 初始化方法
+    init(conversation: ChatConversation) {
+        self._conversation = State(initialValue: conversation)
+    }
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -55,36 +60,47 @@ struct GroupDetailManagementView: View {
     
     // MARK: - 群信息头部
     private var groupInfoHeader: some View {
-        HStack(spacing: ModernDesignSystem.Spacing.md) {
-            // 群头像
-            AsyncImage(url: URL(string: conversation.avatar ?? "")) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } placeholder: {
-                Circle()
-                    .fill(ModernDesignSystem.Colors.backgroundSecondary)
-                    .overlay(
-                        Image(systemName: "person.2.fill")
-                            .font(.system(size: 20))
-                            .foregroundColor(ModernDesignSystem.Colors.textSecondary)
-                    )
-            }
-            .frame(width: 50, height: 50)
-            .clipShape(Circle())
-            
-            // 群信息
-            VStack(alignment: .leading, spacing: 4) {
-                Text(conversation.title ?? "群聊")
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundColor(ModernDesignSystem.Colors.textPrimary)
+        VStack(spacing: ModernDesignSystem.Spacing.sm) {
+            HStack(spacing: ModernDesignSystem.Spacing.md) {
+                // 群头像
+                CachedAsyncImage(url: URL(string: conversation.avatar ?? "")) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    Circle()
+                        .fill(ModernDesignSystem.Colors.backgroundSecondary)
+                        .overlay(
+                            Image(systemName: "person.2.fill")
+                                .font(.system(size: 20))
+                                .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                        )
+                }
+                .frame(width: 50, height: 50)
+                .clipShape(Circle())
                 
-                Text("\(conversation.membersCount ?? 0)名成员")
-                    .font(.system(size: 14))
-                    .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                // 群信息
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(conversation.title ?? "群聊")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(ModernDesignSystem.Colors.textPrimary)
+                    
+                    Text("\(conversation.membersCount ?? 0)名成员")
+                        .font(.system(size: 14))
+                        .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                }
+                
+                Spacer()
             }
             
-            Spacer()
+            // 群描述
+            if let description = conversation.description, !description.isEmpty {
+                Text(description)
+                    .font(.system(size: 13))
+                    .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                    .lineLimit(2)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
         }
         .padding(.horizontal, ModernDesignSystem.Spacing.lg)
         .padding(.vertical, ModernDesignSystem.Spacing.lg)
@@ -151,8 +167,9 @@ struct GroupDetailManagementView: View {
             GroupMemberListView(conversation: conversation)
                 .asSubView()
         case .editGroup:
-            EditGroupInfoView(conversation: conversation) { _ in
-                // 更新回调
+            EditGroupInfoView(conversation: conversation) { updatedConversation in
+                // 更新回调 - 更新本地会话信息
+                self.conversation = updatedConversation
                 navigationPath.removeLast()
             }
             .asSubView()
@@ -198,7 +215,7 @@ enum GroupDetailDestination: Hashable {
             lastSeenAt: nil
         ),
         memberRecords: [],
-        description: "专业的iOS开发技术交流群",
+        description: "专业的iOS开发技术交流群，欢迎所有对SwiftUI、UIKit、Combine等iOS技术感兴趣的朋友加入",
         maxMembers: 500,
         createdAt: "2024-01-01T00:00:00Z"
     )

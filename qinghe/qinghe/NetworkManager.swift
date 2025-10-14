@@ -149,12 +149,27 @@ class NetworkManager {
                 }
                 if let newURL = components?.url {
                     request.url = newURL
+                    print("🔍 添加查询参数后的URL: '\(newURL.absoluteString)'")
+                } else {
+                    print("⚠️ 无法创建带查询参数的URL")
                 }
             } else {
                 // 其他请求将参数添加到请求体
                 do {
-                    request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
+                    // 使用 JSONSerialization 的 .sortedKeys 和 .prettyPrinted 选项以确保正确编码
+                    let jsonData = try JSONSerialization.data(
+                        withJSONObject: parameters,
+                        options: [.sortedKeys, .withoutEscapingSlashes]
+                    )
+                    request.httpBody = jsonData
+                    
+                    // 打印实际发送的JSON
+                    if let jsonString = String(data: jsonData, encoding: .utf8) {
+                        print("📤 实际发送的JSON: \(jsonString)")
+                        print("📤 JSON字节数: \(jsonData.count)")
+                    }
                 } catch {
+                    print("❌ 参数编码失败: \(error)")
                     throw NetworkError.networkError("参数编码失败")
                 }
             }
@@ -213,8 +228,8 @@ class NetworkManager {
                 }
 
                 guard 200...299 ~= httpResponse.statusCode else {
-                    // 对于401、500等错误，尝试解析错误消息
-                    if httpResponse.statusCode == 401 || httpResponse.statusCode == 500 {
+                    // 对于401、403、404、500等错误，尝试解析错误消息
+                    if httpResponse.statusCode == 401 || httpResponse.statusCode == 403 || httpResponse.statusCode == 404 || httpResponse.statusCode == 500 {
                         if let errorResponse = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
                            let message = errorResponse["message"] as? String {
                             print("🔍 \(httpResponse.statusCode)错误消息: \(message)")
@@ -452,4 +467,29 @@ struct APIEndpoints {
     static let temptations = "/temptations"                 // 诱惑记录管理
     static let emotions = "/emotions"                       // 情绪记录管理
     static let plans = "/plans"                             // 计划管理
+    
+    // 功过格相关
+    static let merits = "/merits"                           // 功过记录管理
+    static let meritsDaily = "/merits/daily"                // 每日记录
+    static let meritsMonthly = "/merits/monthly"            // 月度汇总
+    static let meritsStatistics = "/merits/statistics"      // 统计数据
+    static let meritsStandard = "/merits/standard-items"    // 标准条目
+    static let meritsCategories = "/merits/categories"      // 分类列表
+    static let meritsLeaderboard = "/merits/leaderboard"    // 排行榜
+
+    // 会员订阅相关
+    static let membershipStatus = "/membership/status"            // 获取会员状态
+    static let membershipPlans = "/membership/plans"              // 获取套餐列表
+    static let membershipUsage = "/membership/usage"              // 获取使用统计
+    static let membershipHistory = "/membership/history"          // 获取订阅历史
+    static let membershipCancelAutoRenew = "/membership/cancel-auto-renew" // 取消自动续费
+
+    // Apple IAP 相关
+    static let appleProducts = "/apple-iap/products"             // 获取产品列表（公开）
+    static let appleVerify = "/apple-iap/verify"                 // 验证收据并激活
+    static let appleStatus = "/apple-iap/status"                 // 获取用户会员状态
+    static let appleSubscriptions = "/apple-iap/subscriptions"   // 获取用户订阅历史
+    static let appleTransactions = "/apple-iap/transactions"     // 获取交易记录
+    static let appleSubscription = "/apple-iap/subscription"      // 获取订阅状态（需拼接ID）
+    static let appleRefresh = "/apple-iap/refresh"               // 刷新订阅
 }

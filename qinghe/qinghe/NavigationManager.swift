@@ -12,19 +12,32 @@ class NavigationManager: ObservableObject {
     
     // MARK: - 通知相关导航
     
-    /// 导航到帖子详情页
-    func navigateToPost(id: Int) {
+    /// 导航到帖子详情页（支持字符串ID）
+    func navigateToPost(id: String, highlightSection: String? = nil, highlightUserId: String? = nil) {
         // 切换到社区Tab
         selectedTab = .community
         
         // 发送导航通知
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            var userInfo: [String: Any] = ["postId": id]
+            if let section = highlightSection {
+                userInfo["highlightSection"] = section
+            }
+            if let userId = highlightUserId {
+                userInfo["highlightUserId"] = userId
+            }
+            
             NotificationCenter.default.post(
                 name: NSNotification.Name("NavigateToPost"),
                 object: nil,
-                userInfo: ["postId": id]
+                userInfo: userInfo
             )
         }
+    }
+    
+    /// 导航到帖子详情页（支持Int ID，用于兼容）
+    func navigateToPost(id: Int, highlightSection: String? = nil, highlightUserId: String? = nil) {
+        navigateToPost(id: String(id), highlightSection: highlightSection, highlightUserId: highlightUserId)
     }
     
     /// 导航到用户资料页
@@ -37,8 +50,8 @@ class NavigationManager: ObservableObject {
         )
     }
     
-    /// 导航到评论详情
-    func navigateToComment(postId: Int, commentId: Int) {
+    /// 导航到评论详情（支持字符串ID）
+    func navigateToComment(postId: String, commentId: String) {
         // 先导航到帖子详情，然后定位到特定评论
         navigateToPost(id: postId)
         
@@ -50,6 +63,11 @@ class NavigationManager: ObservableObject {
                 userInfo: ["commentId": commentId]
             )
         }
+    }
+    
+    /// 导航到评论详情（支持Int ID，用于兼容）
+    func navigateToComment(postId: Int, commentId: Int) {
+        navigateToComment(postId: String(postId), commentId: String(commentId))
     }
     
     /// 导航到聊天页面

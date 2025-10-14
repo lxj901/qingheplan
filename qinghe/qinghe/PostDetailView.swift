@@ -14,9 +14,20 @@ struct NavigationLazyView<Content: View>: View {
 }
 import UIKit
 
+// MARK: - 高亮区域类型
+enum HighlightSection {
+    case likes
+    case bookmarks
+    case comments
+}
+
 /// 重新设计的帖子详情页面 - 全屏沉浸式体验
 struct PostDetailView: View {
     let postId: String
+    let highlightSection: HighlightSection?
+    let highlightUserId: String?
+    let isSheetPresentation: Bool  // 是否以 sheet 方式显示
+    
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel: PostDetailViewModel
     @StateObject private var adManager = GDTAdManager.shared
@@ -31,7 +42,6 @@ struct PostDetailView: View {
     @State private var showingBlockPostAlert = false
     @State private var showingDeleteConfirmation = false
     @State private var scrollOffset: CGFloat = 0
-    @State private var showingFullContent = false
     @State private var keyboardHeight: CGFloat = 0
     @State private var topSafeAreaInset: CGFloat = 44
 
@@ -40,13 +50,19 @@ struct PostDetailView: View {
     // 详情页广告相关状态
     @State private var detailPageAdViews: [UIView] = []
     @State private var isDetailPageAdLoaded = false
+    
+    // 高亮动画状态
+    @State private var isHighlighted = false
 
     private let communityService = CommunityAPIService.shared
 
-    init(postId: String) {
+    init(postId: String, highlightSection: HighlightSection? = nil, highlightUserId: String? = nil, isSheetPresentation: Bool = false) {
         self.postId = postId
+        self.highlightSection = highlightSection
+        self.highlightUserId = highlightUserId
+        self.isSheetPresentation = isSheetPresentation
         self._viewModel = StateObject(wrappedValue: PostDetailViewModel())
-        print("🚀 PostDetailView 初始化，postId: \(postId)")
+        print("🚀 PostDetailView 初始化，postId: \(postId), highlightSection: \(String(describing: highlightSection)), highlightUserId: \(highlightUserId ?? "无"), isSheetPresentation: \(isSheetPresentation)")
     }
 
     var body: some View {
@@ -67,6 +83,12 @@ struct PostDetailView: View {
         }
         .sheet(isPresented: $showingBlockUserView) {
             blockUserSheet
+        }
+        .sheet(isPresented: $viewModel.showingLikesUsers) {
+            likesUsersSheet
+        }
+        .sheet(isPresented: $viewModel.showingBookmarksUsers) {
+            bookmarksUsersSheet
         }
         .confirmationDialog("更多选项", isPresented: $showingMoreOptions, titleVisibility: .visible) {
             moreOptionsButtons
@@ -201,6 +223,14 @@ struct PostDetailView: View {
         }
     }
     
+    private var likesUsersSheet: some View {
+        PostInteractionUsersView(postId: postId, type: .likes, highlightUserId: highlightUserId)
+    }
+    
+    private var bookmarksUsersSheet: some View {
+        PostInteractionUsersView(postId: postId, type: .bookmarks, highlightUserId: highlightUserId)
+    }
+    
     // MARK: - Alert 按钮
     private var deleteAlert: some View {
         Group {
@@ -234,9 +264,15 @@ struct PostDetailView: View {
         print("🔍 PostDetailView setupOnAppear - postId: \(postId)")
 
         // 初始化安全区域
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let window = windowScene.windows.first {
+        if isSheetPresentation {
+            // Sheet 方式显示时使用较小的顶部间距
+            topSafeAreaInset = 8
+            print("📐 PostDetailView 以 Sheet 方式显示，使用固定顶部间距: \(topSafeAreaInset)")
+        } else if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let window = windowScene.windows.first {
+            // 全屏方式显示时使用系统安全区域
             topSafeAreaInset = window.safeAreaInsets.top
+            print("📐 PostDetailView 全屏显示，使用系统安全区域顶部: \(topSafeAreaInset)")
         }
 
         // 只在需要时加载帖子数据，避免重复加载
@@ -289,7 +325,8 @@ struct PostDetailView: View {
             }
         }
         .padding(.horizontal, 20)
-        .padding(.top, topSafeAreaInset + 10)
+        .padding(.top, topSafeAreaInset + 4)
+        .padding(.bottom, 12)
         .background(
             ZStack {
                 // 主背景
@@ -330,14 +367,21 @@ struct PostDetailView: View {
             // 用户信息头部
             modernUserHeader(post)
                 .padding(.horizontal, 20)
-                .padding(.top, 50) // 合适的导航栏间距
+                .padding(.top, 70) // 增加导航栏间距，避免被遮挡
 
             // 帖子文本内容 - 与头像对齐
             if !post.content.isEmpty {
-                postTextContent(post.content)
-                    .padding(.leading, 20) // 与头像左边缘对齐
-                    .padding(.trailing, 20)
-                    .padding(.top, 16)
+                VStack(alignment: .leading, spacing: 8) {
+                    postTextContent(post.content)
+
+                    // AI生成标识
+                    if post.isAIGenerated == true {
+                        aiGeneratedBadge
+                    }
+                }
+                .padding(.leading, 20) // 与头像左边缘对齐
+                .padding(.trailing, 20)
+                .padding(.top, 16)
             }
 
             // 图片内容 - 与头像对齐
@@ -351,7 +395,7 @@ struct PostDetailView: View {
                 )
                 .padding(.leading, 20) // 与头像左边缘对齐
                 .padding(.trailing, 20)
-                .padding(.top, 16)
+                .padding(.top, post.content.isEmpty ? 16 : 24) // 如果有文本内容，增加间距避免误触
             }
 
             // 视频内容 - 全宽无边距无圆角
@@ -720,25 +764,25 @@ struct PostDetailView: View {
 
     // MARK: - 帖子文本内容
     private func postTextContent(_ content: String) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(content)
-                .dynamicFont(.body)
-                .foregroundColor(.primary)
-                .lineLimit(showingFullContent ? nil : 6)
-                .multilineTextAlignment(.leading)
+        Text(content)
+            .dynamicFont(.body)
+            .foregroundColor(.primary)
+            .multilineTextAlignment(.leading)
+    }
 
-            if content.count > 200 && !showingFullContent {
-                Button(action: {
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        showingFullContent = true
-                    }
-                }) {
-                    Text("展开全文")
-                        .dynamicFont(.footnote)
-                        .foregroundColor(AppConstants.Colors.primaryGreen)
-                }
-            }
+    // MARK: - AI生成标识
+    private var aiGeneratedBadge: some View {
+        HStack(spacing: 4) {
+            Image(systemName: "info.circle")
+                .font(.system(size: 11))
+            Text("此内容由AI生成，仅供参考")
+                .font(.system(size: 12))
         }
+        .foregroundColor(.orange)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(Color.orange.opacity(0.1))
+        .cornerRadius(6)
     }
 
     // MARK: - 现代化图片网格
@@ -950,7 +994,8 @@ struct PostDetailView: View {
                     Button(action: {
                         navigateToTagDetail(tag)
                     }) {
-                        Text("#\(tag)")
+                        // 如果标签不以#开头，添加#号显示
+                        Text(tag.hasPrefix("#") ? tag : "#\(tag)")
                             .font(.system(size: 12, weight: .medium))
                             .foregroundColor(AppConstants.Colors.primaryGreen)
                             .padding(.horizontal, 8)
@@ -1037,6 +1082,11 @@ struct PostDetailView: View {
                     .fill(Color.gray.opacity(0.1))
                     .frame(height: 0.5)
             }
+            
+            // 互动用户列表区域
+            if let post = viewModel.post {
+                interactionUsersSection(post)
+            }
 
             // 使用统一的评论系统
             UnifiedCommentListView(
@@ -1054,6 +1104,120 @@ struct PostDetailView: View {
                     viewModel.updateCommentsCount(newCount)
                 }
             )
+        }
+    }
+    
+    // MARK: - 互动用户区域
+    private func interactionUsersSection(_ post: Post) -> some View {
+        VStack(spacing: 0) {
+            // 点赞用户列表按钮
+            if post.likesCount > 0 {
+                Button(action: {
+                    viewModel.showingLikesUsers = true
+                }) {
+                    HStack(spacing: 12) {
+                        Image(systemName: "heart.fill")
+                            .font(.system(size: 16))
+                            .foregroundColor(.red)
+                        
+                        Text("点赞")
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundColor(.primary)
+                        
+                        Text("\(post.likesCount)")
+                            .font(.system(size: 15))
+                            .foregroundColor(.secondary)
+                        
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 14))
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(
+                        highlightSection == .likes && isHighlighted
+                            ? Color.yellow.opacity(0.3)
+                            : Color(.systemBackground)
+                    )
+                }
+                .buttonStyle(PlainButtonStyle())
+                .animation(.easeInOut(duration: 0.3), value: isHighlighted)
+                
+                Divider()
+                    .padding(.leading, 48)
+            }
+            
+            // 收藏用户列表按钮
+            if post.bookmarksCount > 0 {
+                Button(action: {
+                    viewModel.showingBookmarksUsers = true
+                }) {
+                    HStack(spacing: 12) {
+                        Image(systemName: "bookmark.fill")
+                            .font(.system(size: 16))
+                            .foregroundColor(AppConstants.Colors.primaryGreen)
+                        
+                        Text("收藏")
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundColor(.primary)
+                        
+                        Text("\(post.bookmarksCount)")
+                            .font(.system(size: 15))
+                            .foregroundColor(.secondary)
+                        
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 14))
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(
+                        highlightSection == .bookmarks && isHighlighted
+                            ? Color.yellow.opacity(0.3)
+                            : Color(.systemBackground)
+                    )
+                }
+                .buttonStyle(PlainButtonStyle())
+                .animation(.easeInOut(duration: 0.3), value: isHighlighted)
+                
+                Divider()
+                    .padding(.leading, 48)
+            }
+            
+            // 如果有互动用户，添加底部间距
+            if post.likesCount > 0 || post.bookmarksCount > 0 {
+                Rectangle()
+                    .fill(Color(.systemGroupedBackground))
+                    .frame(height: 12)
+            }
+        }
+        .onAppear {
+            // 如果有高亮区域，延迟触发高亮动画并打开对应列表
+            if let section = highlightSection {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    isHighlighted = true
+                    
+                    // 自动打开对应的用户列表
+                    switch section {
+                    case .likes:
+                        viewModel.showingLikesUsers = true
+                    case .bookmarks:
+                        viewModel.showingBookmarksUsers = true
+                    case .comments:
+                        // 评论区域不需要打开 sheet，直接滚动到评论区即可
+                        break
+                    }
+                    
+                    // 3秒后取消高亮
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                        isHighlighted = false
+                    }
+                }
+            }
         }
     }
     
@@ -1370,27 +1534,29 @@ struct PostDetailView: View {
 
     /// 导航到标签详情页面
     private func navigateToTagDetail(_ tagName: String) {
-        // 这里应该实现导航到标签详情页面的逻辑
-        // 由于当前的导航结构，我们需要通过通知或其他方式来实现导航
-        print("🏷️ 导航到标签详情页面: #\(tagName)")
+        // 统一标签格式：如果不以#开头，添加#号
+        let searchTag = tagName.hasPrefix("#") ? tagName : "#\(tagName)"
+        print("🏷️ 导航到标签详情页面: \(searchTag)")
 
         // 发送通知，让父级视图处理导航
         NotificationCenter.default.post(
             name: NSNotification.Name("NavigateToTagDetail"),
             object: nil,
-            userInfo: ["tagName": tagName]
+            userInfo: ["tagName": searchTag]
         )
     }
     
     /// 导航到标签搜索页面
     private func navigateToTagSearch(_ tagName: String) {
-        print("🏷️ 导航到标签搜索页面: #\(tagName)")
+        // 统一标签格式：如果不以#开头，添加#号
+        let searchTag = tagName.hasPrefix("#") ? tagName : "#\(tagName)"
+        print("🏷️ 导航到标签搜索页面: \(searchTag)")
 
         // 发送通知，让父级视图处理导航到搜索页面
         NotificationCenter.default.post(
             name: NSNotification.Name("NavigateToTagSearch"),
             object: nil,
-            userInfo: ["tagName": "#\(tagName)"]
+            userInfo: ["tagName": searchTag]
         )
     }
 

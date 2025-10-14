@@ -18,6 +18,10 @@ class UserProfileViewModel: ObservableObject {
     @Published var errorMessage: String?
     
     @Published var isFollowActionLoading = false
+    
+    // 屏蔽用户相关的错误提示
+    @Published var showBlockedUserAlert = false
+    @Published var blockedUserMessage: String?
 
     // 收藏相关
     @Published var bookmarkedPosts: [Post] = []
@@ -42,9 +46,55 @@ class UserProfileViewModel: ObservableObject {
     private let networkManager = NetworkManager.shared
     private let apiService = CommunityAPIService.shared
     
+    // MARK: - 缓存相关属性
+    // 缓存最后加载时间
+    private var lastLoadTime: Date?
+    // 缓存有效期（秒），默认5分钟
+    private let cacheValidDuration: TimeInterval = 5 * 60
+    // 是否已经初次加载过
+    private var hasInitialLoaded: Bool = false
+    // 缓存的用户ID（用于判断是否切换了用户）
+    private var cachedUserId: String?
+    
+    // MARK: - 检查缓存是否有效
+    func shouldLoadData(userId: String, forceRefresh: Bool = false) -> Bool {
+        // 如果强制刷新，直接返回 true
+        if forceRefresh {
+            return true
+        }
+        
+        // 如果切换了用户，需要重新加载
+        if cachedUserId != userId {
+            return true
+        }
+        
+        // 如果从未加载过，需要加载
+        if !hasInitialLoaded {
+            return true
+        }
+        
+        // 检查缓存是否过期
+        if let lastTime = lastLoadTime {
+            let timeElapsed = Date().timeIntervalSince(lastTime)
+            // 如果缓存未过期，不需要重新加载
+            if timeElapsed < cacheValidDuration {
+                print("📦 用户详情页缓存有效，剩余时间: \(Int(cacheValidDuration - timeElapsed))秒")
+                return false
+            }
+        }
+        
+        return true
+    }
+    
     // MARK: - 加载用户资料
-    func loadUserProfile(userId: String) async {
+    func loadUserProfile(userId: String, forceRefresh: Bool = false) async {
         print("🔍 UserProfileViewModel: 开始加载用户资料, userId: \(userId)")
+        
+        // 检查是否需要加载数据（除非是强制刷新）
+        if !forceRefresh && !shouldLoadData(userId: userId, forceRefresh: false) {
+            print("📦 使用缓存数据，跳过加载")
+            return
+        }
 
         // 将String类型的userId转换为Int类型
         guard let userIdInt = Int(userId) else {
@@ -87,6 +137,14 @@ class UserProfileViewModel: ObservableObject {
                     print("🔍 UserProfileViewModel: 开始加载用户帖子")
                     await loadUserPosts(userId: userId, page: 1)
                 }
+                
+                // 标记已初次加载完成
+                hasInitialLoaded = true
+                // 更新最后加载时间
+                lastLoadTime = Date()
+                // 缓存当前用户ID
+                cachedUserId = userId
+                print("📦 用户详情页缓存已更新")
             } else {
                 print("❌ UserProfileViewModel: 用户资料加载失败")
                 print("❌ UserProfileViewModel: response.success = \(response.success)")
@@ -378,10 +436,30 @@ class UserProfileViewModel: ObservableObject {
                     print("✅ 关注操作成功: \(message)")
                 }
             } else {
-                print("❌ 关注操作失败: \(response.message ?? "未知错误")")
+                // 处理失败情况
+                let errorMsg = response.message ?? "未知错误"
+                print("❌ 关注操作失败: \(errorMsg)")
+                
+                // 检查是否是屏蔽用户的错误
+                if errorMsg.contains("无法关注已屏蔽的用户") || errorMsg.contains("屏蔽") {
+                    blockedUserMessage = "您已屏蔽该用户，如需关注请先从黑名单中移除"
+                    showBlockedUserAlert = true
+                }
             }
         } catch {
             print("❌ 关注用户失败: \(error)")
+            
+            // 检查是否是 NetworkError.serverMessage
+            if let networkError = error as? NetworkManager.NetworkError,
+               case .serverMessage(let message) = networkError {
+                print("🔍 捕获到服务器错误消息: \(message)")
+                
+                // 检查是否是屏蔽用户的错误
+                if message.contains("无法关注已屏蔽的用户") || message.contains("屏蔽") {
+                    blockedUserMessage = "您已屏蔽该用户，如需关注请先从黑名单中移除"
+                    showBlockedUserAlert = true
+                }
+            }
         }
 
         isFollowActionLoading = false
@@ -430,12 +508,21 @@ class UserProfileViewModel: ObservableObject {
         guard let userProfile = userProfile else { return }
 
         do {
-            // 暂时使用模拟API调用，因为API可能还没有实现
-            try await Task.sleep(nanoseconds: 1_000_000_000) // 模拟网络延迟
-
-            // 更新本地状态
-            self.userProfile?.isBlocked = true
-            print("✅ 屏蔽用户成功")
+            let response = try await apiService.blockUser(userId: userProfile.id, reason: reason)
+            
+            if response.success, let data = response.data {
+                // 使用服务器返回的实际数据更新本地状态
+                self.userProfile?.isBlocked = data.isBlocked
+                if let isFollowing = data.isFollowing {
+                    self.userProfile?.isFollowing = isFollowing
+                }
+                print("✅ 屏蔽用户成功 - isBlocked: \(data.isBlocked), isFollowing: \(data.isFollowing ?? false)")
+                
+                // 重新加载用户资料以获取最新状态
+                await refreshFollowStatus(userId: userProfile.id)
+            } else {
+                print("❌ 屏蔽用户失败: \(response.message ?? "未知错误")")
+            }
         } catch {
             print("❌ 屏蔽用户失败: \(error)")
         }
@@ -446,12 +533,18 @@ class UserProfileViewModel: ObservableObject {
         guard let userProfile = userProfile else { return }
 
         do {
-            // 暂时使用模拟API调用，因为API可能还没有实现
-            try await Task.sleep(nanoseconds: 1_000_000_000) // 模拟网络延迟
-
-            // 更新本地状态
-            self.userProfile?.isBlocked = false
-            print("✅ 取消屏蔽用户成功")
+            let response = try await apiService.unblockUser(userId: userProfile.id)
+            
+            if response.success, let data = response.data {
+                // 使用服务器返回的实际数据更新本地状态
+                self.userProfile?.isBlocked = data.isBlocked
+                print("✅ 取消屏蔽用户成功 - isBlocked: \(data.isBlocked), canFollow: \(data.canFollow ?? false)")
+                
+                // 重新加载用户资料以获取最新状态
+                await refreshFollowStatus(userId: userProfile.id)
+            } else {
+                print("❌ 取消屏蔽用户失败: \(response.message ?? "未知错误")")
+            }
         } catch {
             print("❌ 取消屏蔽用户失败: \(error)")
         }

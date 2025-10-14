@@ -110,13 +110,15 @@ struct ReportPostView: View {
             .navigationTitle("举报内容")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .asSubView()
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("取消") {
                         dismiss()
                     }
                 }
+            }
+            .onAppear {
+                print("✅ ReportPostView: 页面已显示，帖子ID: \(postId)")
             }
         }
     }

@@ -38,6 +38,7 @@ struct SplashAdView: View {
                 .transition(.opacity)
             }
         }
+        .preferredColorScheme(.light) // 开屏广告页面不适配深色模式
         .onAppear {
             // 直接尝试显示广告
             showAdIfReady()

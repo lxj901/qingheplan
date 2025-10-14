@@ -50,8 +50,9 @@ class NetworkMonitor: ObservableObject {
     }
     
     /// 检查是否可以加载图片
+    /// 修改为：只要有网络连接就允许加载图片（包括移动网络）
     var canLoadImages: Bool {
-        return isConnected && (!isExpensive || connectionType == .wifi)
+        return isConnected
     }
     
     /// 获取网络状态描述

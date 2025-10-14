@@ -68,6 +68,19 @@ class ImageLoader: ObservableObject {
     private let maxRetries = 3
     private let retryDelays: [TimeInterval] = [1.0, 2.0, 4.0] // 递增延迟
 
+    // 自定义URLSession配置，支持移动网络
+    private static let urlSession: URLSession = {
+        let config = URLSessionConfiguration.default
+        config.allowsCellularAccess = true  // 允许使用移动网络
+        config.allowsExpensiveNetworkAccess = true  // 允许使用昂贵网络（移动数据）
+        config.allowsConstrainedNetworkAccess = true  // 允许受限网络
+        config.waitsForConnectivity = false  // 不等待网络连接
+        config.timeoutIntervalForRequest = 30  // 请求超时30秒
+        config.timeoutIntervalForResource = 60  // 资源超时60秒
+        config.requestCachePolicy = .returnCacheDataElseLoad  // 优先使用缓存
+        return URLSession(configuration: config)
+    }()
+
     init() {
         // 配置缓存
         Self.cache.countLimit = 100 // 最多缓存100张图片
@@ -93,6 +106,13 @@ class ImageLoader: ObservableObject {
             return
         }
 
+        // 检查是否是 base64 数据 URL
+        let urlString = url.absoluteString
+        if urlString.hasPrefix("data:image/") {
+            loadBase64Image(from: urlString, cacheKey: cacheKey)
+            return
+        }
+
         // 重置状态
         image = nil
         isLoading = true
@@ -104,16 +124,50 @@ class ImageLoader: ObservableObject {
             await loadImageWithRetry(url: url, cacheKey: cacheKey)
         }
     }
+    
+    private func loadBase64Image(from dataUrl: String, cacheKey: NSString) {
+        // 解析 base64 数据
+        // 格式: data:image/jpeg;base64,/9j/4AAQSkZJRgABA...
+        guard let commaIndex = dataUrl.firstIndex(of: ",") else {
+            hasError = true
+            return
+        }
+        
+        let base64String = String(dataUrl[dataUrl.index(after: commaIndex)...])
+        
+        // 解码 base64
+        if let imageData = Data(base64Encoded: base64String, options: .ignoreUnknownCharacters),
+           let uiImage = UIImage(data: imageData) {
+            // 缓存图片
+            Self.cache.setObject(uiImage, forKey: cacheKey)
+            
+            // 更新UI
+            image = uiImage
+            hasError = false
+            isLoading = false
+            print("✅ Base64图片加载成功")
+        } else {
+            hasError = true
+            isLoading = false
+            print("❌ Base64图片解码失败")
+        }
+    }
 
     private func loadImageWithRetry(url: URL, cacheKey: NSString) async {
         do {
-            let (data, response) = try await URLSession.shared.data(from: url)
+            // 打印网络状态
+            let networkMonitor = await NetworkMonitor.shared
+            print("🌐 图片加载开始 - 网络状态: 连接=\(networkMonitor.isConnected), 类型=\(networkMonitor.connectionType?.description ?? "未知")")
+            print("🖼️ 图片URL: \(url.absoluteString)")
+
+            let (data, response) = try await Self.urlSession.data(from: url)
 
             guard !Task.isCancelled else { return }
 
             // 检查HTTP响应状态
             if let httpResponse = response as? HTTPURLResponse {
                 print("🖼️ 图片加载状态码: \(httpResponse.statusCode) - \(url.absoluteString)")
+                print("🖼️ 响应头: \(httpResponse.allHeaderFields)")
 
                 // 如果是503或其他服务器错误，尝试重试
                 if httpResponse.statusCode >= 500 && retryCount < maxRetries {
@@ -143,6 +197,16 @@ class ImageLoader: ObservableObject {
 
         } catch {
             print("❌ 图片加载失败 (尝试 \(retryCount + 1)/\(maxRetries + 1)): \(error.localizedDescription)")
+            print("❌ 错误详情: \(error)")
+
+            // 如果是URLError，打印更多信息
+            if let urlError = error as? URLError {
+                print("❌ URLError代码: \(urlError.code.rawValue)")
+                print("❌ URLError描述: \(urlError.localizedDescription)")
+                if let failingURL = urlError.failureURLString {
+                    print("❌ 失败的URL: \(failingURL)")
+                }
+            }
 
             // 检查是否需要重试
             if retryCount < maxRetries && shouldRetry(error: error) {

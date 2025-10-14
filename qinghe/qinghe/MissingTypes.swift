@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 import AVFoundation
+import UIKit
 import CoreLocation
 import CoreML
 
@@ -248,12 +249,18 @@ class SleepAudioRecorder: NSObject, ObservableObject {
     @Published var isRecording = false
     @Published var recordingDuration: TimeInterval = 0
 
-    // 输出回调：当检测到“事件段”结束时回调返回完整 WAV 数据与类型
+    // 输出回调：当检测到"事件段"结束时回调返回完整 WAV 数据与类型
     var onEventFinalized: ((Data, String, Double) -> Void)?
 
     private var audioEngine: AVAudioEngine?
     private var inputNode: AVAudioInputNode?
     private var audioFormat: AVAudioFormat?
+    
+    // 后台任务管理
+    private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
+    private var statusCheckTimer: Timer?
+    private var isObservingLifecycle = false
+    private var lastEngineCheckTime: AVAudioTime?
 
     // ML 模型管理器
     private let mlModels = AudioMLModels()
@@ -268,7 +275,7 @@ class SleepAudioRecorder: NSObject, ObservableObject {
     // 1分钟超时落盘（即使仍有低概率语音），二选一策略：1分钟或静音超时
     private let maxEventDurationSec: TimeInterval = 60
 
-    // “每分钟至少一段”需求：单独维护分钟缓冲（不受事件状态机影响）
+    // "每分钟至少一段"需求：单独维护分钟缓冲（不受事件状态机影响）
     private var minuteFloatBuffer: [Float] = []
 
     // VAD 判决平滑
@@ -284,15 +291,35 @@ class SleepAudioRecorder: NSObject, ObservableObject {
     // 音频处理缓冲区（用于 VAD 推理，16k）
     private var vadBuffer: [Float] = []
     private let vadFrameSize = 512 // Silero VAD 期望的帧大小（32ms @ 16kHz）
+    
+    // MARK: - Lifecycle
+    
+    override init() {
+        super.init()
+        setupLifecycleObservers()
+    }
+    
+    deinit {
+        removeLifecycleObservers()
+    }
 
     // MARK: - Public API
     func startRecording() async throws {
         if isRecording { return }
 
         let session = AVAudioSession.sharedInstance()
-        try session.setCategory(.record, mode: .measurement, options: [.duckOthers])
+        // 🔧 使用 .playAndRecord 支持后台录音，允许蓝牙设备
+        // 🚀 添加 .interruptSpokenAudioAndMixWithOthers 确保后台录制优先级
+        try session.setCategory(.playAndRecord, mode: .measurement, options: [
+            .mixWithOthers, 
+            .allowBluetooth, 
+            .defaultToSpeaker, 
+            .duckOthers,
+            .interruptSpokenAudioAndMixWithOthers
+        ])
         try session.setPreferredSampleRate(targetSampleRate)
-        try session.setActive(true)
+        // 🔥 设置为高优先级，确保后台保持活跃
+        try session.setActive(true, options: .notifyOthersOnDeactivation)
 
         let engine = AVAudioEngine()
         self.audioEngine = engine
@@ -314,6 +341,10 @@ class SleepAudioRecorder: NSObject, ObservableObject {
             self.isRecording = true
             self.recordingDuration = 0
         }
+        
+        // 启动后台保护
+        beginBackgroundTask()
+        startStatusCheckTimer()
 
         Task.detached { [weak self] in
             while let self, self.isRecording {
@@ -321,6 +352,8 @@ class SleepAudioRecorder: NSObject, ObservableObject {
                 await MainActor.run { self.recordingDuration += 1 }
             }
         }
+        
+        print("🎤 睡眠录音已启动（支持后台）")
     }
 
     func stopRecording() {
@@ -333,13 +366,83 @@ class SleepAudioRecorder: NSObject, ObservableObject {
         inputNode = nil
 
         resetEvent()
+        
+        // 停止后台保护
+        stopStatusCheckTimer()
+        endBackgroundTask()
+        
+        // 🔧 停用音频会话，释放音频资源
+        do {
+            if WhiteNoisePlayer.shared.isPlaying {
+                print("ℹ️ MissingTypes: 保留音频会话（白噪音正在播放）")
+            } else {
+                try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+            }
+            print("✅ 睡眠录制音频会话已停用")
+        } catch {
+            print("⚠️ 停用音频会话失败: \(error)")
+        }
     }
 
     func checkRecordingStatus() -> Bool { isRecording }
 
     func attemptRecovery() async throws {
-        stopRecording()
-        try await startRecording()
+        print("🔄 开始恢复录制...")
+        
+        // 保存当前状态
+        let wasRecording = isRecording
+        guard wasRecording else { return }
+        
+        // 🔥 关键修复：不调用 stopRecording()，只重置音频引擎
+        // 保持 isRecording=true 和后台任务/定时器继续运行
+        
+        // 清理音频引擎但保持录制状态
+        inputNode?.removeTap(onBus: 0)
+        audioEngine?.stop()
+        audioEngine = nil
+        inputNode = nil
+        
+        // 等待一小段时间让系统释放资源
+        try await Task.sleep(nanoseconds: 100_000_000) // 0.1秒
+        
+        // 重新初始化音频引擎（不改变 isRecording 状态）
+        try await setupAudioEngine()
+        
+        print("✅ 音频引擎恢复成功（保持后台任务）")
+    }
+    
+    // MARK: - Audio Engine Setup
+    
+    private func setupAudioEngine() async throws {
+        // 重新配置音频会话
+        let session = AVAudioSession.sharedInstance()
+        try session.setCategory(.playAndRecord, mode: .measurement, options: [
+            .mixWithOthers, 
+            .allowBluetooth, 
+            .defaultToSpeaker, 
+            .duckOthers,
+            .interruptSpokenAudioAndMixWithOthers
+        ])
+        try session.setPreferredSampleRate(targetSampleRate)
+        try session.setActive(true, options: .notifyOthersOnDeactivation)
+
+        // 创建新的音频引擎
+        let engine = AVAudioEngine()
+        self.audioEngine = engine
+        let input = engine.inputNode
+        self.inputNode = input
+
+        // 设置音频格式
+        let inputFormat = input.outputFormat(forBus: 0)
+        self.audioFormat = inputFormat
+
+        // 安装音频处理tap
+        input.installTap(onBus: 0, bufferSize: 1024, format: inputFormat) { [weak self] buffer, _ in
+            self?.process(buffer: buffer)
+        }
+
+        // 启动音频引擎
+        try engine.start()
     }
 
     // 供 SleepDataManager 定时保存（1分钟固定段）
@@ -676,6 +779,496 @@ class SleepAudioRecorder: NSObject, ObservableObject {
 
         return data
     }
+    
+    // MARK: - Background Task Management
+    
+    private func beginBackgroundTask() {
+        // 🔥 关键修复：即使已有后台任务也要续期，确保不中断
+        if backgroundTask != .invalid {
+            renewBackgroundTask()
+            return
+        }
+        
+        backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "SleepAudioRecording") { [weak self] in
+            print("⚠️ 录音后台任务即将到期，立即续期...")
+            self?.renewBackgroundTask()
+        }
+        
+        if backgroundTask != .invalid {
+            print("✅ 录音后台任务已启动: \(backgroundTask)")
+        } else {
+            print("❌ 录音后台任务启动失败")
+        }
+    }
+    
+    private func renewBackgroundTask() {
+        // 🔥 关键修复：确保任务正确清理和续期
+        let oldTask = backgroundTask
+        
+        // 立即申请新的后台任务
+        backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "SleepAudioRecording") { [weak self] in
+            print("⚠️ 录音后台任务即将到期，立即续期...")
+            self?.renewBackgroundTask()
+        }
+        
+        if backgroundTask != .invalid {
+            print("✅ 录音后台任务续期成功: \(backgroundTask)")
+            
+            // 🔥 关键：只有在新任务成功创建后才结束旧任务
+            if oldTask != .invalid && oldTask != backgroundTask {
+                UIApplication.shared.endBackgroundTask(oldTask)
+                print("🔚 旧录音后台任务已结束: \(oldTask)")
+            }
+        } else {
+            print("❌ 录音后台任务续期失败")
+            // 如果新任务创建失败，保持旧任务（如果有的话）
+            backgroundTask = oldTask
+        }
+    }
+    
+    private func endBackgroundTask() {
+        guard backgroundTask != .invalid else { return }
+        
+        UIApplication.shared.endBackgroundTask(backgroundTask)
+        backgroundTask = .invalid
+        print("🔚 录音后台任务已结束")
+    }
+    
+    // MARK: - Status Check Timer (定期检查录制状态)
+    
+    private func startStatusCheckTimer() {
+        stopStatusCheckTimer()
+        
+        // 每10秒检查一次录制状态（更频繁，以便快速发现问题）
+        statusCheckTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
+            guard let self = self, self.isRecording else { return }
+            
+            // 🔥 在后台时，积极续期后台任务和维护音频会话
+            let isBackground = UIApplication.shared.applicationState == .background
+            if isBackground {
+                self.beginBackgroundTask()
+                // 后台时更频繁地重新配置音频会话
+                self.reassertAudioSession()
+            }
+            
+            // 检查音频会话状态
+            let session = AVAudioSession.sharedInstance()
+            let isActive = session.category == .playAndRecord
+            
+            if !isActive {
+                print("⚠️ 音频会话已失效，重新激活...")
+                self.reassertAudioSession()
+            }
+            
+            // 🔥 增强的音频引擎状态检查
+            guard let engine = self.audioEngine else {
+                print("❌ 音频引擎为空，立即重新初始化...")
+                Task {
+                    try? await self.attemptRecovery()
+                }
+                return
+            }
+            
+            if !engine.isRunning {
+                print("⚠️ 音频引擎已停止，尝试恢复...")
+                Task {
+                    try? await self.attemptRecovery()
+                }
+                return
+            }
+            
+            // 🔥 检查音频引擎输入节点状态
+            let inputNode = engine.inputNode
+            if inputNode.numberOfInputs == 0 {
+                print("⚠️ 音频引擎输入节点无效，重新配置...")
+                Task {
+                    try? await self.attemptRecovery()
+                }
+                return
+            }
+            
+            // 主动维持音频会话（心跳）- 后台时更强力
+            if isBackground {
+                // 后台时使用更强的激活选项
+                try? session.setActive(true, options: [.notifyOthersOnDeactivation])
+                // 额外的音频会话保活
+                try? session.setPreferredSampleRate(self.targetSampleRate)
+                
+                // 🔥 后台时额外检查：确保音频引擎真的在工作
+                if let lastCheckTime = self.lastEngineCheckTime {
+                    // 使用系统时间来检测是否卡住（简化版本）
+                    let currentSystemTime = AVAudioTime(hostTime: mach_absolute_time())
+                    if currentSystemTime.hostTime - lastCheckTime.hostTime > 30_000_000_000 { // 30秒无更新
+                        print("⚠️ 检测到音频引擎可能长时间无响应，强制重启...")
+                        Task {
+                            try? await self.attemptRecovery()
+                        }
+                        return
+                    }
+                }
+                self.lastEngineCheckTime = AVAudioTime(hostTime: mach_absolute_time())
+            } else {
+                try? session.setActive(true, options: .notifyOthersOnDeactivation)
+            }
+            
+            let statusMsg = isBackground ? "✅ 录制状态检查正常 (后台模式)" : "✅ 录制状态检查正常 (前台模式)"
+            print(statusMsg)
+        }
+        
+        // 确保定时器在所有 RunLoop 模式下运行（包括滚动时）
+        if let timer = statusCheckTimer {
+            RunLoop.current.add(timer, forMode: .common)
+        }
+        
+        print("⏱️ 状态检查定时器已启动（15秒间隔，包含保活心跳）")
+    }
+    
+    private func stopStatusCheckTimer() {
+        statusCheckTimer?.invalidate()
+        statusCheckTimer = nil
+        print("⏹️ 状态检查定时器已停止")
+    }
+    
+    // MARK: - Lifecycle Observers
+    
+    private func setupLifecycleObservers() {
+        guard !isObservingLifecycle else { return }
+        isObservingLifecycle = true
+        
+        let nc = NotificationCenter.default
+        
+        // 监听应用进入后台
+        nc.addObserver(
+            self,
+            selector: #selector(handleAppDidEnterBackground),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
+        
+        // 监听应用进入前台
+        nc.addObserver(
+            self,
+            selector: #selector(handleAppWillEnterForeground),
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil
+        )
+        
+        // 监听音频会话中断
+        nc.addObserver(
+            self,
+            selector: #selector(handleAudioSessionInterruption(_:)),
+            name: AVAudioSession.interruptionNotification,
+            object: nil
+        )
+        
+        // 监听音频路由变化
+        nc.addObserver(
+            self,
+            selector: #selector(handleAudioSessionRouteChange(_:)),
+            name: AVAudioSession.routeChangeNotification,
+            object: nil
+        )
+        
+        // 监听音频引擎配置变化
+        nc.addObserver(
+            self,
+            selector: #selector(handleEngineConfigurationChange),
+            name: .AVAudioEngineConfigurationChange,
+            object: nil
+        )
+        
+        // 🔐 监听屏幕锁定/解锁（关键！）
+        nc.addObserver(
+            self,
+            selector: #selector(handleScreenLocked),
+            name: UIApplication.protectedDataWillBecomeUnavailableNotification,
+            object: nil
+        )
+        
+        nc.addObserver(
+            self,
+            selector: #selector(handleScreenUnlocked),
+            name: UIApplication.protectedDataDidBecomeAvailableNotification,
+            object: nil
+        )
+        
+        print("👂 生命周期监听已启动（包含屏幕锁定检测）")
+    }
+    
+    private func removeLifecycleObservers() {
+        guard isObservingLifecycle else { return }
+        isObservingLifecycle = false
+        
+        NotificationCenter.default.removeObserver(self)
+        print("🔇 生命周期监听已移除")
+    }
+    
+    // MARK: - Lifecycle Event Handlers
+    
+    @objc private func handleAppDidEnterBackground() {
+        guard isRecording else { return }
+        
+        print("📱 应用进入后台，保护录制...")
+        
+        // 重新申请后台任务
+        beginBackgroundTask()
+        
+        // 确保音频会话仍然活跃
+        reassertAudioSession()
+    }
+    
+    @objc private func handleAppWillEnterForeground() {
+        guard isRecording else { return }
+        
+        print("📱 应用进入前台，检查录制状态...")
+        
+        // 检查并恢复录制
+        Task {
+            await checkAndRestoreRecording()
+        }
+    }
+    
+    @objc private func handleAudioSessionInterruption(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
+            return
+        }
+        
+        switch type {
+        case .began:
+            print("🔇 音频会话中断开始")
+            // 不立即停止，等待中断结束
+            
+        case .ended:
+            print("🔊 音频会话中断结束，尝试恢复...")
+            
+            // 检查是否应该恢复
+            if let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt {
+                let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
+                if options.contains(.shouldResume) {
+                    Task {
+                        try? await attemptRecovery()
+                    }
+                }
+            }
+            
+        @unknown default:
+            break
+        }
+    }
+    
+    @objc private func handleAudioSessionRouteChange(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
+              let reason = AVAudioSession.RouteChangeReason(rawValue: reasonValue) else {
+            return
+        }
+        
+        print("🎚️ 音频路由变化: \(reason.rawValue)")
+        
+        // 对于某些路由变化，可能需要重新配置
+        switch reason {
+        case .newDeviceAvailable, .oldDeviceUnavailable:
+            print("🔄 音频设备变化，重新配置...")
+            reassertAudioSession()
+            
+        default:
+            break
+        }
+    }
+    
+    @objc private func handleEngineConfigurationChange() {
+        guard isRecording else { return }
+        
+        print("⚙️ 音频引擎配置变化，重新配置...")
+        
+        Task {
+            try? await attemptRecovery()
+        }
+    }
+    
+    // 🔐 屏幕锁定处理（关键！保持音频会话活跃）
+    @objc private func handleScreenLocked() {
+        guard isRecording else { return }
+        
+        print("🔒 屏幕已锁定，保持音频会话活跃...")
+        
+        // 强化后台任务
+        beginBackgroundTask()
+        
+        // 重新激活音频会话，确保锁屏后继续录音
+        reassertAudioSession()
+        
+        // 检查引擎状态
+        if let engine = audioEngine, !engine.isRunning {
+            print("⚠️ 锁屏时音频引擎已停止，立即恢复...")
+            Task {
+                try? await attemptRecovery()
+            }
+        }
+    }
+    
+    // 🔓 屏幕解锁处理
+    @objc private func handleScreenUnlocked() {
+        guard isRecording else { return }
+        
+        print("🔓 屏幕已解锁，检查录制状态...")
+        
+        // 检查并恢复录制
+        Task {
+            await checkAndRestoreRecording()
+        }
+    }
+    
+    // MARK: - Auto Recovery
+    
+    private func reassertAudioSession() {
+        let session = AVAudioSession.sharedInstance()
+        
+        do {
+            // 检查权限
+            switch session.recordPermission {
+            case .denied:
+                print("⚠️ 录音权限被拒绝")
+                return
+            case .undetermined:
+                print("ℹ️ 录音权限未确定")
+                return
+            case .granted:
+                break
+            @unknown default:
+                break
+            }
+            
+            // 🔥 智能音频会话管理 - 避免不必要的重新配置
+            let currentCategory = session.category
+            let isCurrentlyActive = session.isOtherAudioPlaying == false
+            
+            // 如果会话已经正确配置且活跃，只需要重新激活
+            if currentCategory == .playAndRecord && isCurrentlyActive {
+                try session.setActive(true, options: .notifyOthersOnDeactivation)
+                print("✅ 音频会话重新激活成功（轻量模式）")
+                return
+            }
+            
+            // 需要完整重新配置的情况
+            print("🔄 执行音频会话完整重新配置...")
+            
+            // 🔧 分步骤重新配置，减少失败概率
+            
+            // 步骤1: 温和停用当前会话
+            if isCurrentlyActive {
+                do {
+                    if WhiteNoisePlayer.shared.isPlaying {
+                        print("ℹ️ MissingTypes: 保留音频会话（白噪音正在播放）")
+                    } else {
+                        try session.setActive(false, options: .notifyOthersOnDeactivation)
+                    }
+                    // 给系统时间处理
+                    Thread.sleep(forTimeInterval: 0.05)
+                } catch {
+                    print("⚠️ 停用音频会话时出现警告: \(error)")
+                    // 继续执行，不要因为停用失败而中断
+                }
+            }
+            
+            // 步骤2: 重新配置类别和选项
+            try session.setCategory(
+                .playAndRecord,
+                mode: .measurement,
+                options: [
+                    .mixWithOthers,           // 混合其他音频
+                    .allowBluetooth,          // 允许蓝牙
+                    .defaultToSpeaker,        // 默认扬声器（避免听筒）
+                    .duckOthers              // 降低其他音频音量
+                ]
+            )
+            
+            // 步骤3: 设置首选参数
+            try session.setPreferredSampleRate(targetSampleRate)
+            try session.setPreferredIOBufferDuration(0.02) // 20ms缓冲
+            
+            // 步骤4: 重新激活会话
+            try session.setActive(true, options: .notifyOthersOnDeactivation)
+            
+            print("✅ 音频会话重新配置成功（完整模式）")
+            
+        } catch let error as NSError {
+            print("❌ 音频会话重新配置失败: \(error)")
+            
+            // 🚨 错误恢复策略
+            if error.code == 561015905 { // Session activation failed
+                print("🔄 检测到会话激活失败，尝试恢复性重启...")
+                attemptAudioSessionRecovery()
+            }
+        }
+    }
+    
+    private func attemptAudioSessionRecovery() {
+        print("🔄 开始音频会话恢复性重启...")
+        
+        // 在后台队列执行恢复，避免阻塞主线程
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            
+            let session = AVAudioSession.sharedInstance()
+            
+            do {
+                // 完全重置音频会话
+                print("🔄 步骤1: 强制停用音频会话...")
+                if WhiteNoisePlayer.shared.isPlaying {
+                    print("ℹ️ MissingTypes: 保留音频会话（白噪音正在播放）")
+                } else {
+                    try? session.setActive(false, options: [])
+                }
+                
+                // 等待更长时间让系统完全清理
+                Thread.sleep(forTimeInterval: 0.3)
+                
+                print("🔄 步骤2: 重新配置音频会话...")
+                // 使用最基本的配置
+                try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker])
+                
+                print("🔄 步骤3: 重新激活音频会话...")
+                try session.setActive(true, options: .notifyOthersOnDeactivation)
+                
+                print("✅ 音频会话恢复性重启成功")
+                
+                // 在主线程更新状态
+                DispatchQueue.main.async {
+                    // 如果音频引擎停止了，尝试重启
+                    if let engine = self.audioEngine, !engine.isRunning {
+                        Task {
+                            try? await self.attemptRecovery()
+                        }
+                    }
+                }
+                
+            } catch {
+                print("❌ 音频会话恢复性重启失败: \(error)")
+            }
+        }
+    }
+    
+    private func checkAndRestoreRecording() async {
+        guard isRecording else { return }
+        
+        // 检查引擎是否还在运行
+        guard let engine = audioEngine else {
+            print("⚠️ 音频引擎丢失，尝试恢复...")
+            try? await attemptRecovery()
+            return
+        }
+        
+        if !engine.isRunning {
+            print("⚠️ 音频引擎未运行，尝试恢复...")
+            try? await attemptRecovery()
+            return
+        }
+        
+        print("✅ 录制状态正常")
+    }
 }
 
 private extension AVAudioPCMBuffer {
@@ -690,27 +1283,63 @@ private extension AVAudioPCMBuffer {
     }
 }
 
+// MARK: - 智能后台任务管理器
 class SleepBackgroundManager: ObservableObject {
     static let shared = SleepBackgroundManager()
     @Published var currentTheme = "starry"
+    @Published var isBackgroundTaskActive = false
 
     private var activeSessionId: String?
     private var alarmTime: Date?
     private var startTime: Date?
+    private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
+    private var renewalTimer: Timer?
+    
+    // UserDefaults keys for state persistence
+    private let kActiveSessionId = "SleepTracking.ActiveSessionId"
+    private let kAlarmTime = "SleepTracking.AlarmTime"
+    private let kStartTime = "SleepTracking.StartTime"
+    private let kIsTracking = "SleepTracking.IsTracking"
 
-    private init() {}
+    private init() {
+        // 启动时恢复状态
+        restoreState()
+    }
 
+    // MARK: - Public Methods
+    
     func startBackgroundTracking(sessionId: String, alarmTime: Date?) {
         self.activeSessionId = sessionId
         self.alarmTime = alarmTime
         self.startTime = Date()
+        
+        // 持久化状态
+        saveState()
+        
+        // 启动后台任务
+        beginBackgroundTask()
+        
+        // 启动智能续期定时器（每25秒续期）
+        startRenewalTimer()
+        
         print("🌙 后台追踪已启动，会话ID: \(sessionId)")
+        print("📱 后台任务已激活，智能续期已启动")
     }
 
     func stopBackgroundTracking() {
         self.activeSessionId = nil
         self.alarmTime = nil
         self.startTime = nil
+        
+        // 清除持久化状态
+        clearState()
+        
+        // 停止后台任务
+        endBackgroundTask()
+        
+        // 停止续期定时器
+        stopRenewalTimer()
+        
         print("☀️ 后台追踪已停止")
     }
 
@@ -720,6 +1349,121 @@ class SleepBackgroundManager: ObservableObject {
 
     func getCurrentSessionInfo() -> (sessionId: String?, alarmTime: Date?, startTime: Date?) {
         return (activeSessionId, alarmTime, startTime)
+    }
+    
+    // MARK: - Background Task Management (智能续期)
+    
+    private func beginBackgroundTask() {
+        guard backgroundTask == .invalid else { return }
+        
+        backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "SleepTracking") { [weak self] in
+            print("⚠️ 后台任务即将到期，准备续期...")
+            self?.renewBackgroundTask()
+        }
+        
+        isBackgroundTaskActive = true
+        print("✅ 后台任务已启动: \(backgroundTask)")
+    }
+    
+    private func endBackgroundTask() {
+        guard backgroundTask != .invalid else { return }
+        
+        UIApplication.shared.endBackgroundTask(backgroundTask)
+        backgroundTask = .invalid
+        isBackgroundTaskActive = false
+        print("🔚 后台任务已结束")
+    }
+    
+    /// 智能续期：结束当前任务并立即启动新任务
+    private func renewBackgroundTask() {
+        print("🔄 执行后台任务续期...")
+        
+        let oldTask = backgroundTask
+        
+        // 🔥 关键修复：先创建新任务，再结束旧任务
+        let newTask = UIApplication.shared.beginBackgroundTask(withName: "SleepTracking") { [weak self] in
+            print("⚠️ 后台任务即将到期，准备续期...")
+            self?.renewBackgroundTask()
+        }
+        
+        if newTask != .invalid {
+            // 新任务创建成功，更新引用
+            backgroundTask = newTask
+            isBackgroundTaskActive = true
+            print("✅ 后台任务续期成功: \(newTask)")
+            
+            // 结束旧任务
+            if oldTask != .invalid && oldTask != newTask {
+                UIApplication.shared.endBackgroundTask(oldTask)
+                print("🔚 旧后台任务已结束: \(oldTask)")
+            }
+        } else {
+            print("❌ 后台任务续期失败，保持旧任务")
+            // 如果新任务创建失败，保持旧任务
+            // backgroundTask 保持不变
+        }
+    }
+    
+    // MARK: - Renewal Timer (每25秒自动续期)
+    
+    private func startRenewalTimer() {
+        stopRenewalTimer()
+        
+        // 每25秒续期一次，避免30秒限制
+        renewalTimer = Timer.scheduledTimer(withTimeInterval: 25.0, repeats: true) { [weak self] _ in
+            guard let self = self, self.hasActiveBackgroundTracking() else { return }
+            
+            print("⏰ 定时续期触发")
+            self.renewBackgroundTask()
+        }
+        
+        print("⏱️ 续期定时器已启动（25秒间隔）")
+    }
+    
+    private func stopRenewalTimer() {
+        renewalTimer?.invalidate()
+        renewalTimer = nil
+        print("⏹️ 续期定时器已停止")
+    }
+    
+    // MARK: - State Persistence
+    
+    private func saveState() {
+        let defaults = UserDefaults.standard
+        defaults.set(activeSessionId, forKey: kActiveSessionId)
+        defaults.set(alarmTime, forKey: kAlarmTime)
+        defaults.set(startTime, forKey: kStartTime)
+        defaults.set(true, forKey: kIsTracking)
+        defaults.synchronize()
+        print("💾 后台追踪状态已保存")
+    }
+    
+    private func restoreState() {
+        let defaults = UserDefaults.standard
+        
+        guard defaults.bool(forKey: kIsTracking) else { return }
+        
+        self.activeSessionId = defaults.string(forKey: kActiveSessionId)
+        self.alarmTime = defaults.object(forKey: kAlarmTime) as? Date
+        self.startTime = defaults.object(forKey: kStartTime) as? Date
+        
+        if activeSessionId != nil {
+            print("🔄 恢复后台追踪状态：\(activeSessionId ?? "unknown")")
+            
+            // 重新启动后台任务和续期
+            beginBackgroundTask()
+            startRenewalTimer()
+        }
+    }
+    
+    private func clearState() {
+        let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: kActiveSessionId)
+        defaults.removeObject(forKey: kAlarmTime)
+        defaults.removeObject(forKey: kStartTime)
+        defaults.removeObject(forKey: kIsTracking)
+        defaults.synchronize()
+        print("🗑️ 后台追踪状态已清除")
     }
 }
 
