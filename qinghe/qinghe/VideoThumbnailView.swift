@@ -163,8 +163,13 @@ struct VideoThumbnailView: View {
             print("🎬 视频组件出现: \(videoURL) -> 修复后: \(fixedUrl), showControls: \(showControls)")
         }
         .onDisappear {
-            playerManager.cleanup()
-            print("🎬 视频组件消失: \(videoURL)")
+            // 只在列表模式下清理播放器，详情页模式保持播放器
+            if !showControls {
+                playerManager.cleanup()
+                print("🎬 视频组件消失（列表模式）: \(videoURL)")
+            } else {
+                print("🎬 视频组件消失（详情页模式，保持播放器）: \(videoURL)")
+            }
         }
         // 系统原生全屏播放器
         .fullScreenCover(isPresented: $showingFullScreen) {

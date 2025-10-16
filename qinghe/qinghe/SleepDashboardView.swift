@@ -5,7 +5,7 @@ struct SleepDashboardView: View {
     @StateObject private var sleepManager = SleepDataManager.shared
     @State private var showSleepTracking = false
     @State private var showSleepRecords = false
-    @State private var showSleepInsights = false
+    @State private var showWhiteNoise = false
 
     @State private var animateCards = false
     @State private var currentTime = Date()
@@ -107,8 +107,8 @@ struct SleepDashboardView: View {
         .fullScreenCover(isPresented: $showSleepRecords) {
             SleepRecordsView()
         }
-        .fullScreenCover(isPresented: $showSleepInsights) {
-            SleepInsightsView()
+        .fullScreenCover(isPresented: $showWhiteNoise) {
+            WhiteNoisePageView()
         }
 
 
@@ -443,13 +443,13 @@ struct SleepDashboardView: View {
                 }
                 
                 quickActionCard(
-                    icon: "chart.line.uptrend.xyaxis",
-                    title: "睡眠分析",
-                    subtitle: "查看详细数据",
+                    icon: "waveform",
+                    title: "白噪音",
+                    subtitle: "助眠音乐",
                     color: Color(red: 0.6, green: 0.4, blue: 1.0),
                     delay: 0.3
                 ) {
-                    showSleepInsights = true
+                    showWhiteNoise = true
                 }
             }
         }

@@ -26,6 +26,7 @@ struct HealthManagerView: View {
                 // 背景：使用主题定义的三层渐变（主渐变 + 轻透明覆盖层 + 顶部右侧柔光）
                 HealthDesignTheme.Background.base
                     .ignoresSafeArea()
+                    .preferredColorScheme(.light) // 健康档案页面不适配深色模式
                 HealthDesignTheme.Background.overlay
                     .opacity(0.28)
                     .ignoresSafeArea()
@@ -218,22 +219,21 @@ struct HealthManagerView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-            .toolbarColorScheme(.light, for: .navigationBar)
             .onAppear {
                 let appearance = UINavigationBarAppearance()
                 appearance.configureWithDefaultBackground()
-                appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialLight)
-                appearance.backgroundColor = UIColor.white.withAlphaComponent(0.85) // 增加不透明度到85%
+                appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+                appearance.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.85)
                 appearance.shadowColor = .clear
-                // 标题改为黑色
-                appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
-                appearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+                // 使用系统动态颜色
+                appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.label]
+                appearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.label]
                 let navBar = UINavigationBar.appearance()
                 navBar.standardAppearance = appearance
                 navBar.compactAppearance = appearance
                 navBar.scrollEdgeAppearance = appearance
-                // 返回按钮与右侧按钮统一为黑色
-                navBar.tintColor = .black
+                // 返回按钮与右侧按钮使用系统动态颜色
+                navBar.tintColor = .label
             }
         }
 

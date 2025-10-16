@@ -32,12 +32,11 @@ class WuYunLiuQiService {
     private init() {}
 
     func fetchCurrent(scope: WuYunRangeScope = .day) async throws -> WuYunLiuQiAnalysis {
-        // 先用 NetworkManager 统一基址
-        let endpoint = "/health/five-elements/current?scope=\(scope.rawValue)"
+        // 通过查询参数传递，确保URL参数正确编码
         struct Resp<T: Codable>: Codable { let success: Bool; let data: T }
         let resp: Resp<WuYunLiuQiAnalysis> = try await NetworkManager.shared.get(
-            endpoint: endpoint,
-            parameters: nil,
+            endpoint: "/health/five-elements/current",
+            parameters: ["scope": scope.rawValue],
             headers: nil,
             responseType: Resp<WuYunLiuQiAnalysis>.self
         )

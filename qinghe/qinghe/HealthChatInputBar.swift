@@ -77,12 +77,18 @@ struct ChatInputBar: View {
 }
 
 #Preview {
-    @Previewable @State var text = ""
-    @Previewable @State var showMenu = false
-    @Previewable @FocusState var isFocused: Bool
+    struct PreviewWrapper: View {
+        @State private var text = ""
+        @State private var showMenu = false
+        @FocusState private var isFocused: Bool
+        
+        var body: some View {
+            ChatInputBar(text: $text, onSend: {}, showingActionMenu: $showMenu, isInputFocused: $isFocused)
+                .background(
+                    LinearGradient(colors: [Color(hex: "C3E88D"), Color(hex: "B2F0E1"), Color(hex: "FFE485")], startPoint: .topLeading, endPoint: .bottomTrailing)
+                )
+        }
+    }
     
-    ChatInputBar(text: $text, onSend: {}, showingActionMenu: $showMenu, isInputFocused: $isFocused)
-        .background(
-            LinearGradient(colors: [Color(hex: "C3E88D"), Color(hex: "B2F0E1"), Color(hex: "FFE485")], startPoint: .topLeading, endPoint: .bottomTrailing)
-        )
+    return PreviewWrapper()
 }

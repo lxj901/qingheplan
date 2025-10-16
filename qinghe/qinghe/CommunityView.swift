@@ -4,8 +4,9 @@ import SwiftUI
 
 // MARK: - 社区主页面
 struct CommunityView: View {
-    @StateObject private var viewModel = CommunityViewModel()
+    @ObservedObject private var viewModel = CommunityViewModel.shared
     @StateObject private var adManager = GDTAdManager.shared
+    @StateObject private var localizationManager = LocalizationManager.shared
 
     @State private var showingUserProfile = false
     @State private var selectedUserId: String?

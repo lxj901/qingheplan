@@ -485,10 +485,15 @@ struct ChatDetailView: View {
                 lastReadMessageId: lastMessage.id
             )
 
+            print("ChatDetailView: 已标记消息为已读 - 消息ID: \(lastMessage.id)")
+
+            // 等待一小段时间，让后端有时间更新数据库
+            try? await Task.sleep(nanoseconds: 500_000_000) // 0.5秒
+
             // 更新应用角标
             await PushNotificationManager.shared.updateBadgeCount()
 
-            print("ChatDetailView: 已标记消息为已读并更新角标 - 消息ID: \(lastMessage.id)")
+            print("ChatDetailView: 已更新角标")
         } catch {
             print("ChatDetailView: 标记消息为已读失败: \(error)")
         }

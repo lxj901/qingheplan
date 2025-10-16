@@ -1,0 +1,138 @@
+{
+  "identifier" : "C8E8E8E8",
+  "nonRenewingSubscriptions" : [
+    {
+      "displayPrice" : "29.9",
+      "familyShareable" : false,
+      "internalID" : "6670002001",
+      "localizations" : [
+        {
+          "description" : "优惠价，畅享所有功能",
+          "displayName" : "连续包月会员",
+          "locale" : "zh_CN"
+        }
+      ],
+      "productID" : "com.qinghe.qinghe.membership.monthlyv4",
+      "price" : 29.9,
+      "currency" : "CNY",
+      "referenceName" : "连续包月会员",
+      "type" : "NonRenewingSubscription"
+    },
+    {
+      "displayPrice" : "39.9",
+      "familyShareable" : false,
+      "internalID" : "6670002002",
+      "localizations" : [
+        {
+          "description" : "标准价，按月享受会员服务",
+          "displayName" : "月度会员",
+          "locale" : "zh_CN"
+        }
+      ],
+      "productID" : "com.qinghe.qinghe.membership.monthly.autov5",
+      "price" : 39.9,
+      "currency" : "CNY",
+      "referenceName" : "月度会员",
+      "type" : "NonRenewingSubscription"
+    },
+    {
+      "displayPrice" : "69.9",
+      "familyShareable" : false,
+      "internalID" : "6670002003",
+      "localizations" : [
+        {
+          "description" : "季度订阅更划算",
+          "displayName" : "季度会员",
+          "locale" : "zh_CN"
+        }
+      ],
+      "productID" : "com.qinghe.qinghe.membership.monthly.autov6",
+      "price" : 69.9,
+      "currency" : "CNY",
+      "referenceName" : "季度会员",
+      "type" : "NonRenewingSubscription"
+    },
+    {
+      "displayPrice" : "169",
+      "familyShareable" : false,
+      "internalID" : "6670002004",
+      "localizations" : [
+        {
+          "description" : "年度订阅最省钱",
+          "displayName" : "年度会员",
+          "locale" : "zh_CN"
+        }
+      ],
+      "productID" : "com.qinghe.qinghe.membership.monthly.autov7",
+      "price" : 169,
+      "currency" : "CNY",
+      "referenceName" : "年度会员",
+      "type" : "NonRenewingSubscription"
+    }
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6670000001",
+    "_developerTeamID" : "YOUR_TEAM_ID",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 757382400.0,
+    "_locale" : "zh_CN",
+    "_storefront" : "CHN",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptions" : [
+
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

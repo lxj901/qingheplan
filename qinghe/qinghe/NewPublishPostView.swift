@@ -122,6 +122,9 @@ struct NewPublishPostView: View {
     @State private var showPermissionSettings = false
     @State private var showPrivacySettings = false
 
+    // AI生成内容声明
+    @State private var isAIGenerated = false
+
     // 新增：打卡数据和运动数据相关状态
     @State private var navigateToWorkoutRecords = false
     @State private var selectedWorkoutData: WorkoutDataForPost?
@@ -144,7 +147,7 @@ struct NewPublishPostView: View {
     @Environment(\.dismiss) private var dismiss
 
     // 社区视图模型
-    @StateObject private var communityViewModel = CommunityViewModel()
+    @ObservedObject private var communityViewModel = CommunityViewModel.shared
 
     // 发布失败提示
     @State private var showPublishErrorAlert = false
@@ -664,15 +667,6 @@ struct NewPublishPostView: View {
                         }
                     )
 
-                    // 打卡数据按钮
-                    FunctionButton(
-                        icon: "checkmark.circle",
-                        title: "打卡数据",
-                        subtitle: selectedCheckinData != nil ? "已选择打卡" : "添加打卡数据",
-                        isActive: selectedCheckinData != nil,
-                        action: { navigateToCheckinRecords = true }
-                    )
-
                     // 运动数据按钮
                     FunctionButton(
                         icon: "figure.run",
@@ -687,11 +681,40 @@ struct NewPublishPostView: View {
             .padding(.top, 12)
             .padding(.bottom, 8)
 
+            // AI生成内容声明
+            HStack(spacing: 8) {
+                Toggle(isOn: $isAIGenerated) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "sparkles")
+                            .font(.system(size: 14))
+                            .foregroundColor(isAIGenerated ? AppConstants.Colors.primaryGreen : .secondary)
+
+                        Text("AI生成内容")
+                            .font(.system(size: 14))
+                            .foregroundColor(isAIGenerated ? .primary : .secondary)
+                    }
+                }
+                .toggleStyle(SwitchToggleStyle(tint: AppConstants.Colors.primaryGreen))
+
+                Spacer()
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 12)
+            .padding(.bottom, 8)
+
             // 底部提示
-            Text("发布即表示同意社区规范")
-                .font(.system(size: 11))
-                .foregroundColor(.secondary)
-                .padding(.bottom, 8)
+            VStack(spacing: 4) {
+                if isAIGenerated {
+                    HStack(spacing: 4) {
+                        Image(systemName: "info.circle")
+                            .font(.system(size: 10))
+                        Text("此内容由AI生成，仅供参考")
+                            .font(.system(size: 11))
+                    }
+                    .foregroundColor(.orange)
+                }
+            }
+            .padding(.bottom, 8)
         }
         .background(Color(.systemBackground))
 
@@ -1008,6 +1031,7 @@ struct NewPublishPostView: View {
             longitude: longitude,
             checkinId: checkinId,
             workoutId: workoutId,
+            isAIGenerated: isAIGenerated,
             onSuccess: {
                 // 发布成功，关闭页面
                 DispatchQueue.main.async {

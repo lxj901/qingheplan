@@ -210,6 +210,7 @@ struct Post: Codable, Identifiable {
     let status: PostStatus
     let isTop: Bool
     let hotScore: Double
+    let isAIGenerated: Bool?  // AI生成内容标识
     let lastActiveAt: String
     let createdAt: String
     let updatedAt: String
@@ -291,6 +292,7 @@ struct Post: Codable, Identifiable {
         status: PostStatus = .active,
         isTop: Bool = false,
         hotScore: Double = 0.0,
+        isAIGenerated: Bool? = nil,
         lastActiveAt: String,
         createdAt: String,
         updatedAt: String,
@@ -327,6 +329,7 @@ struct Post: Codable, Identifiable {
         self.status = status
         self.isTop = isTop
         self.hotScore = hotScore
+        self.isAIGenerated = isAIGenerated
         self.lastActiveAt = lastActiveAt
         self.createdAt = createdAt
         self.updatedAt = updatedAt
@@ -425,6 +428,16 @@ struct Post: Codable, Identifiable {
         }
 
         hotScore = try container.decodeIfPresent(Double.self, forKey: .hotScore) ?? 0.0
+
+        // 处理 isAIGenerated 字段，可能是Bool或Int或不存在
+        if let boolValue = try? container.decode(Bool.self, forKey: .isAIGenerated) {
+            isAIGenerated = boolValue
+        } else if let intValue = try? container.decode(Int.self, forKey: .isAIGenerated) {
+            isAIGenerated = intValue != 0
+        } else {
+            isAIGenerated = nil  // 如果字段不存在，设为 nil
+        }
+
         lastActiveAt = try container.decodeIfPresent(String.self, forKey: .lastActiveAt) ?? ""
         createdAt = try container.decode(String.self, forKey: .createdAt)
         updatedAt = try container.decode(String.self, forKey: .updatedAt)
@@ -443,7 +456,7 @@ struct Post: Codable, Identifiable {
     private enum CodingKeys: String, CodingKey {
         case id, authorId, content, images, video, tags, category, location, latitude, longitude
         case checkinId, workoutId, dataType, likesCount, commentsCount, sharesCount, bookmarksCount, viewsCount
-        case isLiked, isBookmarked, allowComments, allowShares, visibility, status, isTop, hotScore
+        case isLiked, isBookmarked, allowComments, allowShares, visibility, status, isTop, hotScore, isAIGenerated
         case lastActiveAt, createdAt, updatedAt, author, checkin, workout
         case finalScore, explanation, strategy
     }
@@ -463,7 +476,7 @@ struct CheckinData: Codable {
 
 // MARK: - 运动数据（关联数据）
 struct PostWorkoutData: Codable {
-    let id: Int
+    let id: Int?  // 改为可选，因为服务器可能不返回此字段
     let workoutId: Int
     let workoutType: String
     let startTime: String
@@ -479,11 +492,13 @@ struct PostWorkoutData: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        // 处理 id 字段，可能是字符串或整数
+        // 处理 id 字段，可能是字符串、整数或不存在
         if let idString = try? container.decode(String.self, forKey: .id) {
-            id = Int(idString) ?? 0
+            id = Int(idString)
+        } else if let idInt = try? container.decode(Int.self, forKey: .id) {
+            id = idInt
         } else {
-            id = try container.decode(Int.self, forKey: .id)
+            id = nil  // 如果字段不存在，设为 nil
         }
 
         // 处理 workoutId 字段，可能是字符串或整数
@@ -923,6 +938,23 @@ struct BlockUserData: Codable {
     let isFollowing: Bool?  // 屏蔽接口返回此字段
 }
 
+// MARK: - 屏蔽用户列表响应
+struct BlockedUsersResponse: Codable {
+    let items: [BlockedUser]
+    let pagination: PaginationInfo
+}
+
+// MARK: - 屏蔽用户信息
+struct BlockedUser: Codable, Identifiable {
+    let id: Int  // API 实际返回的是数字类型的 ID
+    let nickname: String
+    let avatar: String?
+    let bio: String?
+    let isVerified: Bool?
+    let blockedAt: String
+    let reason: String?
+}
+
 // MARK: - 错误响应
 struct ErrorResponse: Codable {
     let success: Bool
@@ -1035,8 +1067,18 @@ struct TopicSearchResult: Codable, Identifiable, Hashable {
 struct SearchResults: Codable {
     let posts: [CommunityPost]?
     let users: [CommunityUserProfile]?
-    let topics: [CommunityPost]?  // 修正：后端实际返回的是帖子对象数组，不是字符串数组
+    let topics: [String]?   // 话题名数组（后端返回字符串列表）
     let total: Int
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        posts = try container.decodeIfPresent([CommunityPost].self, forKey: .posts)
+        users = try container.decodeIfPresent([CommunityUserProfile].self, forKey: .users)
+        topics = try container.decodeIfPresent([String].self, forKey: .topics)
+        total = try container.decodeIfPresent(Int.self, forKey: .total) ?? 0
+    }
+
+    private enum CodingKeys: String, CodingKey { case posts, users, topics, total }
 }
 
 /// 社区帖子模型（用于搜索结果）
@@ -1395,4 +1437,201 @@ enum TagSortType: String, CaseIterable {
             return "流行"
         }
     }
+}
+
+// MARK: - 同城功能相关模型
+
+/// 同城搜索区域信息
+struct NearbySearchArea: Codable {
+    let latitude: Double
+    let longitude: Double
+    let radius: Double
+}
+
+/// 同城帖子数据
+struct NearbyPostsData: Codable {
+    let items: [NearbyPost]
+    let pagination: PaginationInfo
+    let location: NearbySearchArea?
+}
+
+/// 同城帖子响应
+struct NearbyPostsResponse: Codable {
+    let success: Bool
+    let data: NearbyPostsData?
+    let message: String?
+}
+
+/// 同城帖子模型（扩展自Post，增加距离信息）
+struct NearbyPost: Codable, Identifiable {
+    let id: String
+    let authorId: Int
+    let content: String
+    let images: [String]?
+    let video: String?
+    let tags: [String]?
+    let location: String?
+    let latitude: String?
+    let longitude: String?
+    var likesCount: Int
+    var commentsCount: Int
+    var sharesCount: Int
+    var bookmarksCount: Int
+    var viewsCount: Int
+    var isLiked: Bool
+    var isBookmarked: Bool
+    let allowComments: Bool
+    let allowShares: Bool
+    let visibility: String
+    let status: String
+    let isTop: Bool
+    let hotScore: Double
+    let lastActiveAt: String
+    let createdAt: String
+    let updatedAt: String
+    let author: Author
+    let distance: Double  // 距离（米）
+    let distanceText: String  // 距离文本，如 "1.2km"
+    
+    // 转换为Post模型
+    func toPost() -> Post {
+        return Post(
+            id: id,
+            authorId: authorId,
+            content: content,
+            images: images,
+            video: video,
+            tags: tags,
+            category: nil,
+            location: location,
+            latitude: latitude,
+            longitude: longitude,
+            checkinId: nil,
+            workoutId: nil,
+            dataType: nil,
+            likesCount: likesCount,
+            commentsCount: commentsCount,
+            sharesCount: sharesCount,
+            bookmarksCount: bookmarksCount,
+            viewsCount: viewsCount,
+            isLiked: isLiked,
+            isBookmarked: isBookmarked,
+            allowComments: allowComments,
+            allowShares: allowShares,
+            visibility: PostVisibility(rawValue: visibility) ?? .public,
+            status: PostStatus(rawValue: status) ?? .active,
+            isTop: isTop,
+            hotScore: hotScore,
+            lastActiveAt: lastActiveAt,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            author: author
+        )
+    }
+    
+    // 自定义解码器
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        id = try container.decode(String.self, forKey: .id)
+        authorId = try container.decode(Int.self, forKey: .authorId)
+        content = try container.decode(String.self, forKey: .content)
+        images = try container.decodeIfPresent([String].self, forKey: .images)
+        video = try container.decodeIfPresent(String.self, forKey: .video)
+        tags = try container.decodeIfPresent([String].self, forKey: .tags)
+        location = try container.decodeIfPresent(String.self, forKey: .location)
+        latitude = try container.decodeIfPresent(String.self, forKey: .latitude)
+        longitude = try container.decodeIfPresent(String.self, forKey: .longitude)
+        
+        likesCount = try container.decode(Int.self, forKey: .likesCount)
+        commentsCount = try container.decode(Int.self, forKey: .commentsCount)
+        sharesCount = try container.decode(Int.self, forKey: .sharesCount)
+        bookmarksCount = try container.decode(Int.self, forKey: .bookmarksCount)
+        viewsCount = try container.decode(Int.self, forKey: .viewsCount)
+        
+        // 处理布尔字段
+        if let boolValue = try? container.decode(Bool.self, forKey: .isLiked) {
+            isLiked = boolValue
+        } else if let intValue = try? container.decode(Int.self, forKey: .isLiked) {
+            isLiked = intValue != 0
+        } else {
+            isLiked = false
+        }
+        
+        if let boolValue = try? container.decode(Bool.self, forKey: .isBookmarked) {
+            isBookmarked = boolValue
+        } else if let intValue = try? container.decode(Int.self, forKey: .isBookmarked) {
+            isBookmarked = intValue != 0
+        } else {
+            isBookmarked = false
+        }
+        
+        if let boolValue = try? container.decode(Bool.self, forKey: .allowComments) {
+            allowComments = boolValue
+        } else if let intValue = try? container.decode(Int.self, forKey: .allowComments) {
+            allowComments = intValue != 0
+        } else {
+            allowComments = true
+        }
+        
+        if let boolValue = try? container.decode(Bool.self, forKey: .allowShares) {
+            allowShares = boolValue
+        } else if let intValue = try? container.decode(Int.self, forKey: .allowShares) {
+            allowShares = intValue != 0
+        } else {
+            allowShares = true
+        }
+        
+        visibility = try container.decodeIfPresent(String.self, forKey: .visibility) ?? "public"
+        status = try container.decodeIfPresent(String.self, forKey: .status) ?? "active"
+        
+        if let boolValue = try? container.decode(Bool.self, forKey: .isTop) {
+            isTop = boolValue
+        } else if let intValue = try? container.decode(Int.self, forKey: .isTop) {
+            isTop = intValue != 0
+        } else {
+            isTop = false
+        }
+        
+        hotScore = try container.decodeIfPresent(Double.self, forKey: .hotScore) ?? 0.0
+        lastActiveAt = try container.decodeIfPresent(String.self, forKey: .lastActiveAt) ?? ""
+        createdAt = try container.decode(String.self, forKey: .createdAt)
+        updatedAt = try container.decode(String.self, forKey: .updatedAt)
+        author = try container.decode(Author.self, forKey: .author)
+        distance = try container.decode(Double.self, forKey: .distance)
+        distanceText = try container.decode(String.self, forKey: .distanceText)
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case id, authorId, content, images, video, tags, location, latitude, longitude
+        case likesCount, commentsCount, sharesCount, bookmarksCount, viewsCount
+        case isLiked, isBookmarked, allowComments, allowShares, visibility, status, isTop, hotScore
+        case lastActiveAt, createdAt, updatedAt, author, distance, distanceText
+    }
+}
+
+/// 同城用户响应
+struct NearbyUsersResponse: Codable {
+    let success: Bool
+    let data: NearbyUsersData?
+    let message: String?
+}
+
+/// 同城用户数据
+struct NearbyUsersData: Codable {
+    let items: [NearbyUser]
+    let pagination: PaginationInfo
+}
+
+/// 同城用户模型
+struct NearbyUser: Codable, Identifiable {
+    let id: Int
+    let nickname: String
+    let avatar: String?
+    let isVerified: Bool
+    let level: Int?
+    let location: String?
+    let distance: Double
+    let distanceText: String
+    let lastActiveAt: String?
 }

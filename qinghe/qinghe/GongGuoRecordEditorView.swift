@@ -210,9 +210,8 @@ struct GongGuoRecordEditorView: View {
 // 已移除日期格式化函数（不再在页面底部显示日期）
 
     #Preview {
-        @Previewable @StateObject var viewModel = MeritViewModel()
-        return NavigationStack {
-            GongGuoRecordEditorView(date: Date(), viewModel: viewModel)
+        NavigationStack {
+            GongGuoRecordEditorView(date: Date(), viewModel: MeritViewModel())
         }
     }
 

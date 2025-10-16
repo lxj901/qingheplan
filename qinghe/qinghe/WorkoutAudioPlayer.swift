@@ -28,10 +28,11 @@ class WorkoutAudioPlayer: NSObject, ObservableObject {
             let audioSession = AVAudioSession.sharedInstance()
             
             // 设置音频会话类别 - 支持运动时播放
+            // .allowBluetooth(HFP) 与 .playback 不兼容，避免触发 -50 错误
             try audioSession.setCategory(
                 .playback,
                 mode: .spokenAudio,
-                options: [.duckOthers, .allowBluetooth]
+                options: [.duckOthers]
             )
             
             try audioSession.setActive(true)
@@ -118,6 +119,18 @@ class WorkoutAudioPlayer: NSObject, ObservableObject {
         playbackProgress = 0.0
         stopPlaybackTimer()
         currentAudioUrl = nil
+        
+        // 释放音频会话，若白噪音正在播放则保留会话，避免后台播放被意外中断
+        if WhiteNoisePlayer.shared.isPlaying {
+            print("ℹ️ WorkoutAudioPlayer: 保留音频会话（白噪音正在播放）")
+        } else {
+            do {
+                try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+                print("✅ WorkoutAudioPlayer: 音频会话已释放")
+            } catch {
+                print("⚠️ WorkoutAudioPlayer: 音频会话释放失败: \(error)")
+            }
+        }
     }
     
     private func startPlaybackTimer() {

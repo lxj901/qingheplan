@@ -1,4 +1,8 @@
 import SwiftUI
+import AVFoundation
+import Photos
+import CoreLocation
+import UserNotifications
 
 // MARK: - 清理缓存页面
 struct ClearCacheView: View {
@@ -47,16 +51,40 @@ struct ClearCacheView: View {
                                 icon: "waveform.circle.fill",
                                 iconColor: .orange,
                                 title: "音频缓存",
-                                subtitle: "语音消息等",
+                                subtitle: "语音消息等 · \(cacheInfo.audioCacheFileCount) 个文件",
                                 size: cacheInfo.formattedAudioCacheSize
+                            )
+                            
+                            cacheDetailRow(
+                                icon: "video.fill",
+                                iconColor: .red,
+                                title: "视频缓存",
+                                subtitle: "视频内容等 · \(cacheInfo.videoCacheFileCount) 个文件",
+                                size: cacheInfo.formattedVideoCacheSize
                             )
 
                             cacheDetailRow(
                                 icon: "doc.fill",
                                 iconColor: .blue,
                                 title: "数据缓存",
-                                subtitle: "用户信息、帖子数据等",
+                                subtitle: "用户信息、帖子数据等 · \(cacheInfo.diskCacheFileCount) 个文件",
                                 size: cacheInfo.formattedDiskCacheSize
+                            )
+                            
+                            cacheDetailRow(
+                                icon: "network",
+                                iconColor: .teal,
+                                title: "网络缓存",
+                                subtitle: "URL请求响应缓存",
+                                size: cacheInfo.formattedURLCacheSize
+                            )
+                            
+                            cacheDetailRow(
+                                icon: "doc.text.fill",
+                                iconColor: .brown,
+                                title: "临时文件",
+                                subtitle: "临时下载和处理文件",
+                                size: cacheInfo.formattedTempFilesSize
                             )
 
                             cacheDetailRow(
@@ -192,7 +220,8 @@ struct ClearCacheView: View {
                     .font(.system(size: 16))
                     .foregroundColor(.primary)
 
-                Text("包含 \(cacheInfo.diskCacheFileCount) 个文件")
+                let totalFileCount = cacheInfo.diskCacheFileCount + cacheInfo.audioCacheFileCount + cacheInfo.videoCacheFileCount
+                Text("包含 \(totalFileCount) 个文件")
                     .font(.system(size: 14))
                     .foregroundColor(.secondary)
             }
@@ -238,6 +267,7 @@ struct ClearCacheView: View {
 struct SystemPermissionsView: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var navigationPath: NavigationPath
+    @State private var permissionStatuses: [SystemPermission: PermissionStatus] = [:]
     
     var body: some View {
         VStack(spacing: 0) {
@@ -266,12 +296,13 @@ struct SystemPermissionsView: View {
                             
                             Spacer()
                             
-                            Text(permission.status)
+                            let status = permissionStatuses[permission] ?? .unknown
+                            Text(status.displayText)
                                 .font(.system(size: 12))
-                                .foregroundColor(permission.statusColor)
+                                .foregroundColor(status.color)
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 4)
-                                .background(permission.statusColor.opacity(0.1))
+                                .background(status.color.opacity(0.1))
                                 .cornerRadius(8)
                         }
                         .padding(.vertical, 4)
@@ -307,6 +338,34 @@ struct SystemPermissionsView: View {
         }
         .onAppear {
             print("🧭 SystemPermissionsView onAppear - navigationPath.count = \(navigationPath.count)")
+            checkAllPermissions()
+        }
+    }
+    
+    // MARK: - 检查所有权限
+    private func checkAllPermissions() {
+        for permission in SystemPermission.allCases {
+            if permission == .notifications {
+                // 异步检查通知权限
+                UNUserNotificationCenter.current().getNotificationSettings { settings in
+                    DispatchQueue.main.async {
+                        switch settings.authorizationStatus {
+                        case .authorized, .provisional:
+                            permissionStatuses[.notifications] = .authorized
+                        case .denied:
+                            permissionStatuses[.notifications] = .denied
+                        case .notDetermined:
+                            permissionStatuses[.notifications] = .notDetermined
+                        case .ephemeral:
+                            permissionStatuses[.notifications] = .authorized
+                        @unknown default:
+                            permissionStatuses[.notifications] = .unknown
+                        }
+                    }
+                }
+            } else {
+                permissionStatuses[permission] = permission.checkStatus()
+            }
         }
     }
     
@@ -345,6 +404,35 @@ struct SystemPermissionsView: View {
     private func openSystemSettings() {
         if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(settingsUrl)
+        }
+    }
+}
+
+// MARK: - 权限状态枚举
+enum PermissionStatus {
+    case authorized
+    case denied
+    case notDetermined
+    case restricted
+    case unknown
+    
+    var displayText: String {
+        switch self {
+        case .authorized: return "已授权"
+        case .denied: return "已拒绝"
+        case .notDetermined: return "未设置"
+        case .restricted: return "受限制"
+        case .unknown: return "未知"
+        }
+    }
+    
+    var color: Color {
+        switch self {
+        case .authorized: return .green
+        case .denied: return .red
+        case .notDetermined: return .orange
+        case .restricted: return .gray
+        case .unknown: return .gray
         }
     }
 }
@@ -397,93 +485,55 @@ enum SystemPermission: CaseIterable {
         }
     }
     
-    var status: String {
-        // 这里可以根据实际权限状态返回
-        return "已授权"
-    }
-    
-    var statusColor: Color {
-        return .green
-    }
-}
-
-// MARK: - 应用权限页面
-struct AppPermissionsView: View {
-    @Environment(\.dismiss) private var dismiss
-    @Binding var navigationPath: NavigationPath
-    @State private var allowAnalytics = true
-    @State private var allowCrashReports = true
-    @State private var allowPersonalizedAds = false
-
-    var body: some View {
-        VStack(spacing: 0) {
-            // 自定义导航栏
-            customNavigationBar
-
-            List {
-                // 数据收集
-                Section("数据收集") {
-                    Toggle("使用分析", isOn: $allowAnalytics)
-                    Toggle("崩溃报告", isOn: $allowCrashReports)
-                    Toggle("个性化广告", isOn: $allowPersonalizedAds)
-                }
-
-                // 权限说明
-                Section(footer: Text("这些设置控制应用如何收集和使用您的数据")) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("权限说明")
-                            .font(.system(size: 16, weight: .semibold))
-
-                        Text("• 使用分析：帮助我们改进应用性能")
-                            .font(.system(size: 14))
-                            .foregroundColor(.secondary)
-
-                        Text("• 崩溃报告：帮助我们修复应用问题")
-                            .font(.system(size: 14))
-                            .foregroundColor(.secondary)
-
-                        Text("• 个性化广告：根据您的兴趣显示相关广告")
-                            .font(.system(size: 14))
-                            .foregroundColor(.secondary)
-                    }
-                    .padding(.vertical, 8)
-                }
+    // MARK: - 检查权限状态
+    func checkStatus() -> PermissionStatus {
+        switch self {
+        case .camera:
+            let status = AVCaptureDevice.authorizationStatus(for: .video)
+            switch status {
+            case .authorized: return .authorized
+            case .denied: return .denied
+            case .notDetermined: return .notDetermined
+            case .restricted: return .restricted
+            @unknown default: return .unknown
             }
-        }
-        .onAppear {
-            print("🧭 AppPermissionsView onAppear - navigationPath.count = \(navigationPath.count)")
-        }
-    }
-
-    // MARK: - 自定义导航栏
-    private var customNavigationBar: some View {
-        HStack {
-            Button(action: {
-                if navigationPath.count > 0 {
-                    navigationPath.removeLast()
-                } else {
-                    dismiss()
-                }
-            }) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundColor(.primary)
-                    .frame(width: 44, height: 44)
+            
+        case .microphone:
+            let status = AVCaptureDevice.authorizationStatus(for: .audio)
+            switch status {
+            case .authorized: return .authorized
+            case .denied: return .denied
+            case .notDetermined: return .notDetermined
+            case .restricted: return .restricted
+            @unknown default: return .unknown
             }
-
-            Spacer()
-
-            Text("应用权限")
-                .font(.headline)
-                .fontWeight(.semibold)
-
-            Spacer()
-
-            Color.clear.frame(width: 44, height: 44)
+            
+        case .photos:
+            let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+            switch status {
+            case .authorized, .limited: return .authorized
+            case .denied: return .denied
+            case .notDetermined: return .notDetermined
+            case .restricted: return .restricted
+            @unknown default: return .unknown
+            }
+            
+        case .location:
+            let manager = CLLocationManager()
+            let status = manager.authorizationStatus
+            switch status {
+            case .authorizedAlways, .authorizedWhenInUse: return .authorized
+            case .denied: return .denied
+            case .notDetermined: return .notDetermined
+            case .restricted: return .restricted
+            @unknown default: return .unknown
+            }
+            
+        case .notifications:
+            // 通知权限需要异步检查，这里返回未知状态
+            // 实际检查在 SystemPermissionsView 中进行
+            return .unknown
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 8)
-        .background(Color(.systemBackground))
     }
 }
 
@@ -521,17 +571,16 @@ struct AboutAppView: View {
 
                 // 应用详情
                 Section("应用信息") {
-                    InfoRow(title: "开发者", value: "青禾团队")
-                    InfoRow(title: "发布日期", value: "2024年12月")
-                    InfoRow(title: "应用大小", value: "45.2 MB")
-                    InfoRow(title: "兼容性", value: "iOS 18.0 或更高版本")
+                    InfoRow(title: "开发者", value: "杭州耶里信息技术有限责任公司")
+                    InfoRow(title: "发布日期", value: "v1.0")
+                    InfoRow(title: "应用大小", value: "约 85 MB")
+                    InfoRow(title: "兼容性", value: "iOS 17.0 或更高版本")
                 }
 
                 // 联系方式
                 Section("联系我们") {
-                    InfoRow(title: "官方网站", value: "www.qinghe.com")
-                    InfoRow(title: "客服邮箱", value: "support@qinghe.com")
-                    InfoRow(title: "客服电话", value: "400-123-4567")
+                    InfoRow(title: "官方网站", value: "http://api.yingwudaojiafuwuduan.cn/")
+                    InfoRow(title: "客服邮箱", value: "hangzhouyeli@gmail.com")
                 }
             }
         }

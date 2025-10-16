@@ -59,7 +59,10 @@ class WebSocketManager: NSObject, ObservableObject {
             return
         }
 
-        guard let url = URL(string: "\(baseURL)?token=\(token)") else {
+        // 使用 URLComponents 确保查询参数正确编码
+        var components = URLComponents(string: baseURL)
+        components?.queryItems = [URLQueryItem(name: "token", value: token)]
+        guard let url = components?.url else {
             print("WebSocket连接失败：无效的URL")
             connectionStatus = .failed("无效的URL")
             return
@@ -568,6 +571,14 @@ class WebSocketManager: NSObject, ObservableObject {
             }
         }
 
+        // 解析 replyToMessageId，过滤空字符串
+        let replyToMessageId: String?
+        if let replyId = messageData["replyToMessageId"] as? String, !replyId.isEmpty {
+            replyToMessageId = replyId
+        } else {
+            replyToMessageId = nil
+        }
+
         let message = ChatMessage(
             id: messageId,
             conversationId: conversationId,
@@ -578,7 +589,7 @@ class WebSocketManager: NSObject, ObservableObject {
             isRecalled: messageData["isRecalled"] as? Bool ?? false,
             createdAt: createdAt,
             sender: sender,
-            replyToMessageId: messageData["replyToMessageId"] as? String,
+            replyToMessageId: replyToMessageId,
             mediaUrl: messageData["mediaUrl"] as? String,
             mediaDuration: messageData["mediaDuration"] as? Int,
             thumbnailUrl: messageData["thumbnailUrl"] as? String
@@ -724,7 +735,15 @@ class WebSocketManager: NSObject, ObservableObject {
         let mediaUrl = data["mediaUrl"] as? String
         let mediaDuration = data["mediaDuration"] as? Int
         let isRecalled = data["isRecalled"] as? Bool ?? false
-        let replyToMessageId = data["replyToMessageId"] as? String
+
+        // 解析 replyToMessageId，过滤空字符串
+        let replyToMessageId: String?
+        if let replyId = data["replyToMessageId"] as? String, !replyId.isEmpty {
+            replyToMessageId = replyId
+        } else {
+            replyToMessageId = nil
+        }
+
         let thumbnailUrl = data["thumbnailUrl"] as? String
 
         // 创建一个临时的sender对象

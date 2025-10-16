@@ -79,6 +79,7 @@ struct SleepTrackingView: View {
             }
             .navigationBarHidden(true)
         }
+        .preferredColorScheme(.light) // 睡眠管理页面不适配深色模式
         .onAppear {
             withAnimation(.easeInOut(duration: 2.0).repeatForever(autoreverses: true)) {
                 breathingAnimation = true
@@ -601,11 +602,11 @@ struct SleepTrackingView: View {
         let seconds = Int(timeInterval) % 60
 
         if hours > 0 {
-            countdownText = String(format: "%d小时%02d分钟", hours, minutes)
+            countdownText = String(format: "%dh%02dm", hours, minutes)
         } else if minutes > 0 {
-            countdownText = String(format: "%d分钟%02d秒", minutes, seconds)
+            countdownText = String(format: "%dm%02ds", minutes, seconds)
         } else {
-            countdownText = String(format: "%d秒", seconds)
+            countdownText = String(format: "%ds", seconds)
         }
     }
 
@@ -637,10 +638,8 @@ struct SleepTrackingView: View {
 
     private func setupAudioEngine() {
         do {
-            // 配置音频会话
-            let audioSession = AVAudioSession.sharedInstance()
-            try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
-            try audioSession.setActive(true)
+            // 配置音频会话 - 使用 .playAndRecord 支持后台录音
+            AudioOrchestrator.shared.beginBackgroundRecording()
 
             // 创建音频引擎
             audioEngine = AVAudioEngine()
@@ -705,15 +704,15 @@ struct SleepTrackingView: View {
         audioEngine = nil
         audioInputNode = nil
 
-        // 停用音频会话
-        do {
-            try AVAudioSession.sharedInstance().setActive(false)
-        } catch {
-            print("停止音频会话失败: \(error)")
+        // 停用音频会话，通知其他应用可以使用音频
+        // 若白噪音正在播放则保留会话，避免后台播放被中断
+        if WhiteNoisePlayer.shared.isPlaying {
+            print("ℹ️ SleepTrackingView: 保留音频会话（白噪音正在播放）")
+        } else {
+            AudioOrchestrator.shared.endBackgroundRecording()
+            print("✅ 音频监听已停止，音频会话交由 Orchestrator 释放")
+            }
         }
-
-        print("音频监听已停止")
-    }
 
     /// 获取睡眠阶段显示名称
     private func getSleepStageDisplayName(_ stage: String) -> String {
@@ -776,9 +775,7 @@ struct SleepTrackingView: View {
             audioEngine = AVAudioEngine()
             guard let audioEngine = audioEngine else { return }
 
-            let audioSession = AVAudioSession.sharedInstance()
-            try audioSession.setCategory(.record, mode: .default)
-            try audioSession.setActive(true)
+            AudioOrchestrator.shared.beginBackgroundRecording()
 
             audioInputNode = audioEngine.inputNode
             let recordingFormat = audioInputNode?.outputFormat(forBus: 0)
@@ -802,11 +799,12 @@ struct SleepTrackingView: View {
         audioEngine = nil
         audioInputNode = nil
 
-        do {
-            try AVAudioSession.sharedInstance().setActive(false)
-            print("🛑 录音已停止")
-        } catch {
-            print("❌ 停止录音失败: \(error)")
+        // 若白噪音正在播放则保留会话，避免后台播放被中断
+        if WhiteNoisePlayer.shared.isPlaying {
+            print("ℹ️ SleepTrackingView: 保留音频会话（白噪音正在播放）")
+        } else {
+            AudioOrchestrator.shared.endBackgroundRecording()
+            print("✅ 录音已停止，音频会话交由 Orchestrator 释放")
         }
     }
 

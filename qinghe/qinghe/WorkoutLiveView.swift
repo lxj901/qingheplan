@@ -126,34 +126,34 @@ struct WorkoutLiveView: View {
             // Dynamic background based on workout state
             backgroundGradient
                 .ignoresSafeArea()
-            
+
             if isScreenLocked {
                 screenLockView
             } else {
                 mainContentView
             }
-            
 
-            
+
+
             if showEndWorkoutConfirm {
                 endWorkoutConfirmModal
             }
         }
+        .preferredColorScheme(.light) // 运动页面不适配深色模式
         // 暂时注释掉缺失的视图
         // .sheet(isPresented: $showDataSourceSelection) {
         //     DataSourceSelectionView()
         // }
-        // .sheet(isPresented: $showCameraView) {
-        //     WorkoutCameraView(
-        //         cameraManager: cameraManager,
-        //         workoutData: createWorkoutPhotoData(),
-        //         onPhotoTaken: { image in
-        //             // 处理拍摄的照片
-        //             print("📸 拍摄照片成功")
-        //             cameraManager.handleCapturedPhoto(image, workoutData: createWorkoutPhotoData())
-        //         }
-        //     )
-        // }
+        .fullScreenCover(isPresented: $showCameraView) {
+            WorkoutCameraView(
+                cameraManager: cameraManager,
+                workoutData: createWorkoutPhotoData(),
+                onPhotoTaken: { image in
+                    // 处理拍摄的照片
+                    print("📸 照片拍摄完成")
+                }
+            )
+        }
         .navigationBarHidden(true)
         .toolbar(.hidden, for: .tabBar)
         .onAppear {
@@ -1489,17 +1489,16 @@ struct WorkoutLiveView: View {
     }
 
     // 添加创建运动照片数据的方法
-    private func createWorkoutPhotoData() -> WorkoutPhotoData {
-        let codableLocation: CodableLocationCoordinate? = {
-            guard let coordinate = locationManager.currentLocation?.coordinate else { return nil }
-            return CodableLocationCoordinate(latitude: coordinate.latitude, longitude: coordinate.longitude)
-        }()
-
-        return WorkoutPhotoData(
-            imageData: Data(), // 空数据，实际使用时会被替换
-            timestamp: Date(),
-            location: codableLocation,
-            workoutId: nil
+    private func createWorkoutPhotoData() -> ExtendedWorkoutPhotoData {
+        return ExtendedWorkoutPhotoData(
+            workoutType: workoutType.displayName,
+            distance: distance,
+            duration: TimeInterval(elapsedTime),
+            pace: formatPace(pace),
+            heartRate: heartRate,
+            calories: Int(calories),
+            location: locationManager.currentLocation?.coordinate,
+            timestamp: Date()
         )
     }
     
@@ -2457,12 +2456,9 @@ extension WorkoutLiveView {
     }
 
     func takePhoto() {
-        // 简化实现，直接使用相机管理器拍照
-        if cameraManager.takePhoto() != nil {
-            print("📸 拍照成功")
-        } else {
-            print("❌ 拍照失败")
-        }
+        // 显示相机界面
+        showCameraView = true
+        print("📸 打开相机界面")
     }
     
 

@@ -4,6 +4,7 @@ import EventKit
 
 struct NewRecordCenterView: View {
     @StateObject private var viewModel = NewRecordCenterViewModel()
+    @StateObject private var localizationManager = LocalizationManager.shared
     @State private var selectedTab = 0
     @State private var selectedRecordType: RecordType? = nil
     @State private var showingAddPlan = false
@@ -13,7 +14,13 @@ struct NewRecordCenterView: View {
     @State private var selectedPlan: PlanNew?
 
     // 三个标签：情绪记录/诱惑记录/计划管理
-    private let tabTitles = ["情绪记录", "诱惑记录", "计划管理"]
+    private var tabTitles: [String] {
+        [
+            localizationManager.localizedString(key: "emotion_record"),
+            localizationManager.localizedString(key: "temptation_record"),
+            localizationManager.localizedString(key: "plan_management")
+        ]
+    }
 
     var body: some View {
         ZStack {
@@ -24,7 +31,7 @@ struct NewRecordCenterView: View {
             if viewModel.isLoading {
                 VStack {
                     ProgressView()
-                    Text("加载中...")
+                    Text(localizationManager.localizedString(key: "loading"))
                         .foregroundColor(.secondary)
                         .padding(.top, 8)
                 }
@@ -44,8 +51,9 @@ struct NewRecordCenterView: View {
                 }
             }
         }
-        .navigationTitle("记录中心")
+        .navigationTitle(localizationManager.localizedString(key: "record_center"))
         .navigationBarTitleDisplayMode(.inline)
+        .preferredColorScheme(.light) // 记录页面不适配深色模式
         .asRootView() // 标记为根视图，显示Tab栏
         // 弹出创建记录类型选择
         .fullScreenCover(item: $selectedRecordType) { type in

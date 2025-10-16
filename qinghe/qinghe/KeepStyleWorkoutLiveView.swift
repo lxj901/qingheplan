@@ -87,6 +87,7 @@ struct KeepStyleWorkoutLiveView: View {
         }
         .navigationBarHidden(true)
         .toolbar(.hidden, for: .tabBar)
+        .asSubView() // 隐藏自定义 TabBar
         .alert("结束运动", isPresented: $showEndAlert) {
             Button("取消", role: .cancel) { }
             Button("确认结束", role: .destructive) {

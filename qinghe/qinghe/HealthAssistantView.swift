@@ -42,207 +42,30 @@ struct HealthAssistantView: View {
     @State private var showingConversationHistory = false
     @State private var selectedConversationId: String? = nil
     // 使用单例获取 TabBar 可见性，避免环境注入缺失导致崩溃
+    
+    // 会员中心相关状态
+    @State private var showingMembershipAlert = false
+    @State private var showingMembershipCenter = false
+    @State private var membershipAlertMessage = ""
 
     // 消息数据模型
-    struct ChatMessage: Identifiable {
+    struct ChatMessage: Identifiable, Equatable {
         let id = UUID()
         let content: String
         let isUser: Bool
         let timestamp: Date
+
+        static func == (lhs: ChatMessage, rhs: ChatMessage) -> Bool {
+            lhs.id == rhs.id
+        }
     }
 
     var body: some View {
-        ZStack(alignment: .top) {
-            // 页面全局底色
-            Color(UIColor.systemGroupedBackground)
-                .ignoresSafeArea()
-
-            // 顶部柔和渐变（参考健康档案页）
-            AssistantTopGradient()
-                .ignoresSafeArea()
-
-            VStack(spacing: 0) {
-                // 可滚动内容（上滑显示导航栏）
-                ScrollView(.vertical, showsIndicators: false) {
-                    VStack(spacing: 0) {
-                        // 滚动监听器 - 使用与 UserProfileView 相同的实现方式
-                        Color.clear
-                            .frame(height: 1)
-                            .background(
-                                GeometryReader { g in
-                                    let y = g.frame(in: .named("assistantScroll")).minY
-                                    Color.clear
-                                        .preference(key: ScrollOffsetPreferenceKey.self, value: y)
-                                        .onAppear {
-                                            print("📍 健康助手滚动监听器初始化，初始Y值: \(y)")
-                                        }
-                                        .onChange(of: y) { oldValue, newValue in
-                                            print("📈 健康助手滚动监听器检测到变化: \(oldValue) -> \(newValue)")
-
-                                            // 直接在这里更新状态
-                                            DispatchQueue.main.async {
-                                                scrollOffset = newValue
-                                                print("✅ scrollOffset 已更新为: \(newValue)")
-                                            }
-                                        }
-                                }
-                            )
-
-                        // 头部问候 + 插画
-                        headerSection
-                            .padding(.horizontal, 20)
-                            .padding(.top, -10)
-
-                        // 今日自律卡片（放在头部下方与其同层级）
-                        DailySelfDisciplineCard(
-                            suggestions: [
-                                "怎么判断自己是否气血充足？",
-                                "便秘时不能吃什么水果？",
-                                "为什么年龄越大脸越大？"
-                            ],
-                            onTapSuggestion: { _ in /* TODO: 触发向健康助手发问 */ }
-                        )
-                        .padding(.horizontal, 16)
-                        .padding(.top, -42)
-
-                        // 消息列表 - 使用 LazyVStack 提升性能
-                        if !messages.isEmpty || isTyping {
-                            LazyVStack(spacing: 12, pinnedViews: []) {
-                                // 已完成的消息（除了最后一条）
-                                ForEach(messages.dropLast(isTyping ? 1 : 0)) { message in
-                                    MessageBubble(
-                                        message: message,
-                                        displayedText: message.content,
-                                        onLinkTap: handleLinkTap
-                                    )
-                                    .id(message.id) // 确保视图稳定性
-                                }
-
-                                // 正在打字的消息
-                                if isTyping, let lastMessage = messages.last {
-                                    MessageBubble(
-                                        message: lastMessage,
-                                        displayedText: displayedText,
-                                        onLinkTap: handleLinkTap
-                                    )
-                                    .id("typing-\(lastMessage.id)")
-                                }
-
-                                // 正在发送消息的加载指示器
-                                if isSendingMessage {
-                                    HStack(alignment: .top, spacing: 8) {
-                                        HStack(spacing: 8) {
-                                            // 旋转的小圆圈
-                                            Circle()
-                                                .trim(from: 0, to: 0.7)
-                                                .stroke(
-                                                    Color(hex: "1F774E"),
-                                                    style: StrokeStyle(lineWidth: 2, lineCap: .round)
-                                                )
-                                                .frame(width: 16, height: 16)
-                                                .rotationEffect(Angle(degrees: loadingRotation))
-                                                .onAppear {
-                                                    withAnimation(
-                                                        Animation.linear(duration: 1.0)
-                                                            .repeatForever(autoreverses: false)
-                                                    ) {
-                                                        loadingRotation = 360
-                                                    }
-                                                }
-                                            
-                                            // "思考中..." 文字
-                                            Text("思考中...")
-                                                .font(.system(size: 14))
-                                                .foregroundColor(Color(hex: "1F774E"))
-                                        }
-                                        .padding(.horizontal, 14)
-                                        .padding(.vertical, 10)
-                                        .background(
-                                            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                                .fill(Color.white)
-                                        )
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                                .stroke(Color(hex: "E0E0E0"), lineWidth: 1)
-                                        )
-
-                                        Spacer(minLength: 50)
-                                    }
-                                    .onDisappear {
-                                        loadingRotation = 0
-                                    }
-                                }
-                            }
-                            .padding(.horizontal, 16)
-                            .padding(.top, 16)
-                        }
-
-                        Color.clear.frame(height: 24)
-                        // 额外留白，确保可产生实际滚动，从而触发顶部导航渐显
-                        Color.clear.frame(height: 480)
-                    }
-                }
-                .scrollDismissesKeyboard(.immediately)
-                .coordinateSpace(name: "assistantScroll")
-                .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
-                    print("📍 assistantScroll offset updated: \(value)")
-                    DispatchQueue.main.async {
-                        scrollOffset = value
-                    }
-                }
-
-                Spacer(minLength: 0)
-
-                // 操作菜单（输入框上方）
-                if showingActionMenu {
-                    ActionMenu(
-                        onTapTongue: {
-                            showingTongue = true
-                            showingActionMenu = false
-                        },
-                        onTapFace: {
-                            showingFace = true
-                            showingActionMenu = false
-                        },
-                        onTapReport: {
-                            showingReportTypePicker = true
-                            showingActionMenu = false
-                        },
-                        onTapProfile: {
-                            showingHealthRecord = true
-                            showingActionMenu = false
-                        },
-                        onTapSleep: {
-                            showingSleepDashboard = true
-                            showingActionMenu = false
-                        },
-                        onTapConversation: {
-                            showingSidebar = true
-                            showingActionMenu = false
-                        }
-                    )
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 8)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-                }
-
-                // 底部输入栏
-                VStack(spacing: 0) {
-                    ChatInputBar(
-                        text: $inputText,
-                        onSend: {
-                            sendMessage()
-                        },
-                        showingActionMenu: $showingActionMenu,
-                        isInputFocused: $isInputFocused
-                    )
-                }
-                .padding(.bottom, bottomSafeAreaInset)
-            }
-        }
-        .animation(.spring(response: 0.3, dampingFraction: 0.8), value: showingActionMenu)
+        mainContentView
+            .animation(.spring(response: 0.3, dampingFraction: 0.8), value: showingActionMenu)
         // 顶部导航栏（使用 safeAreaInset，更符合 SwiftUI 推荐方式）
         .safeAreaInset(edge: .top) { topNavigationBar(opacity: navOpacity) }
+        .preferredColorScheme(.light) // 健康助手页面不适配深色模式
         // 侧边栏
         .overlay(alignment: .trailing) {
             ZStack(alignment: .trailing) {
@@ -394,6 +217,20 @@ struct HealthAssistantView: View {
         } message: {
             Text("该日没有报告")
         }
+        // 会员升级提示
+        .alert("使用次数已达上限", isPresented: $showingMembershipAlert) {
+            Button("升级会员", role: .none) {
+                showingMembershipCenter = true
+            }
+            Button("取消", role: .cancel) {}
+        } message: {
+            Text(membershipAlertMessage)
+        }
+        // 导航到会员中心
+        .navigationDestination(isPresented: $showingMembershipCenter) {
+            MembershipCenterView()
+                .asSubView()
+        }
         // 监听 app 进入后台
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
             print("📱 App 进入后台")
@@ -420,6 +257,231 @@ struct HealthAssistantView: View {
         // 不再预加载日期型报告,避免误触发旧接口日志
     }
 
+    // MARK: - 主内容视图
+    private var mainContentView: some View {
+        ZStack(alignment: .top) {
+            backgroundView
+            contentStackView
+        }
+    }
+
+    // MARK: - 背景视图
+    private var backgroundView: some View {
+        ZStack {
+            Color(UIColor.systemGroupedBackground)
+                .ignoresSafeArea()
+            AssistantTopGradient()
+                .ignoresSafeArea()
+        }
+    }
+
+    // MARK: - 内容堆栈视图
+    private var contentStackView: some View {
+        VStack(spacing: 0) {
+            scrollableContentView
+            Spacer(minLength: 0)
+            actionMenuView
+            inputBarView
+        }
+    }
+
+    // MARK: - 可滚动内容视图
+    private var scrollableContentView: some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            VStack(spacing: 0) {
+                scrollOffsetTracker
+                headerWithCard
+                messagesListView
+                Color.clear.frame(height: 24)
+                Color.clear.frame(height: 480)
+            }
+        }
+        .scrollDismissesKeyboard(.immediately)
+        .coordinateSpace(name: "assistantScroll")
+        .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
+            print("📍 assistantScroll offset updated: \(value)")
+            DispatchQueue.main.async {
+                scrollOffset = value
+            }
+        }
+    }
+
+    // MARK: - 滚动偏移追踪器
+    private var scrollOffsetTracker: some View {
+        Color.clear
+            .frame(height: 1)
+            .background(
+                GeometryReader { g in
+                    let y = g.frame(in: .named("assistantScroll")).minY
+                    Color.clear
+                        .preference(key: ScrollOffsetPreferenceKey.self, value: y)
+                        .onAppear {
+                            print("📍 健康助手滚动监听器初始化，初始Y值: \(y)")
+                        }
+                        .onChange(of: y) { newValue in
+                            print("📈 健康助手滚动监听器检测到变化: -> \(newValue)")
+                            DispatchQueue.main.async {
+                                scrollOffset = newValue
+                                print("✅ scrollOffset 已更新为: \(newValue)")
+                            }
+                        }
+                }
+            )
+    }
+
+    // MARK: - 头部和卡片
+    private var headerWithCard: some View {
+        Group {
+            headerSection
+                .padding(.horizontal, 20)
+                .padding(.top, -10)
+
+            DailySelfDisciplineCard(
+                suggestions: healthSuggestions,
+                onTapSuggestion: { index in
+                    // 点击提示语时发送消息
+                    let suggestion = healthSuggestions[index]
+                    inputText = suggestion
+                    sendMessage()
+                }
+            )
+            .padding(.horizontal, 16)
+            .padding(.top, -42)
+        }
+    }
+
+    // MARK: - 健康咨询提示语
+    private let healthSuggestions = [
+        "怎么判断自己是否气血充足？",
+        "便秘时不能吃什么水果？",
+        "为什么年龄越大脸越大？",
+        "如何改善睡眠质量？",
+        "经常熬夜对身体有什么危害？",
+        "如何科学减肥不反弹？",
+        "怎样判断自己是否湿气重？",
+        "长期久坐如何缓解腰痛？"
+    ]
+
+    // MARK: - 消息列表视图
+    private var messagesListView: some View {
+        Group {
+            if !messages.isEmpty || isTyping {
+                VStack(spacing: 12) {
+                    ForEach(messages) { message in
+                        MessageBubble(
+                            message: message,
+                            displayedText: (message == messages.last && isTyping) ? displayedText : message.content,
+                            isTyping: message == messages.last && isTyping,
+                            onLinkTap: handleLinkTap
+                        )
+                        .id(message.id)
+                    }
+
+                    if isSendingMessage {
+                        loadingIndicatorView
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 16)
+            }
+        }
+    }
+
+    // MARK: - 加载指示器视图
+    private var loadingIndicatorView: some View {
+        HStack(alignment: .top, spacing: 8) {
+            HStack(spacing: 8) {
+                Circle()
+                    .trim(from: 0, to: 0.7)
+                    .stroke(
+                        Color(hex: "1F774E"),
+                        style: StrokeStyle(lineWidth: 2, lineCap: .round)
+                    )
+                    .frame(width: 16, height: 16)
+                    .rotationEffect(Angle(degrees: loadingRotation))
+                    .onAppear {
+                        withAnimation(
+                            Animation.linear(duration: 1.0)
+                                .repeatForever(autoreverses: false)
+                        ) {
+                            loadingRotation = 360
+                        }
+                    }
+
+                Text("思考中...")
+                    .font(.system(size: 14))
+                    .foregroundColor(Color(hex: "1F774E"))
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 10)
+            .background(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(Color.white)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .stroke(Color(hex: "E0E0E0"), lineWidth: 1)
+            )
+
+            Spacer(minLength: 50)
+        }
+        .onDisappear {
+            loadingRotation = 0
+        }
+    }
+
+    // MARK: - 操作菜单视图
+    private var actionMenuView: some View {
+        Group {
+            if showingActionMenu {
+                ActionMenu(
+                    onTapTongue: {
+                        showingTongue = true
+                        showingActionMenu = false
+                    },
+                    onTapFace: {
+                        showingFace = true
+                        showingActionMenu = false
+                    },
+                    onTapReport: {
+                        showingReportTypePicker = true
+                        showingActionMenu = false
+                    },
+                    onTapProfile: {
+                        showingHealthRecord = true
+                        showingActionMenu = false
+                    },
+                    onTapSleep: {
+                        showingSleepDashboard = true
+                        showingActionMenu = false
+                    },
+                    onTapConversation: {
+                        showingSidebar = true
+                        showingActionMenu = false
+                    }
+                )
+                .padding(.horizontal, 16)
+                .padding(.bottom, 8)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+        }
+    }
+
+    // MARK: - 输入栏视图
+    private var inputBarView: some View {
+        VStack(spacing: 0) {
+            ChatInputBar(
+                text: $inputText,
+                onSend: {
+                    sendMessage()
+                },
+                showingActionMenu: $showingActionMenu,
+                isInputFocused: $isInputFocused
+            )
+        }
+        .padding(.bottom, bottomSafeAreaInset)
+    }
+
     // MARK: - 创建新对话
     private func createNewConversation() {
         Task {
@@ -437,6 +499,10 @@ struct HealthAssistantView: View {
 
                     // 添加欢迎消息并启动打字机效果
                     if let welcomeMsg = data.welcomeMessage {
+                        print("📝 欢迎消息内容：")
+                        print(welcomeMsg)
+                        print("📏 欢迎消息长度: \(welcomeMsg.count) 字符")
+
                         let message = ChatMessage(
                             content: welcomeMsg,
                             isUser: false,
@@ -481,24 +547,28 @@ struct HealthAssistantView: View {
 
     // MARK: - 打字机效果（优化版：批量更新减少渲染次数）
     private func startTypingEffect(for text: String) async {
-        displayedText = ""
-        isTyping = true
+        await MainActor.run {
+            displayedText = ""
+            isTyping = true
+        }
 
         let characters = Array(text)
         let batchSize = 3 // 每次更新3个字符，减少渲染频率
         var currentIndex = 0
-        
+
         while currentIndex < characters.count {
             let endIndex = min(currentIndex + batchSize, characters.count)
             let batch = characters[currentIndex..<endIndex]
-            
-            // 批量添加字符
-            for char in batch {
-                displayedText.append(char)
+
+            // 批量添加字符（在主线程更新）
+            await MainActor.run {
+                for char in batch {
+                    displayedText.append(char)
+                }
             }
-            
+
             currentIndex = endIndex
-            
+
             // 只有不是最后一批才延迟
             if currentIndex < characters.count {
                 // 根据批次大小调整延迟
@@ -506,7 +576,12 @@ struct HealthAssistantView: View {
             }
         }
 
-        isTyping = false
+        await MainActor.run {
+            isTyping = false
+            print("✅ 打字机效果完成，最终显示文本长度: \(displayedText.count) 字符")
+            print("📝 最终显示文本内容：")
+            print(displayedText)
+        }
     }
 
     // MARK: - 发送消息
@@ -557,14 +632,26 @@ struct HealthAssistantView: View {
                 await MainActor.run {
                     isSendingMessage = false
                 }
-                // 添加错误提示消息
-                await MainActor.run {
-                    let errorMessage = ChatMessage(
-                        content: "抱歉，消息发送失败，请稍后重试。",
-                        isUser: false,
-                        timestamp: Date()
-                    )
-                    messages.append(errorMessage)
+                
+                // 检查是否为403错误且消息包含使用次数限制
+                if let networkError = error as? NetworkManager.NetworkError,
+                   case .serverMessage(let message) = networkError,
+                   message.contains("使用次数已达上限") || message.contains("升级会员") {
+                    // 显示会员升级提示
+                    await MainActor.run {
+                        membershipAlertMessage = message
+                        showingMembershipAlert = true
+                    }
+                } else {
+                    // 添加错误提示消息
+                    await MainActor.run {
+                        let errorMessage = ChatMessage(
+                            content: "抱歉，消息发送失败，请稍后重试。",
+                            isUser: false,
+                            timestamp: Date()
+                        )
+                        messages.append(errorMessage)
+                    }
                 }
             }
         }
@@ -953,6 +1040,15 @@ struct HealthAssistantView: View {
         for item in d.physiqueDistribution {
             nineScores[item.name] = Double(item.score) / 100.0
         }
+        
+        // 如果后端没有返回体质分布数据，则根据主体质生成默认分布
+        if nineScores.isEmpty {
+            nineScores = generateNineConstitutionScores(
+                from: d.primaryConstitution?.name ?? d.physiqueName,
+                secondaryConstitutions: d.secondaryConstitutions
+            )
+            print("⚠️ 后端未返回体质分布，已生成默认分布")
+        }
         print("✅ 转换了 \(nineScores.count) 个体质分布: \(nineScores)")
 
         // 转换调理建议
@@ -1022,13 +1118,20 @@ struct HealthAssistantView: View {
             ))
             print("✅ 转换了舌象检测坐标")
         }
+        
+        // 生成脏腑分布数据
+        let organDistribution = generateOrganDistribution(
+            from: d.primaryConstitution?.name ?? d.physiqueName,
+            features: d.features
+        )
+        print("✅ 生成了脏腑分布数据: \(organDistribution)")
 
         let result = ConstitutionAnalysisData(
             hasAnalysis: true,
             primaryConstitution: d.primaryConstitution?.name ?? d.physiqueName,
             secondaryConstitution: d.secondaryConstitutions.first?.name ?? "",
             confidence: d.primaryConstitution?.confidence ?? 0.82,
-            organDistribution: [:], // v2数据中无此字段
+            organDistribution: organDistribution,
             nineConstitutionScores: nineScores,
             recommendations: [], // 已转换为adviceSections
             score: d.score,
@@ -1049,6 +1152,151 @@ struct HealthAssistantView: View {
         print("📊 特征: \(result.features.count), 建议: \(result.adviceSections.count), 体质分布: \(result.nineConstitutionScores.count)")
 
         return result
+    }
+    
+    // MARK: - 生成脏腑分布数据
+    private func generateOrganDistribution(from constitution: String, features: [ActualAnalysisResponse.Feature]) -> [String: Double] {
+        var distribution: [String: Double] = [
+            "心": 0.3, "肝": 0.3, "脾": 0.3, "肺": 0.3, "肾": 0.3
+        ]
+        
+        // 根据体质特点调整脏腑分布（增大差异以便观察）
+        switch constitution {
+        case let c where c.contains("气虚"):
+            distribution["脾"] = 0.8  // 气虚主要影响脾
+            distribution["肺"] = 0.6  // 气虚也影响肺
+            distribution["心"] = 0.4
+            distribution["肝"] = 0.2
+            distribution["肾"] = 0.3
+            
+        case let c where c.contains("阳虚"):
+            distribution["肾"] = 0.9  // 阳虚主要影响肾
+            distribution["脾"] = 0.7  // 阳虚也影响脾
+            distribution["心"] = 0.5
+            distribution["肝"] = 0.3
+            distribution["肺"] = 0.4
+            
+        case let c where c.contains("阴虚"):
+            distribution["肾"] = 0.8  // 阴虚主要影响肾
+            distribution["心"] = 0.6  // 阴虚也影响心
+            distribution["肝"] = 0.5
+            distribution["脾"] = 0.3
+            distribution["肺"] = 0.4
+            
+        case let c where c.contains("痰湿"):
+            distribution["脾"] = 0.9  // 痰湿主要影响脾
+            distribution["肺"] = 0.6  // 痰湿也影响肺
+            distribution["肾"] = 0.5
+            distribution["心"] = 0.3
+            distribution["肝"] = 0.3
+            
+        case let c where c.contains("湿热"):
+            distribution["脾"] = 0.8  // 湿热主要影响脾
+            distribution["肝"] = 0.7  // 湿热也影响肝
+            distribution["肺"] = 0.5
+            distribution["心"] = 0.4
+            distribution["肾"] = 0.3
+            
+        case let c where c.contains("血瘀"):
+            distribution["心"] = 0.9  // 血瘀主要影响心
+            distribution["肝"] = 0.8  // 血瘀也影响肝
+            distribution["脾"] = 0.4
+            distribution["肺"] = 0.3
+            distribution["肾"] = 0.4
+            
+        case let c where c.contains("气郁"):
+            distribution["肝"] = 0.9  // 气郁主要影响肝
+            distribution["心"] = 0.6  // 气郁也影响心
+            distribution["脾"] = 0.5
+            distribution["肺"] = 0.4
+            distribution["肾"] = 0.3
+            
+        case let c where c.contains("特禀"):
+            distribution["肺"] = 0.7  // 特禀主要影响肺
+            distribution["脾"] = 0.6  // 特禀也影响脾
+            distribution["肝"] = 0.5
+            distribution["心"] = 0.4
+            distribution["肾"] = 0.4
+            
+        case let c where c.contains("平和"):
+            distribution["心"] = 0.6
+            distribution["肝"] = 0.5
+            distribution["脾"] = 0.6
+            distribution["肺"] = 0.5
+            distribution["肾"] = 0.6
+            
+        default:
+            // 默认保持适中分布，但有差异
+            distribution["心"] = 0.5
+            distribution["肝"] = 0.4
+            distribution["脾"] = 0.5
+            distribution["肺"] = 0.4
+            distribution["肾"] = 0.5
+        }
+        
+        // 根据具体特征进一步调整
+        for feature in features {
+            switch feature.name {
+            case let n where n.contains("舌质") || n.contains("舌尖"):
+                if feature.status == "异常" {
+                    distribution["心"] = min(1.0, (distribution["心"] ?? 0.3) + 0.2)
+                }
+            case let n where n.contains("舌苔") || n.contains("脾胃"):
+                if feature.status == "异常" {
+                    distribution["脾"] = min(1.0, (distribution["脾"] ?? 0.3) + 0.2)
+                }
+            case let n where n.contains("面色") || n.contains("肝"):
+                if feature.status == "异常" {
+                    distribution["肝"] = min(1.0, (distribution["肝"] ?? 0.3) + 0.2)
+                }
+            case let n where n.contains("舌根") || n.contains("肾"):
+                if feature.status == "异常" {
+                    distribution["肾"] = min(1.0, (distribution["肾"] ?? 0.3) + 0.2)
+                }
+            default:
+                break
+            }
+        }
+        
+        return distribution
+    }
+    
+    // MARK: - 生成九种体质分布数据
+    private func generateNineConstitutionScores(from primaryConstitution: String, secondaryConstitutions: [ActualAnalysisResponse.ConstitutionItem]) -> [String: Double] {
+        // 九种体质的默认基础分数（较低）
+        var scores: [String: Double] = [
+            "平和质": 0.2,
+            "气虚质": 0.15,
+            "阳虚质": 0.15,
+            "阴虚质": 0.15,
+            "痰湿质": 0.15,
+            "湿热质": 0.15,
+            "血瘀质": 0.15,
+            "气郁质": 0.15,
+            "特禀质": 0.15
+        ]
+        
+        // 主体质设置为高分（0.7-0.9）
+        if let mainScore = scores.keys.first(where: { primaryConstitution.contains($0.replacingOccurrences(of: "质", with: "")) }) {
+            scores[mainScore] = 0.85
+        }
+        
+        // 次要体质设置为中等分数（0.4-0.6）
+        for (index, item) in secondaryConstitutions.prefix(2).enumerated() {
+            if let key = scores.keys.first(where: { item.name.contains($0.replacingOccurrences(of: "质", with: "")) }) {
+                scores[key] = index == 0 ? 0.55 : 0.45
+            }
+        }
+        
+        // 如果主体质是"平和质"，调整其他体质分数都较低
+        if primaryConstitution.contains("平和") {
+            scores["平和质"] = 0.8
+            for key in scores.keys where key != "平和质" {
+                scores[key] = 0.1
+            }
+        }
+        
+        return scores
     }
 
     // 已移除：内联体质报告对话流（改为直接跳转报告页）
@@ -1200,10 +1448,10 @@ struct HealthAssistantView: View {
     private func topNavigationBar(opacity: Double) -> some View {
         HStack {
             Spacer()
-            // 导航栏标题（居中、黑色，仅标题）
+            // 导航栏标题（居中，使用系统动态颜色）
             Text("健康助手")
                 .font(.system(size: 17, weight: .semibold))
-                .foregroundColor(.black)
+                .foregroundColor(Color(.label))
             Spacer()
         }
         .frame(height: 44)
@@ -1211,7 +1459,7 @@ struct HealthAssistantView: View {
         .background(.ultraThinMaterial)
         .overlay(
             Rectangle()
-                .fill(Color.black.opacity(0.08))
+                .fill(Color(.separator).opacity(0.5))
                 .frame(height: 0.5)
             , alignment: .bottom
         )
@@ -1266,19 +1514,63 @@ struct HealthAssistantView: View {
         var suggestions: [String]
         var onTapSuggestion: (Int) -> Void
 
+        // 随机显示3个提示语
+        @State private var displayedIndices: [Int] = []
+
         var body: some View {
             VStack(alignment: .leading, spacing: 12) {
                 header
-                ForEach(suggestions.indices, id: \.self) { idx in
-                    suggestionRow(index: idx, text: suggestions[idx])
-                        .onTapGesture { onTapSuggestion(idx) }
+
+                // 显示随机选择的提示语
+                ForEach(displayedIndices, id: \.self) { index in
+                    if index < suggestions.count {
+                        suggestionRow(index: index, text: suggestions[index])
+                            .onTapGesture { onTapSuggestion(index) }
+                    }
                 }
+
+                // 刷新按钮
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            refreshSuggestions()
+                        }
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "arrow.clockwise")
+                                .font(.system(size: 11, weight: .semibold))
+                            Text("换一换")
+                                .font(.system(size: 12, weight: .medium))
+                        }
+                        .foregroundColor(Color(hex: "5972FF"))
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(
+                            Capsule()
+                                .fill(Color(hex: "5972FF").opacity(0.1))
+                        )
+                    }
+                    Spacer()
+                }
+                .padding(.top, 4)
             }
             .padding(14)
             .background(panelBackground)
             .overlay(panelStroke)
             .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
             .shadow(color: .black.opacity(0.05), radius: 16, x: 0, y: 6)
+            .onAppear {
+                if displayedIndices.isEmpty {
+                    refreshSuggestions()
+                }
+            }
+        }
+
+        private func refreshSuggestions() {
+            // 随机选择3个不重复的索引
+            let count = min(3, suggestions.count)
+            displayedIndices = Array(suggestions.indices.shuffled().prefix(count))
         }
 
         // MARK: Header
@@ -1677,8 +1969,9 @@ struct Conversation: Identifiable, Codable {
 struct MessageBubble: View {
     let message: HealthAssistantView.ChatMessage
     let displayedText: String
+    var isTyping: Bool = false
     var onLinkTap: ((String) -> Void)? = nil
-    
+
     @State private var showCopyMenu = false
     @State private var copyMenuParagraphs: [String] = []
 
@@ -1712,8 +2005,12 @@ struct MessageBubble: View {
                 // AI 回复 - 占满全宽的白色半透明卡片
                 VStack(alignment: .leading, spacing: 4) {
                     VStack(alignment: .leading, spacing: 8) {
-                        MarkdownTextView(text: displayedText, onLinkTap: onLinkTap)
-                        
+                        MarkdownTextView(
+                            text: displayedText,
+                            isTyping: isTyping,
+                            onLinkTap: onLinkTap
+                        )
+
                         // AI 生成提示（卡片内部）
                         Text("内容由 AI 生成")
                             .font(.system(size: 11))
@@ -1914,12 +2211,13 @@ struct CopyMenuView: View {
 // MARK: - Markdown 文本视图组件
 struct MarkdownTextView: View {
     let text: String
+    var isTyping: Bool = false
     var onLinkTap: ((String) -> Void)? = nil
-    
+
     // 缓存解析结果，避免重复解析
     @State private var cachedElements: [MarkdownElement] = []
     @State private var lastParsedText: String = ""
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             ForEach(cachedElements, id: \.id) { element in
@@ -1927,31 +2225,41 @@ struct MarkdownTextView: View {
             }
         }
         .onAppear {
+            print("📱 MarkdownTextView onAppear - 文本长度: \(text.count), isTyping: \(isTyping)")
             // 初次加载时解析
             if cachedElements.isEmpty || lastParsedText != text {
                 parseAndCache()
             }
         }
-        .onChange(of: text) { oldValue, newValue in
+        .onChange(of: text) { newValue in
+            print("📱 MarkdownTextView onChange - 新文本长度: \(newValue.count), isTyping: \(isTyping)")
             // 文本变化时重新解析
             parseAndCache()
         }
     }
-    
+
     // 解析并缓存结果（使用防抖优化性能）
     private func parseAndCache() {
         // 避免重复解析相同的文本
-        guard lastParsedText != text else { return }
-        
+        guard lastParsedText != text else {
+            print("⚠️ MarkdownTextView - 跳过重复解析")
+            return
+        }
+
         lastParsedText = text
-        
+
+        print("🔄 MarkdownTextView - 开始解析文本，长度: \(text.count)")
+
         // 使用后台线程解析，避免阻塞主线程
         DispatchQueue.global(qos: .userInitiated).async {
             let parsed = self.parseMarkdown(text)
-            
+
+            print("✅ MarkdownTextView - 解析完成，元素数量: \(parsed.count)")
+
             // 回到主线程更新UI
             DispatchQueue.main.async {
                 self.cachedElements = parsed
+                print("✅ MarkdownTextView - UI 已更新，缓存元素数量: \(self.cachedElements.count)")
             }
         }
     }

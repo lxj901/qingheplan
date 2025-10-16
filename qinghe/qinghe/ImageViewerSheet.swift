@@ -6,21 +6,26 @@ struct ImageViewerSheet: View {
     @Binding var selectedIndex: Int
     @Environment(\.dismiss) private var dismiss
     @State private var dragOffset = CGSize.zero
-    
+
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
-            
+
             if let images = images, !images.isEmpty {
                 TabView(selection: $selectedIndex) {
                     ForEach(Array(images.enumerated()), id: \.offset) { index, imageUrl in
-                        AsyncImage(url: URL(string: imageUrl)) { image in
+                        // 使用 CachedAsyncImage 替代 AsyncImage，支持移动网络
+                        CachedAsyncImage(url: URL(string: imageUrl)) { image in
                             image
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                         } placeholder: {
-                            ProgressView()
-                                .tint(.white)
+                            Rectangle()
+                                .fill(Color.clear)
+                                .overlay(
+                                    ProgressView()
+                                        .tint(.white)
+                                )
                         }
                         .tag(index)
                     }

@@ -317,40 +317,46 @@ struct NestedCommentRowView: View {
 }
 
 #Preview {
-    @Previewable @State var sampleComment = Comment(
-        id: "1",
-        postId: "sample_post",
-        authorId: 1,
-        content: "这是一条测试评论，内容比较长，用来测试评论的显示效果。",
-        parentCommentId: nil,
-        replyToUserId: nil,
-        likesCount: 5,
-        repliesCount: 2,
-        level: 1,
-        status: "active",
-        isTop: false,
-        isLiked: false,
-        createdAt: ISO8601DateFormatter().string(from: Date()),
-        author: PostAuthor(
-            id: 1,
-            nickname: "测试用户",
-            avatar: nil,
-            isVerified: true,
+    struct PreviewWrapper: View {
+        @State private var sampleComment = Comment(
+            id: "1",
+            postId: "sample_post",
+            authorId: 1,
+            content: "这是一条测试评论，内容比较长，用来测试评论的显示效果。",
+            parentCommentId: nil,
+            replyToUserId: nil,
+            likesCount: 5,
+            repliesCount: 2,
             level: 1,
-            followersCount: 100
-        ),
-        replyToUser: nil
-    )
-
-    NestedCommentRowView(
-        comment: $sampleComment,
-        onLike: { _ in },
-        onReply: { _ in },
-        onToggleExpansion: { _ in },
-        onLoadReplies: { _ in },
-        onDelete: { _ in },
-        level: 0
-    )
-    .padding()
-    .background(Color.white)
+            status: "active",
+            isTop: false,
+            isLiked: false,
+            createdAt: ISO8601DateFormatter().string(from: Date()),
+            author: PostAuthor(
+                id: 1,
+                nickname: "测试用户",
+                avatar: nil,
+                isVerified: true,
+                level: 1,
+                followersCount: 100
+            ),
+            replyToUser: nil
+        )
+        
+        var body: some View {
+            NestedCommentRowView(
+                comment: $sampleComment,
+                onLike: { _ in },
+                onReply: { _ in },
+                onToggleExpansion: { _ in },
+                onLoadReplies: { _ in },
+                onDelete: { _ in },
+                level: 0
+            )
+            .padding()
+            .background(Color.white)
+        }
+    }
+    
+    return PreviewWrapper()
 }

@@ -38,6 +38,7 @@ struct SplashAdView: View {
                 .transition(.opacity)
             }
         }
+        .preferredColorScheme(.light) // 开屏广告页面不适配深色模式
         .onAppear {
             // ATT 权限已经在 SplashView 中请求过了，直接显示广告
             showAdIfReady()

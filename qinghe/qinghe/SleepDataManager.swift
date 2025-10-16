@@ -84,6 +84,8 @@ class SleepDataManager: ObservableObject {
     private var recordingTimer: Timer?
     private var segmentTimer: Timer?
     private var stateBackupTimer: Timer?
+    // 由白噪音播放器暂时暂停录音的标记
+    private var recordingPausedByWhiteNoise = false
 
     // Combine相关
     internal var cancellables = Set<AnyCancellable>()
@@ -166,44 +168,31 @@ class SleepDataManager: ObservableObject {
     }
 
     @objc private func handleAppDidEnterBackground() {
+        // 仅在“正在追踪睡眠”场景处理，避免播放白噪音等非睡眠场景触发日志与持久化
+        guard isTrackingSleep else { return }
+
         print("📱 SleepDataManager: 应用进入后台，保存状态")
 
-        // 🔥 关键修复：使用同步方式确保数据立即保存
-        let group = DispatchGroup()
-        
-        // 无论是否在追踪睡眠，都要保存音频文件状态
+        // ✅ 使用异步方式，不阻塞主线程
+        // 保存音频文件状态与追踪状态
         saveAudioFilesState()
+        print("💾 保存睡眠追踪状态到后台")
+        saveTrackingState()
 
-        // 如果正在追踪睡眠，保存完整的追踪状态
-        if isTrackingSleep {
-            print("💾 保存睡眠追踪状态到后台")
-            
-            // 🔥 使用DispatchGroup确保所有异步操作完成
-            group.enter()
-            Task {
-                // 先强制完成当前事件，避免缓冲丢失
+        // 异步保存其他数据
+        Task.detached(priority: .high) {
+            // 先强制完成当前事件，避免缓冲丢失
+            await MainActor.run {
                 self.audioRecorder.forceFinalizeCurrentEvent(reason: "background")
-                await saveEventSegmentsToDisk()
-                await saveCurrentAudioSegment() // 即时保存当前音频段
-                await forceBackupAllData() // 新增：强制备份所有数据
-                group.leave()
             }
-            
-            saveTrackingState()
-        }
-
-        // 🔥 等待所有异步操作完成后再强制同步
-        group.notify(queue: .main) {
-            // 强制同步UserDefaults多次，确保数据写入
-            for _ in 0..<3 {
-                UserDefaults.standard.synchronize()
-                usleep(100000) // 等待100ms
-            }
+            await self.saveEventSegmentsToDisk()
+            await self.saveCurrentAudioSegment() // 即时保存当前音频段
+            await self.forceBackupAllData() // 强制备份所有数据
             print("✅ 后台数据保存完成")
         }
-        
-        // 同步等待一段时间，确保有足够时间保存数据
-        group.wait(timeout: .now() + 2.0)
+
+        // 强制同步UserDefaults（快速操作）
+        UserDefaults.standard.synchronize()
     }
 
     @objc private func handleAppWillEnterForeground() {
@@ -808,6 +797,23 @@ class SleepDataManager: ObservableObject {
         await forceBackupAllData()
 
         print("🎵 音频录制已停止，共保存 \(recordedAudioFiles.count) 个音频文件")
+    }
+
+    // MARK: - 与白噪音播放的协调
+    /// 当白噪音开始/恢复播放时调用：如果正在录音则先暂停，避免音频会话冲突
+    func pauseRecordingForWhiteNoise() async {
+        guard isRecording else { return }
+        recordingPausedByWhiteNoise = true
+        await stopAudioRecording()
+    }
+
+    /// 当白噪音暂停/停止时调用：若之前因白噪音而暂停，则在保持追踪状态下尝试恢复录音
+    func maybeResumeRecordingAfterWhiteNoise() async {
+        guard recordingPausedByWhiteNoise else { return }
+        recordingPausedByWhiteNoise = false
+        if isTrackingSleep && !isRecording {
+            await resumeAudioRecording()
+        }
     }
 
     // MARK: - 其他必要的方法（简化版本）

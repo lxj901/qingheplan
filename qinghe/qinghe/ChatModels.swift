@@ -240,7 +240,15 @@ struct ChatMessage: Codable, Identifiable {
         isRecalled = try container.decodeIfPresent(Bool.self, forKey: .isRecalled)
         createdAt = try container.decode(String.self, forKey: .createdAt)
         sender = try container.decode(ChatUser.self, forKey: .sender)
-        replyToMessageId = try container.decodeIfPresent(String.self, forKey: .replyToMessageId)
+
+        // 解析 replyToMessageId，过滤空字符串
+        if let replyId = try container.decodeIfPresent(String.self, forKey: .replyToMessageId),
+           !replyId.isEmpty {
+            replyToMessageId = replyId
+        } else {
+            replyToMessageId = nil
+        }
+
         mediaUrl = try container.decodeIfPresent(String.self, forKey: .mediaUrl)
         mediaDuration = try container.decodeIfPresent(Int.self, forKey: .mediaDuration)
         thumbnailUrl = try container.decodeIfPresent(String.self, forKey: .thumbnailUrl)

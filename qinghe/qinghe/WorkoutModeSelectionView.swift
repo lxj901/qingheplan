@@ -77,6 +77,7 @@ struct WorkoutModeSelectionView: View {
         .onReceive(timer) { _ in
             currentTime = Date()
         }
+        .preferredColorScheme(.light) // 运动模式选择页面不适配深色模式
         .toolbar(.hidden, for: .tabBar)
     }
 

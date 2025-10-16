@@ -42,7 +42,6 @@ struct PostDetailView: View {
     @State private var showingBlockPostAlert = false
     @State private var showingDeleteConfirmation = false
     @State private var scrollOffset: CGFloat = 0
-    @State private var showingFullContent = false
     @State private var keyboardHeight: CGFloat = 0
     @State private var topSafeAreaInset: CGFloat = 44
 
@@ -372,10 +371,17 @@ struct PostDetailView: View {
 
             // 帖子文本内容 - 与头像对齐
             if !post.content.isEmpty {
-                postTextContent(post.content)
-                    .padding(.leading, 20) // 与头像左边缘对齐
-                    .padding(.trailing, 20)
-                    .padding(.top, 16)
+                VStack(alignment: .leading, spacing: 8) {
+                    postTextContent(post.content)
+
+                    // AI生成标识
+                    if post.isAIGenerated == true {
+                        aiGeneratedBadge
+                    }
+                }
+                .padding(.leading, 20) // 与头像左边缘对齐
+                .padding(.trailing, 20)
+                .padding(.top, 16)
             }
 
             // 图片内容 - 与头像对齐
@@ -389,7 +395,7 @@ struct PostDetailView: View {
                 )
                 .padding(.leading, 20) // 与头像左边缘对齐
                 .padding(.trailing, 20)
-                .padding(.top, 16)
+                .padding(.top, post.content.isEmpty ? 16 : 24) // 如果有文本内容，增加间距避免误触
             }
 
             // 视频内容 - 全宽无边距无圆角
@@ -758,25 +764,25 @@ struct PostDetailView: View {
 
     // MARK: - 帖子文本内容
     private func postTextContent(_ content: String) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(content)
-                .dynamicFont(.body)
-                .foregroundColor(.primary)
-                .lineLimit(showingFullContent ? nil : 6)
-                .multilineTextAlignment(.leading)
+        Text(content)
+            .dynamicFont(.body)
+            .foregroundColor(.primary)
+            .multilineTextAlignment(.leading)
+    }
 
-            if content.count > 200 && !showingFullContent {
-                Button(action: {
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        showingFullContent = true
-                    }
-                }) {
-                    Text("展开全文")
-                        .dynamicFont(.footnote)
-                        .foregroundColor(AppConstants.Colors.primaryGreen)
-                }
-            }
+    // MARK: - AI生成标识
+    private var aiGeneratedBadge: some View {
+        HStack(spacing: 4) {
+            Image(systemName: "info.circle")
+                .font(.system(size: 11))
+            Text("此内容由AI生成，仅供参考")
+                .font(.system(size: 12))
         }
+        .foregroundColor(.orange)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(Color.orange.opacity(0.1))
+        .cornerRadius(6)
     }
 
     // MARK: - 现代化图片网格

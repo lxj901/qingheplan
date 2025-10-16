@@ -1,8 +1,9 @@
 import Foundation
 import SwiftUI
-import FamilyControls
-import DeviceActivity
-import ManagedSettings
+// 🔥 已移除屏幕时间管理功能
+// import FamilyControls
+// import DeviceActivity
+// import ManagedSettings
 import Combine
 
 // MARK: - 应用管理数据模型
@@ -176,9 +177,10 @@ struct DailySelfDisciplineStats: Codable {
 class AppUsageManager: ObservableObject {
     static let shared = AppUsageManager()
 
-    // 使用新的ScreenTimeManager和AppRestrictionManager
+    // 使用新的ScreenTimeManager
     private let screenTimeManager = ScreenTimeManager.shared
-    private let appRestrictionManager = AppRestrictionManager.shared
+    // 🔥 已移除屏幕时间管理功能
+    // private let appRestrictionManager = AppRestrictionManager.shared
 
     // 自律时间倒计时管理器
     private let countdownManager = SelfDisciplineCountdownManager.shared
@@ -397,8 +399,12 @@ class AppUsageManager: ObservableObject {
         currentSelfDisciplineMinutes = newTotal
         updateAppUnlockStatuses()
 
+        // 🔥 已移除屏幕时间管理功能
+        /*
         // 如果有选择的应用且自律时间大于0，开始或更新倒计时
         if newTotal > 0 && !getSelectedApplications().isEmpty {
+        */
+        if newTotal > 0 {
             if countdownManager.isCountingDown {
                 // 只在“新预算”增加时追加时间，避免因前后台刷新导致的回补
                 let delta = newTotal - previousBudget
@@ -703,6 +709,8 @@ class AppUsageManager: ObservableObject {
 
 
 
+    // 🔥 已移除屏幕时间管理功能
+    /*
     /// 从用户选择的应用保存应用信息（不自动创建解锁规则）
     func saveSelectedApplications(_ applications: Set<Application>) {
         print("📱 [FamilyActivityPicker] 用户通过系统选择器选择了 \(applications.count) 个应用，保存应用信息")
@@ -772,6 +780,7 @@ class AppUsageManager: ObservableObject {
             startSelfDisciplineCountdown()
         }
     }
+    */
 
     /// 获取保存的应用信息
     func getSavedApplications() -> [[String: Any]] {
@@ -852,10 +861,13 @@ class AppUsageManager: ObservableObject {
         let remainingMinutes = max(0, countdownManager.remainingTimeInSeconds / 60)
 
         if remainingMinutes >= penaltyMinutes {
+            // 🔥 已移除屏幕时间管理功能
+            /*
             // 先执行取消限制
             Task {
                 await appRestrictionManager.removeRestriction(for: appName)
             }
+            */
             // 再扣除5分钟
             countdownManager.deductTime(minutes: penaltyMinutes)
             print("📱 取消 \(appName) 限制，已扣除 \(penaltyMinutes) 分钟，自律剩余 \(countdownManager.remainingTimeInSeconds/60) 分钟")
@@ -948,10 +960,13 @@ class AppUsageManager: ObservableObject {
 
     /// 临时解锁应用（紧急使用）
     func temporaryUnlock(appName: String, duration: TimeInterval) {
+        // 🔥 已移除屏幕时间管理功能
+        /*
         // 使用新的应用限制管理器
         Task {
             await appRestrictionManager.temporaryUnlock(for: appName, duration: duration)
         }
+        */
 
         // 保留原有的本地记录逻辑
         let key = "temp_unlock_\(appName)"
@@ -1052,6 +1067,8 @@ class AppUsageManager: ObservableObject {
         return nil
     }
 
+    // 🔥 已移除屏幕时间管理功能
+    /*
     /// 获取应用的 ApplicationToken（用于 SwiftUI Label 显示）
     func getApplicationToken(for appName: String) -> ApplicationToken? {
         guard let rule = appUnlockRules.first(where: { $0.appName == appName }),
@@ -1072,6 +1089,16 @@ class AppUsageManager: ObservableObject {
         guard let token = try? PropertyListDecoder().decode(ApplicationToken.self, from: tokenData) else {
             return nil
         }
+        */
+    func getApplicationToken(for appName: String) -> Any? {
+        return nil
+    }
+
+    func makeApplicationLabel(from tokenData: Data, titleOnly: Bool) -> AnyView? {
+        return nil
+    }
+
+    /*
 
         let tokenHash = abs(tokenData.hashValue)
         let cacheKey = "\(tokenHash)_\(titleOnly ? "title" : "icon")"
@@ -1112,6 +1139,7 @@ class AppUsageManager: ObservableObject {
 
         return newView
     }
+    */
 
 
 
@@ -1148,6 +1176,8 @@ class AppUsageManager: ObservableObject {
 
     // MARK: - 应用限制管理
 
+    // 🔥 已移除屏幕时间管理功能
+    /*
     /// 设置应用时间限制
     func setAppTimeLimit(appName: String, timeLimit: TimeInterval) {
         Task {
@@ -1174,7 +1204,22 @@ class AppUsageManager: ObservableObject {
             updateAppUnlockStatuses()
         }
     }
+    */
 
+    func setAppTimeLimit(appName: String, timeLimit: TimeInterval) {
+        updateAppUnlockStatuses()
+    }
+
+    func removeAppRestriction(appName: String) {
+        updateAppUnlockStatuses()
+    }
+
+    func clearAllAppRestrictions() {
+        updateAppUnlockStatuses()
+    }
+
+    // 🔥 已移除屏幕时间管理功能
+    /*
     /// 检查应用是否被限制
     func isAppRestricted(_ appName: String) -> Bool {
         return appRestrictionManager.isAppRestricted(appName)
@@ -1183,6 +1228,15 @@ class AppUsageManager: ObservableObject {
     /// 获取应用剩余限制时间
     func getAppRemainingTime(_ appName: String) -> TimeInterval {
         return appRestrictionManager.getRemainingTime(for: appName)
+    }
+    */
+
+    func isAppRestricted(_ appName: String) -> Bool {
+        return false
+    }
+
+    func getAppRemainingTime(_ appName: String) -> TimeInterval {
+        return 0
     }
 
     // MARK: - 倒计时管理器集成
@@ -1222,11 +1276,15 @@ class AppUsageManager: ObservableObject {
     private func lockSelectedApps() async {
         print("📱 自律时间耗尽，开始锁定选择的应用")
 
+        // 🔥 已移除屏幕时间管理功能
+        /*
         // 使用应用限制管理器锁定选择的应用
         await appRestrictionManager.lockSelectedApplications()
 
         // 获取用户选择的应用数量用于通知
         let selectedApps = getSelectedApplications()
+        */
+        let selectedApps: [Any] = []
 
         if !selectedApps.isEmpty {
             print("📱 已锁定 \(selectedApps.count) 个应用")
@@ -1269,21 +1327,27 @@ class AppUsageManager: ObservableObject {
             return
         }
 
+        // 🔥 已移除屏幕时间管理功能
+        /*
         // 检查是否有选择的应用
         let selectedApps = getSelectedApplications()
         guard !selectedApps.isEmpty else {
             print("📱 没有选择要限制的应用，无法开始倒计时")
             return
         }
+        */
 
         countdownManager.startCountdown(totalMinutes: totalMinutes)
-        print("📱 开始自律时间倒计时：\(totalMinutes) 分钟，将监控 \(selectedApps.count) 个应用")
+        print("📱 开始自律时间倒计时：\(totalMinutes) 分钟")
 
+        // 🔥 已移除屏幕时间管理功能
+        /*
         // 配置系统级一次性拦截：在倒计时结束时由系统扩展在后台触发
         let endDate = Date().addingTimeInterval(TimeInterval(totalMinutes * 60))
         Task { @MainActor in
             await self.appRestrictionManager.scheduleOneOffBlocking(at: endDate)
         }
+        */
     }
 
     /// 停止自律时间倒计时
@@ -1301,8 +1365,11 @@ class AppUsageManager: ObservableObject {
     func unlockSelectedApps() async {
         print("📱 解锁选择的应用")
 
+        // 🔥 已移除屏幕时间管理功能
+        /*
         // 解锁所有应用
         await appRestrictionManager.unlockAllApplications()
+        */
 
         // 发送通知
         NotificationCenter.default.post(
@@ -1313,6 +1380,8 @@ class AppUsageManager: ObservableObject {
 
     // MARK: - 辅助方法
 
+    // 🔥 已移除屏幕时间管理功能
+    /*
     /// 获取选择的应用
     private func getSelectedApplications() -> [Application] {
         let savedApps = getSavedApplications()
@@ -1339,4 +1408,5 @@ class AppUsageManager: ObservableObject {
         // 这里我们直接返回一个包含应用的 Set，在调用处直接使用
         return FamilyActivitySelection()
     }
+    */
 }

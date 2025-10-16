@@ -39,6 +39,7 @@ struct MeritStatisticsView: View {
         .background(ModernDesignSystem.Colors.paperIvory.ignoresSafeArea())
         .navigationTitle("功过统计")
         .navigationBarTitleDisplayMode(.inline)
+        .preferredColorScheme(.light) // 功过统计页面不适配深色模式
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
@@ -69,7 +70,7 @@ struct MeritStatisticsView: View {
             }
         }
         .pickerStyle(.segmented)
-        .onChange(of: statisticsDays) { oldValue, newValue in
+        .onChange(of: statisticsDays) { newValue in
             loadStatistics()
         }
     }

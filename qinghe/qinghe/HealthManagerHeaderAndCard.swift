@@ -1308,7 +1308,7 @@ private struct HealthReportDetailedAnalysisCard: View {
                         .font(.system(size: 14))
                         .foregroundStyle(Color.secondary)
                     
-                    Text("平均睡眠时长：\(String(format: "%.1f", sleep.averageSleepDuration))小时")
+                    Text("平均睡眠时长：\(String(format: "%.1f", sleep.averageSleepDuration))h")
                         .font(.system(size: 14))
                         .foregroundStyle(Color.secondary)
                 }
@@ -2953,6 +2953,11 @@ struct TongueDiagnosisView: View {
     @State private var analysisMessage = "正在上传图片..."
     @State private var showError = false
     @State private var errorMessage = ""
+    
+    // 会员中心相关状态
+    @State private var showingMembershipAlert = false
+    @State private var showingMembershipCenter = false
+    @State private var membershipAlertMessage = ""
 
     init(mode: Mode = .tongue) {
         self.mode = mode
@@ -3068,6 +3073,20 @@ struct TongueDiagnosisView: View {
         } message: {
             Text(errorMessage)
         }
+        // 会员升级提示
+        .alert("使用次数已达上限", isPresented: $showingMembershipAlert) {
+            Button("升级会员", role: .none) {
+                showingMembershipCenter = true
+            }
+            Button("取消", role: .cancel) {}
+        } message: {
+            Text(membershipAlertMessage)
+        }
+        // 导航到会员中心
+        .navigationDestination(isPresented: $showingMembershipCenter) {
+            MembershipCenterView()
+                .asSubView()
+        }
         .asSubView() // 隐藏底部Tab栏
     }
     
@@ -3157,8 +3176,19 @@ struct TongueDiagnosisView: View {
                 } catch {
                     retryCount += 1
                     if retryCount > maxRetries {
-                        // 如果是504超时错误，提供更友好的错误信息
+                        // 检查是否为403错误且消息包含使用次数限制
                         if let networkError = error as? NetworkManager.NetworkError,
+                           case .serverMessage(let message) = networkError,
+                           message.contains("使用次数已达上限") || message.contains("升级会员") {
+                            // 显示会员升级提示
+                            await MainActor.run {
+                                membershipAlertMessage = message
+                                showingMembershipAlert = true
+                            }
+                            return
+                        }
+                        // 如果是504超时错误，提供更友好的错误信息
+                        else if let networkError = error as? NetworkManager.NetworkError,
                            case .serverError(504) = networkError {
                             throw NetworkManager.NetworkError.serverMessage("服务器正在处理中，请稍后重试")
                         } else if error.localizedDescription.contains("504") || 
@@ -3857,21 +3887,21 @@ struct HealthRecordView: View {
         .onAppear {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithDefaultBackground()
-            appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialLight)
-            appearance.backgroundColor = UIColor.white.withAlphaComponent(0.12)
+            appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+            appearance.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.12)
             appearance.shadowColor = .clear
-            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
-            appearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.label]
+            appearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.label]
             let navBar = UINavigationBar.appearance()
             navBar.standardAppearance = appearance
             navBar.compactAppearance = appearance
             navBar.scrollEdgeAppearance = appearance
-            navBar.tintColor = .black
+            navBar.tintColor = .label
             syncBasicInfoWithUser()
         }
         .onDisappear {
             let navBar = UINavigationBar.appearance()
-            navBar.tintColor = .black
+            navBar.tintColor = .label
         }
         .asSubView()
     }

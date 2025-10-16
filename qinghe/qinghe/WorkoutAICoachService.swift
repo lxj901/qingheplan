@@ -423,8 +423,8 @@ class WorkoutAICoachService: NSObject, ObservableObject {
         audioPlayer.stopAudio()
         do {
             let session = AVAudioSession.sharedInstance()
-            // 使用口语音频模式，压低其它音频，支持蓝牙
-            try? session.setCategory(.playback, mode: .spokenAudio, options: [.duckOthers, .allowBluetooth])
+            // 使用口语音频模式，压低其它音频；避免 .allowBluetooth 与 .playback 组合导致 -50 错误
+            try? session.setCategory(.playback, mode: .spokenAudio, options: [.duckOthers])
             try? session.setActive(true)
         }
         let utterance = AVSpeechUtterance(string: text)

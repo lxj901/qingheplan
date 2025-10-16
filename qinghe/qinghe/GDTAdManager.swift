@@ -38,6 +38,11 @@ class GDTAdManager: NSObject, ObservableObject {
         setupGDTSDK()
     }
 
+    // 读取去广告权益（由 MembershipViewModel 同步至 UserDefaults）
+    private var isAdFreeEnabled: Bool {
+        return UserDefaults.standard.bool(forKey: "ad_free_enabled")
+    }
+
     // MARK: - SDK初始化
     private func setupGDTSDK() {
         #if canImport(GDTMobSDK) && !targetEnvironment(simulator)
@@ -133,11 +138,16 @@ class GDTAdManager: NSObject, ObservableObject {
         // 保存完成回调
         self.adCompletionCallback = completion
 
-        // 创建应用logo图片
-        let logoImage = UIImage(named: "AppIcon") ?? UIImage(named: "SplashLogo")
-
-        // 显示全屏开屏广告
-        splashAd.showFullScreenAd(in: window, withLogoImage: logoImage, skip: nil)
+        // 创建自定义的底部品牌视图
+        let brandView = createBrandView(for: window)
+        
+        // 显示全屏开屏广告（不使用logoImage，使用自定义品牌视图）
+        splashAd.showFullScreenAd(in: window, withLogoImage: nil, skip: nil)
+        
+        // 将品牌视图添加到window的最顶层
+        window.addSubview(brandView)
+        window.bringSubviewToFront(brandView)
+        
         isAdShowing = true
 
         print("🎯 显示开屏广告")
@@ -148,6 +158,10 @@ class GDTAdManager: NSObject, ObservableObject {
                 print("🎯 开屏广告显示超时，强制关闭")
                 self.isAdShowing = false
                 self.isAdLoaded = false
+                
+                // 移除品牌视图
+                self.removeBrandView()
+                
                 self.adCompletionCallback?()
                 self.adCompletionCallback = nil
             }
@@ -157,9 +171,111 @@ class GDTAdManager: NSObject, ObservableObject {
         completion()
         #endif
     }
+    
+    // MARK: - 创建品牌视图
+    private func createBrandView(for window: UIWindow) -> UIView {
+        let screenWidth = window.bounds.width
+        let screenHeight = window.bounds.height
+        let brandHeight: CGFloat = 120
+        
+        // 创建容器视图
+        let containerView = UIView(frame: CGRect(x: 0, y: screenHeight - brandHeight, width: screenWidth, height: brandHeight))
+        containerView.backgroundColor = .clear
+        containerView.tag = 9999 // 用于后续移除
+        
+        // 创建渐变背景
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = containerView.bounds
+        gradientLayer.colors = [
+            UIColor.clear.cgColor,
+            UIColor.black.withAlphaComponent(0.3).cgColor,
+            UIColor.black.withAlphaComponent(0.5).cgColor
+        ]
+        gradientLayer.locations = [0.0, 0.5, 1.0]
+        containerView.layer.insertSublayer(gradientLayer, at: 0)
+        
+        // 创建内容容器（垂直居中）
+        let contentView = UIView()
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(contentView)
+        
+        // App图标
+        let iconImageView = UIImageView()
+        iconImageView.translatesAutoresizingMaskIntoConstraints = false
+        iconImageView.contentMode = .scaleAspectFit
+        iconImageView.clipsToBounds = true
+        iconImageView.layer.cornerRadius = 12
+        
+        // 尝试加载app图标
+        if let appIcon = UIImage(named: "AppIcon") ?? UIImage(named: "SplashLogo") {
+            iconImageView.image = appIcon
+        } else {
+            // 如果找不到图标，使用系统图标
+            let config = UIImage.SymbolConfiguration(pointSize: 40, weight: .medium)
+            iconImageView.image = UIImage(systemName: "leaf.fill", withConfiguration: config)
+            iconImageView.tintColor = .systemGreen
+        }
+        
+        contentView.addSubview(iconImageView)
+        
+        // App名称
+        let nameLabel = UILabel()
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.text = "青禾计划"
+        nameLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        nameLabel.textColor = .white
+        nameLabel.textAlignment = .center
+        contentView.addSubview(nameLabel)
+        
+        // 布局约束
+        NSLayoutConstraint.activate([
+            // 内容容器居中
+            contentView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            contentView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            
+            // 图标约束
+            iconImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            iconImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            iconImageView.widthAnchor.constraint(equalToConstant: 50),
+            iconImageView.heightAnchor.constraint(equalToConstant: 50),
+            
+            // 名称标签约束
+            nameLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 8),
+            nameLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            nameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+        
+        return containerView
+    }
+    
+    // MARK: - 移除品牌视图
+    private func removeBrandView() {
+        #if canImport(GDTMobSDK) && !targetEnvironment(simulator)
+        // 获取当前窗口
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first else {
+            return
+        }
+        
+        // 查找并移除品牌视图
+        if let brandView = window.viewWithTag(9999) {
+            UIView.animate(withDuration: 0.3, animations: {
+                brandView.alpha = 0
+            }) { _ in
+                brandView.removeFromSuperview()
+            }
+            print("🎯 移除品牌视图")
+        }
+        #endif
+    }
 
     // MARK: - 信息流广告
     func loadNativeExpressAd(adSize: CGSize, adCount: Int = 1, completion: @escaping (Bool, [UIView]) -> Void) {
+        if isAdFreeEnabled {
+            print("🛡️ 去广告权益生效，跳过信息流广告加载")
+            completion(false, [])
+            return
+        }
         #if canImport(GDTMobSDK) && !targetEnvironment(simulator)
         print("🎯 GDTAdManager: 开始加载信息流广告")
         print("🎯 GDTAdManager: 广告位ID: \(nativeExpressAdUnitID)")
@@ -214,6 +330,11 @@ class GDTAdManager: NSObject, ObservableObject {
 
     // MARK: - 详情页广告
     func loadDetailPageAd(adSize: CGSize, adCount: Int = 1, completion: @escaping (Bool, [UIView]) -> Void) {
+        if isAdFreeEnabled {
+            print("🛡️ 去广告权益生效，跳过详情页广告加载")
+            completion(false, [])
+            return
+        }
         #if canImport(GDTMobSDK) && !targetEnvironment(simulator)
         print("🎯 GDTAdManager: 开始加载详情页广告")
         print("🎯 GDTAdManager: 详情页广告位ID: \(detailPageAdUnitID)")
@@ -314,6 +435,9 @@ extension GDTAdManager: GDTSplashAdDelegate {
             self.isAdShowing = false
             self.isAdLoaded = false
 
+            // 移除品牌视图
+            self.removeBrandView()
+
             // 清理广告对象
             self.splashAd?.delegate = nil
             self.splashAd = nil
@@ -345,6 +469,9 @@ extension GDTAdManager: GDTSplashAdDelegate {
         DispatchQueue.main.async {
             self.isAdShowing = false
             self.isAdLoaded = false
+
+            // 移除品牌视图
+            self.removeBrandView()
 
             // 清理广告对象
             self.splashAd?.delegate = nil

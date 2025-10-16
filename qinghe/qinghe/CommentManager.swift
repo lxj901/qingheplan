@@ -490,8 +490,8 @@ extension CommentManager {
         }
 
         // 递归排序子评论
-        for node in nodes {
-            sortCommentsRecursive(&node.replies, by: sortType)
+        for i in 0..<nodes.count {
+            sortCommentsRecursive(&nodes[i].replies, by: sortType)
         }
     }
 }

@@ -317,5 +317,44 @@ final class SleepAPIService {
         print("✅ 生成健康报告成功")
         return data
     }
+    
+    // MARK: - 睡眠分析 API
+    
+    /// 获取单次睡眠会话的质量分析
+    /// - Parameter sessionId: 睡眠会话ID
+    /// - Returns: 单次会话质量分析数据
+    func getSingleSessionQualityAnalysis(sessionId: String) async throws -> SingleSessionQualityData {
+        print("🔍 获取单次睡眠会话分析，sessionId: \(sessionId)...")
+        
+        // 构建查询参数
+        let parameters: [String: Any] = [
+            "sessionId": sessionId
+        ]
+        
+        // 发送GET请求
+        let response: SingleSessionQualityResponse = try await NetworkManager.shared.get(
+            endpoint: "/sleep/quality-analysis",
+            parameters: parameters,
+            headers: nil,
+            responseType: SingleSessionQualityResponse.self
+        )
+        
+        // 检查响应
+        guard response.status == "success" else {
+            let errorMessage = "获取睡眠会话分析失败"
+            print("❌ \(errorMessage)")
+            throw NSError(domain: "SleepAPIService", code: 1, userInfo: [
+                NSLocalizedDescriptionKey: errorMessage
+            ])
+        }
+        
+        print("✅ 单次睡眠会话分析获取成功")
+        print("   - 会话ID: \(response.data.sessionId)")
+        print("   - 整体评分: \(response.data.qualityAnalysis.overallScore)")
+        print("   - 质量等级: \(response.data.qualityAnalysis.qualityLevel)")
+        print("   - 睡眠效率: \(response.data.qualityAnalysis.keyMetrics.sleepEfficiency)%")
+        
+        return response.data
+    }
 }
 

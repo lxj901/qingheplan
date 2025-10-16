@@ -10,31 +10,31 @@ struct WorkoutCameraView: View {
     let cameraManager: WorkoutCameraManager
     let workoutData: ExtendedWorkoutPhotoData
     let onPhotoTaken: (UIImage) -> Void
-    
+
     @State private var capturedImage: UIImage?
     @State private var showPreview = false
     @State private var isTakingPhoto = false
     @Environment(\.presentationMode) var presentationMode
-    
+
     var body: some View {
         ZStack {
-            // 相机预览
-            CameraPreviewView()
+            // 真实相机预览
+            CameraPreviewView(session: cameraManager.session)
                 .ignoresSafeArea(.all)
-            
+
             // UI覆盖层
             VStack {
                 // 顶部控制栏
                 topControlBar
-                
+
                 Spacer()
-                
+
                 // 底部控制栏
                 bottomControlBar
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 40)
-            
+
             // 拍照预览
             if showPreview, let image = capturedImage {
                 photoPreviewOverlay(image: image)
@@ -45,6 +45,10 @@ struct WorkoutCameraView: View {
         }
         .onDisappear {
             cameraManager.stopSession()
+            // 确保关闭手电筒
+            if cameraManager.isFlashOn {
+                cameraManager.toggleFlash()
+            }
         }
     }
     
@@ -112,27 +116,19 @@ struct WorkoutCameraView: View {
     
     private var bottomControlBar: some View {
         HStack {
-            // 相册按钮（占位）
-            Button(action: {}) {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color.white.opacity(0.3))
-                    .frame(width: 44, height: 44)
-                    .overlay(
-                        Image(systemName: "photo")
-                            .font(.system(size: 16))
-                            .foregroundColor(.white)
-                    )
-            }
-            
+            // 左侧占位（保持布局平衡）
+            Color.clear
+                .frame(width: 44, height: 44)
+
             Spacer()
-            
+
             // 拍照按钮
             Button(action: takePhoto) {
                 ZStack {
                     Circle()
                         .stroke(Color.white, lineWidth: 4)
                         .frame(width: 80, height: 80)
-                    
+
                     Circle()
                         .fill(Color.white)
                         .frame(width: 68, height: 68)
@@ -141,9 +137,9 @@ struct WorkoutCameraView: View {
                 }
             }
             .disabled(isTakingPhoto)
-            
+
             Spacer()
-            
+
             // 前后摄像头切换
             Button(action: {
                 cameraManager.switchCamera()
@@ -212,35 +208,70 @@ struct WorkoutCameraView: View {
     
     private func takePhoto() {
         guard !isTakingPhoto else { return }
-        
+
         isTakingPhoto = true
-        
-        // 模拟拍照延迟
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            // 创建模拟照片（实际应该从相机获取）
-            let renderer = UIGraphicsImageRenderer(size: CGSize(width: 300, height: 400))
-            let image = renderer.image { context in
-                UIColor.black.setFill()
-                context.fill(CGRect(x: 0, y: 0, width: 300, height: 400))
-                
-                // 添加运动数据文字
-                let attributes: [NSAttributedString.Key: Any] = [
-                    .foregroundColor: UIColor.white,
-                    .font: UIFont.systemFont(ofSize: 16, weight: .semibold)
-                ]
-                
-                let text = """
-                \(workoutData.workoutType)
-                \(String(format: "%.2f", workoutData.distance)) km
-                \(formatDuration(workoutData.duration))
-                """
-                
-                text.draw(in: CGRect(x: 20, y: 20, width: 260, height: 100), withAttributes: attributes)
+
+        // 使用真实相机拍照
+        cameraManager.takePhoto { [self] image in
+            DispatchQueue.main.async {
+                if let image = image {
+                    // 在照片上添加运动数据水印
+                    let watermarkedImage = addWorkoutDataWatermark(to: image)
+                    self.capturedImage = watermarkedImage
+                    self.showPreview = true
+                } else {
+                    print("📸 拍照失败")
+                }
+                self.isTakingPhoto = false
             }
-            
-            capturedImage = image
-            showPreview = true
-            isTakingPhoto = false
+        }
+    }
+
+    // 在照片上添加运动数据水印
+    private func addWorkoutDataWatermark(to image: UIImage) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: image.size)
+
+        return renderer.image { context in
+            // 绘制原始照片
+            image.draw(at: .zero)
+
+            // 添加半透明背景
+            let padding: CGFloat = 20
+            let textHeight: CGFloat = 100
+            let rect = CGRect(
+                x: padding,
+                y: image.size.height - textHeight - padding,
+                width: image.size.width - padding * 2,
+                height: textHeight
+            )
+
+            UIColor.black.withAlphaComponent(0.6).setFill()
+            UIBezierPath(roundedRect: rect, cornerRadius: 12).fill()
+
+            // 添加运动数据文字
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.alignment = .left
+
+            let attributes: [NSAttributedString.Key: Any] = [
+                .foregroundColor: UIColor.white,
+                .font: UIFont.systemFont(ofSize: 18, weight: .semibold),
+                .paragraphStyle: paragraphStyle
+            ]
+
+            let text = """
+            \(workoutData.workoutType)
+            距离: \(String(format: "%.2f", workoutData.distance)) km
+            时长: \(formatDuration(workoutData.duration))
+            """
+
+            let textRect = CGRect(
+                x: rect.origin.x + 15,
+                y: rect.origin.y + 15,
+                width: rect.width - 30,
+                height: rect.height - 30
+            )
+
+            text.draw(in: textRect, withAttributes: attributes)
         }
     }
     
@@ -257,37 +288,36 @@ struct WorkoutCameraView: View {
     }
 }
 
-// 相机预览视图
+// MARK: - 真实相机预览视图
 struct CameraPreviewView: UIViewRepresentable {
+    let session: AVCaptureSession
+
     func makeUIView(context: Context) -> CameraPreviewUIView {
-        return CameraPreviewUIView()
+        return CameraPreviewUIView(session: session)
     }
-    
+
     func updateUIView(_ uiView: CameraPreviewUIView, context: Context) {
-        // 更新视图
+        // 更新视图（如果需要）
     }
 }
 
 class CameraPreviewUIView: UIView {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    private let previewLayer: AVCaptureVideoPreviewLayer
+
+    init(session: AVCaptureSession) {
+        self.previewLayer = AVCaptureVideoPreviewLayer(session: session)
+        super.init(frame: .zero)
+
         backgroundColor = .black
-        
-        // 添加模拟相机预览
-        let label = UILabel()
-        label.text = "相机预览"
-        label.textColor = .white
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        addSubview(label)
-        NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: centerYAnchor)
-        ])
+        previewLayer.videoGravity = .resizeAspectFill
+        layer.addSublayer(previewLayer)
     }
-    
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        previewLayer.frame = bounds
+    }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

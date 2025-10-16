@@ -63,6 +63,7 @@ class TabBarVisibilityManager: ObservableObject {
 struct MainTabView: View {
     @StateObject private var navigationManager = NavigationManager.shared
     @ObservedObject private var tabBarManager = TabBarVisibilityManager.shared
+    @StateObject private var localizationManager = LocalizationManager.shared
 
     private var selectedTab: Binding<MainTab> {
         Binding(
@@ -74,38 +75,42 @@ struct MainTabView: View {
     var body: some View {
         ZStack {
             // 根内容（使用自定义 Tab 切换）
-            Group {
-                if navigationManager.selectedTab == .home {
-                    // 首页 -> 社区
-                    MainCommunityView()
-                } else if navigationManager.selectedTab == .newHome {
-                    // 听音 显示我们的新首页页面（重设计页面）
-                    HomeRedesignPlaceholderView()
-                } else if navigationManager.selectedTab == .record {
-                    // 功过格
-                    NavigationStack {
-                        GongGuoGeView()
-                    }
-                } else if navigationManager.selectedTab == .health {
-                    // 健康助手
-                    NavigationStack {
-                        HealthAssistantView()
-                    }
-                } else if navigationManager.selectedTab == .workout {
-                    // 运动
-                    NavigationStack {
-                        WorkoutModeSelectionView()
-                    }
-                } else if navigationManager.selectedTab == .community {
-                    MainCommunityView()
-                } else if navigationManager.selectedTab == .messages {
-                    MessagesView()
-                } else if navigationManager.selectedTab == .profile {
-                    ProfileView()
-                } else {
-                    // 兜底：若出现已移除的Tab类型，回退到社区
-                    MainCommunityView()
+            // 使用 ZStack 同时渲染所有 tab，通过 opacity 控制显示
+            // 这样可以保持每个 tab 的状态
+            ZStack {
+                MainCommunityView()
+                    .opacity(navigationManager.selectedTab == .home || navigationManager.selectedTab == .community ? 1 : 0)
+                    .id("community")
+
+                HomeRedesignPlaceholderView()
+                    .opacity(navigationManager.selectedTab == .newHome ? 1 : 0)
+                    .id("newHome")
+
+                NavigationStack {
+                    GongGuoGeView()
                 }
+                .opacity(navigationManager.selectedTab == .record ? 1 : 0)
+                .id("record")
+
+                NavigationStack {
+                    HealthAssistantView()
+                }
+                .opacity(navigationManager.selectedTab == .health ? 1 : 0)
+                .id("health")
+
+                NavigationStack {
+                    WorkoutModeSelectionView()
+                }
+                .opacity(navigationManager.selectedTab == .workout ? 1 : 0)
+                .id("workout")
+
+                MessagesView()
+                    .opacity(navigationManager.selectedTab == .messages ? 1 : 0)
+                    .id("messages")
+
+                ProfileView()
+                    .opacity(navigationManager.selectedTab == .profile ? 1 : 0)
+                    .id("profile")
             }
             .environmentObject(tabBarManager)
 
@@ -240,17 +245,21 @@ enum MainTab: String, CaseIterable {
     // 自定义可见的 Tab 顺序：首页、记录、健康、运动、我的
     static var allCases: [MainTab] { [.home, .record, .health, .workout, .profile] }
 
-    var title: String {
+    var titleKey: String {
         switch self {
-        case .home: return "首页"
-        case .record: return "记录"
-        case .health: return "健康"
-        case .workout: return "运动"
-        case .newHome: return "听音"
-        case .community: return "社区"
-        case .messages: return "消息"
-        case .profile: return "我的"
+        case .home: return "tab_home"
+        case .record: return "tab_record"
+        case .health: return "tab_health"
+        case .workout: return "tab_workout"
+        case .newHome: return "tab_listening"
+        case .community: return "tab_community"
+        case .messages: return "tab_messages"
+        case .profile: return "tab_profile"
         }
+    }
+    
+    var title: String {
+        return LocalizationManager.shared.localizedString(key: titleKey)
     }
 
     var icon: String {
@@ -329,6 +338,7 @@ struct TabBarVisibilityModifier: ViewModifier {
 // MARK: - 个人资料页面
 struct ProfileView: View {
     @StateObject private var authManager = AuthManager.shared
+    @StateObject private var localizationManager = LocalizationManager.shared
 
     var body: some View {
         NavigationStack {
@@ -344,17 +354,17 @@ struct ProfileView: View {
                         .font(.system(size: 80))
                         .foregroundColor(.gray)
 
-                    Text("未登录")
+                    Text(localizationManager.localizedString(key: "not_logged_in"))
                         .font(.system(size: 20, weight: .semibold))
                         .foregroundColor(.secondary)
 
-                    Text("请先登录以查看个人资料")
+                    Text(localizationManager.localizedString(key: "please_login_to_view_profile"))
                         .font(.system(size: 14))
                         .foregroundColor(.secondary)
 
                     Spacer()
                 }
-                .navigationTitle("我的")
+                .navigationTitle(localizationManager.localizedString(key: "tab_profile"))
             }
         }
         .asRootView()

@@ -7,7 +7,7 @@ struct CommunitySearchView: View {
     @State private var searchHistory: [String] = []
     @State private var searchResults: [CommunityPost] = []
     @State private var searchUsers: [CommunityUserProfile] = []
-    @State private var searchTopics: [CommunityPost] = []
+    @State private var searchTopics: [String] = []
     @State private var isSearching = false
     @State private var selectedFilter: SearchFilter = .all
     @State private var selectedSortType: SortType = .latest
@@ -403,9 +403,13 @@ struct CommunitySearchView: View {
 
                         // 话题搜索结果
                         if selectedFilter == .topics || selectedFilter == .all {
-                            // 当搜索类型为topics时，从posts中提取话题；当为all时，从topics字段中提取
-                            let topicsToShow = selectedFilter == .topics ? searchResults : searchTopics
-                            let uniqueTopics = extractUniqueTopics(from: topicsToShow)
+                            // 优先使用服务端返回的话题名数组；若为空且是topics筛选，则从帖子中提取
+                            let topicsArray: [String] = {
+                                if !searchTopics.isEmpty { return searchTopics }
+                                if selectedFilter == .topics { return extractUniqueTopics(from: searchResults) }
+                                return []
+                            }()
+                            let uniqueTopics = Array(Set(topicsArray)).sorted()
 
                             if !uniqueTopics.isEmpty {
                                 VStack(alignment: .leading, spacing: 12) {
@@ -512,7 +516,11 @@ struct CommunitySearchView: View {
         .fullScreenCover(isPresented: $showingFilters) {
             SearchFiltersSheet(
                 selectedFilter: $selectedFilter,
-                selectedSortType: $selectedSortType
+                selectedSortType: $selectedSortType,
+                onApply: {
+                    // 应用筛选后重新搜索
+                    performSearch()
+                }
             )
         }
     }
@@ -1118,7 +1126,8 @@ struct SearchFiltersSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var selectedFilter: SearchFilter
     @Binding var selectedSortType: SortType
-    
+    let onApply: () -> Void
+
     var body: some View {
         NavigationView {
             VStack(alignment: .leading, spacing: 24) {
@@ -1159,10 +1168,11 @@ struct SearchFiltersSheet: View {
                 }
                 
                 Spacer()
-                
+
                 // 应用按钮
                 Button("应用筛选") {
                     dismiss()
+                    onApply()
                 }
                 .buttonStyle(PrimaryButtonStyle(color: AppConstants.Colors.primaryGreen))
             }
@@ -1292,5 +1302,5 @@ func convertPostToCommunityPost(_ post: Post) -> CommunityPost {
 }
 
 #Preview {
-    CommunitySearchView(viewModel: CommunityViewModel())
+    CommunitySearchView(viewModel: CommunityViewModel.shared)
 }

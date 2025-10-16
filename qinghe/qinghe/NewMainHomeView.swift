@@ -7,7 +7,8 @@ struct NewMainHomeView: View {
     @StateObject private var homePageViewModel = HomePageViewModel()
     @StateObject private var appUsageManager = AppUsageManager.shared
     @StateObject private var screenTimeManager = ScreenTimeManager.shared
-    @StateObject private var appRestrictionManager = AppRestrictionManager.shared
+    // 🔥 已移除屏幕时间管理功能
+    // @StateObject private var appRestrictionManager = AppRestrictionManager.shared
     @StateObject private var countdownManager = SelfDisciplineCountdownManager.shared
     @EnvironmentObject private var tabBarManager: TabBarVisibilityManager
     @State private var selectedSegment: Int = 0
@@ -24,8 +25,9 @@ struct NewMainHomeView: View {
     @State private var isCheckinButtonPressed = false
 
     // 新增：直接授权相关状态
-    @State private var showingFamilyActivityPicker = false
-    @State private var selectedAppsAndCategories = FamilyActivitySelection()
+    // 🔥 已移除屏幕时间管理功能
+    // @State private var showingFamilyActivityPicker = false
+    // @State private var selectedAppsAndCategories = FamilyActivitySelection()
     @State private var showingAuthorizationSuccess = false // 打卡按钮按下状态
     @State private var navigationToConversationId: String? = nil // 推送通知导航
     @State private var showingCheckinInput = false // 显示打卡输入界面
@@ -129,7 +131,14 @@ struct NewMainHomeView: View {
         }
         .onAppear {
             Task {
-                await homePageViewModel.fetchData()
+                // 使用缓存机制：只在缓存失效时加载数据
+                if homePageViewModel.shouldLoadData() {
+                    print("🎯 NewMainHomeView.onAppear: 缓存失效或首次加载，开始加载数据")
+                    await homePageViewModel.fetchData()
+                } else {
+                    print("🎯 NewMainHomeView.onAppear: 使用缓存数据，跳过加载")
+                }
+                
                 // await workoutAnalytics.refreshAnalyticsData()
                 await checkinViewModel.loadInitialData()
 
@@ -137,7 +146,8 @@ struct NewMainHomeView: View {
                 updateAppManagementData()
 
                 // 恢复应用选择状态
-                restoreAppSelection()
+                // 🔥 已移除屏幕时间管理功能
+                // restoreAppSelection()
             }
         }
         .onChange(of: homePageViewModel.comprehensiveSelfDisciplineTime) { _, newValue in
@@ -294,19 +304,21 @@ struct NewMainHomeView: View {
             AppUsageAnalysisDetailView()
         }
 
-        .familyActivityPicker(isPresented: $showingFamilyActivityPicker, selection: $selectedAppsAndCategories)
-        .onChange(of: selectedAppsAndCategories) {
-            handleAppSelectionChange()
-        }
-        .onChange(of: showingFamilyActivityPicker) { _, isPresented in
-            // 当系统选择器关闭后，如果有待打开的“应用管理”页，再打开
-            // 应用管理页面已删除，无需处理
-        }
-        .alert("应用管理设置成功", isPresented: $showingAuthorizationSuccess) {
-            Button("确定", role: .cancel) { }
-        } message: {
-            Text("已为您选择的 \(selectedAppsAndCategories.applications.count) 个应用创建默认解锁规则。完成自律活动即可解锁这些应用！")
-        }
+        // 🔥 已移除屏幕时间管理功能
+        // .familyActivityPicker(isPresented: $showingFamilyActivityPicker, selection: $selectedAppsAndCategories)
+        // .onChange(of: selectedAppsAndCategories) {
+        //     handleAppSelectionChange()
+        // }
+        // .onChange(of: showingFamilyActivityPicker) { _, isPresented in
+        //     // 当系统选择器关闭后，如果有待打开的“应用管理”页，再打开
+        //     // 应用管理页面已删除，无需处理
+        // }
+        // 🔥 已移除屏幕时间管理功能
+        // .alert("应用管理设置成功", isPresented: $showingAuthorizationSuccess) {
+        //     Button("确定", role: .cancel) { }
+        // } message: {
+        //     Text("已为您选择的 \(selectedAppsAndCategories.applications.count) 个应用创建默认解锁规则。完成自律活动即可解锁这些应用！")
+        // }
         .asRootView()
 
     }
@@ -1254,7 +1266,8 @@ struct NewMainHomeView: View {
                     }
                     
                     Button(action: {
-                        requestAuthorizationAndShowPicker()
+                        // 🔥 已移除屏幕时间管理功能
+                        // requestAuthorizationAndShowPicker()
                     }) {
                         HStack(spacing: 8) {
                             Image(systemName: "hand.raised.fill")
@@ -1524,31 +1537,18 @@ struct NewMainHomeView: View {
                     .fill(Color(red: 76/255, green: 175/255, blue: 80/255).opacity(0.2))
                     .frame(width: 32, height: 32)
 
-                // 优先使用真实应用图标，否则使用默认图标
-                if let token = AppUsageManager.shared.getApplicationToken(for: status.appName) {
-                    Label(token)
-                        .labelStyle(.iconOnly)
-                        .frame(width: 20, height: 20)
-                } else {
-                    Image(systemName: "app.fill")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(Color(red: 76/255, green: 175/255, blue: 80/255))
-                }
+                // 🔥 已移除屏幕时间管理功能 - 使用默认图标
+                Image(systemName: "app.fill")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(Color(red: 76/255, green: 175/255, blue: 80/255))
             }
 
             // 应用信息
             VStack(alignment: .leading, spacing: 3) {
-                // 应用名称
-                if let token = AppUsageManager.shared.getApplicationToken(for: status.appName) {
-                    Label(token)
-                        .labelStyle(.titleOnly)
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(Color(red: 51/255, green: 51/255, blue: 51/255))
-                } else {
-                    Text(AppUsageManager.shared.getResolvedDisplayName(for: status.appName))
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(Color(red: 51/255, green: 51/255, blue: 51/255))
-                }
+                // 🔥 已移除屏幕时间管理功能 - 使用应用名称
+                Text(AppUsageManager.shared.getResolvedDisplayName(for: status.appName))
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(Color(red: 51/255, green: 51/255, blue: 51/255))
 
                 Text(AppUsageManager.shared.getUnlockStatusDescription(for: status.appName))
                     .font(.system(size: 11, weight: .medium))
@@ -2186,6 +2186,8 @@ struct NewMainHomeView: View {
         print("📱 首页更新应用管理数据：综合自律时间 \(currentSelfDisciplineMinutes) 分钟")
     }
 
+    // 🔥 已移除屏幕时间管理功能
+    /*
     // MARK: - 直接授权相关方法
 
     /// 请求授权并显示应用选择器
@@ -2209,9 +2211,12 @@ struct NewMainHomeView: View {
             }
         }
     }
+    */
 
+    // 🔥 已移除屏幕时间管理功能
+    /*
     /// 处理用户选择的应用和类别
-    private func handleAppSelectionChange() {
+    private func handleAppSelectionChange_REMOVED() {
         print("📱 [首页FamilyActivityPicker] 用户选择了应用和类别:")
         print("📱 [首页FamilyActivityPicker] 应用数量: \(selectedAppsAndCategories.applications.count)")
         print("📱 [首页FamilyActivityPicker] 类别数量: \(selectedAppsAndCategories.categories.count)")
@@ -2246,18 +2251,24 @@ struct NewMainHomeView: View {
             }
         }
     }
+    */
 
+    // 🔥 已移除屏幕时间管理功能
+    /*
     /// 保存用户选择的应用信息（不自动创建规则）
     private func saveSelectedApplications() {
         // 使用 AppUsageManager 的保存方法
         appUsageManager.saveSelectedApplications(selectedAppsAndCategories.applications)
     }
+    */
 
     /// 处理健康助手按钮点击事件
     private func handleHealthManagerAction() {
         showingHealthAssistant = true
     }
 
+    // 🔥 已移除屏幕时间管理功能
+    /*
     // MARK: - 应用选择状态保存和恢复
 
     /// 保存应用选择状态
@@ -2272,7 +2283,10 @@ struct NewMainHomeView: View {
 
         print("📱 已保存应用选择状态：\(appCount) 个应用，\(categoryCount) 个类别")
     }
+    */
 
+    // 🔥 已移除屏幕时间管理功能
+    /*
     /// 恢复应用选择状态
     private func restoreAppSelection() {
         let appCount = UserDefaults.standard.integer(forKey: "saved_app_selection_count")
@@ -2288,6 +2302,7 @@ struct NewMainHomeView: View {
             }
         }
     }
+    */
 }
 
 // MARK: - 滚动偏移量监听（优化实现）

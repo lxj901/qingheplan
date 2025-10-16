@@ -35,54 +35,47 @@ struct TagSuggestion: Codable, Identifiable {
     }
 }
 
-// 后端标签DTO（与服务器返回一致）
+// 后端标签DTO（简化版本，匹配实际API返回）
 struct TagDTO: Codable {
-    let id: Int
-    let name: String
-    let description: String?
-    let color: String?
-    let icon: String?
-    let postCount: String?
-    let userCount: String?
-    let usageCount: String?
-    let lastUsed: String?
-    let createdAt: String?
+    let tag: String
+    let count: Int
 
     private enum CodingKeys: String, CodingKey {
-        case id, name, description, color, icon, postCount, userCount, usageCount, lastUsed, createdAt
+        case tag, trend, count
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.decode(Int.self, forKey: .id)
-        name = try container.decode(String.self, forKey: .name)
-        description = try container.decodeIfPresent(String.self, forKey: .description)
-        color = try container.decodeIfPresent(String.self, forKey: .color)
-        icon = try container.decodeIfPresent(String.self, forKey: .icon)
-        // 计数字段兼容字符串或数字
-        if let s = try? container.decode(String.self, forKey: .postCount) {
-            postCount = s
-        } else if let i = try? container.decode(Int.self, forKey: .postCount) {
-            postCount = String(i)
+
+        // tag 字段兼容 "tag" 或 "trend" 两种字段名
+        if let tagValue = try? container.decode(String.self, forKey: .tag) {
+            tag = tagValue
+        } else if let trendValue = try? container.decode(String.self, forKey: .trend) {
+            tag = trendValue
         } else {
-            postCount = nil
+            throw DecodingError.keyNotFound(
+                CodingKeys.tag,
+                DecodingError.Context(
+                    codingPath: decoder.codingPath,
+                    debugDescription: "Neither 'tag' nor 'trend' key found"
+                )
+            )
         }
-        if let s = try? container.decode(String.self, forKey: .userCount) {
-            userCount = s
-        } else if let i = try? container.decode(Int.self, forKey: .userCount) {
-            userCount = String(i)
+
+        // count 字段兼容字符串或数字
+        if let countInt = try? container.decode(Int.self, forKey: .count) {
+            count = countInt
+        } else if let countString = try? container.decode(String.self, forKey: .count) {
+            count = Int(countString) ?? 0
         } else {
-            userCount = nil
+            count = 0
         }
-        if let s = try? container.decode(String.self, forKey: .usageCount) {
-            usageCount = s
-        } else if let i = try? container.decode(Int.self, forKey: .usageCount) {
-            usageCount = String(i)
-        } else {
-            usageCount = nil
-        }
-        lastUsed = try container.decodeIfPresent(String.self, forKey: .lastUsed)
-        createdAt = try container.decodeIfPresent(String.self, forKey: .createdAt)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(tag, forKey: .tag)
+        try container.encode(count, forKey: .count)
     }
 }
 
@@ -146,9 +139,8 @@ class TagsAPIService: ObservableObject {
         }
         // 转为 UI 使用的 PopularTag 模型
         let mapped = items.enumerated().map { idx, t in
-            let count = Int(t.userCount ?? t.postCount ?? "0") ?? 0
             // 简单规则：前3个标记为 trending
-            return PopularTag(tag: t.name, count: count, trending: idx < 3)
+            return PopularTag(tag: t.tag, count: t.count, trending: idx < 3)
         }
         return mapped
     }
@@ -184,8 +176,7 @@ class TagsAPIService: ObservableObject {
             throw NetworkManager.NetworkError.networkError(response.message ?? "获取用户常用标签失败")
         }
         return items.map { t in
-            let count = Int(t.usageCount ?? t.postCount ?? "0") ?? 0
-            return UserTag(tag: t.name, count: count, lastUsed: t.lastUsed)
+            return UserTag(tag: t.tag, count: t.count, lastUsed: nil)
         }
     }
 
@@ -210,9 +201,9 @@ class TagsAPIService: ObservableObject {
         }
         return items.prefix(limit).enumerated().map { idx, t in
             TagSuggestion(
-                tag: t.name,
+                tag: t.tag,
                 relevance: 1.0 - Double(idx) * 0.05,
-                category: t.icon // 临时把 icon 放在 category 字段里占位（UI未使用）
+                category: nil // 后端没有返回 category 字段
             )
         }
     }

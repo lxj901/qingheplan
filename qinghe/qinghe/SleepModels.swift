@@ -110,7 +110,53 @@ struct SleepRecord: Identifiable, Codable {
     var formattedSleepDuration: String {
         let hours = Int(totalSleepDuration) / 3600
         let minutes = (Int(totalSleepDuration) % 3600) / 60
-        return String(format: "%d小时%02d分钟", hours, minutes)
+        return String(format: "%dh%02dm", hours, minutes)
+    }
+    
+    // MARK: - API 数据转换
+    
+    /// 转换为API上传格式
+    func toAPIUploadFormat() -> [String: Any] {
+        let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        
+        // 计算各睡眠阶段的时长（分钟）
+        let deepDuration = sleepStages
+            .filter { $0.stage == .deep }
+            .reduce(0.0) { $0 + $1.duration } / 60.0
+        
+        let lightDuration = sleepStages
+            .filter { $0.stage == .light }
+            .reduce(0.0) { $0 + $1.duration } / 60.0
+        
+        let remDuration = sleepStages
+            .filter { $0.stage == .rem }
+            .reduce(0.0) { $0 + $1.duration } / 60.0
+        
+        let awakeDuration = sleepStages
+            .filter { $0.stage == .awake }
+            .reduce(0.0) { $0 + $1.duration } / 60.0
+        
+        // 获取睡眠日期（使用就寝日期）
+        let sleepDateFormatter = DateFormatter()
+        sleepDateFormatter.dateFormat = "yyyy-MM-dd"
+        sleepDateFormatter.timeZone = TimeZone.current
+        let sleepDateString = sleepDateFormatter.string(from: bedTime)
+        
+        // 转换质量评分（1-10范围）
+        let qualityScore = min(max(Double(sleepQualityScore) / 10.0, 1.0), 10.0)
+        
+        return [
+            "sleepDate": sleepDateString,
+            "startTime": dateFormatter.string(from: bedTime),
+            "endTime": dateFormatter.string(from: wakeTime),
+            "duration": Int(totalSleepDuration / 60.0), // 转换为分钟
+            "quality": qualityScore,
+            "deepSleepDuration": Int(deepDuration),
+            "lightSleepDuration": Int(lightDuration),
+            "remSleepDuration": Int(remDuration),
+            "awakeDuration": Int(awakeDuration)
+        ]
     }
     
     // MARK: - API 数据转换

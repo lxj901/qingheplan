@@ -323,7 +323,8 @@ class ChatAPIService: ObservableObject {
 
         let request = MarkAsReadRequest(lastReadMessageId: lastReadMessageId)
 
-        let response: ChatAPIResponse<EmptyResponse> = try await networkManager.post(
+        // 使用 PUT 方法标记已读
+        let response: ChatAPIResponse<EmptyResponse> = try await networkManager.put(
             endpoint: "\(Endpoint.conversations)/\(conversationId)/read",
             parameters: try request.toDictionary(),
             headers: authHeaders,
@@ -333,6 +334,8 @@ class ChatAPIService: ObservableObject {
         guard response.isSuccess else {
             throw NetworkManager.NetworkError.networkError(response.message ?? "标记已读失败")
         }
+
+        print("✅ 标记已读成功 - conversationId: \(conversationId), messageId: \(lastReadMessageId)")
     }
 
     /// 兼容旧版本的标记已读方法
@@ -1175,8 +1178,9 @@ class ChatAPIService: ObservableObject {
         }
     }
 
-    /// 标记对话为已读
+    /// 标记对话为已读（已废弃，请使用 markAsRead(conversationId:lastReadMessageId:)）
     /// - Parameter conversationId: 对话ID
+    @available(*, deprecated, message: "请使用 markAsRead(conversationId:lastReadMessageId:) 方法")
     func markConversationAsRead(conversationId: String) async throws {
         guard let authHeaders = authManager.getAuthHeader() else {
             throw NetworkManager.NetworkError.networkError("未授权")
@@ -1187,7 +1191,8 @@ class ChatAPIService: ObservableObject {
             "readAt": ISO8601DateFormatter().string(from: Date())
         ]
 
-        let response: ChatAPIResponse<EmptyResponse> = try await networkManager.post(
+        // 使用 PUT 方法
+        let response: ChatAPIResponse<EmptyResponse> = try await networkManager.put(
             endpoint: endpoint,
             parameters: parameters,
             headers: authHeaders,

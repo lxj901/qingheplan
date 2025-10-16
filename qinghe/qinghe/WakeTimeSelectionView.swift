@@ -180,20 +180,20 @@ struct WakeTimeSelectionView: View {
     private func calculateSleepDuration() -> String {
         let now = Date()
         let sleepDuration = tempSelectedTime.timeIntervalSince(now)
-        
+
         // 如果选择的时间是明天（即负数或很小的正数）
         var duration = sleepDuration
         if duration <= 0 || duration < 3600 { // 如果小于1小时，认为是明天
             duration += 24 * 3600 // 加24小时
         }
-        
+
         let hours = Int(duration) / 3600
         let minutes = (Int(duration) % 3600) / 60
-        
+
         if minutes == 0 {
-            return "\(hours) 小时"
+            return "\(hours)h"
         } else {
-            return "\(hours) 小时 \(minutes) 分钟"
+            return "\(hours)h \(minutes)m"
         }
     }
 }

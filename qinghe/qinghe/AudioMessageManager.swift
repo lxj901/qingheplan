@@ -80,6 +80,9 @@ class AudioMessageManager: NSObject, ObservableObject {
         duration = 0
         playbackProgress = 0
         stopPlaybackTimer()
+        
+        // 结束语音消息占用，交由 AudioOrchestrator 统一切回白噪音播放所需会话
+        AudioOrchestrator.shared.endVoiceMessage()
     }
     
     /// 跳转到指定时间
@@ -93,25 +96,10 @@ class AudioMessageManager: NSObject, ObservableObject {
     // MARK: - Private Methods
     
     private func setupAudioSession() {
-        do {
-            // 设置音频会话类别为播放和录制，支持蓝牙和扬声器
-            // 注意：.allowBluetoothA2DP 不能与 .playAndRecord 同时使用，否则会导致 -50 (paramErr)
-            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth])
-            try audioSession.setActive(true)
-            print("✅ 音频会话设置成功")
-        } catch {
-            print("❌ 音频会话设置失败: \(error)")
-            // 尝试备用配置
-            do {
-                try audioSession.setCategory(.playback, mode: .default)
-                try audioSession.setActive(true)
-                print("✅ 音频会话备用配置成功")
-            } catch {
-                print("❌ 音频会话备用配置也失败: \(error)")
-            }
-        }
+        // 由 AudioOrchestrator 统一管理音频会话，避免与白噪音冲突
+        print("ℹ️ AudioMessageManager: 音频会话由 AudioOrchestrator 统一管理")
     }
-    
+
     private func playLocalAudio(url: String) {
         guard let fileURL = URL(string: url) else {
             print("❌ 无效的本地音频URL: \(url)")
@@ -149,7 +137,7 @@ class AudioMessageManager: NSObject, ObservableObject {
         }
 
         // 重新设置音频会话
-        setupAudioSession()
+        AudioOrchestrator.shared.beginVoiceMessage()
 
         do {
             // 尝试创建音频播放器
@@ -214,7 +202,7 @@ class AudioMessageManager: NSObject, ObservableObject {
         print("🎵 检测到音频格式: \(format)")
 
         // 重新设置音频会话
-        setupAudioSession()
+        AudioOrchestrator.shared.beginVoiceMessage()
 
         do {
             audioPlayer = try AVAudioPlayer(data: data)
@@ -461,5 +449,4 @@ extension String {
         return digest.map { String(format: "%02hhx", $0) }.joined()
     }
 }
-
 

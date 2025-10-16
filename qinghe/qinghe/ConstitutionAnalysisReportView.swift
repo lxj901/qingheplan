@@ -95,6 +95,7 @@ struct ConstitutionAnalysisReportView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .preferredColorScheme(.light) // 体质分析报告页面不适配深色模式
         .asSubView()
         .tint(.black)
     }

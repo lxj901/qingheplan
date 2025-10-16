@@ -46,9 +46,55 @@ class UserProfileViewModel: ObservableObject {
     private let networkManager = NetworkManager.shared
     private let apiService = CommunityAPIService.shared
     
+    // MARK: - 缓存相关属性
+    // 缓存最后加载时间
+    private var lastLoadTime: Date?
+    // 缓存有效期（秒），默认5分钟
+    private let cacheValidDuration: TimeInterval = 5 * 60
+    // 是否已经初次加载过
+    private var hasInitialLoaded: Bool = false
+    // 缓存的用户ID（用于判断是否切换了用户）
+    private var cachedUserId: String?
+    
+    // MARK: - 检查缓存是否有效
+    func shouldLoadData(userId: String, forceRefresh: Bool = false) -> Bool {
+        // 如果强制刷新，直接返回 true
+        if forceRefresh {
+            return true
+        }
+        
+        // 如果切换了用户，需要重新加载
+        if cachedUserId != userId {
+            return true
+        }
+        
+        // 如果从未加载过，需要加载
+        if !hasInitialLoaded {
+            return true
+        }
+        
+        // 检查缓存是否过期
+        if let lastTime = lastLoadTime {
+            let timeElapsed = Date().timeIntervalSince(lastTime)
+            // 如果缓存未过期，不需要重新加载
+            if timeElapsed < cacheValidDuration {
+                print("📦 用户详情页缓存有效，剩余时间: \(Int(cacheValidDuration - timeElapsed))秒")
+                return false
+            }
+        }
+        
+        return true
+    }
+    
     // MARK: - 加载用户资料
-    func loadUserProfile(userId: String) async {
+    func loadUserProfile(userId: String, forceRefresh: Bool = false) async {
         print("🔍 UserProfileViewModel: 开始加载用户资料, userId: \(userId)")
+        
+        // 检查是否需要加载数据（除非是强制刷新）
+        if !forceRefresh && !shouldLoadData(userId: userId, forceRefresh: false) {
+            print("📦 使用缓存数据，跳过加载")
+            return
+        }
 
         // 将String类型的userId转换为Int类型
         guard let userIdInt = Int(userId) else {
@@ -91,6 +137,14 @@ class UserProfileViewModel: ObservableObject {
                     print("🔍 UserProfileViewModel: 开始加载用户帖子")
                     await loadUserPosts(userId: userId, page: 1)
                 }
+                
+                // 标记已初次加载完成
+                hasInitialLoaded = true
+                // 更新最后加载时间
+                lastLoadTime = Date()
+                // 缓存当前用户ID
+                cachedUserId = userId
+                print("📦 用户详情页缓存已更新")
             } else {
                 print("❌ UserProfileViewModel: 用户资料加载失败")
                 print("❌ UserProfileViewModel: response.success = \(response.success)")
