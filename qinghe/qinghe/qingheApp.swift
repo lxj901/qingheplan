@@ -71,6 +71,7 @@ struct qingheApp: App {
     @StateObject private var pushNotificationManager = PushNotificationManager.shared
     @StateObject private var locationManager = AppleMapService.shared
     @StateObject private var themeManager = ThemeManager.shared
+    @StateObject private var attManager = ATTrackingPermissionManager.shared
 
     init() {
         // 临时代码：打印所有可用字体名称（用于获取自定义字体的PostScript名）

@@ -132,18 +132,33 @@ class CommunityViewModel: ObservableObject {
 
     // MARK: - 加载帖子
     func loadPosts(refresh: Bool = false) async {
+        print("🔍 CommunityViewModel.loadPosts 调用 - refresh: \(refresh), isLoading: \(isLoading), hasMorePosts: \(hasMorePosts)")
+
         // 取消之前的请求
         currentLoadTask?.cancel()
 
         if refresh {
             currentPage = 1
             hasMorePosts = true
+            posts = []  // 清空现有帖子
+            isLoading = false  // 重置加载状态
         }
 
-        guard !isLoading && hasMorePosts else { return }
+        // 如果正在加载或没有更多数据，则返回（但刷新时已经重置了这些状态）
+        guard !isLoading else {
+            print("⚠️ 已在加载中，跳过本次请求")
+            return
+        }
+
+        guard hasMorePosts else {
+            print("⚠️ 没有更多帖子，跳过本次请求")
+            return
+        }
 
         isLoading = true
         errorMessage = nil
+
+        print("🔄 开始加载帖子 - tab: \(selectedTab.displayName), page: \(currentPage)")
 
         // 创建新的任务
         currentLoadTask = Task {
@@ -156,10 +171,13 @@ class CommunityViewModel: ObservableObject {
                 )
 
                 // 检查任务是否被取消
-                guard !Task.isCancelled else { return }
+                guard !Task.isCancelled else {
+                    print("⚠️ 任务已取消")
+                    return
+                }
 
                 print("========================================")
-                print("🔍 CommunityViewModel 加载帖子成功")
+                print("✅ CommunityViewModel 加载帖子成功")
                 print("🔍 获取到 \(response.items.count) 个帖子")
                 print("🔍 refresh: \(refresh)")
 
@@ -178,27 +196,35 @@ class CommunityViewModel: ObservableObject {
                 hasMorePosts = response.pagination.hasNextPage
                 currentPage += 1
 
-                print("🔍 更新后总帖子数: \(posts.count)")
+                print("✅ 更新后总帖子数: \(posts.count)")
                 print("🔍 hasMorePosts: \(hasMorePosts)")
+                print("🔍 下一页: \(currentPage)")
                 print("========================================")
 
             } catch {
                 // 检查任务是否被取消
-                guard !Task.isCancelled else { return }
+                guard !Task.isCancelled else {
+                    print("⚠️ 任务已取消（错误捕获）")
+                    return
+                }
 
                 // 过滤掉取消错误，避免显示"cancelled"错误
                 if error is CancellationError {
+                    print("⚠️ 捕获到取消错误")
                     return
                 }
 
                 if let urlError = error as? URLError, urlError.code == .cancelled {
+                    print("⚠️ 捕获到URL取消错误")
                     return
                 }
 
+                print("❌ 加载帖子失败: \(error.localizedDescription)")
                 errorMessage = error.localizedDescription
             }
 
             isLoading = false
+            print("🔍 加载状态已重置: isLoading = false")
         }
 
         await currentLoadTask?.value
@@ -223,8 +249,22 @@ class CommunityViewModel: ObservableObject {
 
     // MARK: - 切换Tab
     func switchTab(_ tab: CommunityTab) async {
+        print("🔄 切换标签: \(selectedTab.displayName) -> \(tab.displayName)")
+
+        // 如果是同一个标签，不需要切换
+        guard tab != selectedTab else {
+            print("⚠️ 已在当前标签，无需切换")
+            return
+        }
+
+        // 先取消当前请求
+        cancelCurrentRequest()
+
+        // 更新选中的标签
         selectedTab = tab
-        await refreshPosts()
+
+        // 重置状态并加载新数据
+        await loadPosts(refresh: true)
     }
 
     // MARK: - 切换分类

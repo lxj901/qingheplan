@@ -564,8 +564,9 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "青禾计划";
-				INFOPLIST_KEY_NSCameraUsageDescription = "青禾计划需要使用相机来拍摄照片和视频";
+				INFOPLIST_KEY_NSCameraUsageDescription = "我们需要使用相机以便您拍摄照片或视频用于头像上传、发布内容，或使用舌面诊功能进行检测与分析";
 				INFOPLIST_KEY_NSDocumentPickerUsageDescription = "青禾计划需要访问文档来发送文件";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "我们需要获取您的广告标识符（IDFA）以便为您提供个性化广告和优化广告效果。您可以随时在系统设置中更改此权限。";
 				INFOPLIST_KEY_NSFamilyControlsUsageDescription = "青禾计划需要访问屏幕使用时间数据来帮助您管理应用使用时间，实现自律目标";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "青禾计划需要从“健康”读取心率、能量与距离，用于实时运动指导与统计";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "青禾计划可能会向“健康”写入锻炼记录与统计（可选）";
@@ -623,8 +624,9 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "青禾计划";
-				INFOPLIST_KEY_NSCameraUsageDescription = "青禾计划需要使用相机来拍摄照片和视频";
+				INFOPLIST_KEY_NSCameraUsageDescription = "我们需要使用相机以便您拍摄照片或视频用于头像上传、发布内容，或使用舌面诊功能进行检测与分析";
 				INFOPLIST_KEY_NSDocumentPickerUsageDescription = "青禾计划需要访问文档来发送文件";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "我们需要获取您的广告标识符（IDFA）以便为您提供个性化广告和优化广告效果。您可以随时在系统设置中更改此权限。";
 				INFOPLIST_KEY_NSFamilyControlsUsageDescription = "青禾计划需要访问屏幕使用时间数据来帮助您管理应用使用时间，实现自律目标";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "青禾计划需要从“健康”读取心率、能量与距离，用于实时运动指导与统计";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "青禾计划可能会向“健康”写入锻炼记录与统计（可选）";

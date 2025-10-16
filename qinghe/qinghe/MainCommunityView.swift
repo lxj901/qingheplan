@@ -6,6 +6,7 @@ import SwiftUI
 struct MainCommunityView: View {
     @StateObject private var communityViewModel = CommunityViewModel()
     @StateObject private var adManager = GDTAdManager.shared
+    @StateObject private var attManager = ATTrackingPermissionManager.shared
     @EnvironmentObject private var tabBarManager: TabBarVisibilityManager
     @State private var searchText = ""
 
@@ -121,9 +122,6 @@ struct MainCommunityView: View {
             } else {
                 print("🎯 MainCommunityView.task: 不在推荐标签下，跳过广告加载")
             }
-        }
-        .onAppear {
-            // 页面出现时的逻辑可以在这里添加
         }
         .fullScreenCover(isPresented: $showingSearch, onDismiss: {
             Task { @MainActor in

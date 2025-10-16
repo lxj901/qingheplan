@@ -488,3 +488,236 @@ enum ThirdPartyService: CaseIterable {
         }
     }
 }
+
+// MARK: - 使用条款页面
+struct TermsOfUseView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Binding var navigationPath: NavigationPath
+
+    var body: some View {
+        VStack(spacing: 0) {
+            // 自定义导航栏
+            customNavigationBar
+
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    Text("青禾计划使用条款")
+                        .font(.system(size: 24, weight: .bold))
+                        .padding(.bottom, 10)
+
+                    ForEach(TermsOfUseSection.allCases, id: \.self) { section in
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text(section.title)
+                                .font(.system(size: 18, weight: .semibold))
+
+                            Text(section.content)
+                                .font(.system(size: 14))
+                                .foregroundColor(.secondary)
+                                .lineSpacing(4)
+                        }
+                    }
+
+                    Text("最后更新时间：2025年10月16日")
+                        .font(.system(size: 12))
+                        .foregroundColor(.secondary)
+                        .padding(.top, 20)
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
+            }
+        }
+        .onAppear {
+            print("🧭 TermsOfUseView onAppear - navigationPath.count = \(navigationPath.count)")
+        }
+    }
+
+    // MARK: - 自定义导航栏
+    private var customNavigationBar: some View {
+        HStack {
+            Button(action: {
+                if navigationPath.count > 0 {
+                    navigationPath.removeLast()
+                } else {
+                    dismiss()
+                }
+            }) {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 20, weight: .medium))
+                    .foregroundColor(.primary)
+                    .frame(width: 44, height: 44)
+            }
+
+            Spacer()
+
+            Text("使用条款")
+                .font(.headline)
+                .fontWeight(.semibold)
+
+            Spacer()
+
+            Color.clear.frame(width: 44, height: 44)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
+        .background(Color(.systemBackground))
+    }
+}
+
+// MARK: - 使用条款章节枚举
+enum TermsOfUseSection: CaseIterable {
+    case introduction
+    case license
+    case intellectualProperty
+    case userAccount
+    case paidServices
+    case userContent
+    case privacy
+    case thirdParty
+    case disclaimer
+    case liability
+    case indemnification
+    case termination
+    case law
+    case changes
+    case general
+    case contact
+    case apple
+
+    var title: String {
+        switch self {
+        case .introduction: return "重要提示"
+        case .license: return "1. 许可授予"
+        case .intellectualProperty: return "2. 知识产权"
+        case .userAccount: return "3. 用户账户"
+        case .paidServices: return "4. 付费服务与订阅"
+        case .userContent: return "5. 用户内容"
+        case .privacy: return "6. 隐私"
+        case .thirdParty: return "7. 第三方服务"
+        case .disclaimer: return "8. 免责声明"
+        case .liability: return "9. 责任限制"
+        case .indemnification: return "10. 赔偿"
+        case .termination: return "11. 服务变更与终止"
+        case .law: return "12. 适用法律与争议解决"
+        case .changes: return "13. 条款变更"
+        case .general: return "14. 一般条款"
+        case .contact: return "15. 联系我们"
+        case .apple: return "16. Apple 特定条款"
+        }
+    }
+
+    var content: String {
+        switch self {
+        case .introduction:
+            return """
+在下载、安装、访问或使用本应用之前，请仔细阅读本使用条款。使用本应用即表示您同意受本条款的约束。如果您不同意本条款，请勿使用本应用。
+"""
+        case .license:
+            return """
+我们授予您一项有限的、非独占的、不可转让的、可撤销的许可，允许您在符合 Apple App Store 使用规则的 iOS 设备上下载、安装和使用本应用，仅供个人、非商业用途。
+
+您不得复制、修改、改编、翻译、反向工程、反编译或反汇编本应用的任何部分；不得出租、出借、转售、分发、传播或以其他方式转让本应用或本许可。
+"""
+        case .intellectualProperty:
+            return """
+本应用及其所有内容、功能和特性（包括但不限于软件、文本、图形、图像、音频、视频、设计、商标、服务标志和徽标）均由我们或我们的许可方拥有，受中华人民共和国及国际版权法、商标法和其他知识产权法律的保护。
+
+"青禾计划"及相关标识是我们的商标或注册商标。未经我们事先书面许可，您不得使用这些商标。
+"""
+        case .userAccount:
+            return """
+您可以通过手机号码或 Apple ID 创建账户。您必须提供准确、完整和最新的注册信息，并及时更新以保持信息的准确性。
+
+您有责任维护账户的保密性和安全性。您对在您账户下发生的所有活动负责。如果您发现任何未经授权使用您账户的情况，请立即通知我们。
+"""
+        case .paidServices:
+            return """
+本应用提供自动续订订阅服务（包括月度、季度和年度会员）。订阅将自动续订，除非您在当前订阅期结束前至少 24 小时取消订阅。
+
+所有付款通过 Apple 的 App Store 处理。您的 Apple ID 账户将在确认购买时被收费。您可以在 iOS 设备的"设置" > "Apple ID" > "订阅"中管理您的订阅并关闭自动续订。
+
+退款请求应直接向 Apple 提出。我们遵循 Apple 的退款政策。一般情况下，已支付的订阅费用不予退还，除非法律另有规定。
+"""
+        case .userContent:
+            return """
+您可以在本应用中发布、上传或提交内容（包括文本、图片、视频、评论等）。您对您的用户内容负全部责任。
+
+通过在本应用中发布用户内容，您授予我们一项全球性的、非独占的、免版税的、可转让的、可再许可的许可，允许我们使用、复制、修改、改编、发布、翻译、创建衍生作品、分发和展示您的用户内容。
+
+您的用户内容不得侵犯任何第三方的知识产权或其他权利；不得包含非法、有害、威胁、辱骂、骚扰、诽谤、粗俗、淫秽或其他令人反感的内容；不得包含虚假或误导性信息。
+"""
+        case .privacy:
+            return """
+您的隐私对我们非常重要。我们如何收集、使用和保护您的个人信息在我们的《隐私政策》中有详细说明。使用本应用即表示您同意我们按照《隐私政策》处理您的信息。
+
+请在应用内"设置" > "隐私政策"中查看完整的隐私政策。
+"""
+        case .thirdParty:
+            return """
+本应用可能集成或链接到第三方服务、网站或内容（包括但不限于 Apple 身份认证、Apple 内购、腾讯广告 SDK、阿里云 OSS/CDN 等）。这些第三方服务有其自己的条款和隐私政策，我们不对其负责。
+
+我们不对任何第三方服务的可用性、准确性、内容或功能负责。您使用第三方服务的风险由您自行承担。
+"""
+        case .disclaimer:
+            return """
+本应用按"按现状"和"按可用性"提供，不提供任何明示或暗示的保证，包括但不限于对适销性、特定用途适用性和非侵权性的暗示保证。
+
+我们不保证本应用将满足您的要求或期望；不保证本应用将不间断、及时、安全或无错误；不保证通过本应用获得的结果将准确或可靠。
+
+重要提示：本应用提供的健康、睡眠、运动等相关功能和内容仅供一般信息和参考之用，不构成医疗建议、诊断或治疗。在做出任何健康相关决定之前，请咨询合格的医疗专业人员。
+"""
+        case .liability:
+            return """
+在适用法律允许的最大范围内，我们不对任何间接、偶然、特殊、后果性或惩罚性损害负责，包括但不限于利润损失、数据丢失、商誉损失或其他无形损失。
+
+我们对您因使用或无法使用本应用而产生的任何索赔的总责任，无论基于何种法律理论，均不超过您在索赔发生前 12 个月内向我们支付的金额，或人民币 100 元（以较高者为准）。
+"""
+        case .indemnification:
+            return """
+您同意赔偿、辩护并使我们及我们的关联公司、董事、管理人员、员工、代理人和许可方免受因以下原因引起的任何索赔、责任、损害、损失、成本和费用（包括合理的律师费）：您使用或滥用本应用；您违反本条款；您侵犯任何第三方的权利；您的用户内容。
+"""
+        case .termination:
+            return """
+我们保留随时修改、暂停或终止本应用（或其任何部分）的权利，无论是否通知。我们不对您或任何第三方因修改、暂停或终止本应用而承担责任。
+
+我们可以随时以任何理由终止或暂停您对本应用的访问，无需事先通知或承担责任，包括但不限于您违反本条款的情况。
+"""
+        case .law:
+            return """
+本条款受中华人民共和国法律管辖并按其解释，不考虑其法律冲突原则。
+
+因本条款或本应用引起的或与之相关的任何争议，双方应首先通过友好协商解决。如果协商不成，任何一方均可将争议提交至我们所在地有管辖权的人民法院诉讼解决。
+"""
+        case .changes:
+            return """
+我们保留随时修改或更新本条款的权利。如果我们对本条款进行重大变更，我们将通过应用内通知、电子邮件或其他合理方式通知您。
+
+修订后的条款将在发布后立即生效，或在通知中指定的日期生效。您在条款变更后继续使用本应用即表示您接受修订后的条款。
+"""
+        case .general:
+            return """
+本条款（连同我们的《隐私政策》、《用户协议》、《会员服务协议》和《社区公约》）构成您与我们之间关于本应用的完整协议，并取代所有先前或同期的口头或书面协议。
+
+如果本条款的任何条款被认定为无效或不可执行，该条款将被解释为反映各方的原始意图，其余条款将继续完全有效。
+"""
+        case .contact:
+            return """
+如果您对本使用条款有任何疑问、意见或投诉，请通过以下方式联系我们：
+
+运营者：杭州耶里信息技术有限责任公司
+联系邮箱：hangzhouyeli@gmail.com
+ICP 备案号：浙ICP备2023025943号-4
+应用内反馈：进入"设置" > "意见反馈"
+
+我们将在收到您的请求后 7 个工作日内回复（复杂情况可能需要更长时间）。
+"""
+        case .apple:
+            return """
+您承认并同意，Apple 及其子公司是本条款的第三方受益人，Apple 有权（并将被视为已接受该权利）根据本条款对您强制执行本条款。
+
+Apple 不对本应用或其内容负责。Apple 对本应用没有任何维护或支持义务。如果本应用未能符合任何适用的保证，您可以通知 Apple，Apple 将向您退还购买价格（如有）。
+
+您声明并保证：您不在受美国政府禁运或被美国政府指定为"支持恐怖主义"国家的国家/地区；您不在美国政府的任何禁止或限制方名单上。
+"""
+        }
+    }
+}

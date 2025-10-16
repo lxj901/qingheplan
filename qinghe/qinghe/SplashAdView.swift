@@ -6,9 +6,9 @@ struct SplashAdView: View {
     @StateObject private var adManager = GDTAdManager.shared
     @State private var showMainContent = false
     @State private var adLoadTimeout = false
-    
+
     let onAdFinished: () -> Void
-    
+
     var body: some View {
         ZStack {
             // 使用与SplashView相同的背景，避免闪屏
@@ -39,11 +39,11 @@ struct SplashAdView: View {
             }
         }
         .onAppear {
-            // 直接尝试显示广告
+            // ATT 权限已经在 SplashView 中请求过了，直接显示广告
             showAdIfReady()
         }
     }
-    
+
     // MARK: - Private Methods
 
     private func showAdIfReady() {
