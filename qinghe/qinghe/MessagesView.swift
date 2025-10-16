@@ -878,6 +878,7 @@ enum SettingsDestination: Hashable {
     case languageSettings
     case clearCache
     case systemPermissions
+    case attDiagnostic
     case aboutApp
     case adInfo
     case feedbackHelp
@@ -1468,6 +1469,7 @@ struct SettingsView: View {
                 Section(localizationManager.localizedString(key: "storage_permissions")) {
                     settingRow(icon: "trash.fill", iconColor: .red, title: localizationManager.localizedString(key: "clear_cache"))
                     settingRow(icon: "gear.badge", iconColor: .gray, title: localizationManager.localizedString(key: "system_permissions"))
+                    settingRow(icon: "stethoscope", iconColor: .purple, title: "ATT 权限诊断")
                 }
 
                 // 关于与帮助
@@ -1555,6 +1557,10 @@ struct SettingsView: View {
                             .asSubView()
                     case .systemPermissions:
                         SystemPermissionsView(navigationPath: $navigationPath)
+                            .navigationBarHidden(true)
+                            .asSubView()
+                    case .attDiagnostic:
+                        ATTDiagnosticView()
                             .navigationBarHidden(true)
                             .asSubView()
                     case .aboutApp:
@@ -1680,6 +1686,9 @@ struct SettingsView: View {
         case systemPermissions:
             print("🔍 设置页面：点击系统权限")
             navigationPath.append(SettingsDestination.systemPermissions)
+        case "ATT 权限诊断":
+            print("🔍 设置页面：点击 ATT 权限诊断")
+            navigationPath.append(SettingsDestination.attDiagnostic)
         case aboutQinghe:
             print("🔍 设置页面：点击关于青禾计划")
             navigationPath.append(SettingsDestination.aboutApp)
