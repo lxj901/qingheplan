@@ -1,0 +1,33 @@
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+
+# 将 Pods 关联到真正的 App 工程（位于 qinghe/ /qinghe/qinghe.xcodeproj）
+project ' /qinghe/qinghe.xcodeproj'
+
+platform :ios, min_ios_version_supported
+prepare_react_native_project!
+
+target 'qinghe' do
+  config = use_native_modules!
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    :app_path => "#{Pod::Config.instance.installation_root}/..",
+    :hermes_enabled => false,
+    :fabric_enabled => true
+  )
+
+  target 'qingheTests' do
+    inherit! :complete
+  end
+
+  target 'qingheUITests' do
+    inherit! :complete
+  end
+
+  post_install do |installer|
+    react_native_post_install(
+      installer,
+      :mac_catalyst_enabled => false
+    )
+  end
+end
