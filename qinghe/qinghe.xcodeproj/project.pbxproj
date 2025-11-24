@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		35E24B51F58E1FFDC1AAE79E /* libPods-qinghe-qingheUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 674C12C5C24401E35029F297 /* libPods-qinghe-qingheUITests.a */; };
 		52C2B9E349F62C464716FB37 /* libPods-qinghe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD27936DDB85F0D9B02B3A01 /* libPods-qinghe.a */; };
+		950C4C13A940ECA47003B07B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 560190F3598C41F82F5FC6D6 /* PrivacyInfo.xcprivacy */; };
 		A22ED350D6481850BB8A0F55 /* libPods-qinghe-qingheTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CDA52465BD2AA81E8B79882 /* libPods-qinghe-qingheTests.a */; };
 		DD1B3AD72E4B5B9D00CD8265 /* GDTMobSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD1B3AD42E4B5B9D00CD8262 /* GDTMobSDK.xcframework */; };
 		DD1B3AD82E4B5B9D00CD8266 /* Tquic.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD1B3AD52E4B5B9D00CD8263 /* Tquic.xcframework */; };
@@ -88,14 +89,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		12D0A3261FA159215878565A /* Pods-qinghe-qingheTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qinghe-qingheTests.release.xcconfig"; path = "Target Support Files/Pods-qinghe-qingheTests/Pods-qinghe-qingheTests.release.xcconfig"; sourceTree = "<group>"; };
-		3C01011D248C49677354B43D /* Pods-qinghe-qingheTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qinghe-qingheTests.debug.xcconfig"; path = "Target Support Files/Pods-qinghe-qingheTests/Pods-qinghe-qingheTests.debug.xcconfig"; sourceTree = "<group>"; };
+		12D0A3261FA159215878565A /* Pods-qinghe-qingheTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qinghe-qingheTests.release.xcconfig"; path = "../qinghe plan/qinghe/Pods/Target Support Files/Pods-qinghe-qingheTests/Pods-qinghe-qingheTests.release.xcconfig"; sourceTree = "<group>"; };
+		3C01011D248C49677354B43D /* Pods-qinghe-qingheTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qinghe-qingheTests.debug.xcconfig"; path = "../qinghe plan/qinghe/Pods/Target Support Files/Pods-qinghe-qingheTests/Pods-qinghe-qingheTests.debug.xcconfig"; sourceTree = "<group>"; };
 		3CDA52465BD2AA81E8B79882 /* libPods-qinghe-qingheTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-qinghe-qingheTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		560190F3598C41F82F5FC6D6 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		59F9664985E31CE3B30DC291 /* Pods-qinghe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qinghe.release.xcconfig"; path = "Target Support Files/Pods-qinghe/Pods-qinghe.release.xcconfig"; sourceTree = "<group>"; };
+		59F9664985E31CE3B30DC291 /* Pods-qinghe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qinghe.release.xcconfig"; path = "../qinghe plan/qinghe/Pods/Target Support Files/Pods-qinghe/Pods-qinghe.release.xcconfig"; sourceTree = "<group>"; };
 		674C12C5C24401E35029F297 /* libPods-qinghe-qingheUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-qinghe-qingheUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9795727403E63696ADDD1A52 /* Pods-qinghe-qingheUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qinghe-qingheUITests.debug.xcconfig"; path = "Target Support Files/Pods-qinghe-qingheUITests/Pods-qinghe-qingheUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		ACD0A544F9CB886A6F2ED2D4 /* Pods-qinghe-qingheUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qinghe-qingheUITests.release.xcconfig"; path = "Target Support Files/Pods-qinghe-qingheUITests/Pods-qinghe-qingheUITests.release.xcconfig"; sourceTree = "<group>"; };
+		9795727403E63696ADDD1A52 /* Pods-qinghe-qingheUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qinghe-qingheUITests.debug.xcconfig"; path = "../qinghe plan/qinghe/Pods/Target Support Files/Pods-qinghe-qingheUITests/Pods-qinghe-qingheUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		ACD0A544F9CB886A6F2ED2D4 /* Pods-qinghe-qingheUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qinghe-qingheUITests.release.xcconfig"; path = "../qinghe plan/qinghe/Pods/Target Support Files/Pods-qinghe-qingheUITests/Pods-qinghe-qingheUITests.release.xcconfig"; sourceTree = "<group>"; };
 		DD1B3AA92E4B5B9B00CD8261 /* qinghe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = qinghe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD1B3AB72E4B5B9D00CD8261 /* qingheTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = qingheTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD1B3AC12E4B5B9D00CD8261 /* qingheUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = qingheUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -139,36 +140,28 @@
 		DD83E7DD2ECD8F000042F78C /* BioAuthEngine.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = BioAuthEngine.bundle; path = Frameworks/BioAuthEngine.framework/BioAuthEngine.bundle; sourceTree = "<group>"; };
 		DD83E7DE2ECD8F000042F78C /* OCRXMedia.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = OCRXMedia.bundle; path = Frameworks/OCRDetectSDKForTech.framework/OCRXMedia.bundle; sourceTree = "<group>"; };
 		DD83E7DF2ECD8F000042F78C /* ToygerService.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = ToygerService.bundle; path = Frameworks/ToygerService.framework/ToygerService.bundle; sourceTree = "<group>"; };
-		E2596B400684247E6D30C275 /* Pods-qinghe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qinghe.debug.xcconfig"; path = "Target Support Files/Pods-qinghe/Pods-qinghe.debug.xcconfig"; sourceTree = "<group>"; };
+		E2596B400684247E6D30C275 /* Pods-qinghe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qinghe.debug.xcconfig"; path = "../qinghe plan/qinghe/Pods/Target Support Files/Pods-qinghe/Pods-qinghe.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		DDE10CEA2ED41806005586A8 /* Exceptions for "qinghe" folder in "qinghe" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-				"WaterfallLayout 2.swift",
-			);
-			target = DD1B3AA82E4B5B9B00CD8261 /* qinghe */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		DD1B3AAB2E4B5B9B00CD8261 /* qinghe */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				DDE10CEA2ED41806005586A8 /* Exceptions for "qinghe" folder in "qinghe" target */,
 			);
 			path = qinghe;
 			sourceTree = "<group>";
 		};
 		DD1B3ABA2E4B5B9D00CD8261 /* qingheTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = qingheTests;
 			sourceTree = "<group>";
 		};
 		DD1B3AC42E4B5B9D00CD8261 /* qingheUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = qingheUITests;
 			sourceTree = "<group>";
 		};
@@ -457,6 +450,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				950C4C13A940ECA47003B07B /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -551,13 +545,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-qinghe-qingheTests/Pods-qinghe-qingheTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-qinghe-qingheTests/Pods-qinghe-qingheTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -572,13 +562,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-qinghe-qingheUITests/Pods-qinghe-qingheUITests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-qinghe-qingheUITests/Pods-qinghe-qingheUITests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -593,13 +579,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-qinghe/Pods-qinghe-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-qinghe/Pods-qinghe-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -704,7 +686,10 @@
 				MTL_FAST_MATH = YES;
 				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -763,7 +748,10 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				NEW_SETTING = "";
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SWIFT_COMPILATION_MODE = wholemodule;
 				USE_HERMES = false;
