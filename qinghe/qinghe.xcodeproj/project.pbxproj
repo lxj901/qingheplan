@@ -1,0 +1,1051 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		35E24B51F58E1FFDC1AAE79E /* libPods-qinghe-qingheUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 674C12C5C24401E35029F297 /* libPods-qinghe-qingheUITests.a */; };
+		52C2B9E349F62C464716FB37 /* libPods-qinghe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD27936DDB85F0D9B02B3A01 /* libPods-qinghe.a */; };
+		A22ED350D6481850BB8A0F55 /* libPods-qinghe-qingheTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CDA52465BD2AA81E8B79882 /* libPods-qinghe-qingheTests.a */; };
+		DD1B3AD72E4B5B9D00CD8265 /* GDTMobSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD1B3AD42E4B5B9D00CD8262 /* GDTMobSDK.xcframework */; };
+		DD1B3AD82E4B5B9D00CD8266 /* Tquic.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD1B3AD52E4B5B9D00CD8263 /* Tquic.xcframework */; };
+		DD1B3AD92E4B5B9D00CD8267 /* GDTMobSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD1B3AD42E4B5B9D00CD8262 /* GDTMobSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DD1B3ADA2E4B5B9D00CD8268 /* Tquic.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD1B3AD52E4B5B9D00CD8263 /* Tquic.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DD83E7832ECD8A610042F78C /* GDTMobSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD1B3AD42E4B5B9D00CD8262 /* GDTMobSDK.xcframework */; };
+		DD83E7842ECD8A610042F78C /* Tquic.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD1B3AD52E4B5B9D00CD8263 /* Tquic.xcframework */; };
+		DD83E7972ECD8A620042F78C /* ToygerNative.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E7892ECD8A620042F78C /* ToygerNative.framework */; };
+		DD83E7992ECD8A620042F78C /* APBToygerFacade.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E78A2ECD8A620042F78C /* APBToygerFacade.framework */; };
+		DD83E79B2ECD8A620042F78C /* APPSecuritySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E78B2ECD8A620042F78C /* APPSecuritySDK.framework */; };
+		DD83E7A42ECD8A780042F78C /* APPSecuritySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E78B2ECD8A620042F78C /* APPSecuritySDK.framework */; };
+		DD83E7A62ECD8A780042F78C /* BioAuthEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E78D2ECD8A620042F78C /* BioAuthEngine.framework */; };
+		DD83E7A72ECD8A780042F78C /* DTFIdentityManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E78E2ECD8A620042F78C /* DTFIdentityManager.framework */; };
+		DD83E7AA2ECD8A780042F78C /* GDTMobSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD1B3AD42E4B5B9D00CD8262 /* GDTMobSDK.xcframework */; };
+		DD83E7AB2ECD8A780042F78C /* OCRDetectSDKForTech.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E7852ECD8A620042F78C /* OCRDetectSDKForTech.framework */; };
+		DD83E7AC2ECD8A780042F78C /* ToygerNative.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E7892ECD8A620042F78C /* ToygerNative.framework */; };
+		DD83E7AD2ECD8A780042F78C /* ToygerService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E7872ECD8A620042F78C /* ToygerService.framework */; };
+		DD83E7AE2ECD8A780042F78C /* Tquic.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD1B3AD52E4B5B9D00CD8263 /* Tquic.xcframework */; };
+		DD83E7B62ECD8B070042F78C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E7B52ECD8B060042F78C /* CoreGraphics.framework */; };
+		DD83E7B82ECD8B1D0042F78C /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E7B72ECD8B1D0042F78C /* Accelerate.framework */; };
+		DD83E7BA2ECD8B2A0042F78C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E7B92ECD8B2A0042F78C /* SystemConfiguration.framework */; };
+		DD83E7BC2ECD8B370042F78C /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E7BB2ECD8B370042F78C /* AssetsLibrary.framework */; };
+		DD83E7BE2ECD8B480042F78C /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E7BD2ECD8B480042F78C /* CoreTelephony.framework */; };
+		DD83E7C02ECD8B590042F78C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E7BF2ECD8B590042F78C /* QuartzCore.framework */; };
+		DD83E7C22ECD8B690042F78C /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E7C12ECD8B680042F78C /* CoreFoundation.framework */; };
+		DD83E7C42ECD8B760042F78C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E7C32ECD8B760042F78C /* CoreLocation.framework */; };
+		DD83E7C62ECD8B890042F78C /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E7C52ECD8B890042F78C /* ImageIO.framework */; };
+		DD83E7C82ECD8B960042F78C /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E7C72ECD8B960042F78C /* CoreMedia.framework */; };
+		DD83E7CA2ECD8BA50042F78C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E7C92ECD8BA50042F78C /* AVFoundation.framework */; };
+		DD83E7CC2ECD8BB00042F78C /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E7CB2ECD8BB00042F78C /* WebKit.framework */; };
+		DD83E7CE2ECD8BBC0042F78C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E7CD2ECD8BBC0042F78C /* AudioToolbox.framework */; };
+		DD83E7D02ECD8BC90042F78C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E7CF2ECD8BC90042F78C /* CFNetwork.framework */; };
+		DD83E7D22ECD8BD60042F78C /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E7D12ECD8BD60042F78C /* MobileCoreServices.framework */; };
+		DD83E7D42ECD8BE30042F78C /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD83E7D32ECD8BE30042F78C /* AdSupport.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DD1B3AB82E4B5B9D00CD8261 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD1B3AA12E4B5B9B00CD8261 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DD1B3AA82E4B5B9B00CD8261;
+			remoteInfo = qinghe;
+		};
+		DD1B3AC22E4B5B9D00CD8261 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD1B3AA12E4B5B9B00CD8261 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DD1B3AA82E4B5B9B00CD8261;
+			remoteInfo = qinghe;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		DD1B3ADB2E4B5B9D00CD8269 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				DD1B3AD92E4B5B9D00CD8267 /* GDTMobSDK.xcframework in Embed Frameworks */,
+				DD1B3ADA2E4B5B9D00CD8268 /* Tquic.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD58E9F82E7AD3CE001C0F65 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		12D0A3261FA159215878565A /* Pods-qinghe-qingheTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qinghe-qingheTests.release.xcconfig"; path = "Target Support Files/Pods-qinghe-qingheTests/Pods-qinghe-qingheTests.release.xcconfig"; sourceTree = "<group>"; };
+		3C01011D248C49677354B43D /* Pods-qinghe-qingheTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qinghe-qingheTests.debug.xcconfig"; path = "Target Support Files/Pods-qinghe-qingheTests/Pods-qinghe-qingheTests.debug.xcconfig"; sourceTree = "<group>"; };
+		3CDA52465BD2AA81E8B79882 /* libPods-qinghe-qingheTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-qinghe-qingheTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		560190F3598C41F82F5FC6D6 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		59F9664985E31CE3B30DC291 /* Pods-qinghe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qinghe.release.xcconfig"; path = "Target Support Files/Pods-qinghe/Pods-qinghe.release.xcconfig"; sourceTree = "<group>"; };
+		674C12C5C24401E35029F297 /* libPods-qinghe-qingheUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-qinghe-qingheUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9795727403E63696ADDD1A52 /* Pods-qinghe-qingheUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qinghe-qingheUITests.debug.xcconfig"; path = "Target Support Files/Pods-qinghe-qingheUITests/Pods-qinghe-qingheUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		ACD0A544F9CB886A6F2ED2D4 /* Pods-qinghe-qingheUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qinghe-qingheUITests.release.xcconfig"; path = "Target Support Files/Pods-qinghe-qingheUITests/Pods-qinghe-qingheUITests.release.xcconfig"; sourceTree = "<group>"; };
+		DD1B3AA92E4B5B9B00CD8261 /* qinghe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = qinghe.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD1B3AB72E4B5B9D00CD8261 /* qingheTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = qingheTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD1B3AC12E4B5B9D00CD8261 /* qingheUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = qingheUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD1B3AD42E4B5B9D00CD8262 /* GDTMobSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GDTMobSDK.xcframework; sourceTree = "<group>"; };
+		DD1B3AD52E4B5B9D00CD8263 /* Tquic.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Tquic.xcframework; sourceTree = "<group>"; };
+		DD27936DDB85F0D9B02B3A01 /* libPods-qinghe.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-qinghe.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD83E7852ECD8A620042F78C /* OCRDetectSDKForTech.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OCRDetectSDKForTech.framework; sourceTree = "<group>"; };
+		DD83E7862ECD8A620042F78C /* DTFMobileRPC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DTFMobileRPC.framework; sourceTree = "<group>"; };
+		DD83E7872ECD8A620042F78C /* ToygerService.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ToygerService.framework; sourceTree = "<group>"; };
+		DD83E7882ECD8A620042F78C /* ATAuthSDK_D.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ATAuthSDK_D.xcframework; sourceTree = "<group>"; };
+		DD83E7892ECD8A620042F78C /* ToygerNative.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ToygerNative.framework; sourceTree = "<group>"; };
+		DD83E78A2ECD8A620042F78C /* APBToygerFacade.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = APBToygerFacade.framework; sourceTree = "<group>"; };
+		DD83E78B2ECD8A620042F78C /* APPSecuritySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = APPSecuritySDK.framework; sourceTree = "<group>"; };
+		DD83E78C2ECD8A620042F78C /* DTFUtility.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DTFUtility.framework; sourceTree = "<group>"; };
+		DD83E78D2ECD8A620042F78C /* BioAuthEngine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BioAuthEngine.framework; sourceTree = "<group>"; };
+		DD83E78E2ECD8A620042F78C /* DTFIdentityManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DTFIdentityManager.framework; sourceTree = "<group>"; };
+		DD83E7AF2ECD8A780042F78C /* VerifyNativeAbility.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = VerifyNativeAbility.framework; sourceTree = "<group>"; };
+		DD83E7B02ECD8A780042F78C /* ZolozFaceAuthFacade.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ZolozFaceAuthFacade.framework; sourceTree = "<group>"; };
+		DD83E7B52ECD8B060042F78C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
+		DD83E7B72ECD8B1D0042F78C /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/Accelerate.framework; sourceTree = DEVELOPER_DIR; };
+		DD83E7B92ECD8B2A0042F78C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
+		DD83E7BB2ECD8B370042F78C /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/AssetsLibrary.framework; sourceTree = DEVELOPER_DIR; };
+		DD83E7BD2ECD8B480042F78C /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/CoreTelephony.framework; sourceTree = DEVELOPER_DIR; };
+		DD83E7BF2ECD8B590042F78C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		DD83E7C12ECD8B680042F78C /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/CoreFoundation.framework; sourceTree = DEVELOPER_DIR; };
+		DD83E7C32ECD8B760042F78C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
+		DD83E7C52ECD8B890042F78C /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/ImageIO.framework; sourceTree = DEVELOPER_DIR; };
+		DD83E7C72ECD8B960042F78C /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/CoreMedia.framework; sourceTree = DEVELOPER_DIR; };
+		DD83E7C92ECD8BA50042F78C /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
+		DD83E7CB2ECD8BB00042F78C /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
+		DD83E7CD2ECD8BBC0042F78C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/AudioToolbox.framework; sourceTree = DEVELOPER_DIR; };
+		DD83E7CF2ECD8BC90042F78C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
+		DD83E7D12ECD8BD60042F78C /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/MobileCoreServices.framework; sourceTree = DEVELOPER_DIR; };
+		DD83E7D32ECD8BE30042F78C /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/AdSupport.framework; sourceTree = DEVELOPER_DIR; };
+		DD83E7D52ECD8BF90042F78C /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/usr/lib/libresolv.tbd; sourceTree = DEVELOPER_DIR; };
+		DD83E7D62ECD8C0C0042F78C /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/usr/lib/libz.tbd; sourceTree = DEVELOPER_DIR; };
+		DD83E7D72ECD8C250042F78C /* libc++.1.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.1.tbd"; path = "Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/usr/lib/libc++.1.tbd"; sourceTree = DEVELOPER_DIR; };
+		DD83E7D82ECD8C360042F78C /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/usr/lib/libc++abi.tbd"; sourceTree = DEVELOPER_DIR; };
+		DD83E7D92ECD8C420042F78C /* libz.1.2.8.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.1.2.8.tbd; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/usr/lib/libz.1.2.8.tbd; sourceTree = DEVELOPER_DIR; };
+		DD83E7DC2ECD8F000042F78C /* APBToygerFacade.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = APBToygerFacade.bundle; path = Frameworks/APBToygerFacade.framework/APBToygerFacade.bundle; sourceTree = "<group>"; };
+		DD83E7DD2ECD8F000042F78C /* BioAuthEngine.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = BioAuthEngine.bundle; path = Frameworks/BioAuthEngine.framework/BioAuthEngine.bundle; sourceTree = "<group>"; };
+		DD83E7DE2ECD8F000042F78C /* OCRXMedia.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = OCRXMedia.bundle; path = Frameworks/OCRDetectSDKForTech.framework/OCRXMedia.bundle; sourceTree = "<group>"; };
+		DD83E7DF2ECD8F000042F78C /* ToygerService.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = ToygerService.bundle; path = Frameworks/ToygerService.framework/ToygerService.bundle; sourceTree = "<group>"; };
+		E2596B400684247E6D30C275 /* Pods-qinghe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qinghe.debug.xcconfig"; path = "Target Support Files/Pods-qinghe/Pods-qinghe.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		DDE10CEA2ED41806005586A8 /* Exceptions for "qinghe" folder in "qinghe" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+				"WaterfallLayout 2.swift",
+			);
+			target = DD1B3AA82E4B5B9B00CD8261 /* qinghe */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		DD1B3AAB2E4B5B9B00CD8261 /* qinghe */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				DDE10CEA2ED41806005586A8 /* Exceptions for "qinghe" folder in "qinghe" target */,
+			);
+			path = qinghe;
+			sourceTree = "<group>";
+		};
+		DD1B3ABA2E4B5B9D00CD8261 /* qingheTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = qingheTests;
+			sourceTree = "<group>";
+		};
+		DD1B3AC42E4B5B9D00CD8261 /* qingheUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = qingheUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DD1B3AA62E4B5B9B00CD8261 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD1B3AD72E4B5B9D00CD8265 /* GDTMobSDK.xcframework in Frameworks */,
+				DD83E7C62ECD8B890042F78C /* ImageIO.framework in Frameworks */,
+				DD1B3AD82E4B5B9D00CD8266 /* Tquic.xcframework in Frameworks */,
+				DD83E7C02ECD8B590042F78C /* QuartzCore.framework in Frameworks */,
+				DD83E7C82ECD8B960042F78C /* CoreMedia.framework in Frameworks */,
+				DD83E7AA2ECD8A780042F78C /* GDTMobSDK.xcframework in Frameworks */,
+				DD83E7CC2ECD8BB00042F78C /* WebKit.framework in Frameworks */,
+				DD83E7D22ECD8BD60042F78C /* MobileCoreServices.framework in Frameworks */,
+				DD83E7992ECD8A620042F78C /* APBToygerFacade.framework in Frameworks */,
+				DD83E7AB2ECD8A780042F78C /* OCRDetectSDKForTech.framework in Frameworks */,
+				DD83E7C22ECD8B690042F78C /* CoreFoundation.framework in Frameworks */,
+				DD83E7C42ECD8B760042F78C /* CoreLocation.framework in Frameworks */,
+				DD83E7B62ECD8B070042F78C /* CoreGraphics.framework in Frameworks */,
+				DD83E7AE2ECD8A780042F78C /* Tquic.xcframework in Frameworks */,
+				DD83E7842ECD8A610042F78C /* Tquic.xcframework in Frameworks */,
+				DD83E7A62ECD8A780042F78C /* BioAuthEngine.framework in Frameworks */,
+				DD83E7AD2ECD8A780042F78C /* ToygerService.framework in Frameworks */,
+				DD83E7972ECD8A620042F78C /* ToygerNative.framework in Frameworks */,
+				DD83E79B2ECD8A620042F78C /* APPSecuritySDK.framework in Frameworks */,
+				DD83E7D42ECD8BE30042F78C /* AdSupport.framework in Frameworks */,
+				DD83E7832ECD8A610042F78C /* GDTMobSDK.xcframework in Frameworks */,
+				DD83E7D02ECD8BC90042F78C /* CFNetwork.framework in Frameworks */,
+				DD83E7AC2ECD8A780042F78C /* ToygerNative.framework in Frameworks */,
+				DD83E7BE2ECD8B480042F78C /* CoreTelephony.framework in Frameworks */,
+				DD83E7BC2ECD8B370042F78C /* AssetsLibrary.framework in Frameworks */,
+				DD83E7B82ECD8B1D0042F78C /* Accelerate.framework in Frameworks */,
+				DD83E7A72ECD8A780042F78C /* DTFIdentityManager.framework in Frameworks */,
+				DD83E7BA2ECD8B2A0042F78C /* SystemConfiguration.framework in Frameworks */,
+				DD83E7A42ECD8A780042F78C /* APPSecuritySDK.framework in Frameworks */,
+				DD83E7CA2ECD8BA50042F78C /* AVFoundation.framework in Frameworks */,
+				DD83E7CE2ECD8BBC0042F78C /* AudioToolbox.framework in Frameworks */,
+				52C2B9E349F62C464716FB37 /* libPods-qinghe.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD1B3AB42E4B5B9D00CD8261 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A22ED350D6481850BB8A0F55 /* libPods-qinghe-qingheTests.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD1B3ABE2E4B5B9D00CD8261 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				35E24B51F58E1FFDC1AAE79E /* libPods-qinghe-qingheUITests.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		58C683B63CA5007A4F0CFC9A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E2596B400684247E6D30C275 /* Pods-qinghe.debug.xcconfig */,
+				59F9664985E31CE3B30DC291 /* Pods-qinghe.release.xcconfig */,
+				3C01011D248C49677354B43D /* Pods-qinghe-qingheTests.debug.xcconfig */,
+				12D0A3261FA159215878565A /* Pods-qinghe-qingheTests.release.xcconfig */,
+				9795727403E63696ADDD1A52 /* Pods-qinghe-qingheUITests.debug.xcconfig */,
+				ACD0A544F9CB886A6F2ED2D4 /* Pods-qinghe-qingheUITests.release.xcconfig */,
+			);
+			name = Pods;
+			path = ../../Pods;
+			sourceTree = "<group>";
+		};
+		DD1B3AA02E4B5B9B00CD8261 = {
+			isa = PBXGroup;
+			children = (
+				DD58EA262E7FC591001C0F65 /* Fonts */,
+				DD1B3AAB2E4B5B9B00CD8261 /* qinghe */,
+				DD1B3ABA2E4B5B9D00CD8261 /* qingheTests */,
+				DD1B3AC42E4B5B9D00CD8261 /* qingheUITests */,
+				DD1B3AAA2E4B5B9B00CD8261 /* Products */,
+				DD1B3AD62E4B5B9D00CD8264 /* Frameworks */,
+				DD65B6F02ECF2C45008665B2 /* Recovered References */,
+				560190F3598C41F82F5FC6D6 /* PrivacyInfo.xcprivacy */,
+				58C683B63CA5007A4F0CFC9A /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		DD1B3AAA2E4B5B9B00CD8261 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DD1B3AA92E4B5B9B00CD8261 /* qinghe.app */,
+				DD1B3AB72E4B5B9D00CD8261 /* qingheTests.xctest */,
+				DD1B3AC12E4B5B9D00CD8261 /* qingheUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DD1B3AD62E4B5B9D00CD8264 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DD83E7D92ECD8C420042F78C /* libz.1.2.8.tbd */,
+				DD83E7D82ECD8C360042F78C /* libc++abi.tbd */,
+				DD83E7D72ECD8C250042F78C /* libc++.1.tbd */,
+				DD83E7D62ECD8C0C0042F78C /* libz.tbd */,
+				DD83E7D52ECD8BF90042F78C /* libresolv.tbd */,
+				DD83E7D32ECD8BE30042F78C /* AdSupport.framework */,
+				DD83E7D12ECD8BD60042F78C /* MobileCoreServices.framework */,
+				DD83E7CF2ECD8BC90042F78C /* CFNetwork.framework */,
+				DD83E7CD2ECD8BBC0042F78C /* AudioToolbox.framework */,
+				DD83E7CB2ECD8BB00042F78C /* WebKit.framework */,
+				DD83E7C92ECD8BA50042F78C /* AVFoundation.framework */,
+				DD83E7C72ECD8B960042F78C /* CoreMedia.framework */,
+				DD83E7C52ECD8B890042F78C /* ImageIO.framework */,
+				DD83E7C32ECD8B760042F78C /* CoreLocation.framework */,
+				DD83E7C12ECD8B680042F78C /* CoreFoundation.framework */,
+				DD83E7BF2ECD8B590042F78C /* QuartzCore.framework */,
+				DD83E7BD2ECD8B480042F78C /* CoreTelephony.framework */,
+				DD83E7BB2ECD8B370042F78C /* AssetsLibrary.framework */,
+				DD83E7B92ECD8B2A0042F78C /* SystemConfiguration.framework */,
+				DD83E7B72ECD8B1D0042F78C /* Accelerate.framework */,
+				DD83E7B52ECD8B060042F78C /* CoreGraphics.framework */,
+				DD83E7AF2ECD8A780042F78C /* VerifyNativeAbility.framework */,
+				DD83E7B02ECD8A780042F78C /* ZolozFaceAuthFacade.framework */,
+				DD83E78A2ECD8A620042F78C /* APBToygerFacade.framework */,
+				DD83E78B2ECD8A620042F78C /* APPSecuritySDK.framework */,
+				DD83E7882ECD8A620042F78C /* ATAuthSDK_D.xcframework */,
+				DD83E78D2ECD8A620042F78C /* BioAuthEngine.framework */,
+				DD83E78E2ECD8A620042F78C /* DTFIdentityManager.framework */,
+				DD83E7862ECD8A620042F78C /* DTFMobileRPC.framework */,
+				DD83E78C2ECD8A620042F78C /* DTFUtility.framework */,
+				DD83E7852ECD8A620042F78C /* OCRDetectSDKForTech.framework */,
+				DD83E7892ECD8A620042F78C /* ToygerNative.framework */,
+				DD83E7872ECD8A620042F78C /* ToygerService.framework */,
+				DD1B3AD42E4B5B9D00CD8262 /* GDTMobSDK.xcframework */,
+				DD1B3AD52E4B5B9D00CD8263 /* Tquic.xcframework */,
+				DD27936DDB85F0D9B02B3A01 /* libPods-qinghe.a */,
+				3CDA52465BD2AA81E8B79882 /* libPods-qinghe-qingheTests.a */,
+				674C12C5C24401E35029F297 /* libPods-qinghe-qingheUITests.a */,
+			);
+			path = Frameworks;
+			sourceTree = "<group>";
+		};
+		DD58EA262E7FC591001C0F65 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		DD65B6F02ECF2C45008665B2 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				DD83E7DC2ECD8F000042F78C /* APBToygerFacade.bundle */,
+				DD83E7DD2ECD8F000042F78C /* BioAuthEngine.bundle */,
+				DD83E7DE2ECD8F000042F78C /* OCRXMedia.bundle */,
+				DD83E7DF2ECD8F000042F78C /* ToygerService.bundle */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DD1B3AA82E4B5B9B00CD8261 /* qinghe */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DD1B3ACB2E4B5B9D00CD8261 /* Build configuration list for PBXNativeTarget "qinghe" */;
+			buildPhases = (
+				1247D2259C60C9A4922DC6CD /* [CP] Check Pods Manifest.lock */,
+				DD1B3AA52E4B5B9B00CD8261 /* Sources */,
+				DD1B3AA62E4B5B9B00CD8261 /* Frameworks */,
+				DD1B3AA72E4B5B9B00CD8261 /* Resources */,
+				DD1B3ADB2E4B5B9D00CD8269 /* Embed Frameworks */,
+				DD58E9F82E7AD3CE001C0F65 /* Embed Foundation Extensions */,
+				FD397A2C7B071EB8140AAE35 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				DD1B3AAB2E4B5B9B00CD8261 /* qinghe */,
+			);
+			name = qinghe;
+			productName = qinghe;
+			productReference = DD1B3AA92E4B5B9B00CD8261 /* qinghe.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DD1B3AB62E4B5B9D00CD8261 /* qingheTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DD1B3ACE2E4B5B9D00CD8261 /* Build configuration list for PBXNativeTarget "qingheTests" */;
+			buildPhases = (
+				1A19297F1EE72FC3F6540CFF /* [CP] Check Pods Manifest.lock */,
+				DD1B3AB32E4B5B9D00CD8261 /* Sources */,
+				DD1B3AB42E4B5B9D00CD8261 /* Frameworks */,
+				DD1B3AB52E4B5B9D00CD8261 /* Resources */,
+				9FA75584DC08271F19C36613 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DD1B3AB92E4B5B9D00CD8261 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				DD1B3ABA2E4B5B9D00CD8261 /* qingheTests */,
+			);
+			name = qingheTests;
+			productName = qingheTests;
+			productReference = DD1B3AB72E4B5B9D00CD8261 /* qingheTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		DD1B3AC02E4B5B9D00CD8261 /* qingheUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DD1B3AD12E4B5B9D00CD8261 /* Build configuration list for PBXNativeTarget "qingheUITests" */;
+			buildPhases = (
+				1037E75437DAA304B7E29A73 /* [CP] Check Pods Manifest.lock */,
+				DD1B3ABD2E4B5B9D00CD8261 /* Sources */,
+				DD1B3ABE2E4B5B9D00CD8261 /* Frameworks */,
+				DD1B3ABF2E4B5B9D00CD8261 /* Resources */,
+				F59DECAD81FCA4E8E612AD1F /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DD1B3AC32E4B5B9D00CD8261 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				DD1B3AC42E4B5B9D00CD8261 /* qingheUITests */,
+			);
+			name = qingheUITests;
+			productName = qingheUITests;
+			productReference = DD1B3AC12E4B5B9D00CD8261 /* qingheUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DD1B3AA12E4B5B9B00CD8261 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					DD1B3AA82E4B5B9B00CD8261 = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					DD1B3AB62E4B5B9D00CD8261 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = DD1B3AA82E4B5B9B00CD8261;
+					};
+					DD1B3AC02E4B5B9D00CD8261 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = DD1B3AA82E4B5B9B00CD8261;
+					};
+				};
+			};
+			buildConfigurationList = DD1B3AA42E4B5B9B00CD8261 /* Build configuration list for PBXProject "qinghe" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = DD1B3AA02E4B5B9B00CD8261;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = DD1B3AAA2E4B5B9B00CD8261 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DD1B3AA82E4B5B9B00CD8261 /* qinghe */,
+				DD1B3AB62E4B5B9D00CD8261 /* qingheTests */,
+				DD1B3AC02E4B5B9D00CD8261 /* qingheUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DD1B3AA72E4B5B9B00CD8261 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD1B3AB52E4B5B9D00CD8261 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD1B3ABF2E4B5B9D00CD8261 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1037E75437DAA304B7E29A73 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-qinghe-qingheUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1247D2259C60C9A4922DC6CD /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-qinghe-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1A19297F1EE72FC3F6540CFF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-qinghe-qingheTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9FA75584DC08271F19C36613 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-qinghe-qingheTests/Pods-qinghe-qingheTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-qinghe-qingheTests/Pods-qinghe-qingheTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-qinghe-qingheTests/Pods-qinghe-qingheTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F59DECAD81FCA4E8E612AD1F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-qinghe-qingheUITests/Pods-qinghe-qingheUITests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-qinghe-qingheUITests/Pods-qinghe-qingheUITests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-qinghe-qingheUITests/Pods-qinghe-qingheUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FD397A2C7B071EB8140AAE35 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-qinghe/Pods-qinghe-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-qinghe/Pods-qinghe-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-qinghe/Pods-qinghe-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DD1B3AA52E4B5B9B00CD8261 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD1B3AB32E4B5B9D00CD8261 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD1B3ABD2E4B5B9D00CD8261 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DD1B3AB92E4B5B9D00CD8261 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DD1B3AA82E4B5B9B00CD8261 /* qinghe */;
+			targetProxy = DD1B3AB82E4B5B9D00CD8261 /* PBXContainerItemProxy */;
+		};
+		DD1B3AC32E4B5B9D00CD8261 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DD1B3AA82E4B5B9B00CD8261 /* qinghe */;
+			targetProxy = DD1B3AC22E4B5B9D00CD8261 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		DD1B3AC92E4B5B9D00CD8261 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 7CHR3URQ44;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				NEW_SETTING = "";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "$(inherited)  ";
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				USE_HERMES = false;
+			};
+			name = Debug;
+		};
+		DD1B3ACA2E4B5B9D00CD8261 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 7CHR3URQ44;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				NEW_SETTING = "";
+				OTHER_LDFLAGS = "$(inherited)  ";
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				USE_HERMES = false;
+			};
+			name = Release;
+		};
+		DD1B3ACC2E4B5B9D00CD8261 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E2596B400684247E6D30C275 /* Pods-qinghe.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
+				CODE_SIGN_ENTITLEMENTS = qinghe/qinghe.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7CHR3URQ44;
+				ENABLE_BITCODE = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+				);
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = qinghe/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "青禾计划";
+				INFOPLIST_KEY_LSApplicationCategoryType = NSUserTrackingUsageDescription;
+				INFOPLIST_KEY_NSCameraUsageDescription = "青禾计划需要使用相机以便您拍摄照片或视频用于头像上传、发布内容，或使用舌面诊功能进行检测与分析";
+				INFOPLIST_KEY_NSDocumentPickerUsageDescription = "青禾计划需要访问文档来发送文件";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "青禾计划需要从“健康”读取心率、能量与距离，用于实时运动指导与统计";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "青禾计划可能会向“健康”写入锻炼记录与统计（可选）";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "青禾计划需要始终访问您的位置信息来在后台记录运动轨迹，即使应用在后台运行时也能准确记录您的运动路线";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "青禾计划需要访问您的位置信息来记录运动轨迹和提供基于位置的服务";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "青禾计划需要使用麦克风来录制语音消息";
+				INFOPLIST_KEY_NSMotionUsageDescription = "青禾计划需要访问“运动与体能”数据，用于获取步数、步频和配速";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "青禾计划需要访问相册来选择照片和视频";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "此标识符将用于向您投放个性化广告";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIBackgroundModes = "audio location";
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.1;
+				NEW_SETTING1 = "";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.qinghe.qinghe;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "qinghe/qinghe-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Debug;
+		};
+		DD1B3ACD2E4B5B9D00CD8261 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 59F9664985E31CE3B30DC291 /* Pods-qinghe.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
+				CODE_SIGN_ENTITLEMENTS = qinghe/qinghe.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7CHR3URQ44;
+				ENABLE_BITCODE = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+				);
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = qinghe/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "青禾计划";
+				INFOPLIST_KEY_LSApplicationCategoryType = NSUserTrackingUsageDescription;
+				INFOPLIST_KEY_NSCameraUsageDescription = "青禾计划需要使用相机以便您拍摄照片或视频用于头像上传、发布内容，或使用舌面诊功能进行检测与分析";
+				INFOPLIST_KEY_NSDocumentPickerUsageDescription = "青禾计划需要访问文档来发送文件";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "青禾计划需要从“健康”读取心率、能量与距离，用于实时运动指导与统计";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "青禾计划可能会向“健康”写入锻炼记录与统计（可选）";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "青禾计划需要始终访问您的位置信息来在后台记录运动轨迹，即使应用在后台运行时也能准确记录您的运动路线";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "青禾计划需要访问您的位置信息来记录运动轨迹和提供基于位置的服务";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "青禾计划需要使用麦克风来录制语音消息";
+				INFOPLIST_KEY_NSMotionUsageDescription = "青禾计划需要访问“运动与体能”数据，用于获取步数、步频和配速";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "青禾计划需要访问相册来选择照片和视频";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "此标识符将用于向您投放个性化广告";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIBackgroundModes = "audio location";
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.1;
+				NEW_SETTING1 = "";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.qinghe.qinghe;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "qinghe/qinghe-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Release;
+		};
+		DD1B3ACF2E4B5B9D00CD8261 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3C01011D248C49677354B43D /* Pods-qinghe-qingheTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7CHR3URQ44;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.qinghe.qingheTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/qinghe.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/qinghe";
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Debug;
+		};
+		DD1B3AD02E4B5B9D00CD8261 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 12D0A3261FA159215878565A /* Pods-qinghe-qingheTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7CHR3URQ44;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.qinghe.qingheTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/qinghe.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/qinghe";
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Release;
+		};
+		DD1B3AD22E4B5B9D00CD8261 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9795727403E63696ADDD1A52 /* Pods-qinghe-qingheUITests.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7CHR3URQ44;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.qinghe.qingheUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = qinghe;
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Debug;
+		};
+		DD1B3AD32E4B5B9D00CD8261 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = ACD0A544F9CB886A6F2ED2D4 /* Pods-qinghe-qingheUITests.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7CHR3URQ44;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.qinghe.qingheUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = qinghe;
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DD1B3AA42E4B5B9B00CD8261 /* Build configuration list for PBXProject "qinghe" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD1B3AC92E4B5B9D00CD8261 /* Debug */,
+				DD1B3ACA2E4B5B9D00CD8261 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DD1B3ACB2E4B5B9D00CD8261 /* Build configuration list for PBXNativeTarget "qinghe" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD1B3ACC2E4B5B9D00CD8261 /* Debug */,
+				DD1B3ACD2E4B5B9D00CD8261 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DD1B3ACE2E4B5B9D00CD8261 /* Build configuration list for PBXNativeTarget "qingheTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD1B3ACF2E4B5B9D00CD8261 /* Debug */,
+				DD1B3AD02E4B5B9D00CD8261 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DD1B3AD12E4B5B9D00CD8261 /* Build configuration list for PBXNativeTarget "qingheUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD1B3AD22E4B5B9D00CD8261 /* Debug */,
+				DD1B3AD32E4B5B9D00CD8261 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DD1B3AA12E4B5B9B00CD8261 /* Project object */;
+}
